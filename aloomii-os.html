@@ -1434,10 +1434,10 @@
         document.getElementById('bar-cost').style.width     = costPct.toFixed(1) + '%';
       }, 300);
     }
-    fetch('/public_metrics.json')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!data.pipeline) return;
+    // Try live metrics first, fall back to static file
+    function loadMetrics(data) {
+      // Pipeline
+      if (data.pipeline) {
         var p = data.pipeline;
         var fmt = function(n) { return n >= 1000 ? '$' + (n/1000).toFixed(1) + 'k' : n; };
         var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
@@ -1446,12 +1446,9 @@
         set('pipe-opps', p.active_opportunities);
         set('pipe-network', p.network_contacts);
         set('pipe-value', fmt(p.est_pipeline_value));
-      })
-      .catch(function() {});
-    fetch('/public_metrics.json')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!data.economics) return;
+      }
+      // Economics
+      if (data.economics) {
         var econ = data.economics;
         var costEl  = document.getElementById('econ-cost');
         var valueEl = document.getElementById('econ-value');
@@ -1460,8 +1457,29 @@
         if (valueEl) animateCounter(valueEl, econ.human_value_usd, '$', '', 1600);
         if (roiEl)   animateCounter(roiEl, parseFloat(econ.roi_multiplier), '', 'x', 2000);
         animateBars(econ);
-      })
-      .catch(function() {});
+      }
+      // AI Leverage Ratio
+      if (data.ai_leverage_ratio) {
+        var heroVal = document.querySelector('.hero-value');
+        if (heroVal) heroVal.textContent = parseFloat(data.ai_leverage_ratio.value || data.ai_leverage_ratio).toFixed(1);
+      }
+      // Timestamp
+      if (data.updated_at || data.timestamp) {
+        var ts = new Date(data.updated_at || data.timestamp);
+        var tsEl = document.getElementById('timestamp');
+        if (tsEl) tsEl.textContent = 'Last updated ' + ts.toLocaleString('en-US', { hour12: false });
+      }
+    }
+    fetch('/api/metrics')
+      .then(function(r) { if (!r.ok) throw new Error('no live data'); return r.json(); })
+      .then(function(data) { loadMetrics(data); })
+      .catch(function() {
+        // Fallback to static file
+        fetch('/public_metrics.json')
+          .then(function(r) { return r.json(); })
+          .then(function(data) { loadMetrics(data); })
+          .catch(function() {});
+      });
     </script>
 
     <script>
@@ -1568,16 +1586,26 @@
         }
 
         async function loadData() {
+            // Try live API first, then static file
             let data;
             try {
-                const resp = await fetch('./data/metrics.json');
-                data = await resp.json();
+                const resp = await fetch('/api/metrics');
+                if (resp.ok) {
+                    data = await resp.json();
+                } else {
+                    throw new Error('no live data');
+                }
             } catch(e) {
-                data = {};
+                try {
+                    const resp2 = await fetch('./data/metrics.json');
+                    data = await resp2.json();
+                } catch(e2) {
+                    data = {};
+                }
             }
 
             // Timestamp
-            const ts = data.timestamp ? new Date(data.timestamp) : new Date();
+            const ts = (data.updated_at || data.timestamp) ? new Date(data.updated_at || data.timestamp) : new Date();
             const tsEl = document.getElementById('timestamp');
             if (tsEl) {
                 tsEl.textContent = 'Last updated ' + ts.toLocaleString('en-US', { hour12: false });
