@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aloomii — Business & Creative Strategy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-white: #ffffff;
+      --bg-light: #f8f8f8;
+      --bg-dark: #0a0a0a;
+      --text-dark: #1a1a1a;
+      --text-body: #444444;
+      --text-light: #ffffff;
+      --text-muted: #888888;
+      --accent: #2a2a2a;
+      --nav-height: 72px;
+      --section-padding: 100px;
+      --grid-gap: 4vw;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-white);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ───── NAVIGATION ───── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo {
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-body);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-dark);
+    }
+
+    .nav-email {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-email svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-body);
+      fill: none;
+      stroke-width: 1.5;
+      transition: stroke 0.2s;
+    }
+
+    .nav-email:hover svg {
+      stroke: var(--text-dark);
+    }
+
+    /* Mobile menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-dark);
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 24px 40px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      z-index: 999;
+    }
+
+    .mobile-menu.active {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 12px 0;
+      color: var(--text-body);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 400;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--text-dark);
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ───── HERO / UNICORN STUDIO ───── */
+    .hero {
+      margin-top: var(--nav-height);
+      position: relative;
+      width: 100%;
+    }
+
+    .us-container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .us-desktop {
+      aspect-ratio: 1440 / 900;
+    }
+
+    .us-mobile {
+      aspect-ratio: 390 / 844;
+      display: none;
+    }
+
+    .us-container,
+    .us-container * {
+      touch-action: pan-y !important;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .us-container > div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    @media (min-width: 768px) {
+      .us-desktop { display: block; }
+      .us-mobile { display: none !important; }
+    }
+
+    @media (max-width: 767px) {
+      .us-desktop { display: none !important; }
+      .us-mobile { display: block !important; }
+    }
+
+    /* ───── CONTENT WRAPPER ───── */
+    .content-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    @media (max-width: 768px) {
+      .content-wrapper {
+        padding: 0 20px;
+      }
+    }
+
+    /* ───── SERVICE SECTIONS ───── */
+    .services {
+      padding: var(--section-padding) 0;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    .service-card {
+      text-align: left;
+    }
+
+    .service-card.centered {
+      grid-column: 1 / -1;
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .service-card h3 {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      color: #009e96;
+      margin-bottom: 12px;
+    }
+
+    .service-card p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #555555;
+      font-weight: 400;
+    }
+
+    @media (max-width: 768px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .service-card.centered {
+        max-width: 100%;
+      }
+    }
+
+    /* ───── AI PHILOSOPHY ───── */
+    .ai-philosophy {
+      background: var(--bg-dark);
+      color: var(--text-light);
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .ai-philosophy h2,
+    .ai-philosophy .subtitle {
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+      color: var(--text-light);
+    }
+
+    .ai-philosophy h2 {
+      margin-bottom: 12px;
+    }
+
+    /* ───── LOGO SECTIONS (shared) ───── */
+    .logo-section {
+      padding: 80px 0;
+    }
+
+    .logo-section-title {
+      font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text-dark);
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    /* ── Past Experience: white bg, 4x2, colored, large logos ── */
+    .logo-section--experience {
+      background: #ffffff;
+    }
+
+    .logo-section--experience .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 2px 0;
+      align-items: center;
+      justify-items: center;
+      justify-content: center;
+      column-gap: calc(1200px * 0.015);
+    }
+
+    .logo-section--experience .logo-grid img {
+      max-width: 240px;
+      max-height: 105px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      transition: opacity 0.3s;
+    }
+
+    .logo-section--experience .logo-grid img:hover {
+      opacity: 0.75;
+    }
+
+    /* ── Current Clients: dark grey gradient, 3x2, smaller logos, colored ── */
+    .logo-section--clients {
+      background: linear-gradient(180deg, #3a3a3a 0%, #222222 100%);
+    }
+
+    .logo-section--clients .logo-section-title {
+      color: var(--text-light);
+    }
+
+    .logo-section--clients .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 2px 0;
+      align-items: center;
+      justify-items: center;
+      justify-content: center;
+      column-gap: calc(1200px * 0.0195);
+      row-gap: calc(2px * 14.4);
+    }
+
+    .logo-section--clients .logo-grid img {
+      max-width: 180px;
+      max-height: 75px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      transition: opacity 0.3s;
+    }
+
+    .logo-section--clients .logo-grid img:hover {
+      opacity: 0.75;
+    }
+
+    /* ── Worked Deals: black bg, 5x2, white logos ── */
+    .logo-section--deals {
+      background: #000000;
+    }
+
+    .logo-section--deals .logo-section-title {
+      color: var(--text-light);
+    }
+
+    .logo-section--deals .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+      gap: 2px 0;
+      align-items: center;
+      justify-items: center;
+      justify-content: center;
+      column-gap: calc(1200px * 0.03);
+    }
+
+    .logo-section--deals .logo-grid img {
+      max-width: 248px;
+      max-height: 102px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      transition: opacity 0.3s;
+    }
+
+    .logo-section--deals .logo-grid img:hover {
+      opacity: 0.75;
+    }
+
+    /* ── Mobile stacking for all logo grids ── */
+    @media (max-width: 768px) {
+      .logo-section--experience .logo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 24px;
+      }
+
+      .logo-section--clients .logo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px 20px;
+      }
+
+      .logo-section--deals .logo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px 20px;
+      }
+    }
+
+    /* ───── SECTION DIVIDER ───── */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    /* ───── FOOTER ───── */
+    .footer {
+      padding: 48px 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-light);
+      transition: background 0.2s;
+    }
+
+    .footer-social a:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .footer-social svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-body);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-dark);
+    }
+
+    @media (max-width: 768px) {
+      .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+    }
+
+    /* ───── SCROLL ANIMATIONS ───── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ───── CONTACT / CONSULTATION FORM ───── */
+    .contact-section {
+      padding: var(--section-padding) 0;
+      background: var(--bg-light);
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .contact-header h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .contact-header p {
+      font-size: 1.05rem;
+      color: var(--text-body);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .consultation-form {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 48px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+
+    .form-group .required {
+      color: #c0392b;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      background: var(--bg-white);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #aaa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--text-dark);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+    }
+
+    .form-submit {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .form-submit button {
+      display: inline-block;
+      padding: 16px 48px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--bg-white);
+      background: var(--text-dark);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .form-submit button:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    .form-submit button:active {
+      transform: translateY(0);
+    }
+
+    .form-submit button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .form-success.visible {
+      display: block;
+    }
+
+    .form-success .success-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      background: var(--text-dark);
+      color: var(--bg-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .form-success p {
+      font-size: 1.05rem;
+      color: var(--text-body);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .contact-section {
+        padding: 60px 0;
+      }
+
+      .contact-header {
+        margin-bottom: 36px;
+      }
+
+      .form-submit button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="homepage">
+
+  <!-- ───── NAVIGATION ───── -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <img src="images/logos/Aloomii - final.png" alt="Aloomii">
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="aloomii-os.html">Aloomii OS</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li>
+        <a href="mailto:hello@aloomii.com" class="nav-email" aria-label="Email us">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M22 4L12 13L2 4"/>
+          </svg>
+        </a>
+      </li>
+    </ul>
+
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMenu()">Home</a>
+    <a href="aloomii-os.html" onclick="closeMenu()">Aloomii OS</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+    <a href="mailto:hello@aloomii.com" onclick="closeMenu()">Email</a>
+  </div>
+
+  <!-- ───── HERO / UNICORN STUDIO ───── -->
+  <section class="hero">
+    <!-- Desktop -->
+    <div class="us-container us-desktop">
+      <div data-us-project="ZU1wuWl1J4Sp9Tl2q1mr" style="width:100%; height:100%;"></div>
+    </div>
+
+    <!-- Mobile -->
+    <div class="us-container us-mobile">
+      <div data-us-project="ZU1wuWl1J4Sp9Tl2q1mr" style="width:100%; height:100%;"></div>
+    </div>
+  </section>
+
+  <!-- ───── SERVICES ───── -->
+  <section class="services">
+    <div class="content-wrapper">
+      <div class="services-grid fade-in">
+
+        <!-- Row 1 -->
+        <div class="service-card">
+          <h3>Business &amp; Creative Strategy</h3>
+          <p>We find the angle others miss. New revenue streams, market positioning, and product concepts grounded in what's actually working. We bring ideas that come with a plan to execute them.</p>
+        </div>
+
+        <div class="service-card">
+          <h3>Closing Deals &amp; Strategic Partnerships</h3>
+          <p>We don't just open doors, we close them. From structuring partnerships to getting signatures. Our enterprise experience (IBM, JP Morgan, Maersk) means we speak the language on both sides of the table.</p>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="service-card">
+          <h3>AI Operations &amp; Agent Infrastructure</h3>
+          <p>You installed the tools. We make them work. Most companies invest in AI and see no return, not because the technology is wrong, but because nobody built the operations layer. We design, deploy, and manage AI systems that run your business processes autonomously. The difference between an AI demo and an AI employee is what we build.</p>
+        </div>
+
+        <div class="service-card">
+          <h3>Growth &amp; Brand Strategy</h3>
+          <p>We build the story, positioning, and go-to-market approach that makes companies impossible to ignore. Brand integrity, audience mapping, content pillars, and platform strategy, for your team's easy access.</p>
+        </div>
+
+        <!-- Row 3: Centered -->
+        <div class="service-card centered">
+          <h3>Video &amp; Podcast Production</h3>
+          <p>End-to-end production from concept through final cut. One recording session becomes 30+ pieces of platform-native content: clips, threads, quote cards, newsletters, and podcasts. We produce it and we teach you how to turn every episode into a month of distribution.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── AI PHILOSOPHY ───── -->
+  <section class="ai-philosophy fade-in">
+    <div class="content-wrapper">
+      <h2>Great Ideas + Great AI = &#x1F680;</h2>
+      <p class="subtitle">Bad Ideas + Great AI = &#x1F4C9;</p>
+    </div>
+  </section>
+
+  <!-- ───── PAST EXPERIENCE ───── -->
+  <section class="logo-section logo-section--experience">
+    <div class="content-wrapper">
+      <p class="logo-section-title">Past Experience</p>
+      <div class="logo-grid">
+        <img src="images/logos/ibm.png" alt="IBM">
+        <img src="images/logos/jpmorgan.png" alt="JPMorgan">
+        <img src="images/logos/maersk.png" alt="Maersk">
+        <img src="images/logos/mto.png" alt="MTO">
+        <img src="images/logos/gpc.png" alt="GPC">
+        <img src="images/logos/ameriprise.png" alt="Ameriprise">
+        <img src="images/logos/unum.png" alt="Unum">
+        <img src="images/logos/dexmedia.png" alt="Dex Media">
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── CURRENT CLIENTS ───── -->
+  <section class="logo-section logo-section--clients">
+    <div class="content-wrapper">
+      <p class="logo-section-title">Past and Current Clients Include</p>
+      <div class="logo-grid">
+        <img src="images/logos/logo-bis.png" alt="BIS">
+        <img src="images/logos/logo-pbn.png" alt="Pale Blue Nexus">
+        <img src="images/logos/logo1-cc.png" alt="CC">
+        <img src="images/logos/logo1-cs.png" alt="CS">
+        <img src="images/logos/logo1-tt.png" alt="TT">
+        <img src="images/logos/logo1-eg.png" alt="EG">
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── WORKED DEALS ───── -->
+  <section class="logo-section logo-section--deals">
+    <div class="content-wrapper">
+      <p class="logo-section-title">Worked Deals With</p>
+      <div class="logo-grid">
+        <img src="images/logos/-logo1-ab.svg.png" alt="AB">
+        <img src="images/logos/logo-av.png" alt="AV">
+        <img src="images/logos/-logo1-dk.png" alt="DK">
+        <img src="images/logos/-logo1-tv.png" alt="TV">
+        <img src="images/logos/-logo1-ml.png" alt="ML">
+        <img src="images/logos/logo-raas.png" alt="RaaS">
+        <img src="images/logos/-logo1-pg.svg.png" alt="PG">
+        <img src="images/logos/-logo1-tz.png" alt="TZ">
+        <img src="images/logos/-logo1-socio.png" alt="Socio">
+        <img src="images/logos/-logo1-dl.png" alt="DL">
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── CONTACT / CONSULTATION FORM ───── -->
+  <section class="contact-section fade-in" id="contact">
+    <div class="content-wrapper">
+      <div class="contact-header">
+        <h2>Start a Conversation</h2>
+        <p>Tell us where you are and where you want to go. We'll tell you honestly if we're the right fit.</p>
+      </div>
+
+      <form
+        id="consultationForm"
+        action="/api/contact"
+        method="POST"
+        webmcp-action="request_ai_consultation"
+        webmcp-description="Use this form to request a discovery call or consultation with Aloomii — a business strategy and AI operations agency that helps companies build real operational infrastructure, brand strategy, content systems, and close enterprise deals."
+        class="consultation-form"
+      >
+        <div class="form-grid">
+          <!-- Left Column -->
+          <div class="form-col">
+            <div class="form-group">
+              <label for="name">Full Name <span class="required">*</span></label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                webmcp-field="client_full_name"
+                placeholder="Jane Smith"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="email">Business Email <span class="required">*</span></label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                webmcp-field="client_email"
+                placeholder="jane@company.com"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="company">Company Name</label>
+              <input
+                type="text"
+                id="company"
+                name="company"
+                webmcp-field="client_company_name"
+                placeholder="Acme Corp"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="service">What Are You Looking For?</label>
+              <select id="service" name="service" webmcp-field="client_service_interest">
+                <option value="" disabled selected>Select a service</option>
+                <option value="ai-operations">AI Operations &amp; Agent Infrastructure</option>
+                <option value="business-strategy">Business &amp; Creative Strategy</option>
+                <option value="growth-brand">Growth &amp; Brand Strategy</option>
+                <option value="deals-partnerships">Closing Deals &amp; Strategic Partnerships</option>
+                <option value="video-podcast">Video &amp; Podcast Production</option>
+                <option value="full-service">Full-Service (Multiple)</option>
+                <option value="not-sure">Not Sure Yet — Let's Talk</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="form-col">
+            <div class="form-group">
+              <label for="budget">Budget Range</label>
+              <select id="budget" name="budget" webmcp-field="client_budget_range">
+                <option value="" disabled selected>Select a range</option>
+                <option value="under-5k">Under $5,000 / mo</option>
+                <option value="5k-10k">$5,000 – $10,000 / mo</option>
+                <option value="10k-25k">$10,000 – $25,000 / mo</option>
+                <option value="25k-plus">$25,000+ / mo</option>
+                <option value="project">Project-Based / One-Time</option>
+                <option value="discuss">Prefer to Discuss</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="timeline">Timeline</label>
+              <select id="timeline" name="timeline" webmcp-field="client_timeline">
+                <option value="" disabled selected>When do you want to start?</option>
+                <option value="immediately">Immediately</option>
+                <option value="1-2-weeks">Within 1–2 Weeks</option>
+                <option value="1-month">Within a Month</option>
+                <option value="exploring">Just Exploring</option>
+              </select>
+            </div>
+
+            <div class="form-group form-group--full">
+              <label for="details">Tell Us More</label>
+              <textarea
+                id="details"
+                name="details"
+                webmcp-field="client_project_details"
+                placeholder="What's the biggest problem you're trying to solve right now?"
+                rows="5"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" id="contactSubmitBtn">Book My Discovery Call</button>
+        </div>
+
+        <div class="form-success" id="contactSuccess">
+          <div class="success-icon">&#10003;</div>
+          <p>We got your request. Someone from the team will reach out within 24 hours.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ───── FOOTER ───── -->
+  <footer class="footer">
+    <div class="content-wrapper">
+      <div class="footer-content">
+        <div class="footer-social">
+          <a href="mailto:hello@aloomii.com" aria-label="Email us">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M22 4L12 13L2 4"/>
+            </svg>
+          </a>
+        </div>
+
+        <ul class="footer-links">
+          <li><a href="#">Client Terms</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms and Conditions</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ───── UNICORN STUDIO SCRIPT ───── -->
+  <script type="text/javascript">
+    !function(){
+      var u=window.UnicornStudio;
+      if(u&&u.init){
+        if(document.readyState==="loading"){
+          document.addEventListener("DOMContentLoaded",function(){u.init()})
+        }else{u.init()}
+      }else{
+        window.UnicornStudio={isInitialized:!1};
+        var i=document.createElement("script");
+        i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.4/dist/unicornStudio.umd.js";
+        i.onload=function(){
+          if(document.readyState==="loading"){
+            document.addEventListener("DOMContentLoaded",function(){UnicornStudio.init()})
+          }else{UnicornStudio.init()}
+        };
+        (document.head||document.body).appendChild(i)
+      }
+    }();
+  </script>
+
+  <!-- ───── SCRIPTS ───── -->
+  <script>
+    // Mobile menu toggle
+    function toggleMenu() {
+      document.querySelector('.hamburger').classList.toggle('active');
+      document.getElementById('mobileMenu').classList.toggle('active');
+    }
+
+    function closeMenu() {
+      document.querySelector('.hamburger').classList.remove('active');
+      document.getElementById('mobileMenu').classList.remove('active');
+    }
+
+    // Scroll fade-in animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Consultation form submission
+    const consultationForm = document.getElementById('consultationForm');
+    if (consultationForm) {
+      consultationForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('contactSubmitBtn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+
+        const formData = {
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          company: document.getElementById('company').value.trim(),
+          service: document.getElementById('service').value,
+          budget: document.getElementById('budget').value,
+          timeline: document.getElementById('timeline').value,
+          details: document.getElementById('details').value.trim(),
+        };
+
+        try {
+          const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          });
+
+          if (res.ok) {
+            consultationForm.querySelector('.form-grid').style.display = 'none';
+            consultationForm.querySelector('.form-submit').style.display = 'none';
+            document.getElementById('contactSuccess').classList.add('visible');
+          } else {
+            btn.textContent = 'Something went wrong — try again';
+            btn.disabled = false;
+            setTimeout(() => { btn.textContent = originalText; }, 3000);
+          }
+        } catch (err) {
+          btn.textContent = 'Connection error — try again';
+          btn.disabled = false;
+          setTimeout(() => { btn.textContent = originalText; }, 3000);
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

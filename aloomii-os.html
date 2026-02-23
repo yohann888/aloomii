@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aloomii OS — Live Fleet Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Space+Mono&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #080810;
+            --card: rgba(255,255,255,0.06);
+            --border: rgba(255,255,255,0.12);
+            --border-hot: rgba(0,158,150,0.4);
+            --text: #f0f0f0;
+            --dim: #666;
+            --accent: #009e96;
+            --accent2: #663399;
+            --red: #f87171;
+            --yellow: #56cbf9;
+            --nav-height: 72px;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ───── NAVIGATION ───── */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: rgba(8, 8, 16, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo {
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-logo img {
+            height: 36px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        .nav-email {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-email svg {
+            width: 20px;
+            height: 20px;
+            stroke: rgba(255, 255, 255, 0.55);
+            fill: none;
+            stroke-width: 1.5;
+            transition: stroke 0.2s;
+        }
+
+        .nav-email:hover svg {
+            stroke: var(--text);
+        }
+
+        /* Mobile menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: var(--nav-height);
+            left: 0;
+            right: 0;
+            background: rgba(8, 8, 16, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 24px 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 12px 0;
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            .nav { padding: 0 20px; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+        }
+
+        /* ───── DASHBOARD CONTENT ───── */
+        .dashboard {
+            padding: 48px 24px 0;
+            padding-top: calc(var(--nav-height) + 48px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Header */
+        .header { text-align: center; margin-bottom: 56px; }
+        .logo-badge {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .live-text {
+            animation: pulse-text 2s infinite;
+        }
+        @keyframes pulse-text {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .live-dot {
+            width: 6px; height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+        h1 span { color: var(--accent); }
+        .tagline {
+            color: var(--dim);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Hero metric */
+        .hero {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card);
+            border: 1px solid var(--border-hot);
+            border-radius: 20px;
+            padding: 48px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 240px; height: 240px;
+            background: radial-gradient(circle, rgba(0,158,150,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-left .label {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .hero-value {
+            font-size: 6rem;
+            font-weight: 700;
+            line-height: 1;
+            background: linear-gradient(135deg, #fff 30%, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Space Mono', monospace;
+        }
+        .hero-sub { color: var(--dim); margin-top: 8px; font-size: 0.9rem; }
+        .hero-right {
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .hero-right .desc {
+            font-size: 1rem;
+            color: var(--text);
+            max-width: 260px;
+            line-height: 1.6;
+        }
+        .hero-right .desc strong { color: var(--accent); }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 16px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .card:hover { border-color: var(--border-hot); transform: translateY(-3px); }
+        .card .label {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin-bottom: 12px;
+        }
+        .card .val {
+            font-size: 2.8rem;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .card .sub { color: var(--dim); font-size: 0.8rem; }
+        .accent-text { color: var(--accent); }
+        .accent2-text { color: var(--accent2); }
+        .yellow-text { color: var(--yellow); }
+
+        /* Agent Fleet */
+        .fleet {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 16px;
+        }
+        .fleet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .fleet-title {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--dim);
+        }
+        .fleet-count {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-family: 'Space Mono', monospace;
+        }
+        .agents {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .agent {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .agent:hover {
+            border-color: var(--border-hot);
+            transform: translateY(-2px);
+        }
+        .agent .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 8px rgba(0,158,150,0.5), 0 0 16px rgba(0,158,150,0.2);
+        }
+        .agent.idle .dot { background: var(--dim); animation: none; box-shadow: none; }
+
+        /* Footer */
+        .dash-footer {
+            margin-top: 8px !important;
+            padding-bottom: 12px;
+            color: var(--dim);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        .econ-section {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        .roi-callout {
+            margin-bottom: 0 !important;
+        }
+        .ts { font-family: 'Space Mono', monospace; }
+
+        /* Scanline effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.03) 2px,
+                rgba(0,0,0,0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ───── PASSWORD GATE ───── */
+        .gate-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .gate-overlay.unlocked {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .gate-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(0,158,150,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(102,51,153,0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .gate-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.03) 2px,
+                rgba(0,0,0,0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        .gate-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            padding: 0 24px;
+        }
+
+        .gate-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .gate-logo img {
+            height: 32px;
+            width: auto;
+            opacity: 0.9;
+        }
+
+        .gate-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 32px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .gate-badge .live-dot {
+            width: 5px;
+            height: 5px;
+        }
+
+        .gate-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px 32px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        .gate-card:focus-within {
+            border-color: var(--border-hot);
+        }
+
+        .gate-card-title {
+            font-size: 0.68rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin-bottom: 20px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .gate-input-group {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .gate-input-group:last-of-type {
+            margin-bottom: 20px;
+        }
+
+        .gate-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .gate-input::placeholder {
+            color: rgba(255,255,255,0.2);
+            font-weight: 300;
+        }
+
+        .gate-input:focus {
+            border-color: var(--accent);
+            background: rgba(0,158,150,0.03);
+        }
+
+        .gate-input.error {
+            border-color: var(--red);
+            background: rgba(248,113,113,0.03);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        .gate-btn {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            background: rgba(0,158,150,0.08);
+            color: var(--accent);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gate-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,158,150,0.15), transparent);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .gate-btn:hover {
+            background: rgba(0,158,150,0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0,158,150,0.15);
+        }
+
+        .gate-btn:hover::before {
+            opacity: 1;
+        }
+
+        .gate-btn:active {
+            transform: translateY(0);
+        }
+
+        .gate-btn.secondary {
+            border-color: var(--border);
+            background: rgba(255,255,255,0.02);
+            color: var(--text);
+        }
+
+        .gate-btn.secondary:hover {
+            border-color: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.04);
+            box-shadow: none;
+        }
+
+        .gate-error-msg {
+            color: var(--red);
+            font-size: 0.78rem;
+            margin-top: -8px;
+            margin-bottom: 12px;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .gate-error-msg.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gate-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 0 0 20px;
+        }
+
+        .gate-divider::before,
+        .gate-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .gate-divider-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .gate-request-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .gate-success-msg {
+            text-align: center;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-family: 'Space Mono', monospace;
+            padding: 16px;
+            border: 1px solid rgba(0,158,150,0.2);
+            border-radius: 10px;
+            background: rgba(0,158,150,0.04);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .gate-success-msg.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile responsive for hero */
+        @media (max-width: 640px) {
+            .hero {
+                flex-direction: column;
+                padding: 32px 24px;
+                text-align: center;
+            }
+            .hero-right {
+                text-align: center;
+            }
+            .hero-value {
+                font-size: 4rem;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .gate-card {
+                padding: 28px 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ───── PASSWORD GATE ───── -->
+    <div class="gate-overlay" id="gateOverlay">
+        <div class="gate-container">
+            <div class="gate-logo">
+                <img src="images/logos/Aloomii - final.png" alt="Aloomii">
+            </div>
+            <div class="gate-badge">
+                <div class="live-dot"></div>
+                RESTRICTED ACCESS
+            </div>
+
+            <!-- Password Section -->
+            <div class="gate-card" id="passwordCard">
+                <div class="gate-card-title">Enter Password</div>
+                <div class="gate-input-group">
+                    <input type="password" class="gate-input" id="gatePassword" placeholder="Password" autocomplete="off" />
+                </div>
+                <div class="gate-error-msg" id="gateError">Incorrect password. Try again.</div>
+                <button class="gate-btn" onclick="attemptLogin()">Authenticate</button>
+            </div>
+
+            <!-- Divider -->
+            <div class="gate-divider">
+                <span class="gate-divider-text">Need Access?</span>
+            </div>
+
+            <!-- Access Request Section -->
+            <div class="gate-card" id="requestCard">
+                <div class="gate-card-title">Request Access</div>
+                <form id="accessRequestForm" onsubmit="submitAccessRequest(event)">
+                    <div class="gate-request-fields">
+                        <input type="text" class="gate-input" id="reqName" name="name" placeholder="Full Name" required />
+                        <input type="email" class="gate-input" id="reqEmail" name="email" placeholder="Email Address" required />
+                    </div>
+                    <button type="submit" class="gate-btn secondary" id="requestBtn">Send Request</button>
+                </form>
+                <div class="gate-success-msg" id="requestSuccess">Request sent. You'll hear back soon.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───── NAVIGATION ───── -->
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">
+            <img src="images/logos/Aloomii - final.png" alt="Aloomii">
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aloomii-os.html" class="active">Aloomii OS</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+            <li>
+                <a href="mailto:hello@aloomii.com" class="nav-email" aria-label="Email us">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="M22 4L12 13L2 4"/>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+
+        <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" onclick="closeMenu()">Home</a>
+        <a href="aloomii-os.html" onclick="closeMenu()">Aloomii OS</a>
+        <a href="index.html#contact" onclick="closeMenu()">Contact</a>
+        <a href="mailto:hello@aloomii.com" onclick="closeMenu()">Email</a>
+    </div>
+
+    <!-- ───── DASHBOARD ───── -->
+    <div class="dashboard">
+
+        <div class="header">
+            <div class="logo-badge">
+                <div class="live-dot"></div>
+                ALOOMII OS DASHBOARD · <span class="live-text">LIVE</span>
+            </div>
+        </div>
+
+        <!-- Hero Metric -->
+        <div class="hero">
+            <div class="hero-left">
+                <div class="label">AI Leverage Ratio</div>
+                <div class="hero-value">23.5</div>
+                <div class="hero-sub">tasks per human employee</div>
+            </div>
+            <div class="hero-right">
+                <p class="desc">Every task completed by an agent is one a human didn't have to do.<br><br><strong>23.5x output</strong> from a lean team.</p>
+            </div>
+        </div>
+
+        <!-- Agent Fleet -->
+        <div class="fleet">
+            <div class="fleet-header">
+                <div class="fleet-title">Active Agent Fleet</div>
+                <div class="fleet-count">11 AGENTS DEPLOYED</div>
+            </div>
+            <div class="agents">
+                <div class="agent"><div class="dot"></div>🔍 Lead Intelligence</div>
+                <div class="agent"><div class="dot"></div>🤝 Relationship Ops</div>
+                <div class="agent"><div class="dot"></div>✍️ Content at Scale</div>
+                <div class="agent"><div class="dot"></div>⚙️ Dev Velocity</div>
+                <div class="agent"><div class="dot"></div>🔎 Code Review</div>
+                <div class="agent"><div class="dot"></div>📊 Executive Oversight</div>
+                <div class="agent"><div class="dot"></div>🌐 Network Enrichment</div>
+                <div class="agent"><div class="dot"></div>📚 Knowledge Management</div>
+                <div class="agent"><div class="dot"></div>🔮 Opportunity Scanner</div>
+                <div class="agent"><div class="dot"></div>🛡️ Fleet Audit</div>
+                <div class="agent"><div class="dot"></div>🎬 Media Production</div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="proof-bar" style="max-width:900px;">
+            <div class="proof-stat">
+                <span class="num">11</span>
+                <span class="label">Autonomous agents</span>
+            </div>
+            <div class="proof-divider"></div>
+            <div class="proof-stat">
+                <span class="num">24/7</span>
+                <span class="label">Always running</span>
+            </div>
+        </div>
+
+<!-- ============================================================
+     METRICS + "What Aloomii Does" + Newsletter
+     ============================================================ -->
+<style>
+  .aloomii-section {
+    font-family: 'Space Grotesk', sans-serif;
+    background: #080810;
+    color: #f0f0f0;
+    padding: 40px 24px 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .aloomii-section * { box-sizing: border-box; }
+  /* ── Section label ── */
+  .section-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-eyebrow::before, .section-eyebrow::after {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+  /* ── Headline ── */
+  .section-headline {
+    font-size: clamp(1.4rem, 3.5vw, 2.24rem);
+    font-weight: 700;
+    letter-spacing: -1px;
+    text-align: center;
+    line-height: 1.15;
+    max-width: 680px;
+    margin-bottom: 16px;
+  }
+  .section-headline span { color: var(--accent); }
+  .section-subhead {
+    color: #888;
+    font-size: 1rem;
+    text-align: center;
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 72px;
+  }
+  /* ── Outcome cards ── */
+  .outcomes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 64px;
+  }
+  .outcome-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .outcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .outcome-card:hover {
+    border-color: var(--border-hot);
+    transform: translateY(-4px);
+  }
+  .outcome-card:hover::before { opacity: 1; }
+  .outcome-icon {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .outcome-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .outcome-title span { color: var(--accent); }
+  .outcome-body {
+    color: #888;
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+  /* ── Proof bar ── */
+  .proof-bar {
+    width: 100%;
+    max-width: 960px;
+    border: 1px solid rgba(0,158,150,0.2);
+    border-radius: 12px;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 80px;
+    background: rgba(0,158,150,0.03);
+  }
+  .proof-stat {
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+  }
+  .proof-stat .num {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .proof-stat .label {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .proof-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  /* ── Sales Pipeline ── */
+  .pipeline-section {
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 64px;
+  }
+  .pipeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .pipeline-title {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pipeline-title .live-dot {
+    width: 6px;
+    height: 6px;
+  }
+  .pipeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .pipeline-stat {
+    background: rgba(0,158,150,0.07);
+    border: 1px solid rgba(0,158,150,0.22);
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .pipeline-stat:hover {
+    border-color: rgba(0,158,150,0.35);
+    transform: translateY(-3px);
+  }
+  .pipeline-stat-num {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .pipeline-stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--dim);
+    line-height: 1.4;
+  }
+  /* ── System Economics ── */
+  .econ-section {
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 0;
+  }
+  .econ-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .econ-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .econ-title {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .econ-sub { color: #888; font-size: 0.9rem; margin-top: 8px; }
+  .econ-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 640px) { .econ-grid { grid-template-columns: 1fr; } }
+  .econ-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+  .econ-card.highlight {
+    border-color: rgba(0,158,150,0.3);
+    background: rgba(0,158,150,0.04);
+  }
+  .econ-card-label {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 10px;
+  }
+  .econ-card-value {
+    font-size: 2.4rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .econ-card.highlight .econ-card-value { color: var(--accent); }
+  .econ-card-note { font-size: 0.8rem; color: var(--dim); }
+  /* Bar chart */
+  .econ-bars {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 28px 28px 20px;
+    margin-bottom: 24px;
+  }
+  .econ-bars-title {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 24px;
+  }
+  .bar-row {
+    margin-bottom: 18px;
+  }
+  .bar-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: #aaa;
+    margin-bottom: 8px;
+  }
+  .bar-meta .bar-amt { color: var(--accent); font-family: 'Space Mono', monospace; }
+  .bar-track {
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #008a82, var(--accent));
+    transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bar-fill.cost { background: linear-gradient(90deg, var(--red), #fca5a5); width: 0.7%; }
+  .bar-fill.drafts { width: 73.9%; }
+  .bar-fill.contacts { width: 21.7%; }
+  .bar-fill.leads { width: 3.7%; }
+  .bar-fill.signals { width: 0.7%; }
+  /* ROI callout */
+  .roi-callout {
+    text-align: center;
+    padding: 32px;
+    background: rgba(0,158,150,0.05);
+    border: 1px solid rgba(0,158,150,0.2);
+    border-radius: 16px;
+  }
+  .roi-number {
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    line-height: 1;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff 20%, var(--accent) 75%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .roi-label { font-size: 0.85rem; color: #888; letter-spacing: 1px; }
+  /* ── Newsletter Signup ── */
+  .newsletter-section {
+    width: 100%;
+    max-width: 960px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 56px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .newsletter-section::before {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,158,150,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .newsletter-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .newsletter-headline {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .newsletter-sub {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .newsletter-form {
+    display: flex;
+    gap: 12px;
+    max-width: 480px;
+    margin: 0 auto 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .newsletter-input {
+    flex: 1;
+    min-width: 220px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .newsletter-input::placeholder { color: #555; }
+  .newsletter-input:focus { border-color: var(--border-hot); }
+  .newsletter-btn {
+    background: var(--accent);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    white-space: nowrap;
+  }
+  .newsletter-btn:hover { background: #00b5ab; transform: translateY(-1px); }
+  .newsletter-note {
+    font-size: 0.75rem;
+    color: #555;
+    letter-spacing: 0.5px;
+  }
+  @media (max-width: 600px) {
+    .aloomii-section { padding: 64px 16px; }
+    .proof-bar { flex-direction: column; }
+    .proof-divider { width: 100%; height: 1px; }
+    .newsletter-section { padding: 40px 24px; }
+  }
+</style>
+
+        <!-- Sales Pipeline -->
+        <div class="pipeline-section" style="max-width:900px;">
+            <div class="pipeline-header">
+                <span class="pipeline-title"><div class="live-dot"></div>SALES PIPELINE · <span class="live-text">LIVE</span></span>
+            </div>
+            <div class="pipeline-grid">
+                <div class="pipeline-stat">
+                    <span class="pipeline-stat-num" id="pipe-hot-leads">2</span>
+                    <span class="pipeline-stat-label">Hot Leads<br>This Week</span>
+                </div>
+                <div class="pipeline-stat">
+                    <span class="pipeline-stat-num" id="pipe-signals">4</span>
+                    <span class="pipeline-stat-label">Signals<br>Detected</span>
+                </div>
+                <div class="pipeline-stat">
+                    <span class="pipeline-stat-num" id="pipe-opps">4</span>
+                    <span class="pipeline-stat-label">Active<br>Opportunities</span>
+                </div>
+                <div class="pipeline-stat">
+                    <span class="pipeline-stat-num" id="pipe-network">48</span>
+                    <span class="pipeline-stat-label">Network<br>Contacts</span>
+                </div>
+                <div class="pipeline-stat">
+                    <span class="pipeline-stat-num" id="pipe-value">$28.5k</span>
+                    <span class="pipeline-stat-label">Est. Pipeline<br>Value</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Economics -->
+        <div class="econ-section" id="econ-section" style="max-width:900px;">
+            <div class="econ-header">
+                <div class="econ-eyebrow">System Economics</div>
+                <h3 class="econ-title">What does it actually cost to run?</h3>
+                <p class="econ-sub">Real numbers. This week.</p>
+            </div>
+            <div class="econ-grid">
+                <div class="econ-card">
+                    <div class="econ-card-label">Weekly AI Operating Cost</div>
+                    <div class="econ-card-value" id="econ-cost">$7.42</div>
+                    <div class="econ-card-note">Total compute + API spend</div>
+                </div>
+                <div class="econ-card highlight">
+                    <div class="econ-card-label">Human-Equivalent Value Delivered</div>
+                    <div class="econ-card-value" id="econ-value">$1,083</div>
+                    <div class="econ-card-note">Based on agency rates for the same work</div>
+                </div>
+            </div>
+            <div class="econ-bars">
+                <div class="econ-bars-title">Value Breakdown (% of total output)</div>
+                <div class="bar-row">
+                    <div class="bar-meta"><span>Content Drafts (16 × $50)</span><span class="bar-amt">$800</span></div>
+                    <div class="bar-track"><div class="bar-fill drafts" id="bar-drafts" style="width:0%"></div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-meta"><span>Contacts Managed (47 × $5)</span><span class="bar-amt">$235</span></div>
+                    <div class="bar-track"><div class="bar-fill contacts" id="bar-contacts" style="width:0%"></div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-meta"><span>Hot Leads Surfaced (2 × $20)</span><span class="bar-amt">$40</span></div>
+                    <div class="bar-track"><div class="bar-fill leads" id="bar-leads" style="width:0%"></div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-meta"><span>Signals Scanned (4 × $2)</span><span class="bar-amt">$8</span></div>
+                    <div class="bar-track"><div class="bar-fill signals" id="bar-signals" style="width:0%"></div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-meta"><span>Operating Cost</span><span class="bar-amt" style="color:#fca5a5">$7.42</span></div>
+                    <div class="bar-track"><div class="bar-fill cost" id="bar-cost" style="width:0%"></div></div>
+                </div>
+            </div>
+            <div class="roi-callout">
+                <div class="roi-number" id="econ-roi">146x</div>
+                <div class="roi-label">Return on AI Spend — This Week</div>
+            </div>
+        </div>
+
+        <div class="dash-footer" style="margin-top:8px !important; padding-bottom:120px;">
+            <span class="ts" id="timestamp">—</span> · Zero PII · Aggregate metrics only · aloomii.com
+        </div>
+
+    </div>
+
+<section class="aloomii-section">
+  <!-- ── WHAT ALOOMII DOES ── -->
+  <div class="section-eyebrow">What Aloomii Does</div>
+  <h2 class="section-headline">
+    We replace your SDR. We upgrade your AE.<br><span>$2,500/mo instead of $145,000/yr.</span>
+  </h2>
+  <p class="section-subhead">
+    Most founders are doing the work of 10 people. Aloomii changes the ratio.
+  </p>
+  <!-- Outcome Cards -->
+  <div class="outcomes-grid">
+    <div class="outcome-card">
+      <span class="outcome-icon">🔍</span>
+      <div class="outcome-title"><span>Find more leads</span> — automatically.</div>
+      <p class="outcome-body">An autonomous agent monitors markets around the clock, scores buying signals, and surfaces hot leads before your competitors even see them. No manual searching. No missed opportunities.</p>
+    </div>
+    <div class="outcome-card">
+      <span class="outcome-icon">⚡</span>
+      <div class="outcome-title"><span>Ship faster</span> without hiring.</div>
+      <p class="outcome-body">Code gets written, reviewed, tested, and documented while you sleep. Routine dev work handled automatically. Your roadmap moves whether or not anyone's at the keyboard.</p>
+    </div>
+    <div class="outcome-card">
+      <span class="outcome-icon">🤝</span>
+      <div class="outcome-title">Never let a <span>relationship go cold.</span></div>
+      <p class="outcome-body">Every contact tracked. Every follow-up surfaced at the right moment. Every warm intro path mapped. Your network works for you — not the other way around.</p>
+    </div>
+    <div class="outcome-card">
+      <span class="outcome-icon">📣</span>
+      <div class="outcome-title"><span>Content</span> that never stops.</div>
+      <p class="outcome-body">Drafts, schedules, and distributes across platforms on its own. Your brand stays active and consistent — even on your busiest days.</p>
+    </div>
+    <div class="outcome-card">
+      <span class="outcome-icon">📊</span>
+      <div class="outcome-title">Run like a company <span>10x your size.</span></div>
+      <p class="outcome-body">Daily briefings. Weekly strategy reviews. Nightly audits. You wake up knowing exactly what happened and what's next — without running a single meeting.</p>
+    </div>
+  </div>
+  <!-- Newsletter Signup -->
+  <div class="newsletter-section">
+    <div class="newsletter-eyebrow">Stay in the loop</div>
+    <h3 class="newsletter-headline">Get early access + build notes</h3>
+    <p class="newsletter-sub">
+      We share what we're building, what's working, and what broke.<br>
+      No fluff. Founder-to-founder.
+    </p>
+    <form class="newsletter-form" onsubmit="handleSignup(event)">
+      <input
+        class="newsletter-input"
+        type="email"
+        placeholder="your@email.com"
+        required
+        id="nl-email"
+      />
+      <button class="newsletter-btn" type="submit">Get Early Access &#8594;</button>
+    </form>
+    <p class="newsletter-note">No spam. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+    <script>
+    async function handleSignup(e) {
+      e.preventDefault();
+      var email = document.getElementById('nl-email').value;
+      var btn = e.target.querySelector('.newsletter-btn');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      try {
+        var resp = await fetch('/api/newsletter-signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        });
+        var data = await resp.json();
+
+        if (data.success) {
+          btn.textContent = '\u2713 You\'re on the list';
+          btn.style.background = '#00b5ab';
+          document.getElementById('nl-email').disabled = true;
+        } else {
+          btn.textContent = 'Get Early Access \u2192';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        btn.textContent = 'Get Early Access \u2192';
+        btn.disabled = false;
+      }
+    }
+    function animateCounter(el, target, prefix, suffix, duration) {
+      var start = performance.now();
+      var from = 0;
+      function step(now) {
+        var progress = Math.min((now - start) / duration, 1);
+        var ease = 1 - Math.pow(1 - progress, 3);
+        var val = Math.round(from + (target - from) * ease);
+        el.textContent = prefix + val.toLocaleString() + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    function animateBars(econ) {
+      var total = econ.human_value_usd;
+      var costPct = Math.max((econ.weekly_cost_usd / total) * 100, 0.4);
+      setTimeout(function() {
+        document.getElementById('bar-drafts').style.width   = ((econ.breakdown.content_drafts / total) * 100).toFixed(1) + '%';
+        document.getElementById('bar-contacts').style.width = ((econ.breakdown.contacts_managed / total) * 100).toFixed(1) + '%';
+        document.getElementById('bar-leads').style.width    = ((econ.breakdown.hot_leads / total) * 100).toFixed(1) + '%';
+        document.getElementById('bar-signals').style.width  = ((econ.breakdown.signals_scanned / total) * 100).toFixed(1) + '%';
+        document.getElementById('bar-cost').style.width     = costPct.toFixed(1) + '%';
+      }, 300);
+    }
+    fetch('/public_metrics.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.pipeline) return;
+        var p = data.pipeline;
+        var fmt = function(n) { return n >= 1000 ? '$' + (n/1000).toFixed(1) + 'k' : n; };
+        var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+        set('pipe-hot-leads', p.hot_leads_this_week);
+        set('pipe-signals', p.signals_detected);
+        set('pipe-opps', p.active_opportunities);
+        set('pipe-network', p.network_contacts);
+        set('pipe-value', fmt(p.est_pipeline_value));
+      })
+      .catch(function() {});
+    fetch('/public_metrics.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.economics) return;
+        var econ = data.economics;
+        var costEl  = document.getElementById('econ-cost');
+        var valueEl = document.getElementById('econ-value');
+        var roiEl   = document.getElementById('econ-roi');
+        if (costEl)  costEl.textContent  = '$' + parseFloat(econ.weekly_cost_usd).toFixed(2);
+        if (valueEl) animateCounter(valueEl, econ.human_value_usd, '$', '', 1600);
+        if (roiEl)   animateCounter(roiEl, parseFloat(econ.roi_multiplier), '', 'x', 2000);
+        animateBars(econ);
+      })
+      .catch(function() {});
+    </script>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMenu() {
+            document.querySelector('.hamburger').classList.toggle('active');
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+
+        function closeMenu() {
+            document.querySelector('.hamburger').classList.remove('active');
+            document.getElementById('mobileMenu').classList.remove('active');
+        }
+
+        // ───── PASSWORD GATE ─────
+        const _k = [97,108,111,111,109,105,105,56,56,56]; // Obfuscated password
+        function _d(a) { return a.map(c => String.fromCharCode(c)).join(''); }
+
+        // Check if already authenticated this session
+        if (sessionStorage.getItem('alos_auth') === 'true') {
+            document.getElementById('gateOverlay').classList.add('unlocked');
+        }
+
+        // Enter key triggers login
+        document.getElementById('gatePassword').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') attemptLogin();
+        });
+
+        function attemptLogin() {
+            const input = document.getElementById('gatePassword');
+            const error = document.getElementById('gateError');
+            const pwd = input.value.trim();
+
+            if (pwd === _d(_k)) {
+                // Success — unlock
+                sessionStorage.setItem('alos_auth', 'true');
+                document.getElementById('gateOverlay').classList.add('unlocked');
+                error.classList.remove('visible');
+                input.classList.remove('error');
+                // Load dashboard data after unlock
+                loadData();
+            } else {
+                // Fail — shake + error
+                input.classList.add('error');
+                error.classList.add('visible');
+                setTimeout(() => input.classList.remove('error'), 500);
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // ───── ACCESS REQUEST FORM ─────
+        async function submitAccessRequest(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('reqName').value.trim();
+            const email = document.getElementById('reqEmail').value.trim();
+            const btn = document.getElementById('requestBtn');
+            const successMsg = document.getElementById('requestSuccess');
+
+            if (!name || !email) return;
+
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch('/api/request-access', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email })
+                });
+
+                const data = await resp.json();
+
+                if (data.success) {
+                    document.getElementById('requestCard').querySelector('form').style.display = 'none';
+                    successMsg.classList.add('visible');
+                } else {
+                    btn.textContent = 'Send Request';
+                    btn.disabled = false;
+                    alert('Something went wrong. Please try again.');
+                }
+            } catch (err) {
+                btn.textContent = 'Send Request';
+                btn.disabled = false;
+                alert('Network error. Please try again.');
+            }
+        }
+
+        // ───── ANIMATED COUNTER ─────
+        function animateCount(el, target, duration = 1200, suffix = '') {
+            const start = 0;
+            const startTime = performance.now();
+            const isFloat = String(target).includes('.');
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const val = start + (target - start) * eased;
+                el.textContent = (isFloat ? val.toFixed(1) : Math.floor(val)) + suffix;
+                if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        async function loadData() {
+            let data;
+            try {
+                const resp = await fetch('./data/metrics.json');
+                data = await resp.json();
+            } catch(e) {
+                data = {};
+            }
+
+            // Timestamp
+            const ts = data.timestamp ? new Date(data.timestamp) : new Date();
+            const tsEl = document.getElementById('timestamp');
+            if (tsEl) {
+                tsEl.textContent = 'Last updated ' + ts.toLocaleString('en-US', { hour12: false });
+            }
+        }
+
+        // Only load dashboard data if already authenticated
+        if (sessionStorage.getItem('alos_auth') === 'true') {
+            loadData();
+        }
+    </script>
+
+</body>
+</html>

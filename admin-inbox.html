@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aloomii — Admin Inbox</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #080810;
+            --card: rgba(255,255,255,0.03);
+            --border: rgba(255,255,255,0.07);
+            --text: #f0f0f0;
+            --dim: #666;
+            --accent: #009e96;
+            --accent2: #663399;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ───── LOGIN GATE ───── */
+        .login-gate {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .login-gate.hidden { display: none; }
+
+        .login-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .login-card p {
+            font-size: 0.82rem;
+            color: var(--dim);
+            margin-bottom: 28px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 14px 16px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .login-input:focus {
+            border-color: var(--accent);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--bg);
+            background: var(--accent);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .login-btn:hover { opacity: 0.85; }
+
+        .login-error {
+            color: #f87171;
+            font-size: 0.8rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .login-error.visible { display: block; }
+
+        /* ───── ADMIN PANEL ───── */
+        .admin-panel {
+            display: none;
+            width: 100%;
+            max-width: 1100px;
+            padding: 40px 24px 80px;
+        }
+
+        .admin-panel.visible { display: block; }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .admin-header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .admin-stats {
+            display: flex;
+            gap: 24px;
+        }
+
+        .admin-stat {
+            text-align: center;
+        }
+
+        .admin-stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .admin-stat-label {
+            font-size: 0.68rem;
+            color: var(--dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+
+        .tab-btn {
+            padding: 14px 24px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--dim);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s;
+        }
+
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        /* Table */
+        .inbox-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+        }
+
+        .inbox-table thead th {
+            padding: 14px 20px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--dim);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .inbox-table tbody td {
+            padding: 16px 20px;
+            font-size: 0.85rem;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .inbox-table tbody tr:last-child td { border-bottom: none; }
+        .inbox-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .badge.consultation { background: rgba(0,158,150,0.15); color: var(--accent); }
+        .badge.access { background: rgba(102,51,153,0.15); color: var(--accent2); }
+        .badge.newsletter { background: rgba(86,203,249,0.15); color: #56cbf9; }
+
+        .detail-cell {
+            max-width: 300px;
+            color: var(--dim);
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        .detail-cell .detail-main {
+            color: var(--text);
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .detail-cell .detail-meta {
+            font-size: 0.75rem;
+            color: var(--dim);
+        }
+
+        .time-cell {
+            color: var(--dim);
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .email-link {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .email-link:hover { text-decoration: underline; }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--dim);
+            font-size: 0.9rem;
+        }
+
+        .loading-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--dim);
+            font-size: 0.9rem;
+        }
+
+        .refresh-btn {
+            padding: 8px 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--dim);
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .refresh-btn:hover { color: var(--text); border-color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .admin-panel { padding: 20px 12px 60px; }
+            .admin-header { flex-direction: column; align-items: flex-start; }
+            .inbox-table thead { display: none; }
+            .inbox-table, .inbox-table tbody, .inbox-table tr, .inbox-table td {
+                display: block; width: 100%;
+            }
+            .inbox-table tbody tr {
+                padding: 16px 20px;
+                border-bottom: 1px solid var(--border);
+            }
+            .inbox-table tbody td {
+                padding: 4px 20px; border: none;
+            }
+            .inbox-table tbody td:first-child { padding-top: 14px; }
+            .inbox-table tbody td:last-child { padding-bottom: 14px; }
+            .detail-cell { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ───── LOGIN GATE ───── -->
+    <div class="login-gate" id="loginGate">
+        <div class="login-card">
+            <h1>Admin Inbox</h1>
+            <p>This area is restricted to Aloomii admins.</p>
+            <input type="password" class="login-input" id="adminPassword" placeholder="Admin password" autocomplete="off" />
+            <button class="login-btn" onclick="adminLogin()">Sign In</button>
+            <div class="login-error" id="loginError">Incorrect password.</div>
+        </div>
+    </div>
+
+    <!-- ───── ADMIN PANEL ───── -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <div>
+                <h1>Inbox</h1>
+            </div>
+            <div style="display:flex;align-items:center;gap:20px;">
+                <div class="admin-stats">
+                    <div class="admin-stat">
+                        <div class="admin-stat-val" id="statTotal">—</div>
+                        <div class="admin-stat-label">Total</div>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="admin-stat-val" id="statConsult">—</div>
+                        <div class="admin-stat-label">Consultations</div>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="admin-stat-val" id="statAccess">—</div>
+                        <div class="admin-stat-label">Access</div>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="admin-stat-val" id="statNewsletter">—</div>
+                        <div class="admin-stat-label">Newsletter</div>
+                    </div>
+                </div>
+                <button class="refresh-btn" onclick="loadInbox()">Refresh</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-filter="all" onclick="setFilter('all', this)">All</button>
+            <button class="tab-btn" data-filter="consultation_request" onclick="setFilter('consultation_request', this)">Consultations</button>
+            <button class="tab-btn" data-filter="pending" onclick="setFilter('pending', this)">Access Requests</button>
+            <button class="tab-btn" data-filter="newsletter" onclick="setFilter('newsletter', this)">Newsletter</button>
+        </div>
+
+        <div id="tableContainer">
+            <div class="loading-state">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        // Admin password — different from Aloomii OS password
+        const _ak = [115,117,112,101,114,109,121,115,116,121]; // "supermysty"
+        function _d(a) { return a.map(c => String.fromCharCode(c)).join(''); }
+
+        // Check session
+        if (sessionStorage.getItem('aloomii_admin') === 'true') {
+            document.getElementById('loginGate').classList.add('hidden');
+            document.getElementById('adminPanel').classList.add('visible');
+            loadInbox();
+        }
+
+        document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') adminLogin();
+        });
+
+        function adminLogin() {
+            const input = document.getElementById('adminPassword');
+            const pwd = input.value.trim();
+            if (pwd === _d(_ak)) {
+                sessionStorage.setItem('aloomii_admin', 'true');
+                document.getElementById('loginGate').classList.add('hidden');
+                document.getElementById('adminPanel').classList.add('visible');
+                loadInbox();
+            } else {
+                document.getElementById('loginError').classList.add('visible');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Inbox data
+        let allItems = [];
+        let currentFilter = 'all';
+
+        async function loadInbox() {
+            const authKey = [97,108,111,111,109,105,105,56,56,56]; // "aloomii888" for API
+            try {
+                const res = await fetch('/api/view-requests?auth=' + _d(authKey));
+                const json = await res.json();
+                if (json.success) {
+                    allItems = json.requests || [];
+                    updateStats();
+                    renderTable();
+                } else {
+                    document.getElementById('tableContainer').innerHTML =
+                        '<div class="empty-state">Could not load requests.</div>';
+                }
+            } catch (e) {
+                document.getElementById('tableContainer').innerHTML =
+                    '<div class="empty-state">Error connecting to server.</div>';
+            }
+        }
+
+        function updateStats() {
+            const consultations = allItems.filter(r => r.type === 'consultation_request').length;
+            const newsletters = allItems.filter(r => r.type === 'newsletter').length;
+            const access = allItems.length - consultations - newsletters;
+            document.getElementById('statTotal').textContent = allItems.length;
+            document.getElementById('statConsult').textContent = consultations;
+            document.getElementById('statAccess').textContent = access;
+            document.getElementById('statNewsletter').textContent = newsletters;
+        }
+
+        function setFilter(filter, btn) {
+            currentFilter = filter;
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            renderTable();
+        }
+
+        function renderTable() {
+            const container = document.getElementById('tableContainer');
+            let items = allItems;
+
+            if (currentFilter === 'consultation_request') {
+                items = items.filter(r => r.type === 'consultation_request');
+            } else if (currentFilter === 'pending') {
+                items = items.filter(r => r.type !== 'consultation_request' && r.type !== 'newsletter');
+            } else if (currentFilter === 'newsletter') {
+                items = items.filter(r => r.type === 'newsletter');
+            }
+
+            if (items.length === 0) {
+                container.innerHTML = '<div class="empty-state">No requests found.</div>';
+                return;
+            }
+
+            let html = '<table class="inbox-table"><thead><tr>';
+            html += '<th>Type</th><th>Name</th><th>Email</th><th>Details</th><th>Received</th>';
+            html += '</tr></thead><tbody>';
+
+            items.forEach(r => {
+                const isConsult = r.type === 'consultation_request';
+                const isNewsletter = r.type === 'newsletter';
+                let badge;
+                if (isConsult) {
+                    badge = '<span class="badge consultation">Consultation</span>';
+                } else if (isNewsletter) {
+                    badge = '<span class="badge newsletter">Newsletter</span>';
+                } else {
+                    badge = '<span class="badge access">Access Request</span>';
+                }
+
+                let detailHtml = '';
+                if (isConsult) {
+                    const mainParts = [];
+                    if (r.company) mainParts.push(r.company);
+                    if (r.service) mainParts.push(formatValue(r.service));
+
+                    const metaParts = [];
+                    if (r.budget) metaParts.push('Budget: ' + formatValue(r.budget));
+                    if (r.timeline) metaParts.push('Timeline: ' + formatValue(r.timeline));
+
+                    detailHtml = '<div class="detail-cell">';
+                    if (mainParts.length) detailHtml += '<div class="detail-main">' + mainParts.join(' · ') + '</div>';
+                    if (metaParts.length) detailHtml += '<div class="detail-meta">' + metaParts.join(' · ') + '</div>';
+                    if (r.details) detailHtml += '<div class="detail-meta" style="margin-top:4px;">"' + escapeHtml(r.details) + '"</div>';
+                    detailHtml += '</div>';
+                } else if (isNewsletter) {
+                    detailHtml = '<div class="detail-cell"><div class="detail-meta">Newsletter signup</div></div>';
+                } else {
+                    detailHtml = '<div class="detail-cell"><div class="detail-meta">Requesting dashboard access</div></div>';
+                }
+
+                const time = r.timestamp ? new Date(r.timestamp) : null;
+                const timeStr = time
+                    ? time.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '<br>' +
+                      time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+                    : '—';
+
+                html += '<tr>';
+                html += '<td>' + badge + '</td>';
+                html += '<td style="font-weight:500;">' + escapeHtml(r.name || '—') + '</td>';
+                html += '<td><a href="mailto:' + escapeHtml(r.email || '') + '" class="email-link">' + escapeHtml(r.email || '—') + '</a></td>';
+                html += '<td>' + detailHtml + '</td>';
+                html += '<td class="time-cell">' + timeStr + '</td>';
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function formatValue(val) {
+            if (!val) return '';
+            return val.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+    </script>
+
+</body>
+</html>
