@@ -1,52 +1,42 @@
-export async function onRequestPost(context) {
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Content-Type": "application/json",
-  };
+// POST /api/update-metrics
+// Writes new metrics to Cloudflare KV (auth protected)
+export async function onRequestPost({ request, env }) {
+  // Auth check
+  const authHeader = request.headers.get('Authorization');
+  const apiKey = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  if (!apiKey || apiKey !== env.METRICS_API_KEY) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
 
   try {
-    // Auth check — requires METRICS_API_KEY
-    const authHeader = context.request.headers.get("Authorization");
-    const apiKey = context.env.METRICS_API_KEY;
+    const body = await request.json();
 
-    if (!apiKey || !authHeader || authHeader !== `Bearer ${apiKey}`) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: corsHeaders,
-      });
-    }
+    // Stamp with server time
+    body.updated_at = new Date().toISOString();
 
-    const metrics = await context.request.json();
+    await env.ALOOMII_METRICS.put('metrics', JSON.stringify(body));
 
-    // Store the full metrics blob in KV under a single key
-    await context.env.ACCESS_REQUESTS.put(
-      "live_metrics",
-      JSON.stringify({
-        ...metrics,
-        updated_at: new Date().toISOString(),
-      })
-    );
-
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: corsHeaders,
+    return new Response(JSON.stringify({ success: true, updated_at: body.updated_at }), {
+      headers: { 'Content-Type': 'application/json' }
     });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), {
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
-      headers: corsHeaders,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }
 
+// Handle CORS preflight
 export async function onRequestOptions() {
   return new Response(null, {
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    },
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    }
   });
 }

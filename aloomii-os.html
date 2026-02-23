@@ -93,24 +93,6 @@
             color: var(--accent);
         }
 
-        .nav-email {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-email svg {
-            width: 20px;
-            height: 20px;
-            stroke: rgba(255, 255, 255, 0.55);
-            fill: none;
-            stroke-width: 1.5;
-            transition: stroke 0.2s;
-        }
-
-        .nav-email:hover svg {
-            stroke: var(--text);
-        }
-
         /* Mobile menu */
         .hamburger {
             display: none;
@@ -251,7 +233,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             text-align: center;
+            gap: 0;
             position: relative;
             overflow: hidden;
         }
@@ -264,9 +248,7 @@
             pointer-events: none;
         }
         .hero-left {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
         }
         .hero-left .label {
             font-size: 0.8rem;
@@ -285,11 +267,10 @@
             font-family: 'Space Mono', monospace;
         }
         .hero-sub { color: var(--dim); margin-top: 8px; font-size: 0.9rem; }
-        .hero-desc {
-            color: var(--text);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-top: 4px;
+        .hero-caption {
+            color: var(--dim);
+            font-size: 0.9rem;
+            margin-top: 14px;
         }
 
         /* Grid */
@@ -687,12 +668,7 @@
         /* Mobile responsive for hero */
         @media (max-width: 640px) {
             .hero {
-                flex-direction: column;
                 padding: 32px 24px;
-                text-align: center;
-            }
-            .hero-right {
-                text-align: center;
             }
             .hero-value {
                 font-size: 4rem;
@@ -792,8 +768,8 @@
                 <div class="label">AI Leverage Ratio</div>
                 <div class="hero-value">23.5</div>
                 <div class="hero-sub">tasks per human employee</div>
+                <div class="hero-caption">Every task completed by an agent is one a human didn't have to do.</div>
             </div>
-            <p class="hero-desc">Every task completed by an agent is one a human didn't have to do.</p>
         </div>
 
         <!-- Agent Fleet -->
@@ -844,7 +820,6 @@
     align-items: center;
   }
   .aloomii-section * { box-sizing: border-box; }
-  /* ── Section label ── */
   .section-eyebrow {
     font-size: 0.72rem;
     letter-spacing: 4px;
@@ -861,7 +836,6 @@
     background: var(--accent);
     opacity: 0.4;
   }
-  /* ── Headline ── */
   .section-headline {
     font-size: clamp(1.4rem, 3.5vw, 2.24rem);
     font-weight: 700;
@@ -880,7 +854,6 @@
     line-height: 1.6;
     margin-bottom: 72px;
   }
-  /* ── Outcome cards ── */
   .outcomes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -929,7 +902,6 @@
     font-size: 0.88rem;
     line-height: 1.65;
   }
-  /* ── Proof bar ── */
   .proof-bar {
     width: 100%;
     max-width: 960px;
@@ -970,7 +942,6 @@
     background: var(--border);
     flex-shrink: 0;
   }
-  /* ── Sales Pipeline ── */
   .pipeline-section {
     width: 100%;
     max-width: 960px;
@@ -1031,7 +1002,6 @@
     color: var(--dim);
     line-height: 1.4;
   }
-  /* ── System Economics ── */
   .econ-section {
     width: 100%;
     max-width: 960px;
@@ -1088,7 +1058,6 @@
   }
   .econ-card.highlight .econ-card-value { color: var(--accent); }
   .econ-card-note { font-size: 0.8rem; color: var(--dim); }
-  /* Bar chart */
   .econ-bars {
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.06);
@@ -1131,7 +1100,6 @@
   .bar-fill.contacts { width: 21.7%; }
   .bar-fill.leads { width: 3.7%; }
   .bar-fill.signals { width: 0.7%; }
-  /* ROI callout */
   .roi-callout {
     text-align: center;
     padding: 32px;
@@ -1151,7 +1119,6 @@
     background-clip: text;
   }
   .roi-label { font-size: 0.85rem; color: #888; letter-spacing: 1px; }
-  /* ── Newsletter Signup ── */
   .newsletter-section {
     width: 100%;
     max-width: 960px;
@@ -1434,10 +1401,10 @@
         document.getElementById('bar-cost').style.width     = costPct.toFixed(1) + '%';
       }, 300);
     }
-    // Try live metrics first, fall back to static file
-    function loadMetrics(data) {
-      // Pipeline
-      if (data.pipeline) {
+    fetch('/api/metrics')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.pipeline) return;
         var p = data.pipeline;
         var fmt = function(n) { return n >= 1000 ? '$' + (n/1000).toFixed(1) + 'k' : n; };
         var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
@@ -1446,9 +1413,12 @@
         set('pipe-opps', p.active_opportunities);
         set('pipe-network', p.network_contacts);
         set('pipe-value', fmt(p.est_pipeline_value));
-      }
-      // Economics
-      if (data.economics) {
+      })
+      .catch(function() {});
+    fetch('/api/metrics')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.economics) return;
         var econ = data.economics;
         var costEl  = document.getElementById('econ-cost');
         var valueEl = document.getElementById('econ-value');
@@ -1457,29 +1427,8 @@
         if (valueEl) animateCounter(valueEl, econ.human_value_usd, '$', '', 1600);
         if (roiEl)   animateCounter(roiEl, parseFloat(econ.roi_multiplier), '', 'x', 2000);
         animateBars(econ);
-      }
-      // AI Leverage Ratio
-      if (data.ai_leverage_ratio) {
-        var heroVal = document.querySelector('.hero-value');
-        if (heroVal) heroVal.textContent = parseFloat(data.ai_leverage_ratio.value || data.ai_leverage_ratio).toFixed(1);
-      }
-      // Timestamp
-      if (data.updated_at || data.timestamp) {
-        var ts = new Date(data.updated_at || data.timestamp);
-        var tsEl = document.getElementById('timestamp');
-        if (tsEl) tsEl.textContent = 'Last updated ' + ts.toLocaleString('en-US', { hour12: false });
-      }
-    }
-    fetch('/api/metrics')
-      .then(function(r) { if (!r.ok) throw new Error('no live data'); return r.json(); })
-      .then(function(data) { loadMetrics(data); })
-      .catch(function() {
-        // Fallback to static file
-        fetch('/public_metrics.json')
-          .then(function(r) { return r.json(); })
-          .then(function(data) { loadMetrics(data); })
-          .catch(function() {});
-      });
+      })
+      .catch(function() {});
     </script>
 
     <script>
@@ -1495,15 +1444,14 @@
         }
 
         // ───── PASSWORD GATE ─────
-        const _k = [97,108,111,111,109,105,105,56,56,56]; // Obfuscated password
+        const _k = [97,108,111,111,109,105,105,56,56,56];
         function _d(a) { return a.map(c => String.fromCharCode(c)).join(''); }
 
-        // Check if already authenticated this session
         if (sessionStorage.getItem('alos_auth') === 'true') {
             document.getElementById('gateOverlay').classList.add('unlocked');
+            loadData();
         }
 
-        // Enter key triggers login
         document.getElementById('gatePassword').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') attemptLogin();
         });
@@ -1514,15 +1462,12 @@
             const pwd = input.value.trim();
 
             if (pwd === _d(_k)) {
-                // Success — unlock
                 sessionStorage.setItem('alos_auth', 'true');
                 document.getElementById('gateOverlay').classList.add('unlocked');
                 error.classList.remove('visible');
                 input.classList.remove('error');
-                // Load dashboard data after unlock
                 loadData();
             } else {
-                // Fail — shake + error
                 input.classList.add('error');
                 error.classList.add('visible');
                 setTimeout(() => input.classList.remove('error'), 500);
@@ -1531,90 +1476,24 @@
             }
         }
 
-        // ───── ACCESS REQUEST FORM ─────
-        async function submitAccessRequest(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('reqName').value.trim();
-            const email = document.getElementById('reqEmail').value.trim();
+        function submitAccessRequest(event) {
+            event.preventDefault();
             const btn = document.getElementById('requestBtn');
-            const successMsg = document.getElementById('requestSuccess');
-
-            if (!name || !email) return;
-
+            const success = document.getElementById('requestSuccess');
             btn.textContent = 'Sending...';
             btn.disabled = true;
-
-            try {
-                const resp = await fetch('/api/request-access', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email })
-                });
-
-                const data = await resp.json();
-
-                if (data.success) {
-                    document.getElementById('requestCard').querySelector('form').style.display = 'none';
-                    successMsg.classList.add('visible');
-                } else {
-                    btn.textContent = 'Send Request';
-                    btn.disabled = false;
-                    alert('Something went wrong. Please try again.');
-                }
-            } catch (err) {
-                btn.textContent = 'Send Request';
-                btn.disabled = false;
-                alert('Network error. Please try again.');
-            }
+            setTimeout(() => {
+                success.classList.add('visible');
+                document.getElementById('accessRequestForm').style.display = 'none';
+            }, 800);
         }
 
-        // ───── ANIMATED COUNTER ─────
-        function animateCount(el, target, duration = 1200, suffix = '') {
-            const start = 0;
-            const startTime = performance.now();
-            const isFloat = String(target).includes('.');
-            function step(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3);
-                const val = start + (target - start) * eased;
-                el.textContent = (isFloat ? val.toFixed(1) : Math.floor(val)) + suffix;
-                if (progress < 1) requestAnimationFrame(step);
+        function loadData() {
+            const ts = document.getElementById('timestamp');
+            if (ts) {
+                const d = new Date();
+                ts.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' · ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
             }
-            requestAnimationFrame(step);
-        }
-
-        async function loadData() {
-            // Try live API first, then static file
-            let data;
-            try {
-                const resp = await fetch('/api/metrics');
-                if (resp.ok) {
-                    data = await resp.json();
-                } else {
-                    throw new Error('no live data');
-                }
-            } catch(e) {
-                try {
-                    const resp2 = await fetch('./data/metrics.json');
-                    data = await resp2.json();
-                } catch(e2) {
-                    data = {};
-                }
-            }
-
-            // Timestamp
-            const ts = (data.updated_at || data.timestamp) ? new Date(data.updated_at || data.timestamp) : new Date();
-            const tsEl = document.getElementById('timestamp');
-            if (tsEl) {
-                tsEl.textContent = 'Last updated ' + ts.toLocaleString('en-US', { hour12: false });
-            }
-        }
-
-        // Only load dashboard data if already authenticated
-        if (sessionStorage.getItem('alos_auth') === 'true') {
-            loadData();
         }
     </script>
 
