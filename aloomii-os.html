@@ -823,6 +823,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
   .aloomii-section * { box-sizing: border-box; }
   .section-eyebrow {
@@ -842,13 +846,17 @@
     opacity: 0.4;
   }
   .section-headline {
-    font-size: clamp(1.4rem, 3.5vw, 2.24rem);
+    font-size: clamp(1.1rem, 4vw, 2.24rem);
     font-weight: 700;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
     text-align: center;
-    line-height: 1.15;
+    line-height: 1.2;
     max-width: 680px;
+    width: 100%;
     margin-bottom: 16px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    padding: 0 8px;
   }
   .section-headline span { color: var(--accent); }
   .section-subhead {
