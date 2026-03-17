@@ -1,6 +1,7 @@
 name = "aloomii"
 compatibility_date = "2024-01-01"
+pages_build_output_dir = "."
 
 [[kv_namespaces]]
 binding = "ALOOMII_METRICS"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "b520c1d361e84120b8f511fa942efb81"

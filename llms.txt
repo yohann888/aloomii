@@ -1,0 +1,72 @@
+# Aloomii — AI-Powered Customer Success
+
+> Aloomii is an AI-powered customer success and sales intelligence system built for B2B founders at $0–5M ARR who need pipeline and relationship infrastructure without a full-time sales team.
+
+## What Aloomii Does
+
+Aloomii replaces the SDR function and upgrades the AE function for relationship-intensive B2B businesses. It monitors markets for buying signals, keeps every client relationship warm, maps warm introduction paths, and delivers daily intelligence briefs — 24/7, autonomously.
+
+**Core capabilities:**
+- Signal Scout: monitors Reddit, X, Hacker News, LinkedIn, and Product Hunt for B2B buying intent signals, scored 1–5
+- Relationship Monitor: tracks all contacts, surfaces follow-up opportunities at the right moment
+- Reconnection Engine: prevents warm leads and clients from going cold
+- Network Enrichment: maps warm introduction paths through existing relationships
+- Event Scanner: identifies founder meetups, accelerator deadlines, and ICP-relevant events
+- Senior PM: delivers daily strategy briefs and weekly pipeline reviews
+- Content Engine: drafts and distributes brand content at scale
+
+## Who It's For
+
+**Ideal Customer Profile:**
+- B2B founders at $0–5M ARR
+- No dedicated sales team or SDR
+- Relationship-intensive industries (fintech, professional services, SaaS, consulting)
+- Founders doing their own outreach and losing deals in the follow-up
+
+## Pricing
+
+- Done-With-You: $2,000–3,500/mo + 5–10% performance layer
+- Human equivalent: replaces $60,000–90,000/yr SDR + $90,000–110,000/yr AE = $145,000/yr in salaries
+
+## Key Differentiators
+
+- Not a tool — a fully autonomous AI workforce (15 agents)
+- Relationship-first, not just lead volume
+- Warm intro mapping via existing network
+- Daily intelligence, not just alerts
+- Proprietary Aloomii Score (1–5) for signal qualification
+
+## Contact
+
+- Website: https://aloomii.com
+- Dashboard: https://aloomii.com/aloomii-os.html
+
+## Blog
+
+Aloomii publishes deep-dive articles for B2B founders on three content pillars:
+
+1. **AI Sales System** — How to deploy AI agents to replace SDR workflows, automate prospecting, and manage pipeline intelligence autonomously.
+2. **Industry Playbooks** — Sector-specific guides for fintech, professional services, SaaS, and consulting founders on regulatory exposure, relationship infrastructure, and CRM compliance.
+3. **Comparisons** — Honest breakdowns of AI sales tools, CRMs, and automation stacks — what they cost, what they hide, and when to use them.
+
+**Blog index:** https://aloomii.com/blog
+**Author:** Yohann Calpu — Co-founder, Aloomii. Background: JP Morgan Chase, IBM, 8 years Ontario Government.
+**Content schema:** BlogPosting + FAQPage + BreadcrumbList JSON-LD per article
+
+### Published Articles
+
+- **Your CRM Is a Regulatory Liability: What FSRA and SEC Auditors Actually Look For**
+  URL: https://aloomii.com/blog/crm-regulatory-liability
+  Pillar: Industry Playbooks
+  Summary: Most financial services firms unknowingly create audit exposure through their CRM. This article explains what FSRA and SEC examiners look for, and how self-hosted AI infrastructure eliminates the risk.
+
+- **The Real Cost of an SDR in 2026: A Founder's Honest Breakdown**
+  URL: https://aloomii.com/blog/the-real-cost-of-an-sdr-in-2026
+  Pillar: AI Sales System
+  Summary: A data-driven breakdown of the true fully-loaded cost of an SDR ($145,000+/yr) versus deploying an AI sales system at $4,500+/month. Includes the compounding asset argument for AI-first pipeline.
+
+## Legal
+
+- Privacy Policy: https://aloomii.com/privacy
+- Terms of Service: https://aloomii.com/terms
+- Client Terms: https://aloomii.com/client-terms

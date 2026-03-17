@@ -42,11 +42,20 @@ aloomii/
 
 ## Hosting & Deployment
 
-- **Platform**: Cloudflare Pages
+- **Platform**: Cloudflare Pages (auto-deployed via GitHub Actions)
+- **GitHub repo**: https://github.com/yohann888/aloomii
 - **Project name**: `aloomii`
 - **Default URL**: https://aloomii.pages.dev
 - **Custom domain**: aloomii.com (DNS managed by Cloudflare)
-- **Deploy command**: `npx wrangler pages deploy "/Users/jenny/Downloads/claude code/aloomii" --project-name=aloomii`
+
+### ⚠️ DEPLOY RULE — CRITICAL
+**NEVER run `wrangler pages deploy` directly.** This overwrites the live site with only your local files and will destroy content committed from other machines.
+
+**Only correct deploy:**
+```bash
+git add -A && git commit -m "message" && git push origin main
+```
+GitHub Actions handles the rest automatically.
 
 ## Pages
 

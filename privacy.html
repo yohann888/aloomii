@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Aloomii</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Minimal legal page styles — match site design */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg-white:#fff; --text-dark:#0a0a0a; --text-body:#3d3d3d; --text-muted:#6b7280; --accent:#2563eb; --border:rgba(0,0,0,0.08); }
+    body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg-white); color:var(--text-body); line-height:1.7; }
+    /* nav, footer, legal prose styles here */
+    .legal-container { max-width: 720px; margin: 0 auto; padding: 80px 24px 120px; }
+    .legal-container h1 { font-size: 2rem; color: var(--text-dark); font-weight: 700; margin-bottom: 8px; }
+    .legal-container .effective-date { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 48px; }
+    .legal-container h2 { font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin: 40px 0 12px; }
+    .legal-container p { margin-bottom: 16px; }
+    .legal-container ul { margin: 0 0 16px 20px; }
+    .legal-container li { margin-bottom: 8px; }
+    .legal-container a { color: var(--accent); }
+    /* nav */
+    .nav { position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 24px; }
+    .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .nav-logo img { height: 36px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { color: var(--text-body); text-decoration: none; font-size: 0.9rem; }
+    .nav-cta { background: var(--text-dark); color: #fff !important; padding: 8px 20px; border-radius: 6px; font-weight: 500; }
+    /* footer */
+    .footer { border-top: 1px solid var(--border); padding: 40px 24px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 0.875rem; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--text-dark); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><img src="/images/logos/Aloomii - final.png" alt="Aloomii" /></a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+        <a href="/#contact" class="nav-cta">Book a Call</a>
+      </div>
+    </div>
+  </nav>
+  <main class="legal-container">
+    <h1>Privacy Policy</h1>
+    <div class="effective-date">Effective Date: March 7, 2026</div>
+
+    <h2>1. Data We Collect</h2>
+    <p>We may collect the following types of data in the course of providing our services:</p>
+    <ul>
+      <li>Contact Information (such as name, email, and phone numbers).</li>
+      <li>Prospect Signals (business intelligence and publicly available indicators).</li>
+      <li>Usage Data (website navigation, analytics, and service usage metrics).</li>
+    </ul>
+
+    <h2>2. How We Use Data</h2>
+    <p>Your data is utilized primarily to improve and provide our services, specifically focusing on:</p>
+    <ul>
+      <li>AI signal processing and analysis.</li>
+      <li>Outreach automation and communication scheduling.</li>
+    </ul>
+
+    <h2>3. Self-Hosted Architecture Note</h2>
+    <p><strong>Client business data is processed exclusively within the client's own infrastructure. Aloomii does not store, access, or transmit client contact data through Aloomii servers.</strong></p>
+
+    <h2>4. Data Retention</h2>
+    <p>Data collected via our main website is retained only as long as necessary to provide services or satisfy legal, accounting, and reporting obligations. Client-side data retention is managed directly by the client within their own infrastructure.</p>
+
+    <h2>5. Third-Party Tools</h2>
+    <p>We leverage third-party tools to facilitate our operations. This includes the Gemini API for intelligence and research, and local PostgreSQL databases for secure, high-performance data storage. These tools operate under their respective strict data usage policies.</p>
+
+    <h2>6. Your Rights Under PIPEDA</h2>
+    <p>In accordance with the Personal Information Protection and Electronic Documents Act (PIPEDA), you have the right to:</p>
+    <ul>
+      <li>Access your personal information held by Aloomii.</li>
+      <li>Request corrections to any inaccurate or incomplete personal data.</li>
+      <li>Withdraw consent for the collection, use, or disclosure of your personal information.</li>
+    </ul>
+
+    <h2>7. Contact Us</h2>
+    <p>For any privacy-related requests or questions about this policy, please contact us at <a href="https://aloomii.com/#contact">Contact Us</a>.</p>
+  </main>
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>© 2026 Aloomii. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/client-terms">Client Terms</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

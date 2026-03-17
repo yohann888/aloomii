@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Aloomii Dashboard Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #080810;
+  --card: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.12);
+  --text: #f0f0f0;
+  --dim: #666;
+  --accent: #009e96;
+}
+
+body { font-family: 'Space Grotesk', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+.header { 
+  background: var(--bg); 
+  border-bottom: 1px solid var(--border); 
+  padding: 4rem 2rem; 
+  text-align: center; 
+}
+.header h1 { 
+  font-size: 2.5rem; 
+  font-weight: 700; 
+  margin: 0 0 1rem; 
+  letter-spacing: -1px; 
+}
+.header p { 
+  color: var(--dim); 
+  font-size: 1.1rem; 
+  letter-spacing: 0.5px; 
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit,minmax(350px,1fr)); 
+  gap: 1.5rem; 
+  padding: 3rem 2rem; 
+  max-width: 1400px; 
+  margin: 0 auto; 
+}
+
+.card { 
+  background: var(--card); 
+  border: 1px solid var(--border); 
+  border-radius: 12px; 
+  padding: 2rem; 
+  transition: border-color 0.2s;
+}
+.card:hover {
+  border-color: rgba(0,158,150,0.4);
+}
+
+.card h3 { 
+  color: var(--accent); 
+  margin: 0 0 1.5rem; 
+  font-size: 1.1rem; 
+  font-weight: 600; 
+  letter-spacing: 1px; 
+  text-transform: uppercase; 
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.95rem;
+}
+.card li:last-child {
+  border-bottom: none;
+}
+
+.status-ok { color: #009e96; font-family: 'Space Mono', monospace; font-size: 0.85rem; margin-left: 8px;} 
+.status-warn { color: #f59e0b; font-family: 'Space Mono', monospace; font-size: 0.85rem; margin-left: 8px;}
+
+@media (min-width: 1200px) { .grid { grid-template-columns: repeat(3,1fr); } }
+
+.cta-button {
+  display: inline-block;
+  background: var(--text);
+  color: var(--bg);
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  transition: transform 0.2s, background 0.2s;
+}
+.cta-button:hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+<div class="header">
+<img src="/images/logos/Aloomii%20-%20final.png" alt="Aloomii Logo" style="height: 48px; margin-bottom: 12px;" />
+<div style="font-size: 1.1rem; font-weight: 600; color: var(--dim); letter-spacing: 2px; text-transform: uppercase;">Live Fleet</div>
+</div>
+<div class="grid">
+<div class="card">
+<h3>🚨 Recent Signals (5)</h3>
+<ul>
+<li>Founder: pipeline collapsed, marketing at fault <span class="status-ok">✓ Score 4</span></li>
+<li>Ex-Enterprise AE: "building GTM is a grind" <span class="status-ok">✓ Score 4</span></li>
+<li>Travel tech co. hiring founding SDR <span class="status-ok">✓ Score 4</span></li>
+<li>15yr brand vet pivoting to equity advisory <span class="status-ok">✓ Score 4</span></li>
+<li>SaaS leader: needs signal automation at scale <span class="status-ok">✓ Score 5</span></li>
+</ul>
+</div>
+<div class="card">
+<h3>👥 Hot Contacts (Talk Now)</h3>
+<ul>
+<li>BlockSkunk <span class="status-warn">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: hot]</span></li>
+<li>Westland Insurance <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: demo]</span></li>
+<li>CryptoSlam <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: warm]</span></li>
+<li>CoinFund <span class="status-warn">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: intent]</span></li>
+<li>Syllaby <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: connected]</span></li>
+</ul>
+</div>
+<div class="card">
+<h3>📈 Fleet Health</h3>
+<ul style="font-family: 'Space Mono', monospace;">
+<li>Crons Healthy <span class="status-ok">22/25 (88%)</span></li>
+<li>Weekly Signals <span class="status-ok">34</span></li>
+<li>Active Pipeline <span class="status-ok">$114k</span></li>
+<li>System Uptime <span class="status-ok">99.9% (7d)</span></li>
+<li>Weekly Compute Cost <span class="status-ok">$11.63</span></li>
+</ul>
+</div>
+<div class="card">
+<h3>📅 Events</h3>
+<ul style="font-family: 'Space Mono', monospace;">
+<li>AI Meetup: LLMs & Agents <span class="status-ok">Mar 12 5:30PM</span></li>
+<li>Tech & Startup Pitch Night <span class="status-ok">Mar 12 7:00PM</span></li>
+<li>LAUNCH Festival <span class="status-ok">Mar 16</span></li>
+<li>Startup Investor Drinks <span class="status-warn">Mar 19</span></li>
+<li>Bitcoin Conference <span class="status-warn">Apr 12</span></li>
+</ul>
+</div>
+<div class="card">
+<h3>🎯 Active Outreach</h3>
+<ul>
+<li>BlockSkunk <span class="status-warn">Proposal in progress</span></li>
+<li>Westland Insurance <span class="status-ok">Demo scheduled</span></li>
+<li>SpiceNet <span class="status-ok">Warm intro sent</span></li>
+<li>Hopper <span class="status-ok">SDR angle identified</span></li>
+<li>maggitomato <span class="status-ok">Partner outreach</span></li>
+</ul>
+</div>
+<div class="card">
+<h3>🤖 Aloomii Trends (Top 5)</h3>
+<ul>
+<li>#AISalesAgents</li>
+<li>SDR Hiring Crisis</li>
+<li>AI-Native GTM</li>
+<li>Warm Intro Arbitrage</li>
+<li>CRM Decay</li>
+</ul>
+</div>
+</div>
+<footer style="text-align: center; padding: 4rem 2rem; opacity: 1;">
+<p style="color: var(--dim); margin-bottom: 2rem; font-family: 'Space Mono', monospace; font-size: 0.85rem;">Live data sanitized for demo. NDA unlocks full access.</p>
+<a href="https://calendly.com/yohann/aloomii-demo" class="cta-button">Book Your Fleet → 15min</a>
+</footer>
+</body>
+</html>

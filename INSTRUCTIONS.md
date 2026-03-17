@@ -6,73 +6,65 @@
 |------|-------|
 | **Live site** | https://aloomii.com |
 | **Cloudflare Pages URL** | https://aloomii.pages.dev |
+| **GitHub repo** | https://github.com/yohann888/aloomii |
 | **Cloudflare project** | `aloomii` |
-| **Local folder** | `/Users/jenny/Downloads/claude code/aloomii/` |
 | **Contact email** | hello@aloomii.com |
 
 ---
 
-## How to Deploy Changes
+## ⚠️ DEPLOY RULE — READ FIRST
 
-Every time you edit any file, redeploy with this one command:
+**NEVER run `wrangler pages deploy` directly.** It will overwrite the live site with only the files on your local machine — deleting anything that was committed from another machine.
+
+**The only correct deploy path is Git:**
 
 ```bash
-npx wrangler pages deploy "/Users/jenny/Downloads/claude code/aloomii" --project-name=aloomii
+git add -A
+git commit -m "your message"
+git push origin main
 ```
 
-That's it. Changes go live in ~30 seconds.
+GitHub Actions automatically deploys to Cloudflare Pages on every push to `main`. Changes are live in ~60 seconds. Both Yohann's machine and Jenny's machine must use this workflow.
 
 ---
 
-## How to Log In (if session expired)
+## How to Set Up (first time on a new machine)
 
 ```bash
-npx wrangler login
-```
+# Clone the repo
+git clone https://github.com/yohann888/aloomii.git
+cd aloomii
 
-This opens a browser window. Click "Allow" to authorize. Then run the deploy command above.
-
-Check if you're logged in:
-```bash
-npx wrangler whoami
+# Make changes, then deploy via git:
+git add -A
+git commit -m "describe your change"
+git push origin main
 ```
 
 ---
 
-## Site Pages
+## How to Add a Blog Article
 
-### Homepage (`index.html`)
-- Main marketing page with hero animation, services, and logo sections
-- Hero uses **Unicorn Studio** (loads from CDN, needs internet)
-- Services section: 2x2 grid + 1 centered
-
-### Aloomii OS Dashboard (`aloomii-os.html`)
-- Dark-themed dashboard showing AI agent fleet metrics
-- Data loads from `./data/metrics.json` — if that file doesn't exist, shows demo/fallback numbers
-- To update live metrics: create a `data/` folder and put `metrics.json` in it with this format:
-
-```json
-{
-  "ai_leverage_ratio": { "value": "23.5" },
-  "goal_accuracy": { "value": 94.5 },
-  "signal_velocity": { "total_signals": 36, "hot_leads": 18 },
-  "network_growth": { "total_contacts": 26 },
-  "content_throughput": { "drafts_ready": 16, "published": 0 },
-  "asset_library": { "models": 21, "designs": 52 },
-  "timestamp": "2026-02-21T12:00:00Z"
-}
+1. Create `/blog/your-article-slug.html` — copy the structure from an existing article
+2. Add the article card to `/blog/index.html`
+3. Commit and push:
+```bash
+git add -A
+git commit -m "Blog: add [article title]"
+git push origin main
 ```
 
 ---
 
 ## How to Add a New Page
 
-1. Create a new `.html` file in the `aloomii/` folder
+1. Create a new `.html` file in the root folder
 2. Copy the `<nav>` and mobile menu from `index.html`
-3. Add a link to the new page in the nav on ALL existing pages:
+3. Add a nav link on ALL existing pages:
    - `index.html` — both `<ul class="nav-links">` and `<div class="mobile-menu">`
    - `aloomii-os.html` — both `<ul class="nav-links">` and `<div class="mobile-menu">`
-4. Deploy
+   - `blog/index.html` — nav
+4. Commit and push (see above)
 
 ---
 
@@ -81,11 +73,8 @@ npx wrangler whoami
 Logo images live in `images/logos/`. To swap one:
 
 1. Drop the new image file into `images/logos/`
-2. Update the `src` in the HTML:
-   ```html
-   <img src="images/logos/your-new-logo.png" alt="Company Name">
-   ```
-3. Deploy
+2. Update the `src` in the HTML
+3. Commit and push
 
 ### Logo sections:
 - **Past Experience** (8 logos): White bg, 4x2 grid, large, full color
@@ -94,16 +83,19 @@ Logo images live in `images/logos/`. To swap one:
 
 ---
 
-## Navigation Links
+## Site Pages
 
-Current nav items (in order):
-1. **Home** → `index.html`
-2. **Aloomii OS** → `aloomii-os.html`
-3. **Client Application** → Google Form (opens in new tab)
-4. **Contact** → scrolls to footer on homepage
-5. **Email icon** → `mailto:hello@aloomii.com`
+### Homepage (`index.html`)
+- Main marketing page with hero animation, services, and logo sections
+- Hero uses **Unicorn Studio** (loads from CDN, needs internet)
 
-To change the Client Application form URL, search for `1FAIpQLSf` in both HTML files and replace the full Google Form URL.
+### Aloomii OS Dashboard (`aloomii-os.html`)
+- Dark-themed dashboard showing AI agent fleet metrics
+- Data loads from KV store via Cloudflare Workers function
+
+### Blog (`blog/index.html`)
+- Lists all published articles
+- Individual articles live at `blog/{slug}.html`
 
 ---
 
@@ -111,38 +103,39 @@ To change the Client Application form URL, search for `1FAIpQLSf` in both HTML f
 
 | Color | Hex | Used For |
 |-------|-----|----------|
-| Teal (primary) | `#009e96` | Service headings, dashboard accent |
-| Purple | `#663399` | Dashboard secondary accent |
-| Blue | `#56cbf9` | Dashboard tertiary accent |
-| Body text (light) | `#555555` | Homepage paragraph text |
-| Body text (dark) | `#f0f0f0` | Dashboard text |
+| Teal (primary) | `#009e96` | Headings, accents, CTAs |
+| Body text | `#444444` | Paragraph text |
+| Dark bg | `#0a0a0a` | Dark sections, nav bg |
+| Muted | `#888888` | Dates, captions |
 
 ---
 
-## Custom Domain Management
-
-Domain DNS is managed through Cloudflare. To check or change settings:
-
-1. Go to https://dash.cloudflare.com
-2. Click on `aloomii.com` in your domains
-3. **DNS** tab shows all records
-4. **Workers & Pages** → `aloomii` project → **Custom domains** tab
+## Navigation (current)
+1. **Home** → `index.html`
+2. **Aloomii AI Workforce** → `aloomii-os.html`
+3. **Blog** → `blog/`
+4. **Contact** → `#contact` (scroll anchor)
 
 ---
 
 ## Troubleshooting
 
+**Deploy via GitHub Actions failed?**
+- Check Actions tab at https://github.com/yohann888/aloomii/actions
+- Secrets needed: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+
 **Unicorn Studio hero not showing?**
-- Only works when served over HTTP/HTTPS (not `file://`)
-- Check that the project ID `ZU1wuWl1J4Sp9Tl2q1mr` is still active on your Unicorn Studio account
+- Only works over HTTP/HTTPS (not `file://`)
+- Check project ID `ZU1wuWl1J4Sp9Tl2q1mr` is active on Unicorn Studio
 
-**Deploy fails with "not authenticated"?**
-- Run `npx wrangler login` and re-authorize
+**Changes not showing after push?**
+- Hard refresh: `Cmd+Shift+R` (Mac)
+- Wait 2–3 min for Cloudflare cache to clear
 
-**Changes not showing after deploy?**
-- Hard refresh: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows)
-- Cloudflare may cache for a few minutes — wait 2-3 min
+**Need to roll back?**
+- Cloudflare Dashboard → Workers & Pages → aloomii → Deployments → click any prior deploy → "Rollback"
+- OR: `git revert HEAD && git push origin main`
 
-**Want to roll back a deploy?**
-- Go to Cloudflare Dashboard → Workers & Pages → aloomii → Deployments
-- Click on any previous deployment and click "Rollback to this deployment"
+**Need to check what's actually live vs local?**
+- Visit https://aloomii.com and compare to local files
+- NEVER assume your local folder is the source of truth
