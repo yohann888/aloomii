@@ -1,42 +1,41 @@
 // GET /api/metrics
-// Reads live metrics from Cloudflare KV (merged from business and ops keys)
+// Reads live metrics from Cloudflare KV
 export async function onRequestGet({ env }) {
   try {
-    // Parallel fetch from both KV keys
-    const [bizData, opsData] = await Promise.all([
-      env.ALOOMII_METRICS.get('metrics:business', { type: 'json' }),
-      env.ALOOMII_METRICS.get('metrics:ops', { type: 'json' })
-    ]);
+    // Try to get both, but prioritize business metrics for the main response
+    const bizData = await env.ALOOMII_METRICS.get('metrics:business', { type: 'json' });
+    const opsData = await env.ALOOMII_METRICS.get('metrics:ops', { type: 'json' });
 
-    // Fallback/Legacy: check the old 'metrics' key if new keys are empty
-    let legacyData = null;
+    // Fallback to the old 'metrics' key if neither exist (migration period)
     if (!bizData && !opsData) {
-      legacyData = await env.ALOOMII_METRICS.get('metrics', { type: 'json' });
+      const legacyData = await env.ALOOMII_METRICS.get('metrics', { type: 'json' });
+      if (legacyData) return new Response(JSON.stringify(legacyData), {
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+      });
     }
 
-    // Merge results
-    const merged = {
-      timestamp: new Date().toISOString(),
-      ...(legacyData || {}),
+    // Combine them
+    const combined = {
       ...(bizData || {}),
-      ...(opsData || {})
+      cron_fleet: opsData ? opsData.cron_fleet : undefined,
+      updated_at: new Date().toISOString()
     };
 
-    // If still no data, return static defaults
-    if (!bizData && !opsData && !legacyData) {
+    // If we have nothing, return the hardcoded defaults
+    if (!bizData && !opsData) {
       return new Response(JSON.stringify({
         error: 'No metrics data yet',
-        economics: { weekly_cost_usd: 7.42, human_value_usd: 1083, roi_multiplier: 146,
-          breakdown: { content_drafts: 800, contacts_managed: 235, hot_leads: 40, signals_scanned: 8 }
+        economics: { weekly_cost_usd: 11.63, human_value_usd: 1536, roi_multiplier: 132,
+          breakdown: { content_drafts: 50, contacts_managed: 640, hot_leads: 740, signals_scanned: 106 }
         },
-        pipeline: { hot_leads_this_week: 2, signals_detected: 4, active_opportunities: 4,
-          est_pipeline_value: 28500, network_contacts: 48 }
+        pipeline: { hot_leads_this_week: 37, signals_detected: 53, active_opportunities: 0,
+          est_pipeline_value: 114000, network_contacts: 128 }
       }), {
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
       });
     }
 
-    return new Response(JSON.stringify(merged), {
+    return new Response(JSON.stringify(combined), {
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
     });
   } catch (err) {
