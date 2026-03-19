@@ -2,11 +2,11 @@
 
 <h2 id="compliance-problem">The Compliance Problem with Standard AI Tools</h2>
 
-<p>If you're an insurance broker or financial advisor who's looked at AI tools in the last 12 months, you've probably had this experience: you see a demo, get excited about the efficiency gains, start asking about data handling — and then your compliance officer kills it.</p>
+<p>If you're an insurance broker or financial advisor who's looked at AI tools in the last 12 months, you've probably had this experience: you see a demo, get excited about the efficiency gains, and start asking about data handling. Then your compliance officer kills it.</p>
 
 <p>They're right to kill it. Here's why.</p>
 
-<p>Every mainstream AI tool — ChatGPT, Claude, Gemini, Copilot — processes your data on third-party cloud infrastructure. When you paste a client's financial details into ChatGPT to draft an email, that data travels to OpenAI's servers, gets processed, and may be stored in logs. When you use a cloud-based CRM with AI features, your client data sits on servers you don't control, in jurisdictions you may not have approved.</p>
+<p>Every mainstream AI tool (ChatGPT, Claude, Gemini, Copilot) processes your data on third-party cloud infrastructure. When you paste a client's financial details into ChatGPT to draft an email, that data travels to OpenAI's servers, gets processed, and may be stored in logs. When you use a cloud-based CRM with AI features, your client data sits on servers you don't control, in jurisdictions you may not have approved.</p>
 
 <p>For an unregulated tech startup, this is fine. For an FSRA-regulated insurance brokerage or a financial advisory firm under OSFI or SEC oversight, it's a compliance violation waiting to happen.</p>
 
@@ -20,7 +20,7 @@
 <li><strong>Consent gaps:</strong> Did your clients consent to their data being processed by an AI provider? In most cases, your privacy policy doesn't cover this.</li>
 </ul>
 
-<p>We explored this problem in depth in our article on <a href="/blog/crm-regulatory-liability">Your CRM Is a Regulatory Liability</a>. The same issues that apply to cloud CRMs apply tenfold to cloud AI tools — because AI tools process more data, more deeply, with less transparency about how it's handled.</p>
+<p>We explored this problem in depth in our article on <a href="/blog/crm-regulatory-liability">Your CRM Is a Regulatory Liability</a>. The same issues that apply to cloud CRMs apply tenfold to cloud AI tools, because AI tools process more data, more deeply, with less transparency about how it's handled.</p>
 
 <p>The result: most brokerages and advisory firms are either avoiding AI entirely (losing competitive ground) or using it informally without compliance oversight (creating hidden risk). Neither is acceptable.</p>
 
@@ -30,7 +30,7 @@
 
 <p>Here's the architecture in plain language:</p>
 
-<p><strong>The agent runs on your hardware.</strong> NemoClaw installs on a dedicated server in your office, a private cloud instance you control (AWS, Azure, or a Canadian hosting provider), or even a properly secured Mac Mini. The agent process, its memory, its configuration — all of it lives on infrastructure you own and control.</p>
+<p><strong>The agent runs on your hardware.</strong> NemoClaw installs on a dedicated server in your office, a private cloud instance you control (AWS, Azure, or a Canadian hosting provider), or even a properly secured Mac Mini. The agent process, its memory, and its configuration all live on infrastructure you own and control.</p>
 
 <p><strong>Client data stays local.</strong> When NemoClaw processes a client's policy renewal or monitors a portfolio for triggers, that data never leaves your network. The agent reads from your local CRM or database, processes it locally, and writes results back to your local storage. No external API calls contain client data.</p>
 
@@ -54,11 +54,11 @@
 
 <p><strong>Renewal management and alerts.</strong> For insurance brokerages, renewal cycles are the heartbeat of revenue. NemoClaw tracks every policy renewal date, triggers review workflows 90 days before expiry, drafts renewal outreach emails, and monitors whether the client has engaged with the renewal process. If a renewal is 30 days out and the client hasn't responded to three outreach attempts, NemoClaw escalates it to the principal with a full interaction history.</p>
 
-<p><strong>Relationship health scoring.</strong> Every client relationship gets a rolling health score based on: frequency of contact, response times, meeting cadence, service request patterns, and sentiment indicators from email communications. Advisors see a dashboard of their book sorted by relationship health — the relationships most at risk are at the top. This replaces the gut feeling that senior advisors have (and junior advisors don't) with a data-driven system that works across the entire book of business.</p>
+<p><strong>Relationship health scoring.</strong> Every client relationship gets a rolling health score based on: frequency of contact, response times, meeting cadence, service request patterns, and sentiment indicators from email communications. Advisors see a dashboard of their book sorted by relationship health. The relationships most at risk are at the top. This replaces the gut feeling that senior advisors have (and junior advisors don't) with a data-driven system that works across the entire book of business.</p>
 
 <p><strong>Meeting prep for client reviews.</strong> Before every annual review or check-in meeting, NemoClaw compiles: the client's full interaction history, policy or portfolio summary, life events detected from public sources (marriage, new home, business changes), market conditions relevant to their coverage or portfolio, and suggested discussion topics. The advisor walks into the meeting fully prepared without spending an hour pulling files.</p>
 
-<p><strong>Referral path identification.</strong> NemoClaw cross-references your client network with public data to identify warm introduction paths to prospects. "Your client Jane Smith sits on the same board as Mark Chen, who runs a manufacturing firm with $2M in expiring commercial coverage." These paths exist in your network today — you just can't see them manually. NemoClaw finds them systematically.</p>
+<p><strong>Referral path identification.</strong> NemoClaw cross-references your client network with public data to identify warm introduction paths to prospects. Your client network today; you just can't see them manually. NemoClaw finds them systematically.</p>
 
 <h2 id="regulatory-landscape">The Regulatory Landscape: FSRA, OSFI, and SEC</h2>
 
@@ -66,7 +66,7 @@
 
 <p><strong>FSRA (Financial Services Regulatory Authority of Ontario):</strong> FSRA's technology guidance focuses on outsourcing risk and data governance. If you're sending client data to a third-party AI provider, FSRA expects you to have: a written outsourcing agreement, data processing addendum, business continuity plan if the provider goes down, and evidence of ongoing oversight. Most brokerages using cloud AI tools have none of these. NemoClaw eliminates the outsourcing risk entirely because there is no third party — the technology runs on your infrastructure.</p>
 
-<p><strong>OSFI (Office of the Superintendent of Financial Institutions):</strong> OSFI's B-10 guideline on technology and cyber risk explicitly addresses third-party cloud services. For federally regulated financial institutions, sending client PII to a cloud AI provider without a formal risk assessment and board-level approval is a compliance gap. NemoClaw's on-premise architecture means OSFI's third-party technology provisions don't apply — you're using technology you control, not outsourcing to a provider.</p>
+<p><strong>OSFI (Office of the Superintendent of Financial Institutions):</strong> OSFI's B-10 guideline on technology and cyber risk explicitly addresses third-party cloud services. For federally regulated financial institutions, sending client PII to a cloud AI provider without a formal risk assessment and board-level approval is a compliance gap. NemoClaw's on-premise architecture means OSFI's third-party technology provisions don't apply; you're using technology you control rather than outsourcing to a provider.</p>
 
 <p><strong>SEC (Securities and Exchange Commission):</strong> For US-registered advisors, the SEC's 2025–2026 guidance on AI in financial services emphasizes transparency, audit trails, and fiduciary duty. If an AI tool influences client recommendations or communications, the advisor must be able to explain and document how. NemoClaw's complete action logging satisfies this — every AI-generated insight, draft, or alert is logged with the data that produced it.</p>
 
@@ -86,7 +86,7 @@
 
 <p><strong>Ongoing: Managed support.</strong> After deployment, Aloomii provides monthly management: SOP refinement as your workflows evolve, skill updates as new capabilities become available, monitoring to ensure the agent stays healthy, and quarterly compliance review to keep documentation current.</p>
 
-<p>The firms that deploy NemoClaw aren't early adopters taking a risk. They're pragmatic operators who recognize that their competitors are already using AI informally — and that a structured, compliant deployment is better than pretending the technology doesn't exist.</p>
+<p>The firms that deploy NemoClaw aren't early adopters taking a risk. They're pragmatic operators who recognize that their competitors are already using AI informally, and that a structured, compliant deployment is better than pretending the technology doesn't exist.</p>
 
 <p>If you're running a brokerage or advisory firm and you've been waiting for AI that doesn't create compliance exposure, this is it. NemoClaw gives you the competitive advantage of AI automation with the data control your regulators require.</p>
 
