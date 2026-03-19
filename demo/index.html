@@ -98,12 +98,26 @@ body { font-family: 'Space Grotesk', sans-serif; margin: 0; background: var(--bg
   color: white;
   transform: translateY(-2px);
 }
+
+.live-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 6px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
 </style>
 </head>
 <body>
 <div class="header">
 <img src="/images/logos/Aloomii%20-%20final.png" alt="Aloomii Logo" style="height: 48px; margin-bottom: 12px;" />
-<div style="font-size: 1.1rem; font-weight: 600; color: var(--dim); letter-spacing: 2px; text-transform: uppercase;">Live Fleet</div>
+<div style="font-size: 1.1rem; font-weight: 600; color: var(--dim); letter-spacing: 2px; text-transform: uppercase;"><span class="live-dot"></span>Live Fleet</div>
 </div>
 <div class="grid">
 <div class="card">
@@ -119,41 +133,41 @@ body { font-family: 'Space Grotesk', sans-serif; margin: 0; background: var(--bg
 <div class="card">
 <h3>👥 Hot Contacts (Talk Now)</h3>
 <ul>
-<li>BlockSkunk <span class="status-warn">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: hot, proposal]</span></li>
-<li>Westland Insurance <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: design-partner]</span></li>
-<li>NationGraph <span class="status-warn">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: series-a, hot]</span></li>
-<li>Hustle Fund <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: cix, investor]</span></li>
-<li>Antler Canada <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[tags: cix, investor]</span></li>
+<li>Westland Insurance <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[design-partner]</span></li>
+<li>CryptoSlam / Randy Wasinger <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[equity-relationship]</span></li>
+<li>NationGraph <span class="status-warn">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[series-a, hot]</span></li>
+<li>Hustle Fund <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[cix-mar25, investor]</span></li>
+<li>Antler Canada <span class="status-ok">Tier 1</span> <span style="font-size: 0.8rem; color: var(--dim); margin-left: 8px;">[cix-mar25, investor]</span></li>
 </ul>
 </div>
 <div class="card">
 <h3>📈 Fleet Health</h3>
 <ul style="font-family: 'Space Mono', monospace;">
-<li>Crons Healthy <span class="status-ok">22/25 (88%)</span></li>
-<li>Weekly Signals <span class="status-ok">34</span></li>
-<li>Active Pipeline <span class="status-ok">$114k</span></li>
-<li>System Uptime <span class="status-ok">99.9% (7d)</span></li>
-<li>Weekly Compute Cost <span class="status-ok">$11.63</span></li>
+<li>Crons Healthy <span class="status-ok" id="fleet-health">23/30</span></li>
+<li>Weekly Signals <span class="status-ok" id="fleet-signals">—</span></li>
+<li>Network Contacts <span class="status-ok" id="fleet-contacts">—</span></li>
+<li>Weekly Compute Cost <span class="status-ok" id="fleet-cost">—</span></li>
+<li>ROI Multiplier <span class="status-ok" id="fleet-roi">—</span></li>
 </ul>
 </div>
 <div class="card">
 <h3>📅 Events</h3>
 <ul style="font-family: 'Space Mono', monospace;">
-<li>AI Tech & Startup Night <span class="status-warn">Mar 18 6:00PM</span></li>
-<li>Startup Investor Drinks <span class="status-warn">Mar 19 6:00PM</span></li>
+<li>Startup Investor Drinks <span class="status-warn">Mar 19 6:00PM — Tonight</span></li>
 <li>CIX Summit (100+ investors) <span class="status-warn">Mar 25</span></li>
 <li>OpenClaw Meetup Toronto <span class="status-ok">Mar 26</span></li>
+<li>Consensus 2026 <span class="status-ok">May 5 — Miami</span></li>
 <li>Bitcoin Conference <span class="status-ok">May 2026</span></li>
 </ul>
 </div>
 <div class="card">
 <h3>🎯 Active Outreach</h3>
 <ul>
-<li>BlockSkunk <span class="status-warn">Commission proposal pending</span></li>
+<li>CryptoSlam <span class="status-ok">Proposal sent — call Randy</span></li>
+<li>Arch Network <span class="status-ok">Proposal sent</span></li>
+<li>OPNet BTC <span class="status-ok">Proposal sent</span></li>
 <li>Westland Insurance <span class="status-ok">Design partner — demo prep</span></li>
-<li>SpiceNet <span class="status-ok">Warm intro sent</span></li>
-<li>NationGraph <span class="status-warn">Series A — proposal sent</span></li>
-<li>Hustle Fund <span class="status-ok">CIX Summit Mar 25</span></li>
+<li>NationGraph <span class="status-warn">Series A — follow up now</span></li>
 </ul>
 </div>
 <div class="card">
@@ -171,5 +185,19 @@ body { font-family: 'Space Grotesk', sans-serif; margin: 0; background: var(--bg
 <p style="color: var(--dim); margin-bottom: 2rem; font-family: 'Space Mono', monospace; font-size: 0.85rem;">Live data sanitized for demo. NDA unlocks full access.</p>
 <a href="https://calendly.com/yohann/aloomii-demo" class="cta-button">Book Your Fleet → 15min</a>
 </footer>
+<script>
+fetch('/api/metrics')
+  .then(r => r.json())
+  .then(d => {
+    const p = d.pipeline || {};
+    const e = d.economics || {};
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.textContent = val; };
+    set('fleet-signals', p.signals_detected ?? p.hot_leads_this_week ?? '—');
+    set('fleet-contacts', p.network_contacts ?? '—');
+    set('fleet-cost', e.weekly_cost_usd ? '$' + e.weekly_cost_usd : '—');
+    set('fleet-roi', e.roi_multiplier ? e.roi_multiplier + 'x' : '—');
+  })
+  .catch(() => {}); // fail silently — static fallbacks remain
+</script>
 </body>
 </html>
