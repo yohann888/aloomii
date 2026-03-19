@@ -13,13 +13,17 @@ export async function onRequestPost({ request, env }) {
 
   try {
     const body = await request.json();
-
-    // Stamp with server time
     body.updated_at = new Date().toISOString();
 
-    await env.ALOOMII_METRICS.put('metrics', JSON.stringify(body));
+    // Determine which sub-key to use based on content to avoid race condition overwrites
+    let key = 'metrics:business'; // Default
+    if (body.cron_fleet) {
+      key = 'metrics:ops';
+    }
 
-    return new Response(JSON.stringify({ success: true, updated_at: body.updated_at }), {
+    await env.ALOOMII_METRICS.put(key, JSON.stringify(body));
+
+    return new Response(JSON.stringify({ success: true, key, updated_at: body.updated_at }), {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (err) {

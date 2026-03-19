@@ -1,10 +1,29 @@
 // GET /api/metrics
-// Reads live metrics from Cloudflare KV
+// Reads live metrics from Cloudflare KV (merged from business and ops keys)
 export async function onRequestGet({ env }) {
   try {
-    const data = await env.ALOOMII_METRICS.get('metrics', { type: 'json' });
+    // Parallel fetch from both KV keys
+    const [bizData, opsData] = await Promise.all([
+      env.ALOOMII_METRICS.get('metrics:business', { type: 'json' }),
+      env.ALOOMII_METRICS.get('metrics:ops', { type: 'json' })
+    ]);
 
-    if (!data) {
+    // Fallback/Legacy: check the old 'metrics' key if new keys are empty
+    let legacyData = null;
+    if (!bizData && !opsData) {
+      legacyData = await env.ALOOMII_METRICS.get('metrics', { type: 'json' });
+    }
+
+    // Merge results
+    const merged = {
+      timestamp: new Date().toISOString(),
+      ...(legacyData || {}),
+      ...(bizData || {}),
+      ...(opsData || {})
+    };
+
+    // If still no data, return static defaults
+    if (!bizData && !opsData && !legacyData) {
       return new Response(JSON.stringify({
         error: 'No metrics data yet',
         economics: { weekly_cost_usd: 7.42, human_value_usd: 1083, roi_multiplier: 146,
@@ -17,7 +36,7 @@ export async function onRequestGet({ env }) {
       });
     }
 
-    return new Response(JSON.stringify(data), {
+    return new Response(JSON.stringify(merged), {
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
     });
   } catch (err) {
