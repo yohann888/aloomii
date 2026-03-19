@@ -186,18 +186,31 @@ body { font-family: 'Space Grotesk', sans-serif; margin: 0; background: var(--bg
 <a href="https://calendly.com/yohann/aloomii-demo" class="cta-button">Book Your Fleet → 15min</a>
 </footer>
 <script>
+const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined && val !== null) el.textContent = val; };
+
+// Ops metrics: cron fleet health from /api/metrics
 fetch('/api/metrics')
+  .then(r => r.json())
+  .then(d => {
+    if (d.cron_fleet) {
+      const cf = d.cron_fleet;
+      set('fleet-health', cf.healthy + '/' + cf.total + ' (' + cf.health_pct + '%)');
+    }
+  })
+  .catch(() => {});
+
+// Public metrics: signals, contacts, cost, ROI from deployed JSON
+fetch('/public_metrics.json')
   .then(r => r.json())
   .then(d => {
     const p = d.pipeline || {};
     const e = d.economics || {};
-    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.textContent = val; };
-    set('fleet-signals', p.signals_detected ?? p.hot_leads_this_week ?? '—');
-    set('fleet-contacts', p.network_contacts ?? '—');
-    set('fleet-cost', e.weekly_cost_usd ? '$' + e.weekly_cost_usd : '—');
-    set('fleet-roi', e.roi_multiplier ? e.roi_multiplier + 'x' : '—');
+    set('fleet-signals', p.signals_detected ?? p.hot_leads_this_week ?? null);
+    set('fleet-contacts', p.network_contacts ?? null);
+    set('fleet-cost', e.weekly_cost_usd ? '$' + e.weekly_cost_usd : null);
+    set('fleet-roi', e.roi_multiplier ? e.roi_multiplier + 'x' : null);
   })
-  .catch(() => {}); // fail silently — static fallbacks remain
+  .catch(() => {});
 </script>
 </body>
 </html>
