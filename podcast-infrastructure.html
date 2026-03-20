@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aloomii Podcast Infrastructure — Your Podcast Is a Pipeline</title>
+  <meta name="description" content="Done-for-you podcast operations for B2B founders. Guest booking, production, GEO-optimized distribution. Every episode becomes 30+ assets and a warm relationship in your pipeline. Built on the same system behind Pale Blue Nexus." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://aloomii.com/podcast-infrastructure.html" />
+  <!-- OG -->
+  <meta property="og:title" content="Aloomii Podcast Infrastructure — Your Podcast Is a Pipeline" />
+  <meta property="og:description" content="Done-for-you podcast operations for B2B founders. Guest booking, production, GEO-optimized distribution. Every episode becomes 30+ assets and a warm relationship in your pipeline. Built on the same system behind Pale Blue Nexus." />
+  <meta property="og:url" content="https://aloomii.com/podcast-infrastructure.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Aloomii" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Aloomii Podcast Infrastructure — Your Podcast Is a Pipeline" />
+  <meta name="twitter:description" content="Done-for-you podcast operations for B2B founders. Guest booking, production, GEO-optimized distribution. Every episode becomes 30+ assets and a warm relationship in your pipeline. Built on the same system behind Pale Blue Nexus." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- JSON-LD -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Aloomii","url":"https://aloomii.com","logo":"https://aloomii.com/images/logos/Aloomii - final.png","description":"AI Sales Intelligence for B2B founders. Podcast Infrastructure, Content Intelligence, and Sales Systems.","foundingDate":"2025"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Aloomii Podcast Infrastructure — Your Podcast Is a Pipeline","url":"https://aloomii.com/podcast-infrastructure.html","description":"Done-for-you podcast operations for B2B founders. Guest booking, production, GEO-optimized distribution. Every episode becomes 30+ assets and a warm relationship in your pipeline.","publisher":{"@type":"Organization","name":"Aloomii","url":"https://aloomii.com"}}</script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-white: #ffffff;
+      --bg-light: #f8f8f8;
+      --bg-dark: #0a0a0a;
+      --text-dark: #1a1a1a;
+      --text-body: #444444;
+      --text-light: #ffffff;
+      --text-muted: #888888;
+      --accent: #009e96;
+      --nav-height: 72px;
+      --section-padding: 100px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-white);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ───── NAVIGATION ───── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo { text-decoration: none; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); letter-spacing: -0.02em; }
+    .nav-logo img { height: 36px; width: auto; }
+
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--text-body); text-decoration: none; font-size: 0.9rem; font-weight: 400; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); font-weight: 500; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text-dark); transition: all 0.3s ease; }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-height); left: 0; right: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(12px);
+      padding: 24px 40px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      z-index: 999;
+    }
+    .mobile-menu.active { display: block; }
+    .mobile-menu a { display: block; padding: 12px 0; color: var(--text-body); text-decoration: none; font-size: 1rem; border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--text-dark); }
+
+    @media (max-width: 768px) {
+      .nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ───── CONTENT WRAPPER ───── */
+    .content-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    @media (max-width: 768px) { .content-wrapper { padding: 0 20px; } }
+
+    /* ───── HERO ───── */
+    .pi-hero {
+      margin-top: var(--nav-height);
+      padding: 100px 0 80px;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      text-align: center;
+    }
+
+    .pi-hero .eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .pi-hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text-light);
+      margin-bottom: 24px;
+      max-width: 820px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .pi-hero .subheadline {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.7;
+      color: rgba(255,255,255,0.72);
+      max-width: 680px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-cta-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--bg-dark);
+      background: #ffffff;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .hero-cta-primary:hover { background: #f0f0f0; transform: translateY(-1px); }
+
+    .hero-cta-secondary {
+      display: inline-block;
+      padding: 16px 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .hero-cta-secondary:hover { color: #ffffff; border-color: rgba(255,255,255,0.7); }
+
+    /* ───── CASE STUDY SECTION ───── */
+    .case-study-section {
+      padding: var(--section-padding) 0;
+      background: #0d0d0d;
+    }
+
+    .case-study-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #131313;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+      padding: 48px 48px 48px 44px;
+      position: relative;
+    }
+
+    .case-study-pill {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0,158,150,0.12);
+      border: 1px solid rgba(0,158,150,0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .case-study-card h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-light);
+      margin-bottom: 6px;
+      line-height: 1.15;
+    }
+
+    .case-study-card .cs-subheading {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 32px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .investment-figure {
+      display: inline-block;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+
+    .investment-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .case-study-card p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.72);
+      margin-bottom: 16px;
+      max-width: 740px;
+    }
+
+    .case-study-card .cs-punchline {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-light);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      margin-top: 8px;
+    }
+
+    .cs-watch-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 12px 28px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(0,158,150,0.1);
+      border: 1px solid rgba(0,158,150,0.35);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .cs-watch-link:hover { background: rgba(0,158,150,0.18); border-color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .case-study-card { padding: 32px 24px 32px 20px; }
+    }
+
+    /* ───── "WE RUN IT" SECTION ───── */
+    .we-run-it-section {
+      padding: var(--section-padding) 0;
+      background: var(--bg-white);
+    }
+
+    .we-run-it-section .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .we-run-it-section h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+    }
+
+    .we-run-it-section p {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-body);
+      max-width: 720px;
+      margin-bottom: 16px;
+    }
+
+    .pbn-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,158,150,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+    .pbn-link:hover { border-color: var(--accent); }
+
+    /* ───── WHAT'S INCLUDED ───── */
+    .offer-section {
+      padding: var(--section-padding) 0;
+      background: #f4fafa;
+    }
+
+    .offer-section .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .offer-section h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-dark);
+      margin-bottom: 48px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-white);
+      border: 1px solid rgba(0,0,0,0.07);
+      border-radius: 12px;
+      padding: 28px 28px;
+    }
+
+    .feature-card .feature-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(0,158,150,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .feature-card .feature-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--accent);
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-body);
+    }
+
+    @media (max-width: 768px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ───── PRICING ───── */
+    .pricing-section {
+      padding: var(--section-padding) 0;
+      background: var(--bg-white);
+    }
+
+    .pricing-section .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .pricing-section h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-dark);
+      margin-bottom: 48px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 32px;
+    }
+
+    .pricing-card {
+      background: var(--bg-white);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
+      padding: 40px 32px;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(0,158,150,0.15);
+    }
+
+    .pricing-card .price-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: var(--accent);
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .pricing-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .pricing-card .price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+
+    .pricing-card .price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .price-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(0,0,0,0.08);
+      margin: 20px 0;
+    }
+
+    .pricing-card .price-desc {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-body);
+    }
+
+    .pricing-note {
+      text-align: center;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .pricing-note strong {
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      .pricing-grid { grid-template-columns: 1fr; gap: 20px; }
+    }
+
+    /* ───── HOW IT WORKS ───── */
+    .how-it-works {
+      padding: var(--section-padding) 0;
+      background: #f4fafa;
+    }
+
+    .how-it-works .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .how-it-works h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-dark);
+      margin-bottom: 56px;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 800px;
+    }
+
+    .step {
+      display: flex;
+      gap: 32px;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: #f4fafa;
+      border: 1px solid rgba(0,158,150,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .step-body h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .step-body p {
+      font-size: 0.93rem;
+      line-height: 1.7;
+      color: var(--text-body);
+    }
+
+    @media (max-width: 768px) {
+      .step { gap: 20px; }
+    }
+
+    /* ───── CTA SECTION ───── */
+    .pi-cta-section {
+      padding: var(--section-padding) 0;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      text-align: center;
+    }
+
+    .pi-cta-section h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+
+    .pi-cta-section p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.7);
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+
+    .btn-cta-primary {
+      display: inline-block;
+      padding: 18px 48px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--bg-dark);
+      background: #ffffff;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .btn-cta-primary:hover { background: #f0f0f0; transform: translateY(-1px); }
+
+    /* ───── FOOTER ───── */
+    .footer { padding: 48px 0; border-top: 1px solid rgba(0,0,0,0.08); }
+    .footer-content { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+    .footer-links { display: flex; gap: 32px; list-style: none; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text-dark); }
+
+    @media (max-width: 768px) {
+      .footer-links { flex-direction: column; align-items: center; gap: 12px; }
+    }
+
+    /* ───── SCROLL ANIMATIONS ───── */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- ───── NAVIGATION ───── -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <img src="/images/logos/Aloomii - final.png" alt="Aloomii">
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/aloomii-os.html">Aloomii AI Workforce</a></li>
+      <li><a href="/content-intelligence.html">Content Intelligence</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/" onclick="closeMenu()">Home</a>
+    <a href="/aloomii-os.html" onclick="closeMenu()">Aloomii AI Workforce</a>
+    <a href="/content-intelligence.html" onclick="closeMenu()">Content Intelligence</a>
+    <a href="/blog/" onclick="closeMenu()">Blog</a>
+    <a href="/#contact" onclick="closeMenu()">Contact</a>
+  </div>
+
+  <!-- ───── HERO ───── -->
+  <section class="pi-hero">
+    <div class="content-wrapper">
+      <span class="eyebrow">Aloomii Podcast Infrastructure</span>
+      <h1>Your Podcast Is a Pipeline. We Build the Infrastructure.</h1>
+      <p class="subheadline">Done-for-you podcast operations for B2B founders — from guest booking to GEO-optimized distribution. Every episode becomes 30+ assets and a warm relationship in your pipeline.</p>
+      <div class="hero-ctas">
+        <a href="#offer" class="hero-cta-primary">See the Offer</a>
+        <a href="mailto:hello@aloomii.com" class="hero-cta-secondary">Book a 15-Min Call</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── CASE STUDY ───── -->
+  <section class="case-study-section">
+    <div class="content-wrapper">
+      <div class="case-study-card fade-in">
+        <span class="case-study-pill">Case Study</span>
+        <h2>How a Podcast Interview Led to a $9M Investment</h2>
+        <p class="cs-subheading">A Pale Blue Nexus Case Study</p>
+
+        <div>
+          <span class="investment-figure">$9M</span>
+          <span class="investment-label">Strategic Seed Round — CryptoSlam, January 2022</span>
+        </div>
+
+        <p>In January 2022, CryptoSlam — the NFT analytics platform — closed a $9 million strategic seed round. The lead investor was Animoca Brands, the Web3 gaming giant co-founded by Yat Siu.</p>
+        <p>The relationship that led to that investment didn't start in a pitch meeting. It started with a conversation.</p>
+        <p>Yohann Calpu, co-founder of Aloomii, interviewed Yat Siu on Pale Blue Nexus — a podcast built entirely on Aloomii's infrastructure. That conversation established a peer-level relationship between two operators in the Web3 space. It opened doors that cold outreach never would.</p>
+        <p>Yat Siu and Animoca Brands went on to lead the $9M seed round for CryptoSlam, alongside Mark Cuban, OKEx, and Blockdream Ventures.</p>
+
+        <p class="cs-punchline">That's not a content win. That's a pipeline win.</p>
+
+        <a href="https://youtu.be/dwuY6qUcRrU?si=uG_NEOe0P681VyfI" target="_blank" rel="noopener noreferrer" class="cs-watch-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Watch the episode
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── WE RUN IT ───── -->
+  <section class="we-run-it-section">
+    <div class="content-wrapper">
+      <div class="fade-in">
+        <p class="section-label">Proof of System</p>
+        <h2>We Don't Just Sell This. We Run It.</h2>
+        <p>Pale Blue Nexus is our co-founder's podcast — built entirely on the same infrastructure we deploy for clients. Guests include Yat Siu (Co-founder, Animoca Brands), Jim Rogers (legendary investor), Austin Armstrong (Syllaby CEO, 4M+ followers), and Jeff Neasmith.</p>
+        <p>PBN runs live across X, TikTok, Instagram, and LinkedIn with a companion newsletter. Every episode is produced, clipped, distributed, and GEO-optimized through the exact system you'd get.</p>
+        <a href="https://youtu.be/dwuY6qUcRrU?si=uG_NEOe0P681VyfI" target="_blank" rel="noopener noreferrer" class="pbn-link">
+          Listen to Pale Blue Nexus →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── WHAT'S INCLUDED ───── -->
+  <section class="offer-section" id="offer">
+    <div class="content-wrapper">
+      <p class="section-label fade-in">What's Included</p>
+      <h2 class="fade-in">Everything You Need. Nothing You Don't.</h2>
+
+      <div class="features-grid fade-in">
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+          <h3>Guest Identification &amp; ICP Matching</h3>
+          <p>We find guests who are potential clients, partners, or referrers — not random thought leaders.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 .01h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"></path></svg>
+          </div>
+          <h3>Guest Outreach &amp; Booking</h3>
+          <p>We handle all outreach, scheduling, confirmations, and rescheduling.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </div>
+          <h3>Pre-Interview Intelligence Brief</h3>
+          <p>1-page doc per guest: their business, recent moves, talking points, mutual connections.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </div>
+          <h3>Recording Logistics</h3>
+          <p>Platform setup, calendar management, guest tech prep emails.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+          </div>
+          <h3>Post-Production Editing</h3>
+          <p>Full episode edit, audio cleanup, intro/outro, master file delivery.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+          </div>
+          <h3>8–12 Clips Per Episode</h3>
+          <p>Captioned short-form clips for TikTok/Reels/Shorts and LinkedIn/X.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </div>
+          <h3>GEO-Optimized Show Notes &amp; Episode Pages</h3>
+          <p>Structured for AI engine citation — ChatGPT, Perplexity, Gemini.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </div>
+          <h3>Multi-Platform Distribution</h3>
+          <p>Apple Podcasts, Spotify, YouTube, and social. RSS management included.</p>
+        </div>
+
+        <div class="feature-card" style="grid-column: 1 / -1; max-width: 50%; margin: 0 auto;">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          </div>
+          <h3>Monthly Analytics &amp; Pipeline Report</h3>
+          <p>Downloads, clip performance, guest-to-contact conversion tracking.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── PRICING ───── -->
+  <section class="pricing-section">
+    <div class="content-wrapper">
+      <p class="section-label fade-in">Pricing</p>
+      <h2 class="fade-in">Simple Pricing. No Agency Markup.</h2>
+
+      <div class="pricing-grid fade-in">
+
+        <div class="pricing-card">
+          <h3>Launch Package</h3>
+          <div class="price">$5,000<span> one-time</span></div>
+          <div class="price-divider"></div>
+          <p class="price-desc">Full setup: branding, RSS, platform accounts, intro/outro, first 2 episodes produced, distribution pipeline configured.</p>
+        </div>
+
+        <div class="pricing-card featured">
+          <span class="price-badge">Most Popular</span>
+          <h3>Monthly Infrastructure</h3>
+          <div class="price">$3,000<span>/mo</span></div>
+          <div class="price-divider"></div>
+          <p class="price-desc">4 episodes/month fully produced. Guest research + outreach for 8–10 targets/month. Clips, show notes, GEO pages, distribution.</p>
+        </div>
+
+        <div class="pricing-card">
+          <h3>Bundle: Podcast + ACI Engine</h3>
+          <div class="price">$4,500<span>/mo</span></div>
+          <div class="price-divider"></div>
+          <p class="price-desc">Everything above + Aloomii Content Intelligence Engine tier (social calendar, LinkedIn content, newsletter). Save $1,000/mo vs. buying separately.</p>
+        </div>
+
+      </div>
+
+      <p class="pricing-note fade-in"><strong>First client gets case study pricing — $2,500/mo for the first 3 months.</strong></p>
+    </div>
+  </section>
+
+  <!-- ───── HOW IT WORKS ───── -->
+  <section class="how-it-works">
+    <div class="content-wrapper">
+      <p class="section-label fade-in">The Process</p>
+      <h2 class="fade-in">How it works in 5 steps.</h2>
+
+      <div class="steps-list fade-in">
+
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h3>Discovery Call (30 min)</h3>
+            <p>We learn your goals, ICP, and the type of guests who'd move your business forward.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h3>Launch Setup</h3>
+            <p>Platform accounts, branding, RSS feed, recording environment check. Done in 7 days.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h3>Guest Pipeline Built</h3>
+            <p>We identify and outreach to 8–10 ICP-aligned guests per month. You approve the list.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h3>You Record. We Handle Everything Else.</h3>
+            <p>Production, clips, show notes, distribution. You show up for a 45-min conversation.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h3>Pipeline Report Delivered Monthly</h3>
+            <p>Every guest enters your CRM. You see which episodes generated relationships and which are compounding as GEO assets.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── CTA ───── -->
+  <section class="pi-cta-section">
+    <div class="content-wrapper">
+      <h2>Ready to Turn Your Podcast Into a Pipeline?</h2>
+      <p>15 minutes is enough to know if this is the right fit.</p>
+      <a href="mailto:hello@aloomii.com" class="btn-cta-primary">Book a Discovery Call</a>
+    </div>
+  </section>
+
+  <!-- ───── FOOTER ───── -->
+  <footer class="footer">
+    <div class="content-wrapper">
+      <div class="footer-content">
+        <ul class="footer-links">
+          <li><a href="/client-terms">Client Terms</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms and Conditions</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ───── SCRIPTS ───── -->
+  <script>
+    function toggleMenu() {
+      document.querySelector('.hamburger').classList.toggle('active');
+      document.getElementById('mobileMenu').classList.toggle('active');
+    }
+    function closeMenu() {
+      document.querySelector('.hamburger').classList.remove('active');
+      document.getElementById('mobileMenu').classList.remove('active');
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
