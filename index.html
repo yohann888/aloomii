@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aloomii — AI Sales Systems & OpenClaw Setup for B2B Founders</title>
-  <meta name="description" content="Aloomii builds AI systems that replace your SDR and run your business 24/7. From sales intelligence to custom OpenClaw and NemoClaw agent configuration — we turn AI tools into real workflows." />
+  <meta name="description" content="Aloomii is a Sales Intelligence System for B2B founders. Replace your SDR for $3,500/mo. Run your content engine on autopilot with Aloomii Content Intelligence (ACI) — GEO-optimized for ChatGPT, Perplexity, and Gemini." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -466,6 +466,124 @@
       }
     }
 
+    /* ───── CONTENT INTELLIGENCE SECTION ───── */
+    .content-intelligence {
+      padding: var(--section-padding) 0;
+      background: #f4fafa;
+    }
+
+    .ci-heading {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .ci-intro {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-body);
+      max-width: 720px;
+      margin-bottom: 16px;
+    }
+
+    .ci-tiers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin: 48px 0 40px;
+    }
+
+    .ci-tier {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 32px 28px;
+    }
+
+    .ci-tier-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .ci-tier-header h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #009e96;
+      letter-spacing: -0.02em;
+    }
+
+    .ci-tier-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.02em;
+    }
+
+    .ci-tier-price span {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .ci-tier p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #555555;
+      margin-bottom: 12px;
+    }
+
+    .ci-tier p:last-child {
+      margin-bottom: 0;
+    }
+
+    .ci-best-for {
+      font-size: 0.85rem !important;
+      color: var(--text-muted) !important;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      padding-top: 12px !important;
+    }
+
+    .content-intelligence-cta {
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffffff;
+      background: #009e96;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary:hover {
+      background: #007f79;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+      .ci-tiers {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .ci-tier-header {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
     /* ───── SCROLL ANIMATIONS ───── */
     .fade-in {
       opacity: 0;
@@ -674,6 +792,7 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="aloomii-os.html">Aloomii AI Workforce</a></li>
+      <li><a href="/content-intelligence.html">Content Intelligence</a></li>
       <li><a href="/blog/">Blog</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -689,6 +808,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html" onclick="closeMenu()">Home</a>
     <a href="aloomii-os.html" onclick="closeMenu()">Aloomii AI Workforce</a>
+    <a href="/content-intelligence.html" onclick="closeMenu()">Content Intelligence</a>
     <a href="/blog/" onclick="closeMenu()">Blog</a>
     <a href="#contact" onclick="closeMenu()">Contact</a>
   </div>
@@ -735,10 +855,53 @@
 
         <!-- Row 3: Centered -->
         <div class="service-card">
-          <h3>Video &amp; Podcast Production</h3>
-          <p>End-to-end production from concept through final cut. One recording session becomes 30+ pieces of platform-native content: clips, threads, quote cards, newsletters, and podcasts. We produce it and we teach you how to turn every episode into a month of distribution.</p>
+          <h3>Content Intelligence &amp; Distribution</h3>
+          <p>Your content should compound, not expire. We build and run a done-for-you content engine across LinkedIn, X, TikTok, and AI search — writing, publishing, and optimizing every piece to appear in front of buyers before they ever reach your competitor. One recording session becomes 30+ platform-native assets. Every post feeds data back into the system. Available as Signal ($1,500/mo), Engine ($2,500/mo), or Command ($4,000/mo).</p>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── CONTENT INTELLIGENCE ───── -->
+  <section class="content-intelligence" id="content-intelligence">
+    <div class="content-wrapper">
+      <h2 class="ci-heading fade-in">Your Content Should Sell While You Sleep</h2>
+      <p class="ci-intro fade-in">Most B2B founders treat content as a chore. You post on LinkedIn when you have time. You write a blog when the pipeline feels slow. Then you wonder why your competitors are getting inbound calls from decision-makers who say "I've been following you for months."</p>
+      <p class="ci-intro fade-in">That's not luck. That's a system.</p>
+      <p class="ci-intro fade-in">Aloomii Content Intelligence is a done-for-you content engine that publishes, optimizes, and compounds your authority across LinkedIn, X, TikTok, and AI search engines — while you're closing deals. It's not a marketing retainer. It's a revenue asset.</p>
+
+      <div class="ci-tiers fade-in">
+        <div class="ci-tier">
+          <div class="ci-tier-header">
+            <h3>Signal</h3>
+            <div class="ci-tier-price">$1,500<span>/mo</span></div>
+          </div>
+          <p>LinkedIn + X publishing and trend monitoring. We handle the calendar, the copy, and the distribution. You show up when it matters.</p>
+          <p class="ci-best-for"><strong>Best for:</strong> Founders who need a consistent presence but don't have time to build one.</p>
+        </div>
+
+        <div class="ci-tier">
+          <div class="ci-tier-header">
+            <h3>Engine</h3>
+            <div class="ci-tier-price">$2,500<span>/mo</span></div>
+          </div>
+          <p>Everything in Signal, plus GEO-optimized blog content, TikTok distribution, and an X feedback loop that turns engagement data into smarter posts. We write content designed to appear in AI-generated answers on ChatGPT, Perplexity, and Gemini — not just Google.</p>
+          <p class="ci-best-for"><strong>Best for:</strong> Founders ready to compound their authority into inbound pipeline.</p>
+        </div>
+
+        <div class="ci-tier">
+          <div class="ci-tier-header">
+            <h3>Command</h3>
+            <div class="ci-tier-price">$4,000<span>/mo</span></div>
+          </div>
+          <p>Full category ownership. We monitor competitors, own your GEO positioning, ghostwrite for you across every platform, and run a content intelligence system that tells you what the market is searching for before your competitors figure it out.</p>
+          <p class="ci-best-for"><strong>Best for:</strong> Founders who want to own their category in 12 months.</p>
+        </div>
+      </div>
+
+      <div class="content-intelligence-cta fade-in">
+        <a href="#contact" class="btn-primary">Get a Content Intelligence Audit →</a>
       </div>
     </div>
   </section>
@@ -866,6 +1029,7 @@
                 <option value="growth-brand">Growth &amp; Brand Strategy</option>
                 <option value="deals-partnerships">Closing Deals &amp; Strategic Partnerships</option>
                 <option value="video-podcast">Video &amp; Podcast Production</option>
+                <option value="content-intelligence">Aloomii Content Intelligence / ACI (Signal / Engine / Command)</option>
                 <option value="full-service">Full-Service (Multiple)</option>
                 <option value="not-sure">Not Sure Yet — Let's Talk</option>
               </select>
