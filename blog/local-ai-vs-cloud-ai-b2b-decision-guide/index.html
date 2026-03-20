@@ -1,0 +1,755 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Local AI vs. Cloud AI: The B2B Decision Guide (With a Free Architecture Quiz) — Aloomii Blog</title><meta name="description" content="Local AI keeps your data on-premise — cloud AI gives you instant access to the latest models. For B2B teams, the right choice depends on data sensitivity, compliance, volume, and technical capacity. Take the 5-question quiz to get your recommendation."><meta name="robots" content="index, follow"><link rel="canonical" href="https://aloomii.com/blog/local-ai-vs-cloud-ai-b2b-decision-guide"><!-- OG --><meta property="og:title" content="Local AI vs. Cloud AI: The B2B Decision Guide (With a Free Architecture Quiz) — Aloomii Blog"><meta property="og:description" content="Local AI keeps your data on-premise — cloud AI gives you instant access to the latest models. For B2B teams, the right choice depends on data sensitivity, compliance, volume, and technical capacity. Take the 5-question quiz to get your recommendation."><meta property="og:url" content="https://aloomii.com/blog/local-ai-vs-cloud-ai-b2b-decision-guide"><meta property="og:type" content="article"><meta property="og:site_name" content="Aloomii"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Local AI vs. Cloud AI: The B2B Decision Guide (With a Free Architecture Quiz) — Aloomii Blog"><meta name="twitter:description" content="Local AI keeps your data on-premise — cloud AI gives you instant access to the latest models. For B2B teams, the right choice depends on data sensitivity, compliance, volume, and technical capacity. Take the 5-question quiz to get your recommendation."><!-- Preconnect for Inter font --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"><!-- Organization JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Aloomii","url":"https://aloomii.com","logo":"https://aloomii.com/images/logos/Aloomii - final.png","description":"AI-powered customer success and sales intelligence system for B2B founders.","foundingDate":"2025","sameAs":["https://aloomii.com"]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Local AI vs. Cloud AI: The B2B Decision Guide (With a Free Architecture Quiz)","description":"Local AI keeps your data on-premise — cloud AI gives you instant access to the latest models. For B2B teams, the right choice depends on data sensitivity, compliance, volume, and technical capacity. Take the 5-question quiz to get your recommendation.","datePublished":"2026-03-20T00:00:00.000Z","author":{"@type":"Person","name":"Yohann Calpu","jobTitle":"Co-founder, Aloomii"},"publisher":{"@type":"Organization","name":"Aloomii","url":"https://aloomii.com"},"url":"https://aloomii.com/blog/local-ai-vs-cloud-ai-b2b-decision-guide","mainEntityOfPage":{"@type":"WebPage","@id":"https://aloomii.com/blog/local-ai-vs-cloud-ai-b2b-decision-guide"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aloomii.com"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://aloomii.com/blog"},{"@type":"ListItem","position":3,"name":"Local AI vs. Cloud AI: The B2B Decision Guide (With a Free Architecture Quiz)","item":"https://aloomii.com/blog/local-ai-vs-cloud-ai-b2b-decision-guide"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is local AI?","acceptedAnswer":{"@type":"Answer","text":"Local AI means the model runs on your own hardware or private infrastructure. Your data never leaves your environment. It's the right choice when data sensitivity, compliance requirements, or volume economics demand it."}},{"@type":"Question","name":"What is cloud AI?","acceptedAnswer":{"@type":"Answer","text":"Cloud AI means the model runs on a third-party provider's infrastructure — OpenAI, Google, Anthropic. You send data to their API and receive a response. Fast to set up, cheap at low volume, but your data leaves your environment."}},{"@type":"Question","name":"When should a B2B company use local AI?","acceptedAnswer":{"@type":"Answer","text":"When your AI workflows touch client data, financial records, or regulated information — or when you're running high-volume operations where per-call costs compound significantly."}},{"@type":"Question","name":"What is hybrid AI architecture?","acceptedAnswer":{"@type":"Answer","text":"Hybrid AI means using cloud models for non-sensitive workflows (content, research, ideation) and local or private models for anything touching client data or regulated information."}},{"@type":"Question","name":"How do I choose between local AI and cloud AI for my business?","acceptedAnswer":{"@type":"Answer","text":"The four key factors are: (1) data sensitivity — does your AI touch client data? (2) compliance requirements — are you in a regulated industry? (3) cost at scale — what volume will you run? (4) technical capacity — do you have staff to manage local infrastructure?"}}]}</script><link rel="stylesheet" href="/blog/_astro/_slug_.BRHGPcEa.css">
+<style>
+/* ── Decision Matrix Table ── */
+.decision-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0 2rem;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.decision-matrix th,
+.decision-matrix td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.decision-matrix thead th {
+  background: rgba(0,158,150,0.15);
+  color: #009e96;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.decision-matrix tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+.decision-matrix tbody tr:hover {
+  background: rgba(0,158,150,0.05);
+}
+.decision-matrix td:first-child {
+  font-weight: 600;
+  color: #e0e0e0;
+}
+.decision-matrix .check { color: #4caf50; }
+.decision-matrix .cross { color: #e57373; }
+
+/* ── Quiz Container ── */
+.quiz-container {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 3rem 0;
+}
+.quiz-container h2 {
+  font-size: 1.3rem;
+  margin: 0 0 0.4rem;
+  color: #fff;
+}
+.quiz-subtitle {
+  color: #aaa;
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem;
+}
+
+/* Progress bar */
+.quiz-progress-wrap {
+  margin-bottom: 1.75rem;
+}
+.quiz-progress-label {
+  font-size: 0.78rem;
+  color: #009e96;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.quiz-progress-bar-bg {
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  height: 5px;
+  overflow: hidden;
+}
+.quiz-progress-bar-fill {
+  height: 100%;
+  background: #009e96;
+  border-radius: 99px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+/* Questions */
+.quiz-question {
+  margin-bottom: 1.75rem;
+}
+.quiz-question-label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.quiz-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: rgba(255,255,255,0.02);
+  font-size: 0.93rem;
+  color: #ccc;
+  line-height: 1.4;
+  user-select: none;
+}
+.quiz-option:hover {
+  border-color: rgba(0,158,150,0.4);
+  background: rgba(0,158,150,0.05);
+}
+.quiz-option input[type="radio"] {
+  accent-color: #009e96;
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+}
+.quiz-option.selected {
+  border-color: #009e96;
+  background: rgba(0,158,150,0.1);
+  color: #fff;
+}
+
+/* See Result button */
+.quiz-submit-wrap {
+  display: none;
+  margin-top: 0.5rem;
+}
+.quiz-submit-wrap.visible {
+  display: block;
+}
+.quiz-error {
+  color: #e57373;
+  font-size: 0.88rem;
+  margin-bottom: 0.75rem;
+  display: none;
+}
+.quiz-error.visible {
+  display: block;
+}
+
+/* Result / teaser card */
+.quiz-result-card {
+  display: none;
+  background: rgba(0,158,150,0.06);
+  border: 1px solid rgba(0,158,150,0.25);
+  border-radius: 10px;
+  padding: 1.75rem;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.quiz-result-card.visible {
+  display: block;
+}
+.quiz-result-headline {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: #fff;
+}
+.result-badge {
+  display: inline-block;
+  padding: 0.35rem 1.1rem;
+  border-radius: 99px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.result-badge--cloud   { background: rgba(76,175,80,0.18);  color: #81c784; border: 1px solid #4caf50; }
+.result-badge--hybrid  { background: rgba(255,193,7,0.15);  color: #ffd54f; border: 1px solid #ffc107; }
+.result-badge--local   { background: rgba(255,152,0,0.15);  color: #ffb74d; border: 1px solid #ff9800; }
+
+.quiz-result-teaser-text {
+  font-size: 0.93rem;
+  color: #bbb;
+  margin: 0 0 1.5rem;
+  line-height: 1.65;
+}
+.quiz-email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.quiz-email-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.quiz-email-input:focus {
+  border-color: #009e96;
+}
+.quiz-email-input::placeholder {
+  color: #777;
+}
+.quiz-thankyou {
+  display: none;
+  color: #81c784;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+.quiz-thankyou.visible {
+  display: block;
+}
+.quiz-form-error {
+  display: none;
+  color: #e57373;
+  font-size: 0.88rem;
+}
+.quiz-form-error.visible {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .quiz-container {
+    padding: 1.25rem;
+  }
+  .quiz-email-form {
+    max-width: 100%;
+  }
+}
+</style>
+</head> <body> <!-- ── Navigation ── --> <nav class="nav"> <a href="/" class="nav-logo"> <img src="/images/logos/Aloomii - final.png" alt="Aloomii" width="120" height="36"> </a> <ul class="nav-links"> <li><a href="/">Home</a></li> <li><a href="/aloomii-os.html">Aloomii AI Workforce</a></li>  <li><a href="/blog" aria-current="page">Blog</a></li> <li><a href="/#contact">Contact</a></li> </ul> <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false"> <span></span> <span></span> <span></span> </button> </nav> <!-- Mobile Menu --> <div class="mobile-menu" id="mobileMenu" aria-hidden="true"> <a href="/">Home</a> <a href="/aloomii-os.html">Aloomii AI Workforce</a>  <a href="/blog">Blog</a> <a href="/#contact">Contact</a> </div> <!-- Page Content --> <div class="page-wrapper"> <article class="article-layout"> <!-- Header --> <header class="article-header content-wrapper"> <nav class="breadcrumb-nav" aria-label="Breadcrumb"> <a href="/">Home</a> <span aria-hidden="true">›</span> <a href="/blog">Blog</a> <span aria-hidden="true">›</span> <span>Local AI vs. Cloud AI: The B2B Decision Guide</span> </nav> <div class="article-meta"> <span class="category-pill category-pill--ai-sales">AI Sales System</span> <span>March 20, 2026</span> <span>·</span> <span>9 min read</span> </div> <h1>Local AI vs. Cloud AI: The B2B Decision Guide (With a Free Architecture Quiz)</h1> <div class="author-block"> <img class="author-avatar" src="/images/yohann-calpu.jpg" alt="Yohann Calpu" width="48" height="48"> <div class="author-info"> <div class="author-name">Yohann Calpu</div> <div class="author-credentials">Co-founder, Aloomii. 8 years Ontario Government. Former JP Morgan Chase, IBM.</div> </div> </div> </header> <!-- Article body with TOC --> <div class="article-with-toc content-wrapper"> <!-- TOC Sidebar --> <aside class="toc-sidebar" aria-label="Table of contents"> <nav class="toc-sticky"> <h4>On this page</h4> <ul> <li><a href="#what-local-cloud-mean">What "Local AI" and "Cloud AI" Actually Mean</a></li> <li><a href="#four-questions">The Four Questions That Determine Which You Need</a></li> <li><a href="#decision-matrix">The Decision Matrix</a></li> <li><a href="#running-both">Why Most B2B Companies End Up Running Both</a></li> <li><a href="#vendor-due-diligence">The Vendor Due Diligence Question You'll Start Hearing</a></li> <li><a href="#practical-starting-point">The Practical Starting Point</a></li> <li><a href="#quiz">Quiz: Which AI Architecture Is Right for You?</a></li> </ul> </nav> </aside> <!-- Main prose --> <div class="article-prose">
+
+<p>Most B2B conversations about AI start with the wrong question. "Which model should we use?" is less important than "where should that model run?" The infrastructure decision — local vs. cloud — shapes everything downstream: your cost structure, your compliance posture, your data risk, and your ability to scale.</p>
+
+<p>This isn't a technical question. It's a business strategy question. And the answer is different for a 15-person insurance brokerage, a 200-person law firm, and a 50-person SaaS company.</p>
+
+<p>Here's how to think through it.</p>
+
+<!-- TLDR -->
+<div class="tldr-box" style="background:rgba(0,158,150,0.08);border-left:3px solid #009e96;padding:1rem 1.25rem;margin:1.5rem 0 2rem;border-radius:0 8px 8px 0;">
+  <p style="font-size:0.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#009e96;margin:0 0 0.4rem;">TL;DR</p>
+  <p style="margin:0;font-size:1rem;line-height:1.6;">Local AI runs on your hardware — your data never leaves. Cloud AI runs on someone else's servers — fast to start, expensive at scale, compliance risk if you handle sensitive data. Most B2B companies end up running both. Take the 5-question quiz below to get your recommendation.</p>
+</div>
+
+<h2 id="what-local-cloud-mean">What "Local AI" and "Cloud AI" Actually Mean</h2>
+
+<p>Cloud AI means the model runs on someone else's infrastructure — OpenAI's servers, Google's data centers, Anthropic's API. You send your data to them, they process it, you get a response back. This is how most people start with AI: fast, cheap to experiment with, no setup required.</p>
+
+<p>Local AI means the model runs on your own hardware — a server you control, a machine in your office, or a private cloud environment you manage. Your data never leaves your environment. The processing happens in-house.</p>
+
+<p>There's a middle ground — private cloud deployments — where you run your own model instance on dedicated cloud infrastructure (AWS private VPC, Azure confidential computing). Your data doesn't commingle with other tenants, but you're still on rented infrastructure. For most mid-market B2B companies, this is often the practical answer.</p>
+
+<h2 id="four-questions">The Four Questions That Determine Which You Need</h2>
+
+<h3>1. How sensitive is your data?</h3>
+
+<p>This is the first filter. Be honest about what your AI system will actually touch.</p>
+
+<p>Use cloud if your AI is working with publicly available information, internal docs with no client data, marketing copy, research tasks, or anything you'd be comfortable with a contractor seeing.</p>
+
+<p>Go local if your AI touches client names, financial records, health information, legal documents, proprietary product data, or anything subject to NDA. The moment client data enters the picture, you have a data handling question — and "we sent it to OpenAI's API" is not a compliance answer in regulated industries.</p>
+
+<p>The test: would you be comfortable telling your clients exactly how their data moves through your AI workflow? If the answer is hesitation, you need local or private deployment.</p>
+
+<h3>2. What does your compliance posture require?</h3>
+
+<p>Regulated industries have explicit data residency and handling requirements. But compliance pressure is expanding beyond traditional regulated sectors.</p>
+
+<p>Industries where local or private is increasingly non-negotiable: financial services (OSFI, FSRA, SEC, FINRA), healthcare (HIPAA, PHIPA), legal (solicitor-client privilege, bar association rules), government and defense contracting, enterprise SaaS with SOC 2 Type II requirements.</p>
+
+<p>Industries where cloud is typically fine: early-stage startups without regulated data, marketing and content operations, sales intelligence when not touching client financial data, research and analysis workflows.</p>
+
+<p>The trend line matters here: enterprise buyers are adding AI data handling requirements to vendor contracts at an accelerating rate. If you sell to enterprise or regulated clients, your AI infrastructure will become part of their vendor due diligence within 18 months if it isn't already.</p>
+
+<h3>3. What's the cost at scale?</h3>
+
+<p>Cloud AI has a seductive unit economics problem: it's cheap per call, expensive at volume.</p>
+
+<p>At 100 API calls per day, cloud AI is negligible cost. At 100,000 calls per day — when you're running automated workflows, processing documents, monitoring relationships, generating content — the bill becomes a line item that demands scrutiny.</p>
+
+<p>Cloud AI cost structure: pay per token, per call, per model. Predictable at small scale. Nonlinear at large scale. A company running 500,000 AI calls per month is almost always cheaper on local infrastructure within 12-18 months of the hardware investment.</p>
+
+<p>Local AI cost structure: high upfront (hardware, setup, maintenance) — essentially zero marginal cost per call after that. The economics invert at scale.</p>
+
+<h3>4. What's your team's technical capacity?</h3>
+
+<p>Local AI is not plug-and-play. Running models like Llama 3, Mistral, or Qwen locally requires someone who can manage model serving infrastructure, handle updates, monitor performance, and troubleshoot when things break.</p>
+
+<p>Cloud AI removes that complexity entirely. For teams without dedicated AI engineering capacity, cloud is often the only practical choice.</p>
+
+<p>This is why the rise of managed local AI services matters: companies that want the data sovereignty of local deployment without the engineering overhead can now get both.</p>
+
+<h2 id="decision-matrix">The Decision Matrix</h2>
+
+<table class="decision-matrix">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Cloud AI</th>
+      <th>Local / Private AI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Setup time</td>
+      <td>Minutes</td>
+      <td>Days to weeks</td>
+    </tr>
+    <tr>
+      <td>Data stays in-house</td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="check">✓</span></td>
+    </tr>
+    <tr>
+      <td>Compliance-ready</td>
+      <td>Depends</td>
+      <td><span class="check">✓</span></td>
+    </tr>
+    <tr>
+      <td>Cost at low volume</td>
+      <td><span class="check">✓</span> Cheap</td>
+      <td><span class="cross">✗</span> High upfront</td>
+    </tr>
+    <tr>
+      <td>Cost at high volume</td>
+      <td><span class="cross">✗</span> Expensive</td>
+      <td><span class="check">✓</span> Near-zero marginal</td>
+    </tr>
+    <tr>
+      <td>Always latest models</td>
+      <td><span class="check">✓</span></td>
+      <td>Requires updates</td>
+    </tr>
+    <tr>
+      <td>Engineering required</td>
+      <td>Minimal</td>
+      <td>Moderate to high</td>
+    </tr>
+    <tr>
+      <td>Vendor lock-in risk</td>
+      <td>High</td>
+      <td>Low</td>
+    </tr>
+    <tr>
+      <td>Best for</td>
+      <td>Experimentation, early stage, non-sensitive data</td>
+      <td>Scale, regulated data, enterprise sales</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="running-both">Why Most B2B Companies End Up Running Both</h2>
+
+<p>The binary framing — local vs. cloud — rarely reflects how AI actually gets deployed in practice. Most B2B companies that take AI seriously end up with a hybrid architecture.</p>
+
+<p>Cloud for: ideation, content generation, research, anything that doesn't touch client data. The speed and model variety of cloud AI is unmatched for these use cases.</p>
+
+<p>Local or private for: anything that touches client records, financial data, deal intelligence, relationship data, or anything that will be scrutinized in a vendor audit.</p>
+
+<p>The architectural decision isn't "which one" — it's "which workflows go where." Drawing that line early, before your AI infrastructure is entangled with client data in ways you can't easily unwind, is the move that pays dividends two years from now.</p>
+
+<h2 id="vendor-due-diligence">The Vendor Due Diligence Question You'll Start Hearing</h2>
+
+<p>If you sell to mid-market or enterprise B2B clients, prepare for this question in vendor reviews: "Where does your AI infrastructure run, and what happens to our data when your system processes it?"</p>
+
+<p>Companies that can answer "our AI runs on-premise, your data never leaves your environment" have a meaningful sales advantage in regulated verticals. Companies that answer "we use OpenAI's API" are increasingly encountering friction in enterprise and regulated deals.</p>
+
+<p>This isn't about OpenAI being untrustworthy. It's about enterprise procurement teams applying the same data governance standards to AI vendors that they apply to every other vendor. Local and private deployment isn't a niche compliance play anymore — it's becoming table stakes for B2B AI companies that sell upmarket.</p>
+
+<h2 id="practical-starting-point">The Practical Starting Point</h2>
+
+<p>If you're early in your AI deployment, start cloud. The speed of iteration matters more than infrastructure optimization at small scale. Get workflows working, identify what's actually valuable, understand your data flows.</p>
+
+<p>Then make the architecture decision deliberately — not reactively — once you know what you're actually running at volume and what data it's touching.</p>
+
+<p>The companies that get this wrong are the ones who build deep cloud dependencies into workflows that process sensitive client data, then face a painful and expensive migration when the compliance question arrives.</p>
+
+<p>Build the habits early. Know where your data goes. Model the cost trajectory.</p>
+
+<!-- ══════════════════════════════════════════
+     INTERACTIVE QUIZ
+     ══════════════════════════════════════════ -->
+<div class="quiz-container" id="quiz" aria-label="AI Architecture Quiz">
+  <h2>Quiz: Which AI Architecture Is Right for You?</h2>
+  <p class="quiz-subtitle">Answer 5 questions. We'll send your personalized recommendation to your inbox.</p>
+
+  <!-- Progress bar -->
+  <div class="quiz-progress-wrap">
+    <div class="quiz-progress-label" id="quizProgressLabel">0 of 5 answered</div>
+    <div class="quiz-progress-bar-bg">
+      <div class="quiz-progress-bar-fill" id="quizProgressFill"></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-question">
+    <div class="quiz-question-label">1. Does your AI workflow touch client or customer data?</div>
+    <div class="quiz-options" data-question="q1">
+      <label class="quiz-option">
+        <input type="radio" name="q1" value="0" data-text="No — it's internal use only"> No — it's internal use only
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q1" value="1" data-text="Sometimes — depends on the workflow"> Sometimes — depends on the workflow
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q1" value="2" data-text="Yes — client data is central to how we use AI"> Yes — client data is central to how we use AI
+      </label>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-question">
+    <div class="quiz-question-label">2. Are you in a regulated industry or do you sell to regulated clients?</div>
+    <div class="quiz-options" data-question="q2">
+      <label class="quiz-option">
+        <input type="radio" name="q2" value="0" data-text="No"> No
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q2" value="1" data-text="Adjacent — some compliance exposure"> Adjacent — some compliance exposure
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q2" value="2" data-text="Yes — financial services, legal, healthcare, or government"> Yes — financial services, legal, healthcare, or government
+      </label>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-question">
+    <div class="quiz-question-label">3. How many AI operations does your business run per month?</div>
+    <div class="quiz-options" data-question="q3">
+      <label class="quiz-option">
+        <input type="radio" name="q3" value="0" data-text="Under 10,000 — just getting started"> Under 10,000 — just getting started
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q3" value="1" data-text="10,000 to 100,000 — growing workflows"> 10,000 to 100,000 — growing workflows
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q3" value="2" data-text="Over 100,000 — high-volume automation"> Over 100,000 — high-volume automation
+      </label>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-question">
+    <div class="quiz-question-label">4. Do you have technical staff who can manage infrastructure?</div>
+    <div class="quiz-options" data-question="q4">
+      <label class="quiz-option">
+        <input type="radio" name="q4" value="0" data-text="No — we need something turnkey"> No — we need something turnkey
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q4" value="1" data-text="We have some technical capacity but not dedicated"> We have some technical capacity but not dedicated
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q4" value="2" data-text="Yes — we have engineers who can manage this"> Yes — we have engineers who can manage this
+      </label>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-question">
+    <div class="quiz-question-label">5. Do you sell to enterprise clients who conduct vendor due diligence?</div>
+    <div class="quiz-options" data-question="q5">
+      <label class="quiz-option">
+        <input type="radio" name="q5" value="0" data-text="No — our clients don't ask about this"> No — our clients don't ask about this
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q5" value="1" data-text="Occasionally — it comes up sometimes"> Occasionally — it comes up sometimes
+      </label>
+      <label class="quiz-option">
+        <input type="radio" name="q5" value="2" data-text="Yes — data handling is part of every enterprise deal"> Yes — data handling is part of every enterprise deal
+      </label>
+    </div>
+  </div>
+
+  <!-- See Result button (shown after all 5 answered) -->
+  <div class="quiz-submit-wrap" id="quizSubmitWrap">
+    <p class="quiz-error" id="quizError">Please answer all 5 questions before seeing your result.</p>
+    <button class="btn-primary" id="quizSeeResultBtn" type="button">See Your Result →</button>
+  </div>
+
+  <!-- Result / teaser card -->
+  <div class="quiz-result-card" id="quizResultCard">
+    <div class="quiz-result-headline">Your AI Architecture Recommendation Is Ready</div>
+    <div id="quizResultBadge"></div>
+    <p class="quiz-result-teaser-text">
+      Get your full AI Architecture Report — including specific setup recommendations for your industry and workflow — sent directly to your inbox.
+    </p>
+
+    <!-- Email capture form -->
+    <form class="quiz-email-form" id="quizEmailForm" novalidate>
+      <!-- Hidden fields populated by JS -->
+      <input type="hidden" name="recommendation" id="hiddenRecommendation">
+      <input type="hidden" name="score"          id="hiddenScore">
+      <input type="hidden" name="q1"             id="hiddenQ1">
+      <input type="hidden" name="q2"             id="hiddenQ2">
+      <input type="hidden" name="q3"             id="hiddenQ3">
+      <input type="hidden" name="q4"             id="hiddenQ4">
+      <input type="hidden" name="q5"             id="hiddenQ5">
+      <input type="hidden" name="source"         value="local-vs-cloud-quiz">
+
+      <input
+        type="email"
+        name="email"
+        id="quizEmailInput"
+        class="quiz-email-input"
+        placeholder="Your work email"
+        required
+        autocomplete="email"
+      >
+      <button type="submit" class="btn-primary">Send My Report →</button>
+      <p class="quiz-form-error" id="quizFormError">Something went wrong. Email us directly at <a href="mailto:hello@aloomii.com" style="color:#009e96;">hello@aloomii.com</a></p>
+    </form>
+    <p class="quiz-thankyou" id="quizThankyou">✓ Report sent! Check your inbox — and spam just in case.</p>
+  </div>
+</div>
+<!-- end quiz -->
+
+<!-- FAQ Section -->
+<div class="faq-section" style="margin:3rem 0 2rem;">
+  <h2 style="font-size:1.3rem;margin-bottom:1.5rem;">Frequently Asked Questions</h2>
+  <details style="border-bottom:1px solid rgba(255,255,255,0.08);padding:1rem 0;">
+    <summary style="font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;">What is local AI? <span style="font-size:1.2rem;color:#009e96;margin-left:1rem;">+</span></summary>
+    <p style="margin:0.75rem 0 0;color:#ccc;line-height:1.7;">Local AI means the model runs on your own hardware or private infrastructure. Your data never leaves your environment. It's the right choice when data sensitivity, compliance requirements, or volume economics demand it.</p>
+  </details>
+  <details style="border-bottom:1px solid rgba(255,255,255,0.08);padding:1rem 0;">
+    <summary style="font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;">What is cloud AI? <span style="font-size:1.2rem;color:#009e96;margin-left:1rem;">+</span></summary>
+    <p style="margin:0.75rem 0 0;color:#ccc;line-height:1.7;">Cloud AI means the model runs on a third-party provider's infrastructure — OpenAI, Google, Anthropic. You send data to their API and receive a response. Fast to set up, cheap at low volume, but your data leaves your environment.</p>
+  </details>
+  <details style="border-bottom:1px solid rgba(255,255,255,0.08);padding:1rem 0;">
+    <summary style="font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;">When should a B2B company use local AI? <span style="font-size:1.2rem;color:#009e96;margin-left:1rem;">+</span></summary>
+    <p style="margin:0.75rem 0 0;color:#ccc;line-height:1.7;">When your AI workflows touch client data, financial records, or regulated information — or when you're running high-volume operations where per-call costs compound significantly.</p>
+  </details>
+  <details style="border-bottom:1px solid rgba(255,255,255,0.08);padding:1rem 0;">
+    <summary style="font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;">What is hybrid AI architecture? <span style="font-size:1.2rem;color:#009e96;margin-left:1rem;">+</span></summary>
+    <p style="margin:0.75rem 0 0;color:#ccc;line-height:1.7;">Hybrid AI means using cloud models for non-sensitive workflows (content, research, ideation) and local or private models for anything touching client data or regulated information.</p>
+  </details>
+  <details style="border-bottom:1px solid rgba(255,255,255,0.08);padding:1rem 0;">
+    <summary style="font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;">How do I choose between local AI and cloud AI for my business? <span style="font-size:1.2rem;color:#009e96;margin-left:1rem;">+</span></summary>
+    <p style="margin:0.75rem 0 0;color:#ccc;line-height:1.7;">The four key factors are: (1) data sensitivity — does your AI touch client data? (2) compliance requirements — are you in a regulated industry? (3) cost at scale — what volume will you run? (4) technical capacity — do you have staff to manage local infrastructure?</p>
+  </details>
+</div>
+
+<!-- End CTA -->
+<div class="cta-end-block">
+  <h2>Thinking Through Your AI Architecture?</h2>
+  <p>Aloomii has run this conversation with B2B founders across insurance, financial services, legal, and SaaS. Book a 15-minute call.</p>
+  <a href="mailto:hello@aloomii.com" class="btn-primary">Book a 15-Minute Call</a>
+</div>
+
+</div> <!-- end article-prose -->
+</div> <!-- end article-with-toc -->
+</article>
+
+<!-- Quiz JavaScript (vanilla JS, no dependencies) -->
+<script type="module">
+  // ── Quiz State ──────────────────────────────────────────────
+  // Tracks how many questions are answered and the selected values.
+  const TOTAL_QUESTIONS = 5;
+  const answers = { q1: null, q2: null, q3: null, q4: null, q5: null };
+  const answerTexts = { q1: '', q2: '', q3: '', q4: '', q5: '' };
+
+  // DOM refs
+  const progressLabel = document.getElementById('quizProgressLabel');
+  const progressFill  = document.getElementById('quizProgressFill');
+  const submitWrap    = document.getElementById('quizSubmitWrap');
+  const quizError     = document.getElementById('quizError');
+  const seeResultBtn  = document.getElementById('quizSeeResultBtn');
+  const resultCard    = document.getElementById('quizResultCard');
+  const resultBadge   = document.getElementById('quizResultBadge');
+  const emailForm     = document.getElementById('quizEmailForm');
+  const emailInput    = document.getElementById('quizEmailInput');
+  const thankyou      = document.getElementById('quizThankyou');
+  const formError     = document.getElementById('quizFormError');
+
+  // ── Update progress bar ──────────────────────────────────────
+  function updateProgress() {
+    const answered = Object.values(answers).filter(v => v !== null).length;
+    progressLabel.textContent = `${answered} of ${TOTAL_QUESTIONS} answered`;
+    progressFill.style.width = `${(answered / TOTAL_QUESTIONS) * 100}%`;
+
+    // Show "See Your Result" button once all questions are answered
+    if (answered === TOTAL_QUESTIONS) {
+      submitWrap.classList.add('visible');
+    }
+  }
+
+  // ── Handle option selection ──────────────────────────────────
+  // Attach change listeners to all radio inputs
+  document.querySelectorAll('.quiz-options input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const qName = radio.name; // e.g. "q1"
+      answers[qName]     = parseInt(radio.value, 10);
+      answerTexts[qName] = radio.getAttribute('data-text') || radio.value;
+
+      // Highlight the selected label within this question group
+      const group = radio.closest('.quiz-options');
+      group.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+      radio.closest('.quiz-option').classList.add('selected');
+
+      updateProgress();
+    });
+  });
+
+  // ── Score → Recommendation ───────────────────────────────────
+  function getRecommendation(score) {
+    if (score <= 3) return { label: 'Cloud AI',             tier: 'cloud',  badgeClass: 'result-badge--cloud'  };
+    if (score <= 6) return { label: 'Hybrid Architecture',  tier: 'hybrid', badgeClass: 'result-badge--hybrid' };
+    return            { label: 'Local / Private AI',        tier: 'local',  badgeClass: 'result-badge--local'  };
+  }
+
+  // ── See Result button ────────────────────────────────────────
+  seeResultBtn.addEventListener('click', () => {
+    // Validate all questions answered
+    const unanswered = Object.values(answers).some(v => v === null);
+    if (unanswered) {
+      quizError.classList.add('visible');
+      return;
+    }
+    quizError.classList.remove('visible');
+
+    // Calculate score
+    const score = Object.values(answers).reduce((sum, v) => sum + v, 0);
+    const rec   = getRecommendation(score);
+
+    // Populate hidden form fields
+    document.getElementById('hiddenRecommendation').value = rec.label;
+    document.getElementById('hiddenScore').value          = score;
+    document.getElementById('hiddenQ1').value             = answerTexts.q1;
+    document.getElementById('hiddenQ2').value             = answerTexts.q2;
+    document.getElementById('hiddenQ3').value             = answerTexts.q3;
+    document.getElementById('hiddenQ4').value             = answerTexts.q4;
+    document.getElementById('hiddenQ5').value             = answerTexts.q5;
+
+    // Render badge
+    resultBadge.innerHTML = `<span class="result-badge ${rec.badgeClass}">${rec.label}</span>`;
+
+    // Show result card
+    resultCard.classList.add('visible');
+
+    // Scroll into view smoothly
+    resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Hide the "See Result" button so they can't re-trigger
+    submitWrap.style.display = 'none';
+  });
+
+  // ── Email form submission ────────────────────────────────────
+  emailForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    if (!email) {
+      emailInput.focus();
+      return;
+    }
+
+    // Disable button during submit
+    const submitBtn = emailForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    // Build FormData from the form (picks up all hidden fields + email)
+    const formData = new FormData(emailForm);
+
+    try {
+      const response = await fetch('https://formspree.io/f/FORMSPREE_PLACEHOLDER', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        // Success: hide form, show thank-you
+        emailForm.style.display = 'none';
+        thankyou.classList.add('visible');
+      } else {
+        throw new Error('Non-2xx response');
+      }
+    } catch (err) {
+      // Error: show inline error message
+      formError.classList.add('visible');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send My Report →';
+    }
+  });
+</script>
+
+<script type="module">
+  // ── TOC active-section highlight (same as other posts) ──────
+  if (typeof IntersectionObserver !== 'undefined') {
+    const headings = document.querySelectorAll('.article-prose h2, .article-prose h3');
+    const tocLinks = document.querySelectorAll('.toc-sticky a');
+    if (tocLinks.length) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocLinks.forEach(l => l.classList.remove('active'));
+            document.querySelector(`.toc-sticky a[href="#${entry.target.id}"]`)?.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-20% 0px -70% 0px' });
+      headings.forEach(h => observer.observe(h));
+    }
+  }
+</script>
+
+</div> <!-- end page-wrapper -->
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="content-wrapper">
+    <div class="footer-content">
+      <ul class="footer-links">
+        <li><a href="/client-terms">Client Terms</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms and Conditions</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+  // ── Mobile menu toggle (same as other posts) ─────────────────
+  const hamburger   = document.getElementById('hamburger');
+  const mobileMenu  = document.getElementById('mobileMenu');
+  hamburger?.addEventListener('click', () => {
+    const isOpen = mobileMenu?.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+    mobileMenu?.setAttribute('aria-hidden', String(!isOpen));
+  });
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      hamburger?.classList.remove('active');
+      hamburger?.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+    });
+  });
+</script>
+
+</body>
+</html>
