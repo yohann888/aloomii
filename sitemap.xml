@@ -38,7 +38,7 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts (63 articles — auto-generated 2026-03-22) -->
+  <!-- Blog Posts (66 articles — auto-generated 2026-03-22) -->
   <url>
     <loc>https://aloomii.com/blog/5-openclaw-skills-b2b-founders/</loc>
     <lastmod>2026-03-22</lastmod>
@@ -77,6 +77,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/b2b-founder-content-that-generates-pipeline/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/b2b-messaging-problem-founders/</loc>
     <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -215,6 +221,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/humans-for-judgment-machines-for-volume-gtm-framework/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/icp-definition-b2b-founders/</loc>
     <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -401,6 +413,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/why-your-insurance-brokerage-doesnt-need-an-sdr/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/word-of-mouth-ceiling-b2b-founders/</loc>
     <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
