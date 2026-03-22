@@ -5,3 +5,7 @@ pages_build_output_dir = "."
 [[kv_namespaces]]
 binding = "ALOOMII_METRICS"
 id = "b520c1d361e84120b8f511fa942efb81"
+
+[[kv_namespaces]]
+binding = "ACCESS_REQUESTS"
+id = "b520c1d361e84120b8f511fa942efb81"
