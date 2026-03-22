@@ -7,4 +7,4 @@ sprint:
   enabled: true          # B2B SaaS/dev tool founders $10K-$100K MRR
 
 ai_workforce:
-  enabled: true          # Insurance/financial advisors/wealth managers $1M-$10M ARR
+  enabled: false         # Insurance/financial advisors/wealth managers $1M-$10M ARR
