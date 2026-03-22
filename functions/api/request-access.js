@@ -1,3 +1,19 @@
+async function sendResendEmail(apiKey, { to, subject, html }) {
+  return fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Aloomii Inbox <inbox@aloomii.com>",
+      to,
+      subject,
+      html,
+    }),
+  });
+}
+
 export async function onRequestPost(context) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -24,23 +40,28 @@ export async function onRequestPost(context) {
       name,
       email,
       timestamp,
+      type: "access_request",
       status: "pending"
     }));
 
-    // Also try to send email via the Worker (best-effort, don't fail if it errors)
+    // Send email notification via Resend
     try {
-      if (context.env.EMAIL_WORKER) {
-        await context.env.EMAIL_WORKER.fetch(
-          new Request("https://internal/send", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email }),
-          })
-        );
+      if (context.env.RESEND_API_KEY) {
+        await sendResendEmail(context.env.RESEND_API_KEY, {
+          to: ["yohann@aloomii.com"],
+          subject: `Access request from ${name}`,
+          html: `
+            <h2>New Access Request</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <p><strong>Time:</strong> ${timestamp}</p>
+            <hr>
+            <p><a href="mailto:${email}">Reply to ${name}</a> &middot; <a href="https://aloomii.com/admin-inbox">View inbox</a></p>
+          `,
+        });
       }
     } catch (emailErr) {
-      // Email sending failed — that's OK, request is stored in KV
-      console.log("Email notification failed:", emailErr.message);
+      console.log("Resend notification failed:", emailErr.message);
     }
 
     return new Response(JSON.stringify({ success: true }), {

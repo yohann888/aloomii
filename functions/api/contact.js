@@ -1,3 +1,19 @@
+async function sendResendEmail(apiKey, { to, subject, html }) {
+  return fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Aloomii Inbox <inbox@aloomii.com>",
+      to,
+      subject,
+      html,
+    }),
+  });
+}
+
 export async function onRequestPost(context) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -33,24 +49,29 @@ export async function onRequestPost(context) {
       status: "new"
     }));
 
-    // Try to send email notification via Worker (best-effort)
+    // Send email notification via Resend
     try {
-      if (context.env.EMAIL_WORKER) {
-        await context.env.EMAIL_WORKER.fetch(
-          new Request("https://internal/send", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              name,
-              email,
-              subject: `New Consultation Request from ${name}${company ? ` (${company})` : ''}`,
-              message: `New consultation request via aloomii.com\n\nName: ${name}\nEmail: ${email}\nCompany: ${company || 'N/A'}\nService Interest: ${service || 'N/A'}\nBudget Range: ${budget || 'N/A'}\nTimeline: ${timeline || 'N/A'}\n\nProject Details:\n${details || 'No details provided.'}\n\nReply directly to ${email} to follow up.`
-            }),
-          })
-        );
+      if (context.env.RESEND_API_KEY) {
+        await sendResendEmail(context.env.RESEND_API_KEY, {
+          to: ["yohann@aloomii.com"],
+          subject: `New consultation request from ${name}${company ? ` (${company})` : ''}`,
+          html: `
+            <h2>New Consultation Request</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <p><strong>Company:</strong> ${company || 'N/A'}</p>
+            <p><strong>Service Interest:</strong> ${service || 'N/A'}</p>
+            <p><strong>Budget Range:</strong> ${budget || 'N/A'}</p>
+            <p><strong>Timeline:</strong> ${timeline || 'N/A'}</p>
+            <hr>
+            <p><strong>Details:</strong><br>${(details || 'No details provided.').replace(/\n/g, '<br>')}</p>
+            <hr>
+            <p><a href="mailto:${email}">Reply to ${name}</a> &middot; <a href="https://aloomii.com/admin-inbox">View inbox</a></p>
+          `,
+        });
       }
     } catch (emailErr) {
-      console.log("Email notification failed:", emailErr.message);
+      console.log("Resend notification failed:", emailErr.message);
     }
 
     return new Response(JSON.stringify({ success: true }), {

@@ -1,3 +1,19 @@
+async function sendResendEmail(apiKey, { to, subject, html }) {
+  return fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Aloomii Inbox <inbox@aloomii.com>",
+      to,
+      subject,
+      html,
+    }),
+  });
+}
+
 export async function onRequestPost(context) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -27,24 +43,23 @@ export async function onRequestPost(context) {
       status: "subscribed"
     }));
 
-    // Try to send email notification via Worker (best-effort)
+    // Send email notification via Resend
     try {
-      if (context.env.EMAIL_WORKER) {
-        await context.env.EMAIL_WORKER.fetch(
-          new Request("https://internal/send", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              name: "Newsletter Subscriber",
-              email,
-              subject: `New Newsletter Signup: ${email}`,
-              message: `New newsletter signup on aloomii.com\n\nEmail: ${email}\nTime: ${timestamp}`
-            }),
-          })
-        );
+      if (context.env.RESEND_API_KEY) {
+        await sendResendEmail(context.env.RESEND_API_KEY, {
+          to: ["yohann@aloomii.com"],
+          subject: `New newsletter signup: ${email}`,
+          html: `
+            <h2>New Newsletter Signup</h2>
+            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <p><strong>Time:</strong> ${timestamp}</p>
+            <hr>
+            <p><a href="https://aloomii.com/admin-inbox">View inbox</a></p>
+          `,
+        });
       }
     } catch (emailErr) {
-      console.log("Email notification failed:", emailErr.message);
+      console.log("Resend notification failed:", emailErr.message);
     }
 
     return new Response(JSON.stringify({ success: true }), {
