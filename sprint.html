@@ -386,7 +386,7 @@
       line-height: 1;
       margin-bottom: 0.4rem;
     }
-    .flm-stat-label { font-size: 0.8rem; color: var(--muted); font-weight: 300; margin-bottom: 2rem; }
+    .flm-stat-label { font-size: 0.95rem; color: var(--muted); font-weight: 400; line-height: 1.5; margin-bottom: 2rem; }
     .flm-points { list-style: none; }
     .flm-points li {
       display: flex;
@@ -447,6 +447,50 @@
       color: var(--teal);
       font-weight: 500;
       font-style: italic;
+    }
+
+    /* FOUNDER BIO */
+    .founder-section { background: var(--bg); }
+    .founder-card {
+      max-width: 680px;
+      margin: 2.5rem auto 0;
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      background: var(--bg-section);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+    }
+    .founder-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid var(--teal-border);
+    }
+    .founder-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .founder-title { font-size: 0.8rem; color: var(--teal); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.85rem; }
+    .founder-bio { font-size: 0.875rem; color: var(--muted); font-weight: 300; line-height: 1.75; margin-bottom: 1rem; }
+    .founder-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--teal);
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--teal-border);
+      background: var(--teal-light);
+      padding: 0.35rem 0.85rem;
+      border-radius: 100px;
+      transition: background 0.2s;
+    }
+    .founder-link:hover { background: rgba(0,158,150,0.18); }
+    @media (max-width: 600px) {
+      .founder-card { flex-direction: column; }
+      .founder-avatar { width: 64px; height: 64px; }
     }
 
     /* FOOTER */
@@ -765,6 +809,23 @@
   </div>
 </section>
 
+<!-- WHO RUNS THIS -->
+<section class="section founder-section">
+  <div class="section-inner">
+    <div class="section-label" style="text-align:center;">Who Runs This</div>
+    <h2 style="text-align:center;">A real person writes every post and runs every call.</h2>
+    <div class="founder-card">
+      <img class="founder-avatar" src="/images/yohann-calpu.jpg" alt="Yohann Calpu, Co-founder of Aloomii" width="80" height="80">
+      <div>
+        <div class="founder-name">Yohann Calpu</div>
+        <div class="founder-title">Co-Founder, Aloomii</div>
+        <p class="founder-bio">Former engineer turned sales and partnerships. 8 years in government technology, then IBM and Maersk. Yohann built the Sprint system to replace his own scattered marketing before turning it into a service. He has run outbound and content for B2B companies where the founder is the brand and the relationship is the product. He writes the briefs, runs the strategy calls, and reviews everything before it goes out.</p>
+        <a href="/" class="founder-link" target="_blank" rel="noopener">See the companies we have worked with &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- WHO IT IS AND ISN'T FOR -->
 <section class="section" style="background:var(--bg-section);">
   <div class="section-inner">
@@ -778,7 +839,7 @@
           <li>You have a working B2B product with paying customers</li>
           <li>You are willing to show up on LinkedIn and podcasts</li>
           <li>Your marketing is nonexistent, inconsistent, or not moving the needle</li>
-          <li>You are doing $10K-$100K <span class="tip" data-tip="Monthly Recurring Revenue: your predictable monthly income">MRR</span> and growing through word of mouth</li>
+          <li><span>You are doing $10K-$100K <span class="tip" data-tip="Monthly Recurring Revenue: your predictable monthly income">MRR</span> and growing through word of mouth</span></li>
           <li>You have tried content before and it was inconsistent</li>
           <li>You decide fast when something makes sense</li>
         </ul>
