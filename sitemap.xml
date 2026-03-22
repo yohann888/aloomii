@@ -38,7 +38,7 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts (60 articles — auto-generated 2026-03-22) -->
+  <!-- Blog Posts (63 articles — auto-generated 2026-03-22) -->
   <url>
     <loc>https://aloomii.com/blog/5-openclaw-skills-b2b-founders/</loc>
     <lastmod>2026-03-22</lastmod>
@@ -137,6 +137,18 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/forty-k-mrr-zero-brand-ticking-time-bomb/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/founder-closed-400k-arr-three-linkedin-posts/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/founder-led-marketing-weekly-time-commitment/</loc>
     <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -281,6 +293,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/real-cost-ill-do-marketing-when-i-have-time/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/sprint-vs-marketing-agency-vs-diy-founders/</loc>
     <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
