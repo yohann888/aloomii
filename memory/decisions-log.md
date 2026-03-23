@@ -523,3 +523,22 @@ Rationale: palebluenexus.com has no GitHub repo. Build fresh at ~/Desktop/palebl
 **Decision:** LinkedIn posts drafted by Aloomii are for Yohann to post himself — not published by Aloomii.
 **Rationale:** Posts are in Yohann's first-person founder voice. They carry his credibility. Aloomii drafts, founder publishes.
 **Rule:** Always label LinkedIn post deliverables as "DRAFT — for Yohann to post."
+
+
+## 2026-03-23
+
+**Decision:** Sprint ICP revenue floor raised from $10K-$100K MRR to $50K-$100K MRR.
+**Rationale:** Below $50K MRR founders lack budget conviction at $3K/mo. Tighter ICP = higher close rate. The $2M raise trigger added as a qualifier for well-funded pre-revenue founders.
+**Rule:** Recently funded >$2M founders qualify even if MRR is below floor — $3K is noise for them.
+**Files updated:** `config/signal-scout-icps.yaml`, `SOUL.md`, `memory/icps.md`
+**Commit:** `95a0b73`
+
+**Decision:** jenny100x March 2026 — three sequential priorities established.
+**Rationale:** All 3 models (Gemini Pro, Opus, GPT-5) independently landed on the same top finding: no paying clients = all other infrastructure is theoretical. Consensus this strong is actionable.
+**Priority sequence:** (1) Proof Machine — get 1-3 paid design partners with case study rights; (2) Signal-to-Close Loop — wire Signal Scout → Village.do → Gamma → human review → send; (3) PBN as Sprint Funnel — podcast invites to Sprint ICP founders, editorial only, 30%+ close rate.
+**Key rule from GPT-5:** These are sequential, not parallel. Proof first.
+**Report:** `memory/jenny100x-2026-03.md`
+
+**Decision:** migrate-signals-to-pg.py regex fixed — Python migration now canonical for activity_log only.
+**Rationale:** Script had been silently failing (0 inserts) since signals.md header format changed. JS migration is canonical for the `signals` table. Python migration writes to `activity_log` hypertable. Both valid, different purposes.
+**Lesson:** Always test migration scripts against current file format after any format change.
