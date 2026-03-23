@@ -58,9 +58,9 @@ Use this in every About section, podcast intro, and first conversation with a pr
 
 ## ICP (Sprint)
 
-Bootstrapped/seed-stage B2B founders at $10K-$100K MRR. 1-10 person teams. Nobody owns marketing. Technical founders who built a great product but are invisible in market. Have tried: freelance writers, AI tools, agencies, 11 PM DIY sessions. Nothing stuck. Frustrated competitors with worse products get more attention. Ready to hand off GTM execution.
+B2B founders at $50K-$100K MRR, OR founders who have raised over $2M recently. 1-10 person teams. Nobody owns marketing. Technical founders who built a great product but are invisible in market. Have tried: freelance writers, AI tools, agencies, 11 PM DIY sessions. Nothing stuck. Frustrated that competitors with worse products get more attention. Ready to hand off GTM execution.
 
-**Disqualifiers:** Pre-revenue, already has a working marketing function, wants a tool not an operation, non-B2B.
+**Disqualifiers:** Pre-revenue or below $50K MRR (unless recently funded >$2M), already has a working marketing function, wants a tool not an operation, non-B2B.
 
 ---
 

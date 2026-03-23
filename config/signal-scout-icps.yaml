@@ -4,7 +4,7 @@
 # Both can run simultaneously. Either can be disabled without touching the other.
 
 sprint:
-  enabled: true          # B2B SaaS/dev tool founders $10K-$100K MRR
+  enabled: true          # B2B founders $50K-$100K MRR OR raised >$2M recently
 
 ai_workforce:
   enabled: false         # Insurance/financial advisors/wealth managers $1M-$10M ARR
