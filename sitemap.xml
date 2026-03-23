@@ -38,7 +38,7 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts (68 articles — auto-generated 2026-03-23) -->
+  <!-- Blog Posts (72 articles — auto-generated 2026-03-23) -->
   <url>
     <loc>https://aloomii.com/blog/5-openclaw-skills-b2b-founders/</loc>
     <lastmod>2026-03-23</lastmod>
@@ -47,6 +47,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/90-day-window-founders-wait-too-long-start-marketing/</loc>
+    <lastmod>2026-03-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/ai-content-that-doesnt-sound-like-ai/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -119,6 +125,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/content-calendar-vs-point-of-view-founders/</loc>
+    <lastmod>2026-03-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/crm-automation-insurance-agents-what-actually-works/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -214,6 +226,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://aloomii.com/blog/how-to-do-gtm-solo-founder/</loc>
+    <lastmod>2026-03-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://aloomii.com/blog/how-to-set-up-openclaw-always-on-business-assistant/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>monthly</changefreq>
@@ -287,6 +305,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/partnership-playbook-founders-without-bd-team/</loc>
+    <lastmod>2026-03-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/personal-brand-technical-founder-without-becoming-content-machine/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
