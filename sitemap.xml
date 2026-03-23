@@ -38,7 +38,7 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts (67 articles — auto-generated 2026-03-23) -->
+  <!-- Blog Posts (68 articles — auto-generated 2026-03-23) -->
   <url>
     <loc>https://aloomii.com/blog/5-openclaw-skills-b2b-founders/</loc>
     <lastmod>2026-03-23</lastmod>
@@ -161,6 +161,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/founders-honest-guide-ai-gtm-without-sounding-like-robot/</loc>
+    <lastmod>2026-03-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/fractional-gtm-team-startups-what-it-actually-costs/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
