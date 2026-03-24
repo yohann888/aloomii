@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Sprint: Founder GTM System | Aloomii</title>
+  <meta name="description" content="1-2 LinkedIn posts a week. 2 podcast pitches a week. A weekly brief on what's moving in your market. One 30-minute strategy call. $3,000/month. The Sprint by Aloomii.">
+  <link rel="canonical" href="https://aloomii.com/sprint">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The Sprint: Founder GTM System | Aloomii">
+  <meta property="og:description" content="For B2B founders who have something worth selling and no time to build the visibility that gets them in the room.">
+  <meta property="og:url" content="https://aloomii.com/sprint">
+  <meta property="og:site_name" content="Aloomii">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --teal: #009e96;
+      --teal-dark: #007a74;
+      --teal-light: rgba(0,158,150,0.1);
+      --teal-border: rgba(0,158,150,0.25);
+      --bg: #ffffff;
+      --bg-dark: #0a0f1e;
+      --bg-section: #f8fafb;
+      --text: #0a0f1e;
+      --muted: #5a6b7a;
+      --border: #e8edf2;
+    }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    .nav {
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .nav-logo img { height: 32px; width: auto; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--teal);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--teal-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+    .hamburger span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+
+    /* HERO */
+    .hero {
+      background: var(--bg-dark);
+      color: #fff;
+      padding: 7rem 2rem 6rem;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      border: 1px solid var(--teal-border);
+      background: var(--teal-light);
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 1.75rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero h1 em { font-style: normal; color: var(--teal); }
+    .hero-sub {
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.7);
+      max-width: 560px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: var(--teal);
+      color: #fff;
+      text-decoration: none;
+      padding: 1rem 2.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.2s;
+      margin-bottom: 1rem;
+    }
+    .hero-cta:hover { background: var(--teal-dark); transform: translateY(-2px); }
+    .hero-note { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 0.75rem; }
+
+    /* PROBLEM */
+    .section { padding: 5rem 2rem; }
+    .section-inner { max-width: 960px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .section h2 {
+      font-size: clamp(1.75rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+    .section .lead {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.75;
+      max-width: 640px;
+      margin-bottom: 3rem;
+    }
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .pain-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      background: var(--bg-section);
+    }
+    .pain-card .icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .pain-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .pain-card p { font-size: 0.85rem; color: var(--muted); font-weight: 300; line-height: 1.6; }
+
+    /* DELIVERABLES */
+    .section-dark { background: var(--bg-dark); color: #fff; }
+    .section-dark .section-label { color: var(--teal); }
+    .section-dark .lead { color: rgba(255,255,255,0.6); }
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+    .deliverable {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .deliverable-icon { font-size: 1.75rem; margin-bottom: 1rem; }
+    .deliverable h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+    .deliverable p { font-size: 0.85rem; color: rgba(255,255,255,0.55); font-weight: 300; line-height: 1.65; }
+    .deliverable .qty {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.5rem;
+    }
+
+    /* TIMELINE */
+    .timeline { margin-top: 3rem; }
+    .timeline-row {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-row:last-child { border-bottom: none; }
+    .timeline-week {
+      min-width: 80px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      padding-top: 0.15rem;
+    }
+    .timeline-content h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .timeline-content p { font-size: 0.85rem; color: var(--muted); font-weight: 300; line-height: 1.6; }
+
+    /* MATH */
+    .math-section { background: var(--bg-section); }
+    .math-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      align-items: center;
+      margin-top: 2.5rem;
+    }
+    .math-col h3 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+    .math-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+    .math-item .label { color: var(--muted); font-weight: 300; }
+    .math-item .amount { font-weight: 600; color: #c0392b; }
+    .math-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+    .math-total .amount { color: #c0392b; }
+    .math-vs { font-size: 1.5rem; font-weight: 700; color: var(--muted); text-align: center; }
+    .math-sprint h3 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+    .sprint-price {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--teal);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .sprint-price-sub { font-size: 0.85rem; color: var(--muted); font-weight: 300; }
+
+    /* PRICING */
+    .pricing-card {
+      max-width: 520px;
+      margin: 3rem auto 0;
+      border: 2px solid var(--teal);
+      border-radius: 16px;
+      padding: 2.5rem;
+      text-align: center;
+      background: #fff;
+    }
+    .pricing-card .price {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .pricing-card .per { font-size: 1rem; color: var(--muted); margin-bottom: 2rem; }
+    .pricing-includes {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .pricing-includes li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      font-weight: 400;
+      border-bottom: 1px solid var(--border);
+    }
+    .pricing-includes li:last-child { border-bottom: none; }
+    .pricing-includes li::before { content: "✓"; color: var(--teal); font-weight: 700; flex-shrink: 0; margin-top: 0.05rem; }
+    .pricing-terms { font-size: 0.8rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; }
+    .pricing-cta {
+      display: block;
+      background: var(--teal);
+      color: #fff;
+      text-decoration: none;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.2s;
+      margin-bottom: 1rem;
+    }
+    .pricing-cta:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .pricing-pilot {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .pricing-pilot strong { color: var(--text); }
+
+    /* CALENDLY EMBED */
+    .booking-section { background: var(--bg-section); }
+    .booking-section h2 { text-align: center; margin-bottom: 0.75rem; }
+    .booking-section .lead { text-align: center; margin-left: auto; margin-right: auto; margin-bottom: 2.5rem; }
+    .calendly-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+
+    /* NOT FOR */
+    .not-for-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .not-for-card, .for-card {
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .not-for-card {
+      background: #fff5f5;
+      border: 1px solid #fecaca;
+    }
+    .for-card {
+      background: rgba(0,158,150,0.05);
+      border: 1px solid var(--teal-border);
+    }
+    .not-for-card h3 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #c0392b; margin-bottom: 1rem; }
+    .for-card h3 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .fit-list { list-style: none; }
+    .fit-list li { font-size: 0.875rem; color: var(--muted); padding: 0.35rem 0; font-weight: 300; display: flex; gap: 0.6rem; }
+    .fit-list li::before { flex-shrink: 0; }
+    .not-for-card .fit-list li::before { content: "✗"; color: #c0392b; font-weight: 700; }
+    .for-card .fit-list li::before { content: "✓"; color: var(--teal); font-weight: 700; }
+
+    /* TOOLTIPS */
+    .tip {
+      border-bottom: 1px dotted var(--muted);
+      cursor: help;
+      position: relative;
+    }
+    .tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0a0f1e;
+      color: #fff;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 400;
+      white-space: normal;
+      max-width: 190px;
+      text-align: center;
+      line-height: 1.45;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+      z-index: 50;
+    }
+    .tip:hover::after { opacity: 1; }
+
+    /* FOUNDER-LED MARKETING */
+    .flm-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+    .flm-stat {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--teal);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .flm-stat-label { font-size: 0.95rem; color: var(--muted); font-weight: 400; line-height: 1.5; margin-bottom: 2rem; }
+    .flm-points { list-style: none; }
+    .flm-points li {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      font-size: 0.875rem;
+      color: var(--muted);
+      font-weight: 300;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.55;
+    }
+    .flm-points li:last-child { border-bottom: none; }
+    .flm-points li::before { content: "→"; color: var(--teal); font-weight: 700; flex-shrink: 0; }
+    @media (max-width: 768px) { .flm-grid { grid-template-columns: 1fr; gap: 2rem; } }
+
+    /* EVENT STRATEGY */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+    .event-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      background: var(--bg);
+    }
+    .event-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    .event-name { font-size: 1rem; font-weight: 700; }
+    .event-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--teal-light);
+      color: var(--teal);
+      border: 1px solid var(--teal-border);
+      padding: 0.2rem 0.55rem;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .event-meta { font-size: 0.75rem; color: var(--muted); margin-bottom: 1rem; }
+    .event-who { font-size: 0.78rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .event-who-list { font-size: 0.8rem; color: var(--muted); font-weight: 300; line-height: 1.55; margin-bottom: 0.75rem; }
+    .event-why { font-size: 0.78rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .event-why-text { font-size: 0.8rem; color: var(--muted); font-weight: 300; line-height: 1.55; }
+    .event-sprint-angle {
+      margin-top: 0.85rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--teal);
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    /* FOUNDER BIO */
+    .founder-section { background: var(--bg); }
+    .founder-card {
+      max-width: 680px;
+      margin: 2.5rem auto 0;
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      background: var(--bg-section);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+    }
+    .founder-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid var(--teal-border);
+    }
+    .founder-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .founder-title { font-size: 0.8rem; color: var(--teal); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.85rem; }
+    .founder-bio { font-size: 0.875rem; color: var(--muted); font-weight: 300; line-height: 1.75; margin-bottom: 1rem; }
+    .founder-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--teal);
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--teal-border);
+      background: var(--teal-light);
+      padding: 0.35rem 0.85rem;
+      border-radius: 100px;
+      transition: background 0.2s;
+    }
+    .founder-link:hover { background: rgba(0,158,150,0.18); }
+    @media (max-width: 600px) {
+      .founder-card { flex-direction: column; }
+      .founder-avatar { width: 64px; height: 64px; }
+    }
+
+    /* FOOTER */
+    .footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; }
+    .footer p { font-size: 0.8rem; color: var(--muted); }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; gap: 1.25rem; }
+      .hamburger { display: flex; }
+      .math-grid { grid-template-columns: 1fr; }
+      .math-vs { display: none; }
+      .not-for-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logos/Aloomii - final.png" alt="Aloomii" width="120" height="36">
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/">Home</a></li>
+    <li><a href="/aloomii-os.html">Aloomii OS</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/#contact">Contact</a></li>
+  </ul>
+  <a href="#book" class="nav-cta">Book a Call</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">The Sprint</div>
+  <h1>12 qualified conversations in 90 days:<br><em>partnership intros, podcast bookings, and warm prospect meetings combined.</em></h1>
+  <p class="hero-sub">We run your GTM content, signals, outreach, and podcast booking. Your pipeline fills while you build product.</p>
+  <a href="#book" class="hero-cta">Apply for a Sprint slot</a>
+  <p class="hero-note">Built on the same system we used to book Jim Rogers as our first podcast guest.</p>
+</section>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">The Problem</div>
+    <h2>The problem you already know.</h2>
+    <p class="lead">You built something good. Customers who find you stay. But not enough people are finding you.</p>
+    <p style="font-size:0.95rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:1.5rem;">So you post on LinkedIn when you remember. You try a freelance writer who produces polished content that sounds nothing like you. You test an AI tool that works for two weeks, then sits unused. You look at agencies charging $10K/month and wonder what exactly you would be paying for. Most nights, GTM happens at 11 PM or it does not happen at all.</p>
+    <p style="font-size:0.95rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:1.5rem;">Here is the part nobody talks about: most founders who adopt AI tools for GTM quietly stop using them within 60 days. The novelty fades. The workflow breaks. The outputs get you 80% of the way there, but the last 20% is tone, timing, and relationship nuance. That is where deals are actually won. So fixing the AI output starts taking longer than writing it yourself, and you abandon the tool entirely.</p>
+    <p style="font-size:0.95rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:1.5rem;">Meanwhile, a competitor with a worse product and a louder voice is booking the meetings you should be in.</p>
+    <p style="font-size:1.05rem;font-weight:600;color:var(--text);max-width:680px;">What if you did not have to do any of it?</p>
+  </div>
+</section>
+
+<!-- FOUNDER-LED MARKETING -->
+<section class="section" style="background:var(--bg-section);">
+  <div class="section-inner">
+    <div class="section-label">Why This Works</div>
+    <h2>Founder-led marketing is the only kind that works at your stage.</h2>
+    <p class="lead">At $10K-$100K <span class="tip" data-tip="Monthly Recurring Revenue: your predictable monthly income">MRR</span>, you are the most credible person in your company. Buyers want to hear from you. Not a brand account. Not a freelancer. You.</p>
+    <div class="flm-grid">
+      <div>
+        <div class="flm-stat">3-8x</div>
+        <div class="flm-stat-label">more engagement on founder posts vs company page posts</div>
+        <div class="flm-stat">1 hour</div>
+        <div class="flm-stat-label">on a podcast reaches more qualified buyers than 3 months of cold email</div>
+        <div class="flm-stat">12 mo</div>
+        <div class="flm-stat-label">of relationship warmth from a single podcast appearance, tracked by listeners who re-engage months later</div>
+      </div>
+      <div>
+        <p style="font-size:0.95rem;color:var(--muted);font-weight:300;line-height:1.8;margin-bottom:1.5rem;">The problem is not that you do not know this. The problem is that founder-led marketing requires two things that conflict with every other priority you have: consistency and judgment.</p>
+        <ul class="flm-points">
+          <li>You need to post 1-2 times a week on LinkedIn. You can do it for 2 weeks. Then a sprint starts and it stops.</li>
+          <li>You need to pitch podcasts. You know which ones. But writing the pitch, doing the research, handling the follow-up: it never makes the to-do list.</li>
+          <li>You need to show up with an opinion. Every post should say something. But "something to say" requires time to think you do not have right now.</li>
+          <li>The Sprint handles all of it. We provide the system, the angles, and the execution. You show up for 30 minutes a week and approve. That is it.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="section section-dark">
+  <div class="section-inner">
+    <div class="section-label">What You Get</div>
+    <h2 style="color:#fff;">A complete <span class="tip" data-tip="Go-to-Market">GTM</span> system. Running from week one.</h2>
+    <p class="lead">Everything reviewed before it goes out. Nothing generic. Nothing that sounds like it was written by someone who has never heard of your industry.</p>
+    <div class="deliverables-grid">
+      <div class="deliverable">
+        <div class="deliverable-icon">📝</div>
+        <div class="qty">1-2 per week</div>
+        <h3>LinkedIn Posts</h3>
+        <p>Written in your voice. Specific, opinionated, reviewed for taste. We bring the angles. You spend 10 minutes approving. Nothing goes out that does not sound like you.</p>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">🎙</div>
+        <div class="qty">2 per week</div>
+        <h3>Podcast Pitches</h3>
+        <p>Sent to shows your buyers actually listen to. We research the right ones, write pitches that lead with your story, and handle all follow-up. You show up and talk.</p>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">📊</div>
+        <div class="qty">Weekly</div>
+        <h3>Market Intelligence Brief</h3>
+        <p>Every Friday: one document. Market trends, competitor moves, and content angles your audience is responding to. Already filtered. Lands in your inbox.</p>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">📞</div>
+        <div class="qty">30 min, weekly</div>
+        <h3>Strategy Call</h3>
+        <p>Review what is landing, what to push harder, what to drop. You set the direction. We execute. No decks. No prep work required from you.</p>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">🔍</div>
+        <div class="qty">Weekly</div>
+        <h3>Competitor Notes</h3>
+        <p>What your competitors published, said, or changed this week. Where they are gaining ground and where they are not. Included in your Friday brief.</p>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">📈</div>
+        <div class="qty">Weekly</div>
+        <h3>Notable Trends</h3>
+        <p>3-5 signals from your market worth knowing. Topic shifts, what is getting traction in your buyer's world, search behavior moving. Included in your Friday brief.</p>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">💡</div>
+        <div class="qty">2 per week</div>
+        <h3>Ideas You Can Use</h3>
+        <p>Two ideas per week you can use for content or for research. Based on what we observed in your market that week. Ready to act on immediately or save for the following week.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">How Fast You See It</div>
+    <h2>Results in week one, not month three.</h2>
+    <p class="lead">Most agencies take 30 days to "onboard." The Sprint runs from day one.</p>
+    <div class="timeline">
+      <div class="timeline-row">
+        <div class="timeline-week">Week 1</div>
+        <div class="timeline-content">
+          <h4>Content live. Pitches sent.</h4>
+          <p>First LinkedIn posts published. First podcast pitches sent to a targeted show list built specifically for your industry and <span class="tip" data-tip="Ideal Customer Profile: the specific type of buyer most likely to buy and stay">ICP</span>.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week">Week 2</div>
+        <div class="timeline-content">
+          <h4>Intelligence starts flowing.</h4>
+          <p>First weekly market brief delivered. First strategy call. We review what landed and adjust the angles for week 3.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week">Week 3</div>
+        <div class="timeline-content">
+          <h4>Podcast responses coming in.</h4>
+          <p>On a targeted list of the right shows, typical response rates are 1-3 per week by this point. If a vertical is slower, we adjust the list and increase volume.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week">Month 1</div>
+        <div class="timeline-content">
+          <h4>Visible presence. First appearances confirmed.</h4>
+          <p>You have a consistent LinkedIn voice. First podcast bookings locked. Your name is showing up where it was not before.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOT ANOTHER AI TOOL -->
+<section class="section section-dark">
+  <div class="section-inner">
+    <div class="section-label">Why This Is Different</div>
+    <h2 style="color:#fff;">Why this is not another AI tool.</h2>
+    <p class="lead">Most AI tools fail for the same reason: they hand you the hard part. You still have to edit the output, fix the tone, decide when to publish, figure out who to target. You are managing a tool instead of running your business.</p>
+    <div style="max-width:680px;margin-top:2rem;">
+      <p style="font-size:0.95rem;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:1.5rem;"><strong style="color:#fff;">The 80% problem is real.</strong> AI gets you most of the way there. But the last 20% is where your voice lives. It is tone. It is timing. It is knowing which relationship to nurture this week and which one to leave alone. That 20% is where deals are won or lost.</p>
+      <p style="font-size:0.95rem;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:1.5rem;"><strong style="color:#fff;">We close that last 20%.</strong> Every LinkedIn post, every podcast pitch, every outreach message goes through human review before it ships. Your judgment is your edge. We amplify it, we do not replace it.</p>
+      <p style="font-size:0.95rem;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:1.5rem;"><strong style="color:#fff;">You see everything.</strong> Every signal detected, every post published, every lead identified. No black box. No mystery metrics. Pipeline you can trace from first touch to conversation.</p>
+      <p style="font-size:1rem;font-weight:600;color:#fff;">You do not manage a tool. We run the operation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE DON'T DO -->
+<section class="section" style="background:var(--bg-section);">
+  <div class="section-inner">
+    <div class="section-label">Anti-Positioning</div>
+    <h2>What we do not do.</h2>
+    <div style="max-width:680px;margin-top:2rem;">
+      <p style="font-size:1.05rem;color:var(--text);line-height:1.9;font-weight:400;border-left:3px solid var(--teal);padding-left:1.25rem;margin-bottom:1.25rem;">We do not hand you a login and wish you luck.</p>
+      <p style="font-size:1.05rem;color:var(--text);line-height:1.9;font-weight:400;border-left:3px solid var(--teal);padding-left:1.25rem;margin-bottom:1.25rem;">We do not produce content that sounds like it was generated by a prompt.</p>
+      <p style="font-size:1.05rem;color:var(--text);line-height:1.9;font-weight:400;border-left:3px solid var(--teal);padding-left:1.25rem;margin-bottom:1.25rem;">We do not send reports full of impressions and reach. We track pipeline.</p>
+      <p style="font-size:1.05rem;color:var(--text);line-height:1.9;font-weight:400;border-left:3px solid var(--teal);padding-left:1.25rem;margin-bottom:0;">We do not spend three months learning your brand before producing anything useful.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EVENT STRATEGY -->
+<section class="section" style="background:var(--bg-section);">
+  <div class="section-inner">
+    <div class="section-label">Event Strategy</div>
+    <h2>The rooms worth being in. And who to find when you get there.</h2>
+    <p class="lead">Events are not networking. They are concentrated access to the people who book podcasts, write about you, and buy from you. The Sprint gives you a shortlist of which events, side events, and RSVPs are worth your time, with a short note on what to look for when you get there. Included in your weekly calls and briefs.</p>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="event-card-top">
+          <span class="event-name">SaaStr Annual</span>
+          <span class="event-tag">San Jose, CA</span>
+        </div>
+        <div class="event-meta">September · 10,000+ founders and operators</div>
+        <div class="event-who">Who to meet</div>
+        <div class="event-who-list">CROs and VP Sales from companies your buyers work at. Hosts of SaaS-focused podcasts (SaaStr Pod, The Official SaaStr Podcast). Journalists from TechCrunch and The Information covering B2B.</div>
+        <div class="event-why">Why it matters</div>
+        <div class="event-why-text">The highest density of <span class="tip" data-tip="Ideal Customer Profile: the specific type of buyer most likely to buy and stay">ICP</span>-adjacent founders on earth. If you sell to B2B operators, your buyers send their teams here.</div>
+        <div class="event-sprint-angle">Sprint angle: shortlist of side events and RSVPs worth attending, pre-event LinkedIn content to warm the room</div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-top">
+          <span class="event-name">Collision</span>
+          <span class="event-tag">Toronto, ON</span>
+        </div>
+        <div class="event-meta">June · 35,000+ attendees · Home advantage</div>
+        <div class="event-who">Who to meet</div>
+        <div class="event-who-list">Canadian VC partners (BDC, Inovia, Real Ventures). Scale-up founders from $1M-$20M ARR who are your referral network. Media from BNN Bloomberg, The Logic, and The Globe's Report on Business.</div>
+        <div class="event-why">Why it matters</div>
+        <div class="event-why-text">Canada's biggest tech stage. Home advantage is real. Press coverage is strong and the community is tight enough that one introduction compounds.</div>
+        <div class="event-sprint-angle">Sprint angle: pre-event podcast blitz to arrive with name recognition</div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-top">
+          <span class="event-name">AI Engineer World's Fair</span>
+          <span class="event-tag">San Francisco, CA</span>
+        </div>
+        <div class="event-meta">June · 5,000+ AI founders and engineers</div>
+        <div class="event-who">Who to meet</div>
+        <div class="event-who-list">AI startup founders building at your stage. Engineering leaders at AI-native companies who buy B2B tools. Podcast hosts from Latent Space and Practical AI. Investors from AI-focused funds actively deploying at seed and Series A.</div>
+        <div class="event-why">Why it matters</div>
+        <div class="event-why-text">The most concentrated room of builders in the AI space. If your product serves the AI-native market, your buyers are here and already thinking about infrastructure, tooling, and distribution.</div>
+        <div class="event-sprint-angle">Sprint angle: pre-event content on AI founder GTM themes, podcast pitch blitz to Latent Space and AI-focused shows before you arrive</div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-top">
+          <span class="event-name">Space Symposium</span>
+          <span class="event-tag">Colorado Springs, CO</span>
+        </div>
+        <div class="event-meta">April · 10,000+ space industry leaders</div>
+        <div class="event-who">Who to meet</div>
+        <div class="event-who-list">Commercial space founders and operators across launch, satellite, and ground systems. Program managers from primes (Lockheed, Boeing, Northrop) who buy from vendors like you. Journalists from Space News and Via Satellite. Investors from dedicated space-tech funds.</div>
+        <div class="event-why">Why it matters</div>
+        <div class="event-why-text">The premier event where commercial and government space intersect. If you sell into the space ecosystem, the decision-makers you need are in one place for four days. No other event has this buyer density for the space vertical.</div>
+        <div class="event-sprint-angle">Sprint angle: shortlist of side events and RSVPs worth your time, pre-event content establishing your space credibility before the room assembles</div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-top">
+          <span class="event-name">Inbound</span>
+          <span class="event-tag">Boston, MA</span>
+        </div>
+        <div class="event-meta">September · HubSpot's flagship conference</div>
+        <div class="event-who">Who to meet</div>
+        <div class="event-who-list">Marketing and sales leaders from companies your size. Newsletter writers and podcast hosts covering marketing and sales tech. Analysts from Gartner and Forrester who shape buyer research.</div>
+        <div class="event-why">Why it matters</div>
+        <div class="event-why-text">High media density. More podcast hosts and newsletter writers per square foot than almost any other conference. One press conversation here can produce 6 months of inbound mentions.</div>
+        <div class="event-sprint-angle">Sprint angle: pre-event media pitch to secure 2-3 journalist and host meetings before you land</div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-top">
+          <span class="event-name"><a href="https://b.tc/conference" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Bitcoin Conference</a></span>
+          <span class="event-tag">Nashville, TN</span>
+        </div>
+        <div class="event-meta">May/June · Largest Bitcoin event globally · 20,000+ attendees</div>
+        <div class="event-who">Who to meet</div>
+        <div class="event-who-list">Bitcoin and crypto-native founders building B2B infrastructure. Podcast hosts from What Bitcoin Did, Unchained, and The Bitcoin Standard. Journalists from Bitcoin Magazine and CoinDesk. Investors from funds deploying into fintech and Bitcoin-adjacent B2B.</div>
+        <div class="event-why">Why it matters</div>
+        <div class="event-why-text">The highest-conviction audience in the room. If your product or service touches fintech, payments, or any crypto-native vertical, your buyers are here and they are not distracted by anything else that week.</div>
+        <div class="event-sprint-angle">Sprint angle: shortlist of side events and RSVPs to prioritize, pre-event content series around Bitcoin/fintech themes to warm the room</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATH -->
+<section class="section math-section">
+  <div class="section-inner">
+    <div class="section-label">The Math</div>
+    <h2>What you could be paying for this right now.</h2>
+    <p class="lead">The Sprint replaces a stack of things you are already spending on, plus the hours you are losing every week.</p>
+    <div class="math-grid">
+      <div>
+        <h3>What you are replacing</h3>
+        <div class="math-item"><span class="label">Freelance content writer</span><span class="amount">$1,500-2,500/mo</span></div>
+        <div class="math-item"><span class="label">Podcast booking service</span><span class="amount">$500-1,000/mo</span></div>
+        <div class="math-item"><span class="label">Market research / competitive intel</span><span class="amount">$500-1,000/mo</span></div>
+        <div class="math-item"><span class="label">Scheduling tools</span><span class="amount">$100-200/mo</span></div>
+        <div class="math-item"><span class="label">Your time (10+ hrs/week)</span><span class="amount">$4,000-6,000/mo</span></div>
+        <div class="math-total"><span>Total</span><span class="amount">$6,600-10,700/mo</span></div>
+      </div>
+      <div class="math-vs">vs</div>
+      <div class="math-sprint">
+        <h3>The Sprint</h3>
+        <div class="sprint-price">$3,000</div>
+        <div class="sprint-price-sub">per month, everything included</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">Pricing</div>
+    <h2 style="text-align:center;">One price. Everything included.</h2>
+    <p style="text-align:center;color:var(--muted);font-size:0.95rem;max-width:560px;margin:0 auto 2.5rem;line-height:1.7;">Right now you are spending 10-15 hours per week on GTM that is not converting. Every deal that closes slower because the buyer arrived cold instead of pre-warmed has a cost. Every week without consistent content is a week your competitors own the conversation.</p>
+    <div class="pricing-card">
+      <div class="price">$3,000</div>
+      <div class="per">per month · 90-day engagement · 3 slots available</div>
+      <ul class="pricing-includes">
+        <li>1-2 LinkedIn posts per week, written and drafted in your voice, for you to post</li>
+        <li>2 podcast guest pitches per week sent to targeted shows</li>
+        <li>Weekly market intelligence brief</li>
+        <li>Weekly competitor notes</li>
+        <li>Weekly notable trends (3-5 signals from your market)</li>
+        <li>2 ideas per week for content or research</li>
+        <li>Event strategy included (event shortlists, side events, RSVPs, what to look for)</li>
+        <li>One 30-minute strategy call per week</li>
+        <li>Everything reviewed for taste before it goes out</li>
+      </ul>
+      <p class="pricing-terms">3-month minimum. Cancel with 30 days notice after that.<br>No setup fee. Billed on the 1st.</p>
+      <a href="#book" class="pricing-cta">Apply for a Sprint slot</a>
+      <p class="pricing-pilot"><strong>3 slots. By application.</strong> We review applications weekly and respond within 48 hours. No commitment until we have spoken. If it is not a fit, we will tell you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW WE KNOW THIS WORKS -->
+<section class="section founder-section">
+  <div class="section-inner">
+    <div class="section-label">How We Know This Works</div>
+    <h2>We built this system to run our own GTM first.</h2>
+    <div style="max-width:680px;margin-bottom:3rem;">
+      <p style="font-size:0.95rem;color:var(--muted);line-height:1.9;margin-bottom:1rem;">In 2009, I sent a cold email to Jim Rogers. No warm intro. No connection. Just a young man who admired a legendary investor and hit send.</p>
+      <p style="font-size:0.95rem;color:var(--muted);line-height:1.9;margin-bottom:1rem;">He replied. We exchanged a handful of messages over the years. Nothing big. Just staying in touch. Keeping the thread alive.</p>
+      <p style="font-size:0.95rem;color:var(--muted);line-height:1.9;margin-bottom:1rem;">17 years later, I asked him to be the first guest on our podcast. He said yes.</p>
+      <p style="font-size:0.95rem;color:var(--muted);line-height:1.9;margin-bottom:1rem;">Jim Rogers co-founded the Quantum Fund with George Soros. 4,200% returns in 10 years. Drove around the world twice. Sold his $16M Manhattan home and moved his family to Singapore because he believed the future was in Asia before most people could find it on a map. He is 83. Still in Singapore. Still making bets most people will not understand for another decade.</p>
+      <p style="font-size:0.95rem;color:var(--muted);line-height:1.9;margin-bottom:1.5rem;">The lesson: relationships maintained over time convert. No tool replaces that. Aloomii is the system that keeps threads alive.</p>
+      <p style="font-size:0.9rem;color:var(--muted);line-height:1.8;">We built this system to run our own GTM. It runs our podcast, our content, our outreach. We did not build it and sell it. We built it, used it, proved it, and now we run it for founders like you.</p>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:1rem;font-style:italic;">Built by operators from Ontario Government, IBM, JP Morgan, and Maersk.</p>
+    </div>
+    <div class="section-label" style="margin-bottom:1.5rem;">Who Runs This</div>
+    <div class="founder-card">
+      <img class="founder-avatar" src="/images/yohann-calpu.jpg" alt="Yohann Calpu, Co-founder of Aloomii" width="80" height="80">
+      <div>
+        <div class="founder-name">Yohann Calpu</div>
+        <div class="founder-title">Co-Founder, Aloomii</div>
+        <p class="founder-bio">Technical co-founder turned sales and partnerships. 8 years in government technology, then IBM and JP Morgan Chase. Yohann built the Sprint system to replace his own scattered marketing before turning it into a service. He has run outbound and content for B2B companies where the founder is the brand and the relationship is the product. He writes the briefs, runs every strategy call, and reviews everything before it goes out.</p>
+        <a href="/#past-experience" class="founder-link" target="_blank" rel="noopener">See the companies we have worked with &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT IS AND ISN'T FOR -->
+<section class="section" style="background:var(--bg-section);">
+  <div class="section-inner">
+    <div class="section-label">Fit Check</div>
+    <h2>This is not for everyone.</h2>
+    <p class="lead">The Sprint works when the conditions are right. Here is how to know if they are.</p>
+    <div class="not-for-grid">
+      <div class="for-card">
+        <h3>This is for you if</h3>
+        <ul class="fit-list">
+          <li>You have a working product with paying customers</li>
+          <li>You are willing to show up on LinkedIn and/or podcasts</li>
+          <li>Your marketing is nonexistent, inconsistent, or not moving the needle</li>
+          <li><span>You are doing $10K-$100K <span class="tip" data-tip="Monthly Recurring Revenue: your predictable monthly income">MRR</span> and growing through word of mouth</span></li>
+          <li>You have tried content before and it was inconsistent</li>
+          <li>You decide fast when something makes sense</li>
+        </ul>
+      </div>
+      <div class="not-for-card">
+        <h3>This is not for you if</h3>
+        <ul class="fit-list">
+          <li>You do not have a product yet</li>
+          <li>You are not willing to appear on LinkedIn or podcasts</li>
+          <li>Your marketing is already producing consistent pipeline</li>
+          <li>Your customers make decisions purely on price and reputation plays no role</li>
+          <li>You want someone to run your sales calls</li>
+          <li>You want commission-only with no retainer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK (Calendly embed) -->
+<section class="section booking-section" id="book">
+  <div class="section-inner">
+    <div class="section-label" style="text-align:center;">Apply</div>
+    <h2>15 minutes. No prep needed.</h2>
+    <p class="lead">Tell us what you are building. We will tell you if the Sprint is the right fit and what your first 30 days would look like. We review weekly and respond within 48 hours.</p>
+    <div class="calendly-wrapper">
+      <iframe
+        src="https://calendly.com/yohann8/15min?embed_domain=aloomii.com&embed_type=Inline&hide_landing_page_details=1&hide_gdpr_banner=1"
+        width="100%"
+        height="700"
+        frameborder="0"
+        scrolling="no"
+        title="Book a 15-minute call with Aloomii"
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>&copy; 2026 Aloomii. All rights reserved. &mdash; <a href="/privacy" style="color:inherit;">Privacy</a></p>
+</footer>
+
+<script>
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+if (hamburger && navLinks) {
+  hamburger.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open);
+  });
+}
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+
+</body>
+</html>
