@@ -38,7 +38,7 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts (73 articles — auto-generated 2026-03-24) -->
+  <!-- Blog Posts (74 articles — auto-generated 2026-03-24) -->
   <url>
     <loc>https://aloomii.com/blog/5-openclaw-skills-b2b-founders/</loc>
     <lastmod>2026-03-24</lastmod>
@@ -473,6 +473,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/you-dont-have-a-content-problem-you-have-an-operations-problem/</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/you-dont-need-a-marketer-you-need-a-system/</loc>
     <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
