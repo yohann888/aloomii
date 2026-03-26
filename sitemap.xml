@@ -38,9 +38,15 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts (76 articles — auto-generated 2026-03-26) -->
+  <!-- Blog Posts (79 articles — auto-generated 2026-03-26) -->
   <url>
     <loc>https://aloomii.com/blog/2026-gtm-tech-stack-b2b-founders/</loc>
+    <lastmod>2026-03-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/28-percent-problem-sales-rep-time/</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -65,6 +71,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/ai-sdr-vs-ai-content-engine/</loc>
+    <lastmod>2026-03-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/ai-sdr-vs-ai-workforce/</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -113,6 +125,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/b2b-podcast-vs-newsletter-vs-youtube/</loc>
+    <lastmod>2026-03-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/buying-groups-replacing-lead-gen/</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
