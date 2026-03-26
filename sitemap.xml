@@ -38,7 +38,7 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts (79 articles — auto-generated 2026-03-26) -->
+  <!-- Blog Posts (81 articles — auto-generated 2026-03-26) -->
   <url>
     <loc>https://aloomii.com/blog/2026-gtm-tech-stack-b2b-founders/</loc>
     <lastmod>2026-03-26</lastmod>
@@ -47,6 +47,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/28-percent-problem-sales-rep-time/</loc>
+    <lastmod>2026-03-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/5-buying-signals-competitors-watching/</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -167,6 +173,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/customers-love-you-nobody-else-knows-you-exist/</loc>
+    <lastmod>2026-03-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/executive-visibility-revenue-channel/</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
