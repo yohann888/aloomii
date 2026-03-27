@@ -782,6 +782,13 @@
 </head>
 <body class="homepage">
 
+  <!-- ───── ANNOUNCEMENT BANNER ───── -->
+  <div id="announcement-banner" style="background:#009e96;color:#fff;text-align:center;padding:0.6rem 1rem;font-size:0.875rem;font-weight:500;position:relative;z-index:1000;">
+    <span>Not sure if your GTM is broken or just slow?</span>
+    <a href="/gtm-audit" style="color:#fff;font-weight:700;text-decoration:underline;margin-left:0.5rem;white-space:nowrap;">Take the free 3-minute audit &rarr;</a>
+    <button onclick="document.getElementById('announcement-banner').remove()" aria-label="Dismiss" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.7);font-size:1.1rem;cursor:pointer;line-height:1;padding:0;">&times;</button>
+  </div>
+
   <!-- ───── NAVIGATION ───── -->
   <nav class="nav">
     <a href="/" class="nav-logo">
