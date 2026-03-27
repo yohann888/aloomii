@@ -34,7 +34,6 @@
       color: var(--text-dark);
       line-height: 1.6;
       overflow-x: hidden;
-      padding-top: calc(var(--banner-height) + var(--nav-height));
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -785,17 +784,25 @@
 <body class="homepage">
 
   <!-- ───── ANNOUNCEMENT BANNER ───── -->
-  <div id="announcement-banner" style="background:#009e96;color:#fff;text-align:center;padding:0;height:var(--banner-height);display:flex;align-items:center;justify-content:center;font-size:0.875rem;font-weight:500;position:fixed;top:0;left:0;right:0;z-index:1001;">
-    <span>Not sure if your GTM is broken or just slow?</span>
-    <a href="/gtm-audit" style="color:#fff;font-weight:700;text-decoration:underline;margin-left:0.5rem;white-space:nowrap;">Take the free 3-minute audit &rarr;</a>
-    <button id="banner-close" aria-label="Dismiss" style="position:absolute;right:1rem;background:none;border:none;color:rgba(255,255,255,0.7);font-size:1.2rem;cursor:pointer;line-height:1;padding:0;">&times;</button>
+  <div id="announcement-banner" style="background:#009e96;color:#fff;text-align:center;padding:0.55rem 2.5rem;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0.25rem 0.5rem;font-size:0.85rem;font-weight:500;position:fixed;top:0;left:0;right:0;z-index:1001;white-space:nowrap;">
+    <span>GTM not filling your pipeline?</span>
+    <a href="/gtm-audit" style="color:#fff;font-weight:700;text-decoration:underline;white-space:nowrap;">Free 3-min audit &rarr;</a>
+    <button id="banner-close" aria-label="Dismiss" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.75);font-size:1.1rem;cursor:pointer;line-height:1;padding:0;">&times;</button>
   </div>
   <script>
-    document.getElementById('banner-close').addEventListener('click', function() {
+    function _adjustBanner() {
       var b = document.getElementById('announcement-banner');
-      b.style.display = 'none';
-      document.querySelector('.nav').style.top = '0';
-      document.documentElement.style.setProperty('--banner-height', '0px');
+      var nav = document.querySelector('.nav');
+      if (!b || b.style.display === 'none') { nav.style.top = '0'; document.body.style.paddingTop = '72px'; return; }
+      var h = b.offsetHeight;
+      nav.style.top = h + 'px';
+      document.body.style.paddingTop = (h + 72) + 'px';
+    }
+    document.addEventListener('DOMContentLoaded', _adjustBanner);
+    window.addEventListener('resize', _adjustBanner);
+    document.getElementById('banner-close').addEventListener('click', function() {
+      document.getElementById('announcement-banner').style.display = 'none';
+      _adjustBanner();
     });
   </script>
 
