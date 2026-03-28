@@ -135,12 +135,20 @@ body::before {
 .donut-legend { display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
-.bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 140px; margin-top: 16px; padding: 28px 4px 24px; overflow: visible; position: relative; }
+.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 130px; margin-top: 16px; padding: 20px 8px 30px; overflow: visible; position: relative; }
 .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0; height: 100%; justify-content: flex-end; min-width: 0; position: relative; }
 .bar { width: 100%; max-width: 36px; border-radius: 4px 4px 0 0; position: absolute; bottom: 0; left: 50%; transform-origin: bottom; animation: barGrow 1s ease-out forwards; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; }
 @keyframes barGrow { from { transform: translateX(-50%) scaleY(0); } to { transform: translateX(-50%) scaleY(1); } }
 .bar-label { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-align: center; margin-top: 6px; white-space: nowrap; }
 .bar-value { font-family: var(--mono); font-size: 10px; color: rgba(0,0,0,0.6); font-weight: 600; }
+
+.pipe-chart { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.pipe-row { display: flex; align-items: center; gap: 12px; }
+.pipe-label { font-family: var(--mono); font-size: 11px; color: var(--text-dim); width: 72px; flex-shrink: 0; text-align: right; }
+.pipe-track { flex: 1; height: 24px; background: var(--border); border-radius: 4px; overflow: hidden; position: relative; }
+.pipe-fill { height: 100%; border-radius: 4px; animation: pipeGrow 1s ease-out forwards; transform-origin: left; position: relative; display: flex; align-items: center; padding-left: 8px; }
+@keyframes pipeGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.pipe-val { font-family: var(--mono); font-size: 11px; color: rgba(0,0,0,0.7); font-weight: 600; }
 .trend-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .trend-item:last-child { border-bottom: none; }
 .trend-rank { font-family: var(--mono); font-size: 12px; color: var(--text-dim); width: 24px; flex-shrink: 0; }
@@ -275,42 +283,30 @@ body::before {
   <div class="grid fade-up delay-4">
     <div class="card">
       <div class="card-title"><span class="icon">&#127919;</span> Outreach Pipeline</div>
-      <div class="bar-chart">
-        <div class="bar-group">
-          <div class="bar" style="height: 30%; background: var(--border);">
-            <span class="bar-value" id="bar-1">12</span>
-          </div>
-          <span class="bar-label">ID</span>
+      <div class="pipe-chart">
+        <div class="pipe-row">
+          <span class="pipe-label">Identified</span>
+          <div class="pipe-track"><div class="pipe-fill" style="--w:100%; background: var(--border);"><span class="pipe-val">12</span></div></div>
         </div>
-        <div class="bar-group">
-          <div class="bar" style="height: 55%; background: var(--blue); animation-delay: 0.1s;">
-            <span class="bar-value" id="bar-2">8</span>
-          </div>
-          <span class="bar-label">EN</span>
+        <div class="pipe-row">
+          <span class="pipe-label">Enriched</span>
+          <div class="pipe-track"><div class="pipe-fill" style="--w:67%; background: var(--blue);"><span class="pipe-val">8</span></div></div>
         </div>
-        <div class="bar-group">
-          <div class="bar" style="height: 75%; background: var(--amber); animation-delay: 0.2s;">
-            <span class="bar-value" id="bar-3">5</span>
-          </div>
-          <span class="bar-label">DFT</span>
+        <div class="pipe-row">
+          <span class="pipe-label">Drafted</span>
+          <div class="pipe-track"><div class="pipe-fill" style="--w:42%; background: var(--amber);"><span class="pipe-val">5</span></div></div>
         </div>
-        <div class="bar-group">
-          <div class="bar" style="height: 45%; background: var(--accent); animation-delay: 0.3s;">
-            <span class="bar-value" id="bar-4">3</span>
-          </div>
-          <span class="bar-label">SNT</span>
+        <div class="pipe-row">
+          <span class="pipe-label">Sent</span>
+          <div class="pipe-track"><div class="pipe-fill" style="--w:25%; background: var(--accent);"><span class="pipe-val">3</span></div></div>
         </div>
-        <div class="bar-group">
-          <div class="bar" style="height: 90%; background: linear-gradient(180deg, var(--accent), #00b37e); animation-delay: 0.4s;">
-            <span class="bar-value" id="bar-5">2</span>
-          </div>
-          <span class="bar-label">RPL</span>
+        <div class="pipe-row">
+          <span class="pipe-label">Replied</span>
+          <div class="pipe-track"><div class="pipe-fill" style="--w:17%; background: linear-gradient(90deg, var(--accent), #00b37e);"><span class="pipe-val">2</span></div></div>
         </div>
-        <div class="bar-group">
-          <div class="bar" style="height: 100%; background: linear-gradient(180deg, #00e5a0, #00b37e); box-shadow: 0 0 20px var(--accent-mid); animation-delay: 0.5s;">
-            <span class="bar-value" style="color: var(--accent);" id="bar-6">1</span>
-          </div>
-          <span class="bar-label">MTG</span>
+        <div class="pipe-row">
+          <span class="pipe-label">Meeting</span>
+          <div class="pipe-track"><div class="pipe-fill" style="--w:8%; background: linear-gradient(90deg, #00e5a0, #00b37e); box-shadow: 0 0 12px var(--accent-mid);"><span class="pipe-val">1</span></div></div>
         </div>
       </div>
     </div>
