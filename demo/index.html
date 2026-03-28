@@ -146,6 +146,14 @@ body::before {
 .trend-rank { font-family: var(--mono); font-size: 12px; color: var(--text-dim); width: 24px; flex-shrink: 0; }
 .trend-name { font-size: 14px; flex: 1; }
 .trend-bar-bg { width: 80px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.sig-cat-bar { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.sig-cat-row { display: flex; align-items: center; gap: 12px; }
+.sig-cat-label { font-size: 13px; color: var(--text); width: 140px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sig-cat-track { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.sig-cat-fill { height: 100%; border-radius: 4px; width: var(--w); animation: sigBarGrow 1s ease-out forwards; transform-origin: left; }
+@keyframes sigBarGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.sig-cat-val { font-family: var(--mono); font-size: 12px; color: var(--text-dim); width: 20px; text-align: right; flex-shrink: 0; }
+
 .trend-bar-fill { height: 100%; border-radius: 3px; animation: trendGrow 1.2s ease-out forwards; transform-origin: left; }
 @keyframes trendGrow { from { transform: scaleX(0); } }
 .outreach-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 8px; margin-bottom: 6px; transition: background 0.2s; }
@@ -366,31 +374,50 @@ body::before {
     </div>
 
     <div class="card">
-      <div class="card-title"><span class="icon">&#128202;</span> Aloomii Trends</div>
-      <div class="trend-item">
-        <span class="trend-rank">01</span>
-        <span class="trend-name">#AISalesAgents</span>
-        <div class="trend-bar-bg"><div class="trend-bar-fill" style="width: 95%; background: var(--accent);"></div></div>
-      </div>
-      <div class="trend-item">
-        <span class="trend-rank">02</span>
-        <span class="trend-name">SDR Hiring Crisis</span>
-        <div class="trend-bar-bg"><div class="trend-bar-fill" style="width: 82%; background: var(--accent);"></div></div>
-      </div>
-      <div class="trend-item">
-        <span class="trend-rank">03</span>
-        <span class="trend-name">AI-Native GTM</span>
-        <div class="trend-bar-bg"><div class="trend-bar-fill" style="width: 70%; background: var(--blue);"></div></div>
-      </div>
-      <div class="trend-item">
-        <span class="trend-rank">04</span>
-        <span class="trend-name">Warm Intro Arbitrage</span>
-        <div class="trend-bar-bg"><div class="trend-bar-fill" style="width: 55%; background: var(--blue);"></div></div>
-      </div>
-      <div class="trend-item">
-        <span class="trend-rank">05</span>
-        <span class="trend-name">CRM Decay</span>
-        <div class="trend-bar-bg"><div class="trend-bar-fill" style="width: 40%; background: var(--purple);"></div></div>
+      <div class="card-title"><span class="icon">&#128202;</span> Signals by Category</div>
+      <div class="sig-cat-bar">
+        <div class="sig-cat-row">
+          <span class="sig-cat-label">Insurance Brokerages</span>
+          <div class="sig-cat-track">
+            <div class="sig-cat-fill" style="--w:80%; background: var(--accent); animation-delay: 0.1s;"></div>
+          </div>
+          <span class="sig-cat-val">8</span>
+        </div>
+        <div class="sig-cat-row">
+          <span class="sig-cat-label">SaaS Founders</span>
+          <div class="sig-cat-track">
+            <div class="sig-cat-fill" style="--w:60%; background: var(--blue); animation-delay: 0.2s;"></div>
+          </div>
+          <span class="sig-cat-val">6</span>
+        </div>
+        <div class="sig-cat-row">
+          <span class="sig-cat-label">Fintech Startups</span>
+          <div class="sig-cat-track">
+            <div class="sig-cat-fill" style="--w:40%; background: var(--amber); animation-delay: 0.3s;"></div>
+          </div>
+          <span class="sig-cat-val">4</span>
+        </div>
+        <div class="sig-cat-row">
+          <span class="sig-cat-label">Agency Founders</span>
+          <div class="sig-cat-track">
+            <div class="sig-cat-fill" style="--w:30%; background: var(--accent); animation-delay: 0.4s;"></div>
+          </div>
+          <span class="sig-cat-val">3</span>
+        </div>
+        <div class="sig-cat-row">
+          <span class="sig-cat-label">Series A / Growth</span>
+          <div class="sig-cat-track">
+            <div class="sig-cat-fill" style="--w:20%; background: var(--blue); animation-delay: 0.5s;"></div>
+          </div>
+          <span class="sig-cat-val">2</span>
+        </div>
+        <div class="sig-cat-row">
+          <span class="sig-cat-label">SDR Hiring Pain</span>
+          <div class="sig-cat-track">
+            <div class="sig-cat-fill" style="--w:20%; background: var(--purple); animation-delay: 0.6s;"></div>
+          </div>
+          <span class="sig-cat-val">2</span>
+        </div>
       </div>
     </div>
   </div>
