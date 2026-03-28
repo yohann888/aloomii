@@ -146,9 +146,8 @@ body::before {
 .pipe-row { display: flex; align-items: center; gap: 12px; }
 .pipe-label { font-family: var(--mono); font-size: 11px; color: var(--text-dim); width: 72px; flex-shrink: 0; text-align: right; }
 .pipe-track { flex: 1; height: 24px; background: var(--border); border-radius: 4px; overflow: hidden; position: relative; }
-.pipe-fill { height: 100%; border-radius: 4px; animation: pipeGrow 1s ease-out forwards; transform-origin: left; position: relative; display: flex; align-items: center; padding-left: 8px; }
-@keyframes pipeGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.pipe-val { font-family: var(--mono); font-size: 11px; color: rgba(0,0,0,0.7); font-weight: 600; }
+.pipe-fill { height: 100%; border-radius: 4px; position: relative; display: flex; align-items: center; padding-left: 8px; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+.pipe-val { font-family: var(--mono); font-size: 11px; color: rgba(0,0,0,0.7); font-weight: 600; position: relative; z-index: 1; }
 .trend-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .trend-item:last-child { border-bottom: none; }
 .trend-rank { font-family: var(--mono); font-size: 12px; color: var(--text-dim); width: 24px; flex-shrink: 0; }
@@ -286,27 +285,27 @@ body::before {
       <div class="pipe-chart">
         <div class="pipe-row">
           <span class="pipe-label">Identified</span>
-          <div class="pipe-track"><div class="pipe-fill" style="--w:100%; background: var(--border);"><span class="pipe-val">12</span></div></div>
+          <div class="pipe-track"><div class="pipe-fill" style="width:100%; background: var(--border);"><span class="pipe-val">12</span></div></div>
         </div>
         <div class="pipe-row">
           <span class="pipe-label">Enriched</span>
-          <div class="pipe-track"><div class="pipe-fill" style="--w:67%; background: var(--blue);"><span class="pipe-val">8</span></div></div>
+          <div class="pipe-track"><div class="pipe-fill" style="width:67%; background: var(--blue);"><span class="pipe-val">8</span></div></div>
         </div>
         <div class="pipe-row">
           <span class="pipe-label">Drafted</span>
-          <div class="pipe-track"><div class="pipe-fill" style="--w:42%; background: var(--amber);"><span class="pipe-val">5</span></div></div>
+          <div class="pipe-track"><div class="pipe-fill" style="width:42%; background: var(--amber);"><span class="pipe-val">5</span></div></div>
         </div>
         <div class="pipe-row">
           <span class="pipe-label">Sent</span>
-          <div class="pipe-track"><div class="pipe-fill" style="--w:25%; background: var(--accent);"><span class="pipe-val">3</span></div></div>
+          <div class="pipe-track"><div class="pipe-fill" style="width:25%; background: var(--accent);"><span class="pipe-val">3</span></div></div>
         </div>
         <div class="pipe-row">
           <span class="pipe-label">Replied</span>
-          <div class="pipe-track"><div class="pipe-fill" style="--w:17%; background: linear-gradient(90deg, var(--accent), #00b37e);"><span class="pipe-val">2</span></div></div>
+          <div class="pipe-track"><div class="pipe-fill" style="width:17%; background: linear-gradient(90deg, var(--accent), #00b37e);"><span class="pipe-val">2</span></div></div>
         </div>
         <div class="pipe-row">
           <span class="pipe-label">Meeting</span>
-          <div class="pipe-track"><div class="pipe-fill" style="--w:8%; background: linear-gradient(90deg, #00e5a0, #00b37e); box-shadow: 0 0 12px var(--accent-mid);"><span class="pipe-val">1</span></div></div>
+          <div class="pipe-track"><div class="pipe-fill" style="width:8%; background: linear-gradient(90deg, #00e5a0, #00b37e); box-shadow: 0 0 12px var(--accent-mid);"><span class="pipe-val">1</span></div></div>
         </div>
       </div>
     </div>
@@ -375,42 +374,42 @@ body::before {
         <div class="sig-cat-row">
           <span class="sig-cat-label">Insurance Brokerages</span>
           <div class="sig-cat-track">
-            <div class="sig-cat-fill" style="--w:80%; background: var(--accent); animation-delay: 0.1s;"></div>
+            <div class="sig-cat-fill" style="width:80%; background: var(--accent); animation-delay: 0.1s;"></div>
           </div>
           <span class="sig-cat-val">8</span>
         </div>
         <div class="sig-cat-row">
           <span class="sig-cat-label">SaaS Founders</span>
           <div class="sig-cat-track">
-            <div class="sig-cat-fill" style="--w:60%; background: var(--blue); animation-delay: 0.2s;"></div>
+            <div class="sig-cat-fill" style="width:60%; background: var(--blue); animation-delay: 0.2s;"></div>
           </div>
           <span class="sig-cat-val">6</span>
         </div>
         <div class="sig-cat-row">
           <span class="sig-cat-label">Fintech Startups</span>
           <div class="sig-cat-track">
-            <div class="sig-cat-fill" style="--w:40%; background: var(--amber); animation-delay: 0.3s;"></div>
+            <div class="sig-cat-fill" style="width:40%; background: var(--amber); animation-delay: 0.3s;"></div>
           </div>
           <span class="sig-cat-val">4</span>
         </div>
         <div class="sig-cat-row">
           <span class="sig-cat-label">Agency Founders</span>
           <div class="sig-cat-track">
-            <div class="sig-cat-fill" style="--w:30%; background: var(--accent); animation-delay: 0.4s;"></div>
+            <div class="sig-cat-fill" style="width:30%; background: var(--accent); animation-delay: 0.4s;"></div>
           </div>
           <span class="sig-cat-val">3</span>
         </div>
         <div class="sig-cat-row">
           <span class="sig-cat-label">Series A / Growth</span>
           <div class="sig-cat-track">
-            <div class="sig-cat-fill" style="--w:20%; background: var(--blue); animation-delay: 0.5s;"></div>
+            <div class="sig-cat-fill" style="width:20%; background: var(--blue); animation-delay: 0.5s;"></div>
           </div>
           <span class="sig-cat-val">2</span>
         </div>
         <div class="sig-cat-row">
           <span class="sig-cat-label">SDR Hiring Pain</span>
           <div class="sig-cat-track">
-            <div class="sig-cat-fill" style="--w:20%; background: var(--purple); animation-delay: 0.6s;"></div>
+            <div class="sig-cat-fill" style="width:20%; background: var(--purple); animation-delay: 0.6s;"></div>
           </div>
           <span class="sig-cat-val">2</span>
         </div>
@@ -458,7 +457,12 @@ body::before {
     requestAnimationFrame(update);
   }
 
-  fetch('/api/metrics')
+  // Animate pipeline bars from 0 on load
+  document.querySelectorAll('.pipe-fill').forEach(function(el) {
+    var targetWidth = el.style.width;
+    el.style.width = '0';
+    setTimeout(function() { el.style.width = targetWidth; }, 100);
+  });
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(d) {
       if (!d) return;
