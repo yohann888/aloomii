@@ -170,6 +170,19 @@ body::before {
 .status-demo { background: var(--amber-dim); color: var(--amber); }
 .status-hot { background: var(--red-dim); color: var(--red); }
 .status-active { background: var(--accent-dim); color: var(--accent); }
+
+.queue-section { margin-bottom: 0; }
+.queue-platform { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.queue-item { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.queue-item:last-child { border-bottom: none; }
+.queue-text { font-size: 13px; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+.queue-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.queue-chars { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+.queue-status { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 4px; }
+.status-queued { background: var(--accent-dim); color: var(--accent); }
+.status-review { background: var(--amber-dim); color: var(--amber); }
+.status-draft { background: var(--border); color: var(--text-dim); }
+.queue-divider { height: 1px; background: var(--border); margin: 16px 0; }
 .footer { text-align: center; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
 .footer-note { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin-bottom: 20px; }
 .cta-button {
@@ -419,12 +432,41 @@ body::before {
 
   <div class="grid fade-up delay-6">
     <div class="card">
-      <div class="card-title"><span class="icon">&#127919;</span> Active Outreach</div>
-      <div class="outreach-item"><span class="contact-name">CryptoSlam</span><span class="outreach-status status-sent">Proposal sent</span></div>
-      <div class="outreach-item"><span class="contact-name">Arch Network</span><span class="outreach-status status-sent">Proposal sent</span></div>
-      <div class="outreach-item"><span class="contact-name">OPNet BTC</span><span class="outreach-status status-sent">Proposal sent</span></div>
-      <div class="outreach-item"><span class="contact-name">Westland Insurance</span><span class="outreach-status status-demo">Demo prep</span></div>
-      <div class="outreach-item"><span class="contact-name">NationGraph</span><span class="outreach-status status-hot">Follow up now</span></div>
+      <div class="card-title"><span class="icon">&#128179;</span> Content Queue</div>
+      <div class="queue-section">
+        <div class="queue-platform">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--blue)" style="flex-shrink:0"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zM8 17H6V7h2v10zm4-1h-2V8h2v8zm4 1h-2v-5h2v5z"/></svg>
+          <span style="font-family: var(--mono); font-size: 10px; color: var(--blue); letter-spacing: 1px; text-transform: uppercase;">LinkedIn</span>
+        </div>
+        <div class="queue-item">
+          <div class="queue-text">The Referral Ceiling</div>
+          <div class="queue-meta">
+            <span class="queue-chars">287 chars</span>
+            <span class="queue-status status-queued">Queued — Mon</span>
+          </div>
+        </div>
+        <div class="queue-item">
+          <div class="queue-text">The Invisible Founder</div>
+          <div class="queue-meta">
+            <span class="queue-chars">241 chars</span>
+            <span class="queue-status status-review">In review</span>
+          </div>
+        </div>
+      </div>
+      <div class="queue-divider"></div>
+      <div class="queue-section">
+        <div class="queue-platform">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#ff0050" style="flex-shrink:0"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.73a8.19 8.19 0 004.76 1.52v-3.4a4.85 4.85 0 01-1-.16z"/></svg>
+          <span style="font-family: var(--mono); font-size: 10px; color: #ff0050; letter-spacing: 1px; text-transform: uppercase;">TikTok</span>
+        </div>
+        <div class="queue-item">
+          <div class="queue-text">Why Your Network Stops Working</div>
+          <div class="queue-meta">
+            <span class="queue-chars">182 chars</span>
+            <span class="queue-status status-draft">Draft</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="card">
