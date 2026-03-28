@@ -135,9 +135,9 @@ body::before {
 .donut-legend { display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
-.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 140px; margin-top: 16px; padding-top: 8px; }
-.bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
-.bar { width: 100%; max-width: 40px; border-radius: 4px 4px 0 0; position: relative; animation: barGrow 1s ease-out forwards; transform-origin: bottom; }
+.bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 140px; margin-top: 16px; padding: 8px 4px 0; overflow: hidden; }
+.bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; min-width: 0; }
+.bar { width: 100%; max-width: 36px; border-radius: 4px 4px 0 0; position: relative; animation: barGrow 1s ease-out forwards; transform-origin: bottom; }
 @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 .bar-label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-align: center; }
 .bar-value { font-family: var(--mono); font-size: 11px; color: var(--text-label); position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
