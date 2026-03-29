@@ -185,11 +185,14 @@ body::before {
 .status-draft { background: var(--border); color: var(--text-dim); }
 .queue-divider { height: 1px; background: var(--border); margin: 16px 0; }
 
-.blog-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
-.blog-item:last-child { border-bottom: none; }
-.blog-title { font-size: 13px; color: var(--text); text-decoration: none; display: block; line-height: 1.3; transition: color 0.2s; }
+.blog-item { padding: 10px 12px; border-bottom: 1px solid var(--border); border-radius: 6px; margin-bottom: 4px; transition: background 0.2s; }
+.blog-item:last-child { border-bottom: none; margin-bottom: 0; }
+.blog-item:nth-child(odd) { background: rgba(0, 229, 160, 0.04); }
+.blog-item:nth-child(even) { background: rgba(77, 166, 255, 0.04); }
+.blog-item:hover { background: rgba(0, 229, 160, 0.08); }
+.blog-title { font-size: 13px; color: var(--text); text-decoration: none; display: block; line-height: 1.4; transition: color 0.2s; }
 .blog-title:hover { color: var(--accent); }
-.blog-tag { display: inline-block; font-family: var(--mono); font-size: 9px; padding: 2px 6px; border-radius: 3px; background: var(--accent-dim); color: var(--accent); margin-top: 4px; }
+.blog-tag { display: inline-block; font-family: var(--mono); font-size: 9px; padding: 2px 8px; border-radius: 3px; background: var(--accent-dim); color: var(--accent); margin-top: 6px; letter-spacing: 0.5px; }
 .footer { text-align: center; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
 .footer-note { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin-bottom: 20px; }
 .cta-button {
@@ -496,11 +499,21 @@ body::before {
   
     <div class="card">
       <div class="card-title"><span class="icon">&#128214;</span> From the Blog</div>
-      <div class="blog-item"><a href="https://aloomii.com/blog/5-buying-signals-competitors-watching" class="blog-title">5 Buying Signals Your Competitors Are Watching</a><span class="blog-tag">GTM</span></div>
-      <div class="blog-item"><a href="https://aloomii.com/blog/you-dont-have-a-content-problem-you-have-an-operations-problem" class="blog-title">You Don't Have a Content Problem. You Have an Operations Problem.</a><span class="blog-tag">Ops</span></div>
-      <div class="blog-item"><a href="https://aloomii.com/blog/humans-for-judgment-machines-for-volume-gtm-framework" class="blog-title">Humans for Judgment, Machines for Volume</a><span class="blog-tag">AI</span></div>
-      <div class="blog-item"><a href="https://aloomii.com/blog/weekly-briefing-competitors-getting-that-you-are-not" class="blog-title">The Weekly Briefing Your Competitors Are Getting</a><span class="blog-tag">Intel</span></div>
-      <div class="blog-item"><a href="https://aloomii.com/blog/how-to-do-gtm-solo-founder" class="blog-title">How to Do GTM as a Solo Founder</a><span class="blog-tag">Solo</span></div>
+      <div class="blog-item"><a href="https://aloomii.com/blog/5-buying-signals-competitors-watching" class="blog-title">5 Buying Signals Your Competitors Are Watching</a>
+        <span class="blog-tag">GTM</span>
+      </div>
+      <div class="blog-item"><a href="https://aloomii.com/blog/you-dont-have-a-content-problem-you-have-an-operations-problem" class="blog-title">You Don't Have a Content Problem. You Have an Operations Problem.</a>
+        <span class="blog-tag">Ops</span>
+      </div>
+      <div class="blog-item"><a href="https://aloomii.com/blog/humans-for-judgment-machines-for-volume-gtm-framework" class="blog-title">Humans for Judgment, Machines for Volume</a>
+        <span class="blog-tag">AI</span>
+      </div>
+      <div class="blog-item"><a href="https://aloomii.com/blog/weekly-briefing-competitors-getting-that-you-are-not" class="blog-title">The Weekly Briefing Your Competitors Are Getting</a>
+        <span class="blog-tag">Intel</span>
+      </div>
+      <div class="blog-item"><a href="https://aloomii.com/blog/how-to-do-gtm-solo-founder" class="blog-title">How to Do GTM as a Solo Founder</a>
+        <span class="blog-tag">Solo</span>
+      </div>
     </div>
   <div class="footer fade-up delay-7">
     <div class="footer-note">Live data sanitized for demo &nbsp;&middot;&nbsp; NDA unlocks full access</div>
