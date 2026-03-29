@@ -80,9 +80,9 @@ async function handleRequest(request, env) {
     const validPass = env.VIBRNT_PASS || 'vibrnt2026';
 
     if (pass === validPass) {
-      const resp = redirect(url.origin + ref);
-      resp.headers.append('Set-Cookie', setCookie(pass));
-      return resp;
+      const location = url.origin + ref;
+      const headers = new Headers({ 'Location': location, 'Set-Cookie': setCookie(pass) });
+      return new Response(null, { status: 302, headers });
     } else {
       const errUrl = new URL('/vibrnt/login', url.origin);
       errUrl.searchParams.set('error', '1');
