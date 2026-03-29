@@ -49,19 +49,25 @@ function slugify(s) {
 }
 
 async function build() {
-  // -- Load trends (parse individual trend blocks from daily report files) ----
+  // -- Load trends: parse individual blocks AND provide body for dashboard renderer ----
   const trendFiles = readDir(TRENDS_DIR, '.md');
-  let allTrends = [];
-  for (const f of trendFiles.slice(0, 7)) { // last 7 days
+  let allTrends = []; // parsed individual trend objects for product linking
+
+  // trendReports = old format with body — this is what the dashboard JS actually renders
+  const trendReports = [];
+
+  for (const f of trendFiles.slice(0, 7)) {
     const raw = fs.readFileSync(f.path, 'utf-8');
     const reportDate = f.name.replace('.md', '');
+    const { meta, body } = parseFrontmatter(raw);
 
-    // Split the file on the --- dividers to extract individual trend blocks
+    // Check if any trend in this file has POD Fit >= 6
     const sections = raw.split(/\n---\n/);
+    let filePasses = false;
+
     for (const section of sections) {
       if (!section.includes('type: trend') || !section.includes('pod_fit_score')) continue;
 
-      // Parse the YAML-like block inside this section
       const trendMeta = {};
       section.split('\n').forEach(line => {
         const m = line.match(/^(\w+(?:_\w+)*):\s*(.+)/);
@@ -76,21 +82,26 @@ async function build() {
 
       if (!title) continue;
 
-      allTrends.push({
+      allTrends.push({ date: reportDate, file: f.name, title, podFit, composite, platform, keywords, tags: keywords });
+
+      if (podFit >= 6) filePasses = true;
+    }
+
+    // Only include this report file in the dashboard if it has ≥ 1 trend with POD Fit >= 6
+    if (filePasses) {
+      trendReports.push({
         date: reportDate,
         file: f.name,
-        title,
-        podFit,
-        composite,
-        platform,
-        keywords,
-        tags: keywords,
+        title: meta.title || `Trend Report — ${reportDate}`,
+        tags: [],
+        body: body.slice(0, 5000), // full body for dashboard JS block parsing
+        mtime: f.mtime.toISOString(),
       });
     }
   }
 
-  // Trending section only shows POD Fit ≥ 6
-  const trends = allTrends.filter(t => t.podFit >= 6);
+  // trends = what gets passed to dashboard (full reports with body, for renderer)
+  const trends = trendReports;
 
   // -- Load scripts -----------------------------------------------------------
   const scriptFiles = readDir(SCRIPTS_DIR, '.md');
