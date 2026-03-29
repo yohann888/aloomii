@@ -391,7 +391,7 @@ async function loadTrends() {
             (p.name || '').toLowerCase(),
             (p.collection || '').toLowerCase(),
             (p.style || '').toLowerCase(),
-            (p.moods || '').toLowerCase(),
+            (Array.isArray(p.moods) ? p.moods.join(' ') : (p.moods || '')).toLowerCase(),
             (p.audience || '').toLowerCase()
           ].join(' ');
           let score = 0;
