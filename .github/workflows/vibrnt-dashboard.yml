@@ -36,7 +36,7 @@ jobs:
             curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects" \
               -H "Authorization: Bearer ${TOKEN}" \
               -H "Content-Type: application/json" \
-              -d '{"name":"vibrnt","slug":"vibrnt","build_config":{"destination_dir":""},"source":{"type":"github"}}'
+              -d '{"name":"vibrnt","slug":"vibrnt","build_config":{"destination_dir":""},"production_branch":"main","source":{"type":"github"}}'
             echo "Project creation attempted."
           else
             echo "Project already exists (HTTP $HTTP_CODE)."
