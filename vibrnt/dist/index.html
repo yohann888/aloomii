@@ -28,7 +28,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.6; min-height: 100vh; }
 
-    /* ── Header ── */
+    /* -- Header -- */
     .header { padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
     .brand { display: flex; align-items: center; gap: 12px; }
     .brand-logo { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; }
@@ -40,10 +40,10 @@
     .live-label { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* ── Container ── */
+    /* -- Container -- */
     .container { max-width: 1200px; margin: 0 auto; padding: 28px 24px 80px; }
 
-    /* ── Stats row ── */
+    /* -- Stats row -- */
     .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
     .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: border-color 0.2s; }
     .stat-card:hover { border-color: var(--accent); }
@@ -52,17 +52,17 @@
     .stat-value span.unit { font-size: 16px; font-weight: 400; color: var(--text-dim); margin-left: 2px; }
     .stat-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; font-family: var(--mono); }
 
-    /* ── Cards ── */
+    /* -- Cards -- */
     .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     .card-title { padding: 16px 20px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
     .card-title .icon { font-size: 18px; }
     .card-body { padding: 16px 20px; }
 
-    /* ── Grid layouts ── */
+    /* -- Grid layouts -- */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
 
-    /* ── Trend list ── */
+    /* -- Trend list -- */
     .trend-list { display: flex; flex-direction: column; gap: 16px; }
     .trend-entry { padding: 18px 20px; border-radius: 10px; background: var(--bg-card-hover); border: 1px solid var(--border); transition: border-color 0.2s; cursor: pointer; }
     .trend-entry:hover { border-color: var(--accent); }
@@ -84,7 +84,7 @@
     .trend-scripts-label { font-size: 12px; color: var(--text-dim); font-family: var(--mono); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
     .trend-script-bullets { list-style: none; padding: 0; margin: 0 0 10px 0; display: flex; flex-direction: column; gap: 6px; }
     .trend-script-bullets li { font-size: 14px; display: flex; align-items: center; gap: 8px; }
-    .trend-script-bullets li::before { content: '→'; color: var(--accent); font-weight: 700; }
+    .trend-script-bullets li::before { content: '->'; color: var(--accent); font-weight: 700; }
     .trend-script-bullets .script-type-tag { font-size: 11px; font-family: var(--mono); padding: 1px 6px; border-radius: 3px; }
     .trend-script-bullets .script-type-tag.self-film { background: rgba(0,229,160,0.12); color: var(--green); }
     .trend-script-bullets .script-type-tag.ugc { background: rgba(245,166,35,0.12); color: var(--amber); }
@@ -104,7 +104,7 @@
     .trend-entry.open .trend-read-more .arrow { transform: rotate(90deg); }
     .trend-arrow { display: inline-block; transition: transform 0.2s; font-size: 12px; }
 
-    /* ── Script items ── */
+    /* -- Script items -- */
     .script-item { padding: 14px 16px; border-radius: 8px; margin-bottom: 8px; background: var(--bg-card-hover); border: 1px solid var(--border); transition: border-color 0.2s; }
     .script-item:last-child { margin-bottom: 0; }
     .script-item:hover { border-color: var(--accent); }
@@ -123,22 +123,22 @@
     .btn-secondary { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
     .btn-secondary:hover { border-color: var(--accent); }
 
-    /* ── Empty state ── */
+    /* -- Empty state -- */
     .empty-state { text-align: center; padding: 40px 20px; color: var(--text-dim); }
     .empty-state .icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
     .empty-state p { font-size: 14px; }
     .empty-state strong { color: var(--text); }
 
-    /* ── Refresh button ── */
+    /* -- Refresh button -- */
     .refresh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-family: var(--mono); background: var(--bg); border: 1px solid var(--border); color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
     .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
     .refresh-btn.loading { opacity: 0.6; pointer-events: none; }
 
-    /* ── Loading spinner ── */
+    /* -- Loading spinner -- */
     .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Product catalog ── */
+    /* -- Product catalog -- */
     .catalog-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .catalog-item { padding: 16px 18px; border-radius: 8px; background: var(--bg-card-hover); border: 1px solid var(--border); }
     .catalog-name { font-weight: 600; font-size: 16px; margin-bottom: 2px; }
@@ -152,11 +152,11 @@
     .catalog-audience { font-size: 12px; color: var(--text-dim); }
     .catalog-colors { font-size: 12px; color: var(--text-dim); font-family: var(--mono); }
 
-    /* ── Section header ── */
+    /* -- Section header -- */
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .section-title { font-size: 16px; font-weight: 600; }
 
-    /* ── Mood colors ── */
+    /* -- Mood colors -- */
     .mood-playful { color: #f472b6; }
     .mood-fierce { color: #ef4444; }
     .mood-cozy { color: #f59e0b; }
@@ -170,12 +170,12 @@
     .mood-chill { color: #22d3ee; }
     .mood-mystical { color: #a78bfa; }
 
-    /* ── Responsive ── */
+    /* -- Responsive -- */
     @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .stats-row { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .header { padding: 16px 20px; } .container { padding: 16px 16px 60px; } .stats-row { grid-template-columns: 1fr; } }
   </style>
 <script>
-window.__VIBRNT_DATA__ = {"trends":[{"date":"2026-03-29","file":"2026-03-29.md","title":"Trend Report","tags":[],"body":"# VIBRNT Trend Report - 2026-03-29\n\n> Generated by Trend Scout Agent (qwen35 / Ollama qwen3.5-35B)\n> Threshold: POD Fit >= 6 | Top 5\n\n## 1. let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\"\nvolume_score: 9\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 7.3\nstatus: detected\nrelated_keywords: [lets, switch, cottagecore, folk, horror, film]\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 9/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 7.3\n- **Keywords:** lets, switch, cottagecore, folk, horror, film\n\n\n---\n\n## 2. cozy casual cottagecore outfit today \n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"cozy casual cottagecore outfit today \"\nvolume_score: 4\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5.7\nstatus: detected\nrelated_keywords: [cozy, casual, cottagecore, outfit, today]\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 4/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5.7\n- **Keywords:** cozy, casual, cottagecore, outfit, today\n\n\n---\n\n## 3. I designed this funny pasta lover shirt today. Would you wear it?\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"I designed this funny pasta lover shirt today. Would you wear it?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [designed, funny, pasta, lover, shirt, today]\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** designed, funny, pasta, lover, shirt, today\n\n\n---\n\n## 4. Which AI shirt design maker tools are popular?\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"Which AI shirt design maker tools are popular?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit","mtime":"2026-03-29T13:27:27.131Z"}],"scripts":[{"date":"2026-03-29","file":"2026-03-29-03.md","type":"slideshow","title":"2026-03-29-03","mood":"","body":"# Slideshow Script: let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n> Trend composite: 7.3 | Platform: reddit\n> No person on camera - text overlays on aesthetic b-roll\n\n## Framework: Hook -> Show -> Close\n\n### HOOK (0-2 sec)\n**Visual:** Slow pan or zoom on a scene that evokes \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\" - clean, aesthetic, aspirational.\n**Text overlay:** \"things that just hit different ✨\" or \"the lets edit\"\n**Sound:** \"Snowfall - Oneheart & Reidenshi\" - instrumental, builds slowly\n\n### SHOW (3-8 sec)\n**Slide 1 (1.5 sec):** Product flat lay or styled shot. Gentle zoom in.\n**Text overlay:** \"Villain Era Tee\"\n\n**Slide 2 (1.5 sec):** Product in context - on a desk, in a bag, on a person (no face).\n**Text overlay:** \"for the switch girlie\"\n\n**Slide 3 (2 sec):** Second product styled with complementary props.\n**Text overlay:** \"Celestial Hoodie\"\n\n**Slide 4 (1 sec):** Detail shot - texture, print quality, color.\n**Text overlay:** \"the details though 👀\"\n\n### CLOSE (last 2 sec)\n**Visual:** Wide styled shot with all products visible.\n**Text overlay:** \"VIBRNT ✨ link in bio\"\n**Sound:** Music fades.\n\n---\n\n## Production Notes\n- All footage is b-roll - no face, no talking\n- Source: phone footage or Pexels/Canva Pro clips\n- Color grade: warm, slightly desaturated\n- Transitions: slow dissolve or Ken Burns only\n- Edit in CapCut - total runtime 10-12 seconds\n- Export 9:16 at 1080x1920\n- Font: clean serif (Playfair Display) or minimal sans (Futura)","mtime":"2026-03-29T13:27:27.132Z"},{"date":"2026-03-29","file":"2026-03-29-01.md","type":"slideshow","title":"2026-03-29-01","mood":"","body":"# Self-Film Script: let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n> Trend composite: 7.3 | POD Fit: 10/10 | Platform: reddit\n> Products: Villain Era Tee / Celestial Hoodie\n\n## Framework: Hook -> Show -> Close\n\n### HOOK (0-2 sec)\n**Visual:** Start with a close-up that relates to \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\" - zoom out slowly to reveal you.\n**Audio:** \"Snowfall - Oneheart & Reidenshi\" - start at the drop or hook of the sound.\n**Text overlay:** \"POV: lets but make it wearable\"\n\n### SHOW (3-8 sec)\n**Visual:** You're wearing/using the featured product in a lifestyle setting. Not a flat lay. Real life.\n**Products:** Villain Era Tee / Celestial Hoodie\n**Audio:** Sound continues. No talking unless it adds value.\n**Text overlay (staggered):**\n- Product name + one line about why it fits the trend (3 sec)\n- Second product or close-up detail (5 sec)\n**Action:** Natural interaction with the product. Sip coffee, adjust the tee, toss the tote over shoulder.\n\n### CLOSE (last 2 sec)\n**Visual:** Pull back to full outfit/lifestyle shot or close-up of product detail.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: home, coffee shop, or outdoor setting that matches the lets vibe\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM - 2 PM EST or 7 PM - 10 PM EST","mtime":"2026-03-29T13:27:27.131Z"},{"date":"2026-03-29","file":"2026-03-29-02.md","type":"slideshow","title":"2026-03-29-02","mood":"","body":"# UGC Brief: let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n> Trend composite: 7.3 | POD Fit: 10/10 | Platform: reddit\n\n## Ship to Creator\n- 1x Villain Era Tee (t-shirt)\n- 1x Celestial Hoodie (hoodie)\n\n## Creator Profile\n- Niche: lets, switch community\n- Follower range: 5K-50K on TikTok\n- Vibe: Authentic, relatable, not overly polished\n- Audience overlap: Women who love edgy, dark feminine energy, anime fans, bold dressers\n\n## Framework: Hook -> Show -> Close\n\n### HOOK (0-2 sec)\n**Action:** Start with a relatable moment tied to \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in..\"\n**Text overlay:** A scroll-stopping question or \"POV:\" statement\n**Sound:** \"Snowfall - Oneheart & Reidenshi\"\n\n### SHOW (3-8 sec)\n**Action:** Reveal the VIBRNT product naturally. React genuinely - smile, laugh, show it off to camera.\n**Text overlay:** Product name + one-liner\n**Second beat:** Show the product in use (wearing it, holding it, styled in their space)\n\n### CLOSE (last 2 sec)\n**Action:** Satisfied moment with the product.\n**Text overlay:** Soft CTA (never \"use my code\" - we add CTAs in post)\n\n---\n\n## Creator Guidelines\n- **DO:** Film in your real space. Natural light. Vertical 9:16.\n- **DO:** Be yourself. Genuine reactions only.\n- **DON'T:** Say \"link in bio\" or \"use my code.\" We handle CTAs.\n- **DON'T:** Use ring lights or studio setups.\n- **Delivery:** Raw footage + one edited version. 48-hour turnaround.\n- **Usage rights:** Full perpetual usage for VIBRNT social channels.","mtime":"2026-03-29T13:27:27.131Z"}],"catalog":{"products":[{"name":"1: The Quiet Reader Tee","collection":"Lumi","type":"t-shirt","style":"Vintage bookplate typography. Clean serif font reading \"One More Chapter\" or \"Probably Reading\" on the chest. Small decorative flourish or book icon below text. Relaxed unisex fit. Colors: heather dust, natural, soft cream.","moods":["cozy","nostalgic"],"audience":"Women 22-35, BookTok community, avid readers, book club crowd","colors":"Heather dust, natural, soft cream"},{"name":"2: Cottage Garden Tee","collection":"Mabel","type":"t-shirt","style":"Hand-drawn botanical illustration - wildflowers, lavender sprigs, or a small garden scene printed on the chest. Earthy, nature-inspired. Relaxed fit. Colors: sage green, terracotta, oatmeal.","moods":["cozy","adventurous"],"audience":"Women 25-40, cottagecore enthusiasts, farmers market shoppers, eco-conscious","colors":"Sage green, terracotta, oatmeal"},{"name":"3: Main Character Tee","collection":"Zara","type":"t-shirt","style":"Bold oversized serif or display font reading \"Main Character Energy\" or \"It's My Era\" across the chest. punchy, declarative energy. Cropped or relaxed boxy fit. Colors: black, white, dusty pink.","moods":["confident","bold"],"audience":"Women who love a statement, that-girl aesthetic fans, empowerment seekers","colors":"Black, white, dusty pink"},{"name":"4: Celestial Hoodie","collection":"Sorlyn","type":"hoodie","style":"Minimalist line art of a moon phase series, crescent moon with stars, or a single large sun/moon face on the back. Small matching symbol on chest. Oversized cozy fit. Colors: black, charcoal, midnight blue.","moods":["mystical","dark"],"audience":"Astrology lovers, witchy aesthetic fans, spiritual women 18-30","colors":"Black, charcoal, midnight blue"},{"name":"5: Villain Era Tee","collection":"Kaida","type":"t-shirt","style":"Dark typography - bold sans-serif or gothic font reading \"Final Boss Energy,\" \"I Am The Problem,\" or \"Villain Era\" in all caps. Minimal, high-contrast design. Relaxed fit. Colors: black, charcoal, deep purple.","moods":["fierce","dark"],"audience":"Women who love edgy, dark feminine energy, anime fans, bold dressers","colors":"Black, charcoal, deep purple"}],"updated":"2026-03-29"},"summary":{"latestTrend":"2026-03-29","latestScripts":["2026-03-29-03.md","2026-03-29-01.md","2026-03-29-02.md"],"trendCount":1,"scriptCount":3,"lastBuilt":"2026-03-29T13:29:09.036Z"},"seenTrends":["let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in."]};
+window.__VIBRNT_DATA__ = {"trends":[{"date":"2026-03-29","file":"2026-03-29.md","title":"Trend Report","tags":[],"body":"# VIBRNT Trend Report - 2026-03-29\n\n> Generated by Trend Scout Agent (qwen35 / Ollama qwen3.5-35B)\n> Threshold: POD Fit >= 6 | Top 5\n\n## 1. let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\"\nvolume_score: 9\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 7.3\nstatus: detected\nrelated_keywords: [lets, switch, cottagecore, folk, horror, film]\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 9/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 7.3\n- **Keywords:** lets, switch, cottagecore, folk, horror, film\n\n\n---\n\n## 2. cozy casual cottagecore outfit today \n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"cozy casual cottagecore outfit today \"\nvolume_score: 4\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5.7\nstatus: detected\nrelated_keywords: [cozy, casual, cottagecore, outfit, today]\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 4/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5.7\n- **Keywords:** cozy, casual, cottagecore, outfit, today\n\n\n---\n\n## 3. I designed this funny pasta lover shirt today. Would you wear it?\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"I designed this funny pasta lover shirt today. Would you wear it?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [designed, funny, pasta, lover, shirt, today]\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** designed, funny, pasta, lover, shirt, today\n\n\n---\n\n## 4. Which AI shirt design maker tools are popular?\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"Which AI shirt design maker tools are popular?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit","mtime":"2026-03-29T13:27:27.131Z"}],"scripts":[{"date":"2026-03-29","file":"2026-03-29-03.md","type":"slideshow","title":"2026-03-29-03","mood":"","body":"# Slideshow Script: let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n> Trend composite: 7.3 | Platform: reddit\n> No person on camera - text overlays on aesthetic b-roll\n\n## Framework: Hook -> Show -> Close\n\n### HOOK (0-2 sec)\n**Visual:** Slow pan or zoom on a scene that evokes \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\" - clean, aesthetic, aspirational.\n**Text overlay:** \"things that just hit different ✨\" or \"the lets edit\"\n**Sound:** \"Snowfall - Oneheart & Reidenshi\" - instrumental, builds slowly\n\n### SHOW (3-8 sec)\n**Slide 1 (1.5 sec):** Product flat lay or styled shot. Gentle zoom in.\n**Text overlay:** \"Villain Era Tee\"\n\n**Slide 2 (1.5 sec):** Product in context - on a desk, in a bag, on a person (no face).\n**Text overlay:** \"for the switch girlie\"\n\n**Slide 3 (2 sec):** Second product styled with complementary props.\n**Text overlay:** \"Celestial Hoodie\"\n\n**Slide 4 (1 sec):** Detail shot - texture, print quality, color.\n**Text overlay:** \"the details though 👀\"\n\n### CLOSE (last 2 sec)\n**Visual:** Wide styled shot with all products visible.\n**Text overlay:** \"VIBRNT ✨ link in bio\"\n**Sound:** Music fades.\n\n---\n\n## Production Notes\n- All footage is b-roll - no face, no talking\n- Source: phone footage or Pexels/Canva Pro clips\n- Color grade: warm, slightly desaturated\n- Transitions: slow dissolve or Ken Burns only\n- Edit in CapCut - total runtime 10-12 seconds\n- Export 9:16 at 1080x1920\n- Font: clean serif (Playfair Display) or minimal sans (Futura)","mtime":"2026-03-29T13:27:27.132Z"},{"date":"2026-03-29","file":"2026-03-29-01.md","type":"slideshow","title":"2026-03-29-01","mood":"","body":"# Self-Film Script: let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n> Trend composite: 7.3 | POD Fit: 10/10 | Platform: reddit\n> Products: Villain Era Tee / Celestial Hoodie\n\n## Framework: Hook -> Show -> Close\n\n### HOOK (0-2 sec)\n**Visual:** Start with a close-up that relates to \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\" - zoom out slowly to reveal you.\n**Audio:** \"Snowfall - Oneheart & Reidenshi\" - start at the drop or hook of the sound.\n**Text overlay:** \"POV: lets but make it wearable\"\n\n### SHOW (3-8 sec)\n**Visual:** You're wearing/using the featured product in a lifestyle setting. Not a flat lay. Real life.\n**Products:** Villain Era Tee / Celestial Hoodie\n**Audio:** Sound continues. No talking unless it adds value.\n**Text overlay (staggered):**\n- Product name + one line about why it fits the trend (3 sec)\n- Second product or close-up detail (5 sec)\n**Action:** Natural interaction with the product. Sip coffee, adjust the tee, toss the tote over shoulder.\n\n### CLOSE (last 2 sec)\n**Visual:** Pull back to full outfit/lifestyle shot or close-up of product detail.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: home, coffee shop, or outdoor setting that matches the lets vibe\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM - 2 PM EST or 7 PM - 10 PM EST","mtime":"2026-03-29T13:27:27.131Z"},{"date":"2026-03-29","file":"2026-03-29-02.md","type":"slideshow","title":"2026-03-29-02","mood":"","body":"# UGC Brief: let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n> Trend composite: 7.3 | POD Fit: 10/10 | Platform: reddit\n\n## Ship to Creator\n- 1x Villain Era Tee (t-shirt)\n- 1x Celestial Hoodie (hoodie)\n\n## Creator Profile\n- Niche: lets, switch community\n- Follower range: 5K-50K on TikTok\n- Vibe: Authentic, relatable, not overly polished\n- Audience overlap: Women who love edgy, dark feminine energy, anime fans, bold dressers\n\n## Framework: Hook -> Show -> Close\n\n### HOOK (0-2 sec)\n**Action:** Start with a relatable moment tied to \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in..\"\n**Text overlay:** A scroll-stopping question or \"POV:\" statement\n**Sound:** \"Snowfall - Oneheart & Reidenshi\"\n\n### SHOW (3-8 sec)\n**Action:** Reveal the VIBRNT product naturally. React genuinely - smile, laugh, show it off to camera.\n**Text overlay:** Product name + one-liner\n**Second beat:** Show the product in use (wearing it, holding it, styled in their space)\n\n### CLOSE (last 2 sec)\n**Action:** Satisfied moment with the product.\n**Text overlay:** Soft CTA (never \"use my code\" - we add CTAs in post)\n\n---\n\n## Creator Guidelines\n- **DO:** Film in your real space. Natural light. Vertical 9:16.\n- **DO:** Be yourself. Genuine reactions only.\n- **DON'T:** Say \"link in bio\" or \"use my code.\" We handle CTAs.\n- **DON'T:** Use ring lights or studio setups.\n- **Delivery:** Raw footage + one edited version. 48-hour turnaround.\n- **Usage rights:** Full perpetual usage for VIBRNT social channels.","mtime":"2026-03-29T13:27:27.131Z"}],"catalog":{"products":[{"name":"1: The Quiet Reader Tee","collection":"Lumi","type":"t-shirt","style":"Vintage bookplate typography. Clean serif font reading \"One More Chapter\" or \"Probably Reading\" on the chest. Small decorative flourish or book icon below text. Relaxed unisex fit. Colors: heather dust, natural, soft cream.","moods":["cozy","nostalgic"],"audience":"Women 22-35, BookTok community, avid readers, book club crowd","colors":"Heather dust, natural, soft cream"},{"name":"2: Cottage Garden Tee","collection":"Mabel","type":"t-shirt","style":"Hand-drawn botanical illustration - wildflowers, lavender sprigs, or a small garden scene printed on the chest. Earthy, nature-inspired. Relaxed fit. Colors: sage green, terracotta, oatmeal.","moods":["cozy","adventurous"],"audience":"Women 25-40, cottagecore enthusiasts, farmers market shoppers, eco-conscious","colors":"Sage green, terracotta, oatmeal"},{"name":"3: Main Character Tee","collection":"Zara","type":"t-shirt","style":"Bold oversized serif or display font reading \"Main Character Energy\" or \"It's My Era\" across the chest. punchy, declarative energy. Cropped or relaxed boxy fit. Colors: black, white, dusty pink.","moods":["confident","bold"],"audience":"Women who love a statement, that-girl aesthetic fans, empowerment seekers","colors":"Black, white, dusty pink"},{"name":"4: Celestial Hoodie","collection":"Sorlyn","type":"hoodie","style":"Minimalist line art of a moon phase series, crescent moon with stars, or a single large sun/moon face on the back. Small matching symbol on chest. Oversized cozy fit. Colors: black, charcoal, midnight blue.","moods":["mystical","dark"],"audience":"Astrology lovers, witchy aesthetic fans, spiritual women 18-30","colors":"Black, charcoal, midnight blue"},{"name":"5: Villain Era Tee","collection":"Kaida","type":"t-shirt","style":"Dark typography - bold sans-serif or gothic font reading \"Final Boss Energy,\" \"I Am The Problem,\" or \"Villain Era\" in all caps. Minimal, high-contrast design. Relaxed fit. Colors: black, charcoal, deep purple.","moods":["fierce","dark"],"audience":"Women who love edgy, dark feminine energy, anime fans, bold dressers","colors":"Black, charcoal, deep purple"}],"updated":"2026-03-29"},"summary":{"latestTrend":"2026-03-29","latestScripts":["2026-03-29-03.md","2026-03-29-01.md","2026-03-29-02.md"],"trendCount":1,"scriptCount":3,"lastBuilt":"2026-03-29T13:33:05.158Z"},"seenTrends":["let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in."]};
 window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->${new Date().toISOString()}';
 (function() {
   var _d = window.__VIBRNT_DATA__ || { trends: [], scripts: [], catalog: { products: [] }, summary: {}, seenTrends: [] };
@@ -196,7 +196,7 @@ window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->${new Date()
 </head>
 <body>
 
-<!-- ── Header ── -->
+<!-- -- Header -- -->
 <header class="header">
   <div class="brand">
     <div class="brand-logo">V</div>
@@ -215,7 +215,7 @@ window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->${new Date()
   </div>
 </header>
 
-<!-- ── Main ── -->
+<!-- -- Main -- -->
 <main class="container">
 
   <!-- Stats row -->
@@ -238,7 +238,7 @@ window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->${new Date()
     <div class="stat-card">
       <div class="stat-label">Script types</div>
       <div class="stat-value" id="stat-types" style="font-size:18px">--</div>
-      <div class="stat-sub">self-film · ugc · slideshow</div>
+      <div class="stat-sub">self-film  /  ugc  /  slideshow</div>
     </div>
   </div>
 
@@ -488,7 +488,7 @@ async function loadTrends() {
           <div class="trend-matched-list">
             ${e.matchedProducts.map(p => `<div class="trend-matched-item">
               <div class="product-name">${escHtml(p.name)}</div>
-              <div class="product-collection">${escHtml(p.collection)} collection · ${escHtml(p.type || '')}</div>
+              <div class="product-collection">${escHtml(p.collection)} collection  /  ${escHtml(p.type || '')}</div>
               <div class="product-from-trend">&#9654; matched to: ${escHtml(e.trendName.slice(0, 50))}${e.trendName.length > 50 ? '...' : ''}</div>
             </div>`).join('')}
           </div>

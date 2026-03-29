@@ -49,7 +49,7 @@ function slugify(s) {
 }
 
 async function build() {
-  // ── Load trends ──────────────────────────────────────────────────────────────
+  // -- Load trends --------------------------------------------------------------
   const trendFiles = readDir(TRENDS_DIR, '.md');
   const trends = trendFiles.slice(0, 30).map(f => {
     const raw = fs.readFileSync(f.path, 'utf-8');
@@ -64,7 +64,7 @@ async function build() {
     };
   });
 
-  // ── Load scripts ───────────────────────────────────────────────────────────
+  // -- Load scripts -----------------------------------------------------------
   const scriptFiles = readDir(SCRIPTS_DIR, '.md');
   const scripts = scriptFiles.slice(0, 30).map(f => {
     const raw = fs.readFileSync(f.path, 'utf-8');
@@ -84,7 +84,7 @@ async function build() {
     };
   });
 
-  // ── Load catalog ───────────────────────────────────────────────────────────
+  // -- Load catalog -----------------------------------------------------------
   let catalog = { products: [], updated: null };
   if (fs.existsSync(CATALOG_PATH)) {
     const raw = fs.readFileSync(CATALOG_PATH, 'utf-8');
@@ -117,7 +117,7 @@ async function build() {
     catalog.products = products;
   }
 
-  // ── Build summary ───────────────────────────────────────────────────────────
+  // -- Build summary -----------------------------------------------------------
   const summary = {
     latestTrend: trends[0]?.date || null,
     latestScripts: scripts.slice(0, 3).map(s => s.file),
@@ -126,7 +126,7 @@ async function build() {
     lastBuilt: new Date().toISOString(),
   };
 
-  // ── Load seen trends (dedup) ───────────────────────────────────────────────
+  // -- Load seen trends (dedup) -----------------------------------------------
   let seenTrends = [];
   try {
     if (fs.existsSync(DEDUP_FILE)) {
@@ -135,7 +135,7 @@ async function build() {
     }
   } catch (e) {}
 
-  // ── Inject into HTML ───────────────────────────────────────────────────────
+  // -- Inject into HTML -------------------------------------------------------
   let html = fs.readFileSync(INPUT_HTML, 'utf-8');
 
   // Inject embedded data + fetchJSON override (single </head> replacement)
@@ -166,7 +166,7 @@ window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date(
   const newFetchCall = "const _embed = window.__embed && window.__embed(url); if (_embed) return _embed; const r = await fetch(API + url);";
   html = html.replace(oldFetchCall, newFetchCall);
 
-  // ── Write output ───────────────────────────────────────────────────────────
+  // -- Write output -----------------------------------------------------------
   fs.mkdirSync(path.dirname(OUTPUT_HTML), { recursive: true });
   fs.writeFileSync(OUTPUT_HTML, html, 'utf-8');
 

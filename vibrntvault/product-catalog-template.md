@@ -5,8 +5,8 @@ version: 2.0
 ---
 # VIBRNT Product Catalog
 
-> Mood system: playful · fierce · chill · cozy · confident · adventurous · nostalgic · bold · sassy · mystical · dark · zen
-> Collection personas: Lumi (playful) · Kaida (fierce) · Sage (chill) · Mabel (cozy) · Zara (confident) · Indie (adventurous) · Nyxie (nostalgic) · Aria (bold) · Blair (sassy) · Sorlyn (mystical) · Ravyn (dark) · Elyra (zen)
+> Mood system: playful  /  fierce  /  chill  /  cozy  /  confident  /  adventurous  /  nostalgic  /  bold  /  sassy  /  mystical  /  dark  /  zen
+> Collection personas: Lumi (playful)  /  Kaida (fierce)  /  Sage (chill)  /  Mabel (cozy)  /  Zara (confident)  /  Indie (adventurous)  /  Nyxie (nostalgic)  /  Aria (bold)  /  Blair (sassy)  /  Sorlyn (mystical)  /  Ravyn (dark)  /  Elyra (zen)
 
 ## Product 1: The Quiet Reader Tee
 - **Collection:** Lumi
