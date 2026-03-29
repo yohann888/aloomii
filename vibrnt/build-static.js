@@ -12,6 +12,7 @@ const VAULT = path.join(__dirname, '..', 'vibrntvault');
 const TRENDS_DIR = path.join(VAULT, 'Trends');
 const SCRIPTS_DIR = path.join(VAULT, 'Scripts');
 const CATALOG_PATH = path.join(VAULT, 'product-catalog-template.md');
+const DEDUP_FILE = '/Users/superhana/.openclaw/workspace/vibrnt-seen-trends.json';
 const INPUT_HTML = path.join(__dirname, 'index.html');
 const OUTPUT_HTML = path.join(__dirname, 'dist', 'index.html');
 
@@ -98,12 +99,18 @@ async function build() {
       if (line.startsWith('## Product ')) {
         if (current.name) products.push(current);
         current = { name: line.replace('## Product ', '').trim() };
-      } else if (line.startsWith('- **Mood:**')) {
-        current.mood = line.match(/\*\*Mood:\*\* (.*)/)?.[1] || '';
-      } else if (line.startsWith('- **Price:**')) {
-        current.price = line.match(/\*\*Price:\*\* (.*)/)?.[1] || '';
-      } else if (line.startsWith('- **Category:**')) {
-        current.category = line.match(/\*\*Category:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Collection:**')) {
+        current.collection = line.match(/\*\*Collection:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Type:**')) {
+        current.type = line.match(/\*\*Type:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Style:**')) {
+        current.style = line.match(/\*\*Style:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Moods:**')) {
+        current.moods = (line.match(/\*\*Moods:\*\* (.*)/)?.[1] || '').split(',').map(t => t.trim()).filter(Boolean);
+      } else if (line.includes('**Target audience:**')) {
+        current.audience = line.match(/\*\*Target audience:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Colors:**')) {
+        current.colors = line.match(/\*\*Colors:\*\* (.*)/)?.[1] || '';
       }
     }
     if (current.name) products.push(current);
@@ -119,15 +126,24 @@ async function build() {
     lastBuilt: new Date().toISOString(),
   };
 
+  // ── Load seen trends (dedup) ───────────────────────────────────────────────
+  let seenTrends = [];
+  try {
+    if (fs.existsSync(DEDUP_FILE)) {
+      const dedupData = JSON.parse(fs.readFileSync(DEDUP_FILE, 'utf-8'));
+      seenTrends = Object.values(dedupData).map(v => v.name);
+    }
+  } catch (e) {}
+
   // ── Inject into HTML ───────────────────────────────────────────────────────
   let html = fs.readFileSync(INPUT_HTML, 'utf-8');
 
   // Inject embedded data + fetchJSON override (single </head> replacement)
   const embeddedScript = `<script>
-window.__VIBRNT_DATA__ = ${JSON.stringify({ trends, scripts, catalog, summary })};
+window.__VIBRNT_DATA__ = ${JSON.stringify({ trends, scripts, catalog, summary, seenTrends })};
 window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date().toISOString()}';
 (function() {
-  var _d = window.__VIBRNT_DATA__ || { trends: [], scripts: [], catalog: { products: [] }, summary: {} };
+  var _d = window.__VIBRNT_DATA__ || { trends: [], scripts: [], catalog: { products: [] }, summary: {}, seenTrends: [] };
   var _realFetch = window.fetchJSON; // undefined at this point
   var _routes = {
     '/api/summary': _d.summary,
