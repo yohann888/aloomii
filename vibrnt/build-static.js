@@ -49,24 +49,47 @@ function slugify(s) {
 }
 
 async function build() {
-  // -- Load trends (POD Fit ≥ 6 for Trending section only) --------------------------------------------------------------
+  // -- Load trends (parse individual trend blocks from daily report files) ----
   const trendFiles = readDir(TRENDS_DIR, '.md');
-  const allTrends = trendFiles.slice(0, 30).map(f => {
+  let allTrends = [];
+  for (const f of trendFiles.slice(0, 7)) { // last 7 days
     const raw = fs.readFileSync(f.path, 'utf-8');
-    const { meta, body } = parseFrontmatter(raw);
-    const podFit = parseInt(meta.podFit || meta['pod-fit'] || 0, 10);
-    return {
-      date: f.name.replace('.md', ''),
-      file: f.name,
-      title: meta.title || meta.name || 'Trend Report',
-      podFit: podFit,
-      tags: meta.tags ? meta.tags.split(',').map(t => t.trim()) : [],
-      body: body.slice(0, 2000),
-      mtime: f.mtime.toISOString(),
-    };
-  });
+    const reportDate = f.name.replace('.md', '');
 
-  // Trending section only shows ≥ 6
+    // Split the file on the --- dividers to extract individual trend blocks
+    const sections = raw.split(/\n---\n/);
+    for (const section of sections) {
+      if (!section.includes('type: trend') || !section.includes('pod_fit_score')) continue;
+
+      // Parse the YAML-like block inside this section
+      const trendMeta = {};
+      section.split('\n').forEach(line => {
+        const m = line.match(/^(\w+(?:_\w+)*):\s*(.+)/);
+        if (m) trendMeta[m[1]] = m[2].trim().replace(/^["'\[]|["'\]]$/g, '');
+      });
+
+      const podFit = parseInt(trendMeta['pod_fit_score'] || 0, 10);
+      const title = (trendMeta['trend_name'] || '').replace(/^"|"$/g, '');
+      const keywords = (trendMeta['related_keywords'] || '').replace(/[\[\]]/g, '').split(',').map(k => k.trim()).filter(Boolean);
+      const platform = (trendMeta['platform'] || '').replace(/[\[\]]/g, '');
+      const composite = parseFloat(trendMeta['composite_score'] || 0);
+
+      if (!title) continue;
+
+      allTrends.push({
+        date: reportDate,
+        file: f.name,
+        title,
+        podFit,
+        composite,
+        platform,
+        keywords,
+        tags: keywords,
+      });
+    }
+  }
+
+  // Trending section only shows POD Fit ≥ 6
   const trends = allTrends.filter(t => t.podFit >= 6);
 
   // -- Load scripts -----------------------------------------------------------
@@ -121,15 +144,52 @@ async function build() {
     if (current.name) products.push(current);
     catalog.products = products;
 
-    // Link products to trends
+    // Link products to trends using keyword + mood matching
     catalog.products.forEach(product => {
-      const relatedTrend = trends.find(t => 
-        t.title.toLowerCase().includes(product.name.toLowerCase().slice(0,8)) ||
-        (product.moods && product.moods.some(m => t.tags && t.tags.some(tag => tag.toLowerCase().includes(m.toLowerCase()))))
-      );
-      if (relatedTrend) {
-        product.relatedTrend = relatedTrend.title;
-        product.relatedReason = `Matches trend due to mood overlap and POD Fit ${relatedTrend.podFit}`;
+      const productMoods = product.moods || [];
+      const productName = (product.name || '').toLowerCase();
+
+      let bestTrend = null;
+      let bestScore = 0;
+
+      allTrends.forEach(t => {
+        let score = 0;
+        const trendTitle = t.title.toLowerCase();
+        const trendKeywords = t.keywords || [];
+
+        // Keyword overlap
+        productMoods.forEach(mood => {
+          if (trendTitle.includes(mood.toLowerCase())) score += 2;
+          if (trendKeywords.some(k => k.toLowerCase().includes(mood.toLowerCase()))) score += 1;
+        });
+
+        // Name overlap
+        if (trendTitle.includes(productName.slice(0, 6))) score += 3;
+        
+        if (score > bestScore) {
+          bestScore = score;
+          bestTrend = t;
+        }
+      });
+
+      // Fallback: use highest composite score trend
+      if (!bestTrend && allTrends.length > 0) {
+        bestTrend = allTrends.sort((a, b) => b.composite - a.composite)[0];
+      }
+
+      if (bestTrend) {
+        const matchReasons = [];
+        productMoods.forEach(mood => {
+          if (bestTrend.title.toLowerCase().includes(mood.toLowerCase()) ||
+              (bestTrend.keywords || []).some(k => k.toLowerCase().includes(mood.toLowerCase()))) {
+            matchReasons.push(`"${mood}" mood`);
+          }
+        });
+        product.relatedTrend = bestTrend.title;
+        product.relatedTrendDate = bestTrend.date;
+        product.relatedReason = matchReasons.length > 0
+          ? `Matches via ${matchReasons.join(', ')} (POD Fit ${bestTrend.podFit}/10)`
+          : `Best trending signal from ${bestTrend.date} (POD Fit ${bestTrend.podFit}/10)`;
       }
     });
   }
@@ -158,7 +218,7 @@ async function build() {
 
   // Inject embedded data + fetchJSON override (single </head> replacement)
   const embeddedScript = `<script>
-window.__VIBRNT_DATA__ = ${JSON.stringify({ trends, scripts, catalog, summary, seenTrends })};
+window.__VIBRNT_DATA__ = ${JSON.stringify({ trends, allTrends, scripts, catalog, summary, seenTrends })};
 window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date().toISOString()}';
 (function() {
   var _d = window.__VIBRNT_DATA__ || { trends: [], scripts: [], catalog: { products: [] }, summary: {}, seenTrends: [] };
