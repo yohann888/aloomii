@@ -37,7 +37,7 @@ jobs:
           # Encode as base64 to avoid JS template literal escaping issues
           b64 = base64.b64encode(dashboard_html.encode('utf-8')).decode('ascii')
           # Replace the base64-encoded placeholder
-          old_pattern = "const DASHBOARD_B64 = '';"
+          old_pattern = "const DASHBOARD_B64 = ''"
           new_pattern = "const DASHBOARD_B64 = '" + b64 + "';"
           if old_pattern in js:
               js = js.replace(old_pattern, new_pattern)
