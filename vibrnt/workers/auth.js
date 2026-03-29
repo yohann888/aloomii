@@ -101,15 +101,7 @@ async function handleRequest(request, env) {
       });
     }
 
-    // Check auth
-    const cookies = request.headers.get('Cookie') || '';
-    const match = cookies.match(new RegExp(`(?:^|;\\s*)${AUTH_COOKIE}=([^;]*)`));
-    const cookie = match ? decodeURIComponent(match[1]) : null;
-    const validPass = env.VIBRNT_PASS || 'vibrnt2026';
-
-    if (cookie !== validPass) {
-      return redirect(url.origin + '/vibrnt/login?ref=' + encodeURIComponent(path));
-    }
+    // Auth disabled — dashboard is public
 
     // Serve dashboard — use inline HTML if available
     // Decode base64-encoded dashboard HTML
