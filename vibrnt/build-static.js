@@ -11,6 +11,7 @@ const path = require('path');
 const VAULT = path.join(__dirname, '..', 'vibrntvault');
 const TRENDS_DIR = path.join(VAULT, 'Trends');
 const SCRIPTS_DIR = path.join(VAULT, 'Scripts');
+const PRODUCTS_DIR = path.join(VAULT, 'Products');
 const CATALOG_PATH = path.join(VAULT, 'product-catalog-template.md');
 const DEDUP_FILE = '/Users/superhana/.openclaw/workspace/vibrnt-seen-trends.json';
 const INPUT_HTML = path.join(__dirname, 'index.html');
@@ -123,33 +124,62 @@ async function build() {
     };
   });
 
-  // -- Load catalog -----------------------------------------------------------
+  // -- Load catalog — prefer today's generated products, fall back to static catalog ---
   let catalog = { products: [], updated: null };
-  if (fs.existsSync(CATALOG_PATH)) {
-    const raw = fs.readFileSync(CATALOG_PATH, 'utf-8');
-    const { meta, body } = parseFrontmatter(raw);
-    catalog.updated = meta.updated || null;
 
-    // Parse products from markdown
+  // Find most recent daily products file
+  const today = new Date().toISOString().split('T')[0];
+  const todayProductFile = path.join(PRODUCTS_DIR, `${today}.md`);
+  let catalogRaw = null;
+
+  if (fs.existsSync(PRODUCTS_DIR)) {
+    const productFiles = fs.readdirSync(PRODUCTS_DIR).filter(f => f.endsWith('.md')).sort().reverse();
+    const latestProductFile = productFiles.length > 0 ? path.join(PRODUCTS_DIR, productFiles[0]) : null;
+    if (latestProductFile) {
+      catalogRaw = fs.readFileSync(latestProductFile, 'utf-8');
+      catalog.source = latestProductFile;
+    }
+  }
+
+  if (!catalogRaw && fs.existsSync(CATALOG_PATH)) {
+    catalogRaw = fs.readFileSync(CATALOG_PATH, 'utf-8');
+    catalog.source = 'static-catalog';
+  }
+
+  if (catalogRaw) {
+    const raw = catalogRaw;
+    const { meta, body } = parseFrontmatter(raw);
+    catalog.updated = meta.updated || meta.date || null;
+
+    // Parse products from markdown (supports both static catalog and daily generated format)
     const lines = body.split('\n');
     let current = {};
     const products = [];
     for (const line of lines) {
       if (line.startsWith('## Product ')) {
         if (current.name) products.push(current);
-        current = { name: line.replace('## Product ', '').trim() };
+        // Handle both "## Product N: Name" and "## Product N" formats
+        current = { name: line.replace(/^## Product \d+:?\s*/, '').trim() };
       } else if (line.includes('**Collection:**')) {
         current.collection = line.match(/\*\*Collection:\*\* (.*)/)?.[1] || '';
       } else if (line.includes('**Type:**')) {
         current.type = line.match(/\*\*Type:\*\* (.*)/)?.[1] || '';
       } else if (line.includes('**Style:**')) {
         current.style = line.match(/\*\*Style:\*\* (.*)/)?.[1] || '';
-      } else if (line.includes('**Moods:**')) {
-        current.moods = (line.match(/\*\*Moods:\*\* (.*)/)?.[1] || '').split(',').map(t => t.trim()).filter(Boolean);
+      } else if (line.includes('**Moods:**') || line.includes('**Mood:**')) {
+        current.moods = (line.match(/\*\*Moods?:\*\* (.*)/)?.[1] || '').split(',').map(t => t.trim()).filter(Boolean);
       } else if (line.includes('**Target audience:**')) {
         current.audience = line.match(/\*\*Target audience:\*\* (.*)/)?.[1] || '';
       } else if (line.includes('**Colors:**')) {
         current.colors = line.match(/\*\*Colors:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Trend Source:**')) {
+        current.relatedTrend = line.match(/\*\*Trend Source:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Why This Product:**')) {
+        current.relatedReason = line.match(/\*\*Why This Product:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**POD Fit:**')) {
+        current.podFit = line.match(/\*\*POD Fit:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Trend Date:**')) {
+        current.relatedTrendDate = line.match(/\*\*Trend Date:\*\* (.*)/)?.[1] || '';
       }
     }
     if (current.name) products.push(current);
