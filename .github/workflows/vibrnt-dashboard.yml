@@ -26,12 +26,33 @@ jobs:
           cd vibrnt
           node build-static.js
 
+      - name: Create Cloudflare Pages project if needed
+        run: |
+          ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
+          TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}"
+          # Check if project exists
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/vibrnt" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json")
+          if [ "$HTTP_CODE" = "404" ]; then
+            echo "Creating Cloudflare Pages project 'vibrnt'..."
+            curl -s -X POST \
+              "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects" \
+              -H "Authorization: Bearer ${TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d '{"name":"vibrnt","slug":"vibrnt","build_config":{"destination_dir":""},"source":{"type":"github"}}')
+            echo "Project created."
+          else
+            echo "Project 'vibrnt' already exists (HTTP $HTTP_CODE)."
+          fi
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy vibrnt/dist --project-name=vibrnt --branch=main
+          command: pages deploy vibrnt/dist --project-name=vibrnt --branch=main --commit-dirty=true
 
       - name: Set password environment variable
         run: |
