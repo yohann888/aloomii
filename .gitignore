@@ -1,2 +1,7 @@
 .DS_Store
 .wrangler/
+
+# VibrntVault — large binary files excluded, text files tracked
+vibrntvault/Influencers/
+vibrntvault/Performance/
+vibrntvault/Briefs/
