@@ -125,7 +125,7 @@ async function build() {
   // Inject embedded data + fetchJSON override (single </head> replacement)
   const embeddedScript = `<script>
 window.__VIBRNT_DATA__ = ${JSON.stringify({ trends, scripts, catalog, summary })};
-window.__VIBRNT_BUILT__ = '${new Date().toISOString()}';
+window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date().toISOString()}';
 (function() {
   var _d = window.__VIBRNT_DATA__ || { trends: [], scripts: [], catalog: { products: [] }, summary: {} };
   var _realFetch = window.fetchJSON; // undefined at this point

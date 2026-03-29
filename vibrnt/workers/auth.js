@@ -53,7 +53,7 @@ const LOGIN_HTML = `<!DOCTYPE html>
 </html>`;
 
 // Inline the dashboard HTML — this will be replaced at deploy time
-const DASHBOARD_HTML = `<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->`
+const DASHBOARD_B64 = ''
 
 function redirect(url) {
   return Response.redirect(url, 302);
@@ -109,9 +109,14 @@ async function handleRequest(request, env) {
     }
 
     // Serve dashboard — use inline HTML if available
-    const html = DASHBOARD_HTML.includes('DASHBOARD_HTML_REPLACED_AT_BUILD')
-      ? generateDashboardHTML()
-      : DASHBOARD_HTML;
+    // Decode base64-encoded dashboard HTML
+let DASHBOARD_HTML = '';
+try {
+  DASHBOARD_HTML = atob(DASHBOARD_B64);
+} catch(e) {
+  DASHBOARD_HTML = generateDashboardHTML();
+}
+const html = DASHBOARD_HTML || generateDashboardHTML();
 
     return new Response(html, {
       headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
