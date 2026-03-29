@@ -560,9 +560,13 @@ async function loadCatalog() {
     <div class="catalog-item">
       <div class="catalog-name">
         ${escHtml(p.name || '')}
-        ${todaysMatchedProductNames.has(p.name) ? `<span class="catalog-from-trend">from trend</span>` : ''}
+        ${(p.relatedTrend || todaysMatchedProductNames.has(p.name)) ? `<span class="catalog-from-trend">from trend</span>` : ''}
       </div>
       ${p.collection || p.type ? `<div class="catalog-meta">${p.collection ? `<span class="catalog-collection-tag">${escHtml(p.collection)}</span>` : ''}${p.type ? escHtml(p.type) : ''}</div>` : ''}
+      ${p.relatedTrend ? `<div class="catalog-trend-link" style="font-size:11px;color:#00e5a0;margin:6px 0;padding:6px 10px;background:rgba(0,229,160,0.08);border-radius:6px;border-left:3px solid #00e5a0;">
+        <span style="opacity:0.7;">Trend:</span> ${escHtml(p.relatedTrend)}
+        ${p.relatedReason ? `<br><span style="opacity:0.6;font-size:10px;">${escHtml(p.relatedReason)}</span>` : ''}
+      </div>` : ''}
       ${p.style ? `<div class="catalog-style">${escHtml(p.style)}</div>` : ''}
       ${p.moods && p.moods.length ? `<div class="catalog-mood-tags">${p.moods.map(m => `<span class="catalog-mood-tag">${escHtml(m)}</span>`).join('')}</div>` : ''}
       <div class="catalog-bottom">
