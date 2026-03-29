@@ -19,7 +19,7 @@ version: 2.0
 ## Product 2: Cottage Garden Tee
 - **Collection:** Mabel
 - **Type:** t-shirt
-- **Style:** Hand-drawn botanical illustration — wildflowers, lavender sprigs, or a small garden scene printed on the chest. Earthy, nature-inspired. Relaxed fit. Colors: sage green, terracotta, oatmeal.
+- **Style:** Hand-drawn botanical illustration - wildflowers, lavender sprigs, or a small garden scene printed on the chest. Earthy, nature-inspired. Relaxed fit. Colors: sage green, terracotta, oatmeal.
 - **Moods:** cozy, adventurous
 - **Target audience:** Women 25-40, cottagecore enthusiasts, farmers market shoppers, eco-conscious
 - **Colors:** Sage green, terracotta, oatmeal
@@ -43,7 +43,7 @@ version: 2.0
 ## Product 5: Villain Era Tee
 - **Collection:** Kaida
 - **Type:** t-shirt
-- **Style:** Dark typography — bold sans-serif or gothic font reading "Final Boss Energy," "I Am The Problem," or "Villain Era" in all caps. Minimal, high-contrast design. Relaxed fit. Colors: black, charcoal, deep purple.
+- **Style:** Dark typography - bold sans-serif or gothic font reading "Final Boss Energy," "I Am The Problem," or "Villain Era" in all caps. Minimal, high-contrast design. Relaxed fit. Colors: black, charcoal, deep purple.
 - **Moods:** fierce, dark
 - **Target audience:** Women who love edgy, dark feminine energy, anime fans, bold dressers
 - **Colors:** Black, charcoal, deep purple

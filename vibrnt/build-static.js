@@ -151,7 +151,7 @@ window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date(
     '/api/scripts': { scripts: _d.scripts },
     '/api/catalog': _d.catalog,
   };
-  // Expose embedded data lookup — fetchJSON will check this first
+  // Expose embedded data lookup - fetchJSON will check this first
   window.__embed = function(url) {
     if (_routes[url]) return Promise.resolve(_routes[url]);
     return undefined;
