@@ -22,29 +22,24 @@ jobs:
           node-version: '20'
 
       - name: Build static dashboard
-        run: |
-          cd vibrnt
-          node build-static.js
+        run: node vibrnt/build-static.js
 
-      - name: Create Cloudflare Pages project if needed
+      - name: Create or verify Cloudflare Pages project
         run: |
           ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
           TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}"
-          # Check if project exists
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/vibrnt" \
-            -H "Authorization: Bearer ${TOKEN}" \
-            -H "Content-Type: application/json")
+          echo "Checking if project 'vibrnt' exists..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/vibrnt" -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json")
+          echo "Project check HTTP code: $HTTP_CODE"
           if [ "$HTTP_CODE" = "404" ]; then
             echo "Creating Cloudflare Pages project 'vibrnt'..."
-            curl -s -X POST \
-              "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects" \
+            curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects" \
               -H "Authorization: Bearer ${TOKEN}" \
               -H "Content-Type: application/json" \
-              -d '{"name":"vibrnt","slug":"vibrnt","build_config":{"destination_dir":""},"source":{"type":"github"}}')
-            echo "Project created."
+              -d '{"name":"vibrnt","slug":"vibrnt","build_config":{"destination_dir":""},"source":{"type":"github"}}'
+            echo "Project creation attempted."
           else
-            echo "Project 'vibrnt' already exists (HTTP $HTTP_CODE)."
+            echo "Project already exists (HTTP $HTTP_CODE)."
           fi
 
       - name: Deploy to Cloudflare Pages
@@ -54,11 +49,8 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy vibrnt/dist --project-name=vibrnt --branch=main --commit-dirty=true
 
-      - name: Set password environment variable
+      - name: Summary
         run: |
-          echo "📋 Set VIBRNT_DASHBOARD_PASS in Cloudflare Pages dashboard:"
-          echo "   → Pages → vibrnt → Settings → Environment variables"
-          echo "   → Production variable: VIBRNT_DASHBOARD_PASS = your-password"
-          echo "   → Default dev password (until changed): vibrnt2026"
-          echo ""
-          echo "✅ Dashboard live at: https://aloomii.com/vibrnt"
+          echo "✅ Vibrnt dashboard deployed at: https://aloomii.com/vibrnt"
+          echo "🔐 Set VIBRNT_DASHBOARD_PASS in Cloudflare Pages dashboard (Settings > Environment variables > Production)"
+          echo "   Default dev password (until changed): vibrnt2026"
