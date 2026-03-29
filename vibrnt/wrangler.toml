@@ -1,7 +1,6 @@
 name = "vibrnt-dashboard"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = "dist"
-account_id = "12f075345f13fd7cfbdb3bb663755334"
 
 [vars]
 ENVIRONMENT = "production"
