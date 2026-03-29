@@ -384,15 +384,16 @@ function loadSeenTrends() {
 }
 
 async function refreshAll() {
+  const btn = document.querySelector('.refresh-btn');
   const spinner = document.getElementById('spinner');
-  btn.classList.add('loading');
-  spinner.style.display = 'inline-block';
+  if (btn) btn.classList.add('loading');
+  if (spinner) spinner.style.display = 'inline-block';
   loadSeenTrends();
 
   await Promise.all([loadSummary(), loadTrends(), loadScripts(), loadCatalog()]);
 
-  btn.classList.remove('loading');
-  spinner.style.display = 'none';
+  if (btn) btn.classList.remove('loading');
+  if (spinner) spinner.style.display = 'none';
 }
 
 async function loadSummary() {
