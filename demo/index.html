@@ -134,10 +134,6 @@ body::before {
 @keyframes donutGrow { from { stroke-dashoffset: 314; } }
 .donut-center { font-family: var(--mono); font-size: 22px; font-weight: 700; fill: var(--text); transform: rotate(90deg); transform-origin: center; }
 .donut-legend { display: flex; flex-direction: column; gap: 10px; flex: 1; }
-.legend-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 6px; font-weight: 500; }
-.legend-badge-healthy { background: rgba(0, 229, 160, 0.15); color: var(--accent); }
-.legend-badge-attention { background: rgba(245, 166, 35, 0.15); color: var(--amber); }
-.legend-badge-offline { background: rgba(255, 77, 106, 0.15); color: var(--red); }
 .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 130px; margin-top: 16px; padding: 20px 8px 30px; overflow: visible; position: relative; }
@@ -289,15 +285,15 @@ body::before {
         <div class="donut-legend">
           <div class="legend-item">
             <div class="legend-dot" style="background: var(--accent);"></div>
-            <span class="legend-badge legend-badge-healthy">&#9679;</span><span id="legend-healthy">Healthy — 21 crons</span>
+            <span id="legend-healthy">Healthy — 21 crons</span>
           </div>
           <div class="legend-item">
             <div class="legend-dot" style="background: var(--amber);"></div>
-            <span class="legend-badge legend-badge-attention">&#9679;</span><span id="legend-attention">Needs Attention — 9 crons</span>
+            <span id="legend-attention">Needs Attention — 9 crons</span>
           </div>
           <div class="legend-item">
             <div class="legend-dot" style="background: var(--red);"></div>
-            <span class="legend-badge legend-badge-offline">&#9679;</span><span id="legend-offline">Offline — 3 crons</span>
+            <span id="legend-offline">Offline — 3 crons</span>
           </div>
           <div style="margin-top: 8px; font-family: var(--mono); font-size: 11px; color: var(--text-dim);" id="donut-footer">Signals this week: 2 | Compute: id="donut-footer">2.10</div>
         </div>
