@@ -24,33 +24,36 @@ jobs:
       - name: Build static dashboard
         run: node vibrnt/build-static.js
 
-      - name: Create or verify Cloudflare Pages project
+      - name: Inject dashboard HTML into Worker
         run: |
-          ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
-          TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}"
-          echo "Checking if project 'vibrnt' exists..."
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/vibrnt" -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json")
-          echo "Project check HTTP code: $HTTP_CODE"
-          if [ "$HTTP_CODE" = "404" ]; then
-            echo "Creating Cloudflare Pages project 'vibrnt'..."
-            curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects" \
-              -H "Authorization: Bearer ${TOKEN}" \
-              -H "Content-Type: application/json" \
-              -d '{"name":"vibrnt","slug":"vibrnt","build_config":{"destination_dir":""},"production_branch":"main","source":{"type":"github"}}'
-            echo "Project creation attempted."
-          else
-            echo "Project already exists (HTTP $HTTP_CODE)."
-          fi
+          python3 << 'PYEOF'
+          import json, os, re
+          with open('vibrnt/dist/index.html') as f:
+              html = f.read()
+          with open('vibrnt/workers/auth.js') as f:
+              js = f.read()
+          marker = 'const DASHBOARD_HTML = `<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->`;'
+          replacement = 'const DASHBOARD_HTML = `' + html + '`;'
+          js = js.replace(marker, replacement)
+          with open('vibrnt/workers/auth.js', 'w') as f:
+              f.write(js)
+          print('Dashboard injected into Worker')
+          PYEOF
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy vibrnt/dist --project-name=vibrnt --branch=main --commit-dirty=true
+      - name: Deploy to Cloudflare Workers
+        run: |
+          cd vibrnt/workers
+          npx wrangler deploy --name vibrnt-worker --env production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Summary
         run: |
-          echo "✅ Vibrnt dashboard deployed at: https://aloomii.com/vibrnt"
-          echo "🔐 Set VIBRNT_DASHBOARD_PASS in Cloudflare Pages dashboard (Settings > Environment variables > Production)"
-          echo "   Default dev password (until changed): vibrnt2026"
+          echo "✅ Vibrnt dashboard live at: https://aloomii.com/vibrnt"
+          echo ""
+          echo "🔐 First-time setup (set your password):"
+          echo "   Go to: Cloudflare Dashboard > Workers & Pages > vibrnt-worker > Settings > Variables"
+          echo "   Add: VIBRNT_PASS = your-password"
+          echo ""
+          echo "   Default password (until changed): vibrnt2026"
