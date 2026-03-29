@@ -49,14 +49,12 @@ function slugify(s) {
 }
 
 async function build() {
-  // -- Load trends (POD Fit ≥ 6 only) --------------------------------------------------------------
+  // -- Load trends (POD Fit ≥ 6 for Trending section only) --------------------------------------------------------------
   const trendFiles = readDir(TRENDS_DIR, '.md');
-  const trends = trendFiles.slice(0, 30).map(f => {
+  const allTrends = trendFiles.slice(0, 30).map(f => {
     const raw = fs.readFileSync(f.path, 'utf-8');
     const { meta, body } = parseFrontmatter(raw);
     const podFit = parseInt(meta.podFit || meta['pod-fit'] || 0, 10);
-    if (podFit < 6) return null; // filter out < 6
-
     return {
       date: f.name.replace('.md', ''),
       file: f.name,
@@ -66,7 +64,10 @@ async function build() {
       body: body.slice(0, 2000),
       mtime: f.mtime.toISOString(),
     };
-  }).filter(Boolean); // remove nulls
+  });
+
+  // Trending section only shows ≥ 6
+  const trends = allTrends.filter(t => t.podFit >= 6);
 
   // -- Load scripts -----------------------------------------------------------
   const scriptFiles = readDir(SCRIPTS_DIR, '.md');
