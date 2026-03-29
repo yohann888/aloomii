@@ -550,10 +550,10 @@ body::before {
 
       // Stat cards
       if (e.weekly_cost_usd !== undefined) {
-        document.getElementById('stat-cost').innerHTML = '$' + e.weekly_cost_usd.toFixed(2).replace('.', '<span class="unit">.') + '</span>';
+        const statCost = document.getElementById('stat-cost'); statCost.innerHTML = '$' + e.weekly_cost_usd.toFixed(2).replace('.', '<span class="unit">.') + '</span>';
       }
       if (e.roi_multiplier !== undefined) {
-        document.getElementById('stat-roi').innerHTML = e.roi_multiplier.toFixed(1) + '<span class="unit">x</span>';
+        const statRoi = document.getElementById('stat-roi'); statRoi.innerHTML = e.roi_multiplier.toFixed(1) + '<span class="unit">x</span>';
       }
       if (p.network_contacts !== undefined) {
         countUp(document.getElementById('stat-contacts'), p.network_contacts, '', '', 0);
