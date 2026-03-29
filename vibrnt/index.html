@@ -333,7 +333,9 @@ async function refreshAll() {
   if (spinner) spinner.style.display = 'inline-block';
   loadSeenTrends();
 
-  await Promise.all([loadSummary(), loadTrends(), loadScripts(), loadCatalog()]);
+  // Load catalog first (needed by loadTrends for product matching)
+  await Promise.all([loadSummary(), loadCatalog()]);
+  await Promise.all([loadTrends(), loadScripts()]);
 
   if (btn) btn.classList.remove('loading');
   if (spinner) spinner.style.display = 'none';
@@ -397,7 +399,7 @@ async function loadTrends() {
           for (const w of words) {
             if (productText.includes(w)) score++;
           }
-          const moodList = ((p.moods || '').split(',')).map(m => m.trim().toLowerCase()).filter(Boolean);
+          const moodList = (Array.isArray(p.moods) ? p.moods : (p.moods || '').split(',')).map(m => m.trim().toLowerCase()).filter(Boolean);
           for (const m of moodList) {
             if (trendText.includes(m)) score += 3;
           }
