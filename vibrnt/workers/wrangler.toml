@@ -1,0 +1,11 @@
+name = "vibrnt-worker"
+main = "auth.js"
+compatibility_date = "2024-01-01"
+
+[env.production]
+name = "vibrnt-worker"
+
+# Route: https://aloomii.com/vibrnt/*
+[[routes]]
+pattern = "aloomii.com/vibrnt/*"
+zone_name = "aloomii.com"
