@@ -49,20 +49,24 @@ function slugify(s) {
 }
 
 async function build() {
-  // -- Load trends --------------------------------------------------------------
+  // -- Load trends (POD Fit ≥ 6 only) --------------------------------------------------------------
   const trendFiles = readDir(TRENDS_DIR, '.md');
   const trends = trendFiles.slice(0, 30).map(f => {
     const raw = fs.readFileSync(f.path, 'utf-8');
     const { meta, body } = parseFrontmatter(raw);
+    const podFit = parseInt(meta.podFit || meta['pod-fit'] || 0, 10);
+    if (podFit < 6) return null; // filter out < 6
+
     return {
       date: f.name.replace('.md', ''),
       file: f.name,
       title: meta.title || meta.name || 'Trend Report',
+      podFit: podFit,
       tags: meta.tags ? meta.tags.split(',').map(t => t.trim()) : [],
-      body: body.slice(0, 2000), // truncate to save space
+      body: body.slice(0, 2000),
       mtime: f.mtime.toISOString(),
     };
-  });
+  }).filter(Boolean); // remove nulls
 
   // -- Load scripts -----------------------------------------------------------
   const scriptFiles = readDir(SCRIPTS_DIR, '.md');
@@ -115,6 +119,18 @@ async function build() {
     }
     if (current.name) products.push(current);
     catalog.products = products;
+
+    // Link products to trends
+    catalog.products.forEach(product => {
+      const relatedTrend = trends.find(t => 
+        t.title.toLowerCase().includes(product.name.toLowerCase().slice(0,8)) ||
+        (product.moods && product.moods.some(m => t.tags && t.tags.some(tag => tag.toLowerCase().includes(m.toLowerCase()))))
+      );
+      if (relatedTrend) {
+        product.relatedTrend = relatedTrend.title;
+        product.relatedReason = `Matches trend due to mood overlap and POD Fit ${relatedTrend.podFit}`;
+      }
+    });
   }
 
   // -- Build summary -----------------------------------------------------------
@@ -124,6 +140,7 @@ async function build() {
     trendCount: trends.length,
     scriptCount: scripts.length,
     lastBuilt: new Date().toISOString(),
+    filter: "POD Fit ≥ 6 only"
   };
 
   // -- Load seen trends (dedup) -----------------------------------------------
