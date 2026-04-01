@@ -1,1193 +1,1225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aloomii | AI GTM Operations for B2B Founders</title>
-  <meta name="description" content="Aloomii is a Sales Intelligence System for B2B founders. Replace your SDR for $3,500/mo. Run your content engine on autopilot with Aloomii Content Intelligence (ACI) — GEO-optimized for ChatGPT, Perplexity, and Gemini." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg-white: #ffffff;
-      --bg-light: #f8f8f8;
-      --bg-dark: #0a0a0a;
-      --text-dark: #1a1a1a;
-      --text-body: #444444;
-      --text-light: #ffffff;
-      --text-muted: #888888;
-      --accent: #2a2a2a;
-      --nav-height: 72px;
-      --banner-height: 38px;
-      --section-padding: 100px;
-      --grid-gap: 4vw;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg-white);
-      color: var(--text-dark);
-      line-height: 1.6;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* ───── NAVIGATION ───── */
-    .nav {
-      position: fixed;
-      top: var(--banner-height);
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      height: var(--nav-height);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      transition: all 0.3s ease;
-    }
-
-    .nav-logo {
-      text-decoration: none;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      letter-spacing: -0.02em;
-    }
-
-    .nav-logo img {
-      height: 36px;
-      width: auto;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-body);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 400;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--text-dark);
-    }
-
-    /* Mobile menu */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 8px;
-      background: none;
-      border: none;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--text-dark);
-      transition: all 0.3s ease;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: var(--nav-height);
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 24px 40px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      z-index: 999;
-    }
-
-    .mobile-menu.active {
-      display: block;
-    }
-
-    .mobile-menu a {
-      display: block;
-      padding: 12px 0;
-      color: var(--text-body);
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 400;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .mobile-menu a:last-child {
-      border-bottom: none;
-    }
-
-    .mobile-menu a:hover {
-      color: var(--text-dark);
-    }
-
-    @media (max-width: 768px) {
-      .nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-    }
-
-    /* ───── HERO / UNICORN STUDIO ───── */
-    .hero {
-      margin-top: var(--nav-height);
-      position: relative;
-      width: 100%;
-    }
-
-    .us-container {
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .us-desktop {
-      aspect-ratio: 1440 / 900;
-    }
-
-    .us-mobile {
-      aspect-ratio: 390 / 844;
-      display: none;
-    }
-
-    .us-container,
-    .us-container * {
-      touch-action: pan-y !important;
-      -webkit-user-drag: none;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .us-container > div {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-
-    @media (min-width: 768px) {
-      .us-desktop { display: block; }
-      .us-mobile { display: none !important; }
-    }
-
-    @media (max-width: 767px) {
-      .us-desktop { display: none !important; }
-      .us-mobile { display: block !important; }
-    }
-
-    /* ───── CONTENT WRAPPER ───── */
-    .content-wrapper {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 40px;
-    }
-
-    @media (max-width: 768px) {
-      .content-wrapper {
-        padding: 0 20px;
-      }
-    }
-
-    /* ───── SERVICE SECTIONS ───── */
-    .services {
-      padding: var(--section-padding) 0;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-    }
-
-    .service-card {
-      text-align: left;
-    }
-
-    .service-card.centered {
-      grid-column: 1 / -1;
-      max-width: 540px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .service-card h3 {
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
-      font-weight: 600;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
-      color: #009e96;
-      margin-bottom: 12px;
-    }
-
-    .service-card p {
-      font-size: 0.95rem;
-      line-height: 1.7;
-      color: #555555;
-      font-weight: 400;
-    }
-
-    @media (max-width: 768px) {
-      .services-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .service-card.centered {
-        max-width: 100%;
-      }
-    }
-
-    /* ───── AI PHILOSOPHY ───── */
-    .ai-philosophy {
-      background: var(--bg-dark);
-      color: var(--text-light);
-      padding: var(--section-padding) 0;
-      text-align: center;
-    }
-
-    .ai-philosophy h2,
-    .ai-philosophy .subtitle {
-      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
-      font-weight: 700;
-      line-height: 1.4;
-      letter-spacing: -0.02em;
-      color: var(--text-light);
-    }
-
-    .ai-philosophy h2 {
-      margin-bottom: 12px;
-    }
-
-    /* ───── LOGO SECTIONS (shared) ───── */
-    .logo-section {
-      padding: 80px 0;
-    }
-
-    .logo-section-title {
-      font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--text-dark);
-      margin-bottom: 48px;
-      text-align: center;
-    }
-
-    /* ── Past Experience: white bg, 4x2, colored, large logos ── */
-    .logo-section--experience {
-      background: #ffffff;
-    }
-
-    .logo-section--experience .logo-grid {
-      display: grid;
-      grid-template-columns: repeat(4, auto);
-      gap: 2px 0;
-      align-items: center;
-      justify-items: center;
-      justify-content: center;
-      column-gap: calc(1200px * 0.015);
-    }
-
-    .logo-section--experience .logo-grid img {
-      max-width: 240px;
-      max-height: 105px;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      transition: opacity 0.3s;
-    }
-
-    .logo-section--experience .logo-grid img:hover {
-      opacity: 0.75;
-    }
-
-    /* ── Current Clients: dark grey gradient, 3x2, smaller logos, colored ── */
-    .logo-section--clients {
-      background: linear-gradient(180deg, #3a3a3a 0%, #222222 100%);
-    }
-
-    .logo-section--clients .logo-section-title {
-      color: var(--text-light);
-    }
-
-    .logo-section--clients .logo-grid {
-      display: grid;
-      grid-template-columns: repeat(3, auto);
-      gap: 2px 0;
-      align-items: center;
-      justify-items: center;
-      justify-content: center;
-      column-gap: calc(1200px * 0.0195);
-      row-gap: calc(2px * 14.4);
-    }
-
-    .logo-section--clients .logo-grid img {
-      max-width: 180px;
-      max-height: 75px;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      transition: opacity 0.3s;
-    }
-
-    .logo-section--clients .logo-grid img:hover {
-      opacity: 0.75;
-    }
-
-    /* ── Worked Deals: black bg, 5x2, white logos ── */
-    .logo-section--deals {
-      background: #000000;
-    }
-
-    .logo-section--deals .logo-section-title {
-      color: var(--text-light);
-    }
-
-    .logo-section--deals .logo-grid {
-      display: grid;
-      grid-template-columns: repeat(5, auto);
-      gap: 2px 0;
-      align-items: center;
-      justify-items: center;
-      justify-content: center;
-      column-gap: calc(1200px * 0.03);
-    }
-
-    .logo-section--deals .logo-grid img {
-      max-width: 248px;
-      max-height: 102px;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-      transition: opacity 0.3s;
-    }
-
-    .logo-section--deals .logo-grid img:hover {
-      opacity: 0.75;
-    }
-
-    /* ── Mobile stacking for all logo grids ── */
-    @media (max-width: 768px) {
-      .logo-section--experience .logo-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 32px 24px;
-      }
-
-      .logo-section--clients .logo-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 28px 20px;
-      }
-
-      .logo-section--deals .logo-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 28px 20px;
-      }
-    }
-
-    /* ───── SECTION DIVIDER ───── */
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      background: rgba(0, 0, 0, 0.08);
-    }
-
-    /* ───── FOOTER ───── */
-    .footer {
-      padding: 48px 0;
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
-    }
-
-    .footer-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 400;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--text-dark);
-    }
-
-    @media (max-width: 768px) {
-      .footer-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-      }
-    }
-
-    /* ───── CONTENT INTELLIGENCE SECTION ───── */
-    .content-intelligence {
-      padding: var(--section-padding) 0;
-      background: #f4fafa;
-    }
-
-    .ci-heading {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: var(--text-dark);
-      margin-bottom: 24px;
-      line-height: 1.2;
-    }
-
-    .ci-intro {
-      font-size: 1rem;
-      line-height: 1.75;
-      color: var(--text-body);
-      max-width: 720px;
-      margin-bottom: 16px;
-    }
-
-    .ci-tiers {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-      margin: 48px 0 40px;
-    }
-
-    .ci-tier {
-      background: #ffffff;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      border-radius: 12px;
-      padding: 32px 28px;
-    }
-
-    .ci-tier-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .ci-tier-header h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #009e96;
-      letter-spacing: -0.02em;
-    }
-
-    .ci-tier-price {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      letter-spacing: -0.02em;
-    }
-
-    .ci-tier-price span {
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: var(--text-muted);
-    }
-
-    .ci-tier p {
-      font-size: 0.9rem;
-      line-height: 1.7;
-      color: #555555;
-      margin-bottom: 12px;
-    }
-
-    .ci-tier p:last-child {
-      margin-bottom: 0;
-    }
-
-    .ci-best-for {
-      font-size: 0.85rem !important;
-      color: var(--text-muted) !important;
-      border-top: 1px solid rgba(0,0,0,0.06);
-      padding-top: 12px !important;
-    }
-
-    .content-intelligence-cta {
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      padding: 16px 40px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #ffffff;
-      background: #009e96;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      letter-spacing: 0.01em;
-    }
-
-    .btn-primary:hover {
-      background: #007f79;
-      transform: translateY(-1px);
-    }
-
-    @media (max-width: 768px) {
-      .ci-tiers {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-
-      .ci-tier-header {
-        flex-direction: column;
-        gap: 4px;
-      }
-    }
-
-    /* ───── SCROLL ANIMATIONS ───── */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ───── CONTACT / CONSULTATION FORM ───── */
-    .contact-section {
-      padding: var(--section-padding) 0;
-      background: var(--bg-light);
-    }
-
-    .contact-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-
-    .contact-header h2 {
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      font-weight: 700;
-      color: var(--text-dark);
-      letter-spacing: -0.03em;
-      margin-bottom: 12px;
-    }
-
-    .contact-header p {
-      font-size: 1.05rem;
-      color: var(--text-body);
-      max-width: 520px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-
-    .consultation-form {
-      max-width: 880px;
-      margin: 0 auto;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 48px;
-    }
-
-    .form-group {
-      margin-bottom: 24px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 8px;
-      letter-spacing: 0.01em;
-      text-transform: uppercase;
-    }
-
-    .form-group .required {
-      color: #c0392b;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 14px 16px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      color: var(--text-dark);
-      background: var(--bg-white);
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 8px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .form-group select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 16px center;
-      padding-right: 40px;
-      cursor: pointer;
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
-      color: #aaa;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--text-dark);
-      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
-    }
-
-    .form-submit {
-      text-align: center;
-      margin-top: 16px;
-    }
-
-    .form-submit button {
-      display: inline-block;
-      padding: 16px 48px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--bg-white);
-      background: var(--text-dark);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      letter-spacing: 0.01em;
-    }
-
-    .form-submit button:hover {
-      background: #333;
-      transform: translateY(-1px);
-    }
-
-    .form-submit button:active {
-      transform: translateY(0);
-    }
-
-    .form-submit button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .form-success {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .form-success.visible {
-      display: block;
-    }
-
-    .form-success .success-icon {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto 16px;
-      background: var(--text-dark);
-      color: var(--bg-white);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-
-    .form-success p {
-      font-size: 1.05rem;
-      color: var(--text-body);
-      max-width: 400px;
-      margin: 0 auto;
-    }
-
-    @media (max-width: 768px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .contact-section {
-        padding: 60px 0;
-      }
-
-      .contact-header {
-        margin-bottom: 36px;
-      }
-
-      .form-submit button {
-        width: 100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aloomii | Relationship Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0b0b14;
+    --bg-card: rgba(255,255,255,0.07);
+    --bg-card-hover: rgba(255,255,255,0.11);
+    --border: rgba(255,255,255,0.12);
+    --border-hover: rgba(0,200,190,0.35);
+    --text: #f0f0f0;
+    --text-body: rgba(255,255,255,0.75);
+    --text-muted: rgba(255,255,255,0.4);
+    --accent: #00c8be;
+    --accent-dark: #009e96;
+    --purple: #663399;
+    --purple-light: #a87fdb;
+    --nav-height: 72px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ==================== CANVAS ==================== */
+  #ghostCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .page-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ==================== NAV ==================== */
+  nav {
+    position: sticky;
+    top: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 48px;
+    background: rgba(11,11,20,0.75);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { text-decoration: none; }
+  .nav-logo img { height: 36px; width: auto; }
+  .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--text-body); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: #fff; }
+  .nav-links .nav-cta {
+    background: var(--accent); color: #000; padding: 10px 22px;
+    border-radius: 10px; font-weight: 600; font-size: 13px; transition: all 0.25s;
+  }
+  .nav-links .nav-cta:hover { background: #00e0d5; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,200,190,0.3); }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 8px; background: none; border: none;
+  }
+  .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: all 0.3s; }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+  .mobile-menu {
+    display: none; position: fixed; top: var(--nav-height); left: 0; right: 0;
+    background: rgba(11,11,20,0.95); backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px); padding: 24px 40px;
+    border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  .mobile-menu.active { display: block; }
+  .mobile-menu a { display: block; padding: 14px 0; color: var(--text-body); text-decoration: none; font-size: 1rem; border-bottom: 1px solid var(--border); }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: #fff; }
+  @media (max-width: 768px) { nav { padding: 14px 20px; } .nav-links { display: none; } .hamburger { display: flex; } }
+
+  /* ==================== GLASS CARD ==================== */
+  .glass {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    transition: all 0.35s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+  .glass:hover { background: rgba(255,255,255,0.12); border-color: rgba(0,200,190,0.45); }
+
+  /* ==================== CONTENT WRAPPER ==================== */
+  .content-wrapper { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+  @media (max-width: 768px) { .content-wrapper { padding: 0 20px; } }
+
+  /* ==================== HERO ==================== */
+  .hero {
+    padding: 80px 48px 60px;
+    max-width: 1100px; margin: 0 auto; text-align: center;
+  }
+  @keyframes heroFadeIn { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+  .hero h1 {
+    font-size: clamp(36px, 5.5vw, 58px); font-weight: 800; line-height: 1.08;
+    letter-spacing: -2.5px; color: #fff; margin-bottom: 24px;
+    max-width: 820px; margin-left: auto; margin-right: auto;
+  }
+  .hero h1 .highlight { color: var(--accent); }
+  .hero .sub { font-size: 18px; color: var(--text-body); max-width: 620px; margin: 0 auto 40px; line-height: 1.75; }
+  .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-block; background: var(--accent); color: #000;
+    padding: 16px 36px; border-radius: 10px; font-size: 15px;
+    font-weight: 600; text-decoration: none; transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(0,200,190,0.2);
+  }
+  .btn-primary:hover { background: #00e0d5; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,200,190,0.3); }
+  .btn-secondary {
+    display: inline-block; background: transparent; color: #fff;
+    padding: 16px 36px; border-radius: 10px; font-size: 15px;
+    font-weight: 600; text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.35); transition: all 0.3s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* ==================== SOCIAL PROOF ==================== */
+  .proof-bar { padding: 48px; text-align: center; border-top: 1px solid var(--border); }
+  .proof-bar .label { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 28px; }
+  .proof-logos { display: flex; justify-content: center; align-items: center; gap: 48px; flex-wrap: wrap; }
+  .proof-logos img {
+    height: 75px; width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.45;
+    transition: opacity 0.3s;
+  }
+  .proof-logos img:hover { opacity: 0.75; }
+
+  /* ==================== SECTION UTILITIES ==================== */
+  .section-label { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); text-align: center; margin-bottom: 12px; }
+  .section-heading { font-size: clamp(30px, 4vw, 42px); font-weight: 800; letter-spacing: -1.5px; text-align: center; margin-bottom: 16px; color: #fff; }
+  .section-sub { font-size: 17px; color: var(--text-body); text-align: center; max-width: 600px; margin: 0 auto 60px; line-height: 1.7; }
+
+  /* ==================== PROBLEM ==================== */
+  .problem { padding: 60px 48px 80px; text-align: center; }
+  .problem-inner { max-width: 800px; margin: 0 auto; }
+  .problem h2 { font-size: clamp(28px, 3.5vw, 38px); font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 20px; color: #fff; }
+  .problem p { font-size: 16px; color: var(--text-body); line-height: 1.8; margin-bottom: 12px; }
+  .stat-row { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+  .stat-card {
+    padding: 32px 28px; text-align: center; flex: 1; min-width: 180px;
+  }
+  .stat-card .num {
+    font-size: 42px; font-weight: 800; letter-spacing: -2px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, var(--accent) 50%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; line-height: 1; margin-bottom: 10px;
+  }
+  .stat-card .desc { font-size: 13px; color: var(--text-body); max-width: 170px; margin: 0 auto; line-height: 1.5; }
+
+  /* ==================== OFFERINGS ==================== */
+  .offerings { padding: 80px 48px 100px; }
+  .offerings-inner { max-width: 1100px; margin: 0 auto; }
+  .offering-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .offering-card { padding: 44px 40px; }
+  .offering-card .card-tag {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 6px; margin-bottom: 20px;
+  }
+  .offering-card.founders .card-tag { background: rgba(0,200,190,0.1); color: var(--accent); }
+  .offering-card.businesses .card-tag { background: rgba(102,51,153,0.15); color: var(--purple-light); }
+  .offering-card h3 { font-size: 26px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 8px; color: #fff; }
+  .offering-card.founders .price { font-size: 15px; color: var(--accent); font-weight: 700; margin-bottom: 16px; }
+  .offering-card.businesses .price { font-size: 15px; color: var(--purple-light); font-weight: 700; margin-bottom: 16px; }
+  .offering-card p { font-size: 15px; color: var(--text-body); line-height: 1.7; margin-bottom: 24px; }
+  .offering-card .features { list-style: none; margin-bottom: 28px; }
+  .offering-card .features li {
+    font-size: 14px; color: var(--text); padding: 8px 0;
+    border-bottom: 1px solid var(--border); padding-left: 24px; position: relative;
+  }
+  .offering-card.founders .features li::before { content: "\2713"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .offering-card.businesses .features li::before { content: "\2713"; position: absolute; left: 0; color: var(--purple-light); font-weight: 700; }
+  .card-cta {
+    display: inline-block; padding: 14px 28px; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.3s;
+  }
+  .card-cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .offering-card.founders .card-cta { background: var(--accent); color: #000; box-shadow: 0 4px 16px rgba(0,200,190,0.2); }
+  .offering-card.founders .card-cta:hover { background: #00e0d5; transform: translateY(-1px); }
+  .offering-card.founders .card-cta-outline { background: transparent; color: var(--accent); border: 2px solid var(--accent); box-shadow: none; }
+  .offering-card.founders .card-cta-outline:hover { background: rgba(0,200,190,0.1); transform: translateY(-1px); }
+  .offering-card.businesses .card-cta { background: var(--purple); color: #fff; box-shadow: 0 4px 16px rgba(102,51,153,0.3); border: none; }
+  .offering-card.businesses .card-cta:hover { background: var(--purple-light); transform: translateY(-1px); }
+
+  /* ==================== HOW IT WORKS ==================== */
+  .how-it-works { padding: 80px 48px 100px; max-width: 900px; margin: 0 auto; }
+  .steps { display: flex; flex-direction: column; }
+  .step { display: flex; gap: 32px; align-items: flex-start; padding: 36px 0; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-size: 52px; font-weight: 800; line-height: 1; min-width: 70px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, var(--accent) 45%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .step-content h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+  .step-content p { font-size: 15px; color: var(--text-body); line-height: 1.7; }
+
+  /* ==================== DIFFERENTIATOR ==================== */
+  .differentiator { padding: 80px 48px 100px; }
+  .differentiator-inner { max-width: 1100px; margin: 0 auto; }
+  .diff-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .diff-card { padding: 36px 32px; }
+  .diff-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--accent); }
+  .diff-card p { font-size: 14px; color: var(--text-body); line-height: 1.7; }
+
+  /* ==================== SCROLLING TICKER ==================== */
+  .ticker-wrap {
+    overflow: hidden; padding: 28px 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .ticker-wrap::before, .ticker-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+  }
+  .ticker-wrap::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+  .ticker-wrap::after { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+  .ticker { display: flex; gap: 48px; animation: tickerScroll 30s linear infinite; white-space: nowrap; width: max-content; }
+  .ticker span { font-size: 15px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); display: inline-flex; align-items: center; gap: 48px; }
+  .ticker span::after { content: '\00B7'; color: var(--accent); font-size: 24px; }
+  @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* ==================== VERTICALS ==================== */
+  .verticals { padding: 80px 48px; text-align: center; }
+  .verticals h2 { font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; color: #fff; }
+  .verticals .sub { font-size: 15px; color: var(--text-body); margin-bottom: 36px; }
+  .vertical-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+  .vertical-pill {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 40px; padding: 10px 22px;
+    font-size: 13px; font-weight: 600; color: var(--text); transition: all 0.3s;
+  }
+  .vertical-pill:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 2px 12px rgba(0,200,190,0.1); transform: translateY(-1px); }
+
+  /* ==================== TEAM ==================== */
+  .team { padding: 80px 48px; max-width: 900px; margin: 0 auto; }
+  .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .team-member { padding: 36px 32px; }
+  .team-member h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: #fff; }
+  .team-member .role { font-size: 13px; color: var(--accent); font-weight: 600; margin-bottom: 16px; }
+  .team-member p { font-size: 14px; color: var(--text-body); line-height: 1.7; }
+  .team-bottom { text-align: center; margin-top: 28px; padding: 32px; }
+  .team-bottom p { font-size: 15px; color: var(--text-body); line-height: 1.7; }
+  .team-bottom strong { color: #fff; }
+
+  /* ==================== NEWSLETTER ==================== */
+  .newsletter { padding: 80px 48px; }
+  .newsletter-inner {
+    max-width: 640px; margin: 0 auto; text-align: center; padding: 56px 48px;
+  }
+  .newsletter-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--accent);
+    background: rgba(0,200,190,0.1); padding: 5px 14px;
+    border-radius: 20px; margin-bottom: 24px;
+  }
+  .newsletter h2 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; color: #fff; }
+  .newsletter p { font-size: 16px; color: var(--text-body); line-height: 1.7; margin-bottom: 8px; }
+  .newsletter .bonus {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin: 20px 0 28px; padding: 14px 22px;
+    background: rgba(0,200,190,0.08); border: 1px solid rgba(0,200,190,0.15);
+    border-radius: 12px; font-size: 14px; color: var(--accent); font-weight: 500;
+  }
+  .newsletter-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; }
+  .newsletter-form input {
+    flex: 1; padding: 14px 18px; background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border); border-radius: 10px;
+    color: #fff; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s;
+  }
+  .newsletter-form input::placeholder { color: var(--text-muted); }
+  .newsletter-form input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,200,190,0.1); }
+  .newsletter-form button {
+    padding: 14px 28px; background: var(--accent); color: #000;
+    border: none; border-radius: 10px; font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all 0.3s; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,200,190,0.2);
+  }
+  .newsletter-form button:hover { background: #00e0d5; transform: translateY(-1px); }
+  .newsletter-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .newsletter-success { display: none; padding: 20px; text-align: center; color: var(--accent); font-weight: 600; }
+  .newsletter-success.visible { display: block; }
+  .newsletter .fine-print { font-size: 12px; color: var(--text-muted); margin-top: 14px; }
+
+  /* ==================== CONTACT FORM ==================== */
+  .contact-section { padding: 80px 48px; }
+  .contact-header { text-align: center; margin-bottom: 56px; }
+  .contact-header h2 {
+    font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -1.5px;
+    color: #fff; margin-bottom: 16px;
+  }
+  .contact-header p {
+    font-size: 17px; color: var(--text-body); line-height: 1.7;
+    max-width: 520px; margin: 0 auto;
+  }
+  .consultation-form { max-width: 880px; margin: 0 auto; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  .form-group { margin-bottom: 24px; }
+  .form-group label {
+    display: block; font-size: 0.82rem; font-weight: 600; color: #fff;
+    margin-bottom: 8px; letter-spacing: 0.01em; text-transform: uppercase;
+  }
+  .form-group .required { color: #c0392b; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 14px 16px; font-family: 'Inter', sans-serif;
+    font-size: 0.95rem; color: #fff; background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none; appearance: none;
+  }
+  .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center;
+    padding-right: 40px; cursor: pointer; background-color: rgba(255,255,255,0.06);
+  }
+  .form-group select option { background: #1a1a2e; color: #fff; }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.35); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,255,255,0.06);
+  }
+  .form-submit { text-align: center; margin-top: 16px; }
+  .form-submit button {
+    display: inline-block; padding: 16px 48px; font-family: 'Inter', sans-serif;
+    font-size: 0.95rem; font-weight: 600; color: #fff; background: #fff;
+    color: #0b0b14; border: none; border-radius: 8px; cursor: pointer;
+    transition: background 0.2s, transform 0.15s; letter-spacing: 0.01em;
+  }
+  .form-submit button:hover { background: #e0e0e0; transform: translateY(-1px); }
+  .form-submit button:active { transform: translateY(0); }
+  .form-submit button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .form-success { display: none; text-align: center; padding: 40px 20px; }
+  .form-success.visible { display: block; }
+  .form-success .success-icon {
+    width: 56px; height: 56px; margin: 0 auto 16px; background: #fff;
+    color: #0b0b14; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 1.4rem; font-weight: 700;
+  }
+  .form-success p { font-size: 17px; color: var(--text-body); }
+  @media (max-width: 768px) {
+    .contact-section { padding: 60px 20px; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ==================== FOOTER ==================== */
+  .site-footer { color: var(--text-muted); padding: 64px 48px 40px; border-top: 2px solid var(--accent); }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
+  .footer-brand .footer-logo img { height: 28px; width: auto; margin-bottom: 16px; }
+  .footer-brand p { font-size: 14px; line-height: 1.6; color: var(--text-muted); max-width: 280px; }
+  .footer-col h4 { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+  .footer-col a { display: block; font-size: 14px; color: var(--text-muted); text-decoration: none; padding: 4px 0; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    max-width: 1200px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; font-size: 13px;
+  }
+  .footer-bottom a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .footer-bottom a:hover { color: var(--accent); }
+  .footer-social { display: flex; gap: 16px; }
+  @media (max-width: 768px) { .site-footer { padding: 48px 20px 32px; } .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; } .footer-bottom { flex-direction: column; gap: 12px; text-align: center; } }
+  @media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
+
+  /* ==================== SCROLL ANIMATIONS ==================== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Stagger children */
+  .reveal-stagger .reveal-child {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-stagger.visible .reveal-child {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-stagger.visible .reveal-child:nth-child(1) { transition-delay: 0.05s; }
+  .reveal-stagger.visible .reveal-child:nth-child(2) { transition-delay: 0.12s; }
+  .reveal-stagger.visible .reveal-child:nth-child(3) { transition-delay: 0.19s; }
+  .reveal-stagger.visible .reveal-child:nth-child(4) { transition-delay: 0.26s; }
+  .reveal-stagger.visible .reveal-child:nth-child(5) { transition-delay: 0.33s; }
+  .reveal-stagger.visible .reveal-child:nth-child(6) { transition-delay: 0.4s; }
+  .reveal-stagger.visible .reveal-child:nth-child(7) { transition-delay: 0.47s; }
+  .reveal-stagger.visible .reveal-child:nth-child(8) { transition-delay: 0.54s; }
+  .reveal-stagger.visible .reveal-child:nth-child(9) { transition-delay: 0.61s; }
+  .reveal-stagger.visible .reveal-child:nth-child(10) { transition-delay: 0.68s; }
+
+  /* Scale-up variant */
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-scale.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  /* ==================== PROOF POINT ==================== */
+  .proof-point { padding: 80px 48px; }
+  .proof-point-inner { max-width: 1000px; margin: 0 auto; }
+  .proof-point .section-heading { margin-bottom: 40px; }
+  .proof-story { padding: 40px 36px; }
+  .proof-story .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+  }
+  .proof-story h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; color: #fff; }
+  .proof-story p { font-size: 15px; color: var(--text-body); line-height: 1.7; }
+  .proof-story .proof-highlight {
+    display: inline-block; margin-top: 16px; font-size: 14px; font-weight: 600;
+    color: var(--accent); border-bottom: 1px solid rgba(0,200,190,0.3); padding-bottom: 2px;
+  }
+  @media (max-width: 768px) {
+    .proof-point { padding: 60px 20px; }
+  }
+
+  /* ==================== TEAM WITH PHOTOS ==================== */
+  .team-member {
+    display: flex; gap: 24px; align-items: flex-start;
+  }
+  .team-member-photo {
+    width: 88px; height: 88px; border-radius: 14px; object-fit: cover;
+    flex-shrink: 0; border: 2px solid rgba(255,255,255,0.12);
+  }
+  .team-member-info { flex: 1; }
+  @media (max-width: 480px) {
+    .team-member { flex-direction: column; align-items: center; text-align: center; }
+    .team-member-photo { width: 80px; height: 80px; }
+  }
+
+  /* ==================== BLOG PREVIEW ==================== */
+  .blog-preview { padding: 80px 48px; }
+  .blog-preview-inner { max-width: 1100px; margin: 0 auto; }
+  .blog-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-top: 48px; }
+  .blog-card {
+    padding: 32px 28px; display: flex; flex-direction: column;
+  }
+  .blog-card .blog-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+  }
+  .blog-card h3 {
+    font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 10px;
+    line-height: 1.35; letter-spacing: -0.3px;
+  }
+  .blog-card p {
+    font-size: 13px; color: var(--text-body); line-height: 1.6; flex: 1; margin-bottom: 16px;
+  }
+  .blog-card .blog-link {
+    font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .blog-card .blog-link:hover { opacity: 0.75; }
+  .blog-view-all {
+    text-align: center; margin-top: 36px;
+  }
+  .blog-view-all a {
+    display: inline-block; padding: 12px 32px; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; color: #fff;
+    border: 2px solid rgba(255,255,255,0.35); transition: all 0.3s;
+  }
+  .blog-view-all a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+  @media (max-width: 768px) {
+    .blog-preview { padding: 60px 20px; }
+    .blog-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ==================== FREE SCAN ==================== */
+  .free-scan { padding: 80px 48px; }
+  .free-scan-inner { max-width: 700px; margin: 0 auto; text-align: center; padding: 56px 48px; }
+  .free-scan-inner .scan-badge {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+  }
+  .free-scan-inner h2 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; color: #fff; }
+  .free-scan-inner p { font-size: 16px; color: var(--text-body); line-height: 1.7; margin-bottom: 12px; }
+  .free-scan-inner .scan-details {
+    text-align: left; margin: 24px 0 28px; padding: 20px 24px;
+    background: rgba(0,200,190,0.06); border: 1px solid rgba(0,200,190,0.12);
+    border-radius: 12px;
+  }
+  .free-scan-inner .scan-details li {
+    font-size: 14px; color: var(--text); padding: 6px 0; list-style: none;
+    padding-left: 20px; position: relative;
+  }
+  .free-scan-inner .scan-details li::before { content: "\2713"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .free-scan-inner .scan-cta {
+    display: inline-block; background: var(--accent); color: #000;
+    padding: 16px 36px; border-radius: 10px; font-size: 15px;
+    font-weight: 600; text-decoration: none; transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(0,200,190,0.2);
+  }
+  .free-scan-inner .scan-cta:hover { background: #00e0d5; transform: translateY(-2px); }
+  .free-scan-inner .no-commitment { font-size: 13px; color: var(--text-muted); margin-top: 14px; }
+  @media (max-width: 768px) {
+    .free-scan { padding: 60px 20px; }
+    .free-scan-inner { padding: 36px 24px; }
+  }
+
+  /* ==================== GTM BANNER ==================== */
+  .gtm-banner {
+    background: var(--accent-dark);
+    text-align: center;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    z-index: 101;
+    position: relative;
+  }
+  .gtm-banner a {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    margin-left: 6px;
+    transition: opacity 0.2s;
+  }
+  .gtm-banner a:hover { opacity: 0.85; }
+  .gtm-banner .close-banner {
+    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer;
+    font-size: 18px; line-height: 1; padding: 4px 8px; transition: color 0.2s;
+  }
+  .gtm-banner .close-banner:hover { color: #fff; }
+
+  /* ==================== GTM AUDIT SECTION ==================== */
+  .gtm-audit { padding: 80px 48px; }
+  .gtm-audit-inner {
+    max-width: 640px; margin: 0 auto; text-align: center; padding: 56px 48px;
+  }
+  .gtm-audit-inner .audit-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .gtm-audit-inner h2 {
+    font-size: 32px; font-weight: 800; letter-spacing: -1px;
+    margin-bottom: 14px; color: #fff;
+  }
+  .gtm-audit-inner p {
+    font-size: 16px; color: var(--text-body); line-height: 1.7; margin-bottom: 32px;
+  }
+  .gtm-audit-inner .audit-cta {
+    display: inline-block; background: var(--accent); color: #000;
+    padding: 16px 36px; border-radius: 10px; font-size: 15px;
+    font-weight: 600; text-decoration: none; transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(0,200,190,0.2);
+  }
+  .gtm-audit-inner .audit-cta:hover { background: #00e0d5; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,200,190,0.3); }
+
+  /* ==================== RESPONSIVE ==================== */
+  @media (max-width: 768px) {
+    .hero { padding: 60px 20px 40px; }
+    .hero h1 { letter-spacing: -1px; }
+    .offering-grid { grid-template-columns: 1fr; }
+    .diff-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr; }
+    .stat-row { flex-direction: column; align-items: center; gap: 16px; }
+    .problem, .how-it-works, .team { padding: 60px 20px; }
+    .offerings, .differentiator, .newsletter { padding: 60px 20px; }
+    .newsletter-inner { padding: 36px 24px; }
+    .newsletter-form { flex-direction: column; }
+    .newsletter-form button { width: 100%; }
+    .step { flex-direction: column; gap: 12px; }
+    .step-num { font-size: 36px; }
+    .proof-logos { gap: 36px; }
+    .proof-logos img { height: 36px; }
+    .gtm-audit { padding: 60px 20px; }
+    .gtm-audit-inner { padding: 36px 24px; }
+    .gtm-banner { font-size: 12px; padding: 10px 40px 10px 20px; }
+  }
+</style>
 </head>
-<body class="homepage">
+<body>
 
-  <!-- ───── ANNOUNCEMENT BANNER ───── -->
-  <div id="announcement-banner" style="background:#009e96;color:#fff;text-align:center;padding:0.55rem 2.5rem;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0.25rem 0.5rem;font-size:0.85rem;font-weight:500;position:fixed;top:0;left:0;right:0;z-index:1001;white-space:nowrap;">
-    <span>GTM not filling your pipeline?</span>
-    <a href="/gtm-audit" style="color:#fff;font-weight:700;text-decoration:underline;white-space:nowrap;">Free 2-min audit &rarr;</a>
-    <button id="banner-close" aria-label="Dismiss" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.75);font-size:1.1rem;cursor:pointer;line-height:1;padding:0;">&times;</button>
+<!-- ==================== GHOST CATS CANVAS ==================== -->
+<canvas id="ghostCanvas"></canvas>
+
+<!-- ==================== PAGE CONTENT ==================== -->
+<div class="page-content">
+
+<!-- GTM BANNER -->
+<div class="gtm-banner" id="gtmBanner">
+  Teams are shrinking. Relationships still drive revenue.<a href="#offerings">See how we help &rarr;</a>
+  <button class="close-banner" onclick="document.getElementById('gtmBanner').style.display='none'" aria-label="Close">&times;</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><img src="images/logos/Aloomii - final.png" alt="Aloomii"></a>
+  <ul class="nav-links">
+    <li><a href="#offerings">Services</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="https://aloomii.com/blog/">Blog</a></li>
+    <li><a href="#contact" class="nav-cta">Start a Conversation</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#offerings" onclick="closeMenu()">Services</a>
+  <a href="#how" onclick="closeMenu()">How It Works</a>
+  <a href="#team" onclick="closeMenu()">Team</a>
+  <a href="https://aloomii.com/blog/" onclick="closeMenu()">Blog</a>
+  <a href="#contact" onclick="closeMenu()">Start a Conversation</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" style="animation: heroFadeIn 1s ease forwards;">
+  <h1>Humans close deals.<br><span class="highlight">AI doesn't.</span></h1>
+  <p class="sub">We handle the 90% that builds the relationship. You show up for the conversation that counts.</p>
+  <div class="hero-ctas">
+    <a href="#offerings" class="btn-primary">See Our Services</a>
+    <a href="https://aloomii.com/gtm-audit/" class="btn-secondary">Take the 2-minute GTM check</a>
   </div>
-  <script>
-    function _adjustBanner() {
-      var b = document.getElementById('announcement-banner');
-      var nav = document.querySelector('.nav');
-      if (!b || b.style.display === 'none') { nav.style.top = '0'; document.body.style.paddingTop = '72px'; return; }
-      var h = b.offsetHeight;
-      nav.style.top = h + 'px';
-      document.body.style.paddingTop = (h + 72) + 'px';
-    }
-    document.addEventListener('DOMContentLoaded', _adjustBanner);
-    window.addEventListener('resize', _adjustBanner);
-    document.getElementById('banner-close').addEventListener('click', function() {
-      document.getElementById('announcement-banner').style.display = 'none';
-      _adjustBanner();
-    });
-  </script>
+</section>
 
-  <!-- ───── NAVIGATION ───── -->
-  <nav class="nav">
-    <a href="/" class="nav-logo">
-      <img src="images/logos/Aloomii - final.png" alt="Aloomii">
-    </a>
-
-
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="aloomii-os.html">Aloomii AI Workforce</a></li>
-      
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html" onclick="closeMenu()">Home</a>
-    <a href="aloomii-os.html" onclick="closeMenu()">Aloomii AI Workforce</a>
-    
-    <a href="#contact" onclick="closeMenu()">Contact</a>
+<!-- SOCIAL PROOF -->
+<div class="proof-bar reveal">
+  <div class="label">Built by operators from</div>
+  <div class="proof-logos">
+    <img src="images/logos/jpmorgan.png" alt="JP Morgan">
+    <img src="images/logos/mto.png" alt="Ontario Government">
+    <img src="images/logos/ibm.png" alt="IBM">
   </div>
+</div>
 
-  <!-- ───── HERO / UNICORN STUDIO ───── -->
-  <section class="hero">
-    <!-- Desktop -->
-    <div class="us-container us-desktop">
-      <div data-us-project="ZU1wuWl1J4Sp9Tl2q1mr" style="width:100%; height:100%;"></div>
+<!-- PROBLEM -->
+<section class="problem reveal">
+  <div class="problem-inner glass" style="padding: 56px 48px; max-width: 900px;">
+    <h2>Your CRM records contacts.<br>It doesn't protect relationships.</h2>
+    <p>Every relationship-dependent business has the same problem: hundreds of client relationships, no system for knowing which ones need attention right now. Signals get missed. Revenue walks out the door.</p>
+    <div class="stat-row reveal-stagger">
+      <div class="stat-card glass reveal-child"><div class="num">32%</div><div class="desc">annual client churn at small service businesses</div></div>
+      <div class="stat-card glass reveal-child"><div class="num">20x</div><div class="desc">more expensive to acquire a new client than to keep one</div></div>
+      <div class="stat-card glass reveal-child"><div class="num">10-15%</div><div class="desc">of client relationships are at elevated risk at any given time</div></div>
     </div>
+  </div>
+</section>
 
-    <!-- Mobile -->
-    <div class="us-container us-mobile">
-      <div data-us-project="ZU1wuWl1J4Sp9Tl2q1mr" style="width:100%; height:100%;"></div>
-    </div>
-  </section>
-
-  <!-- ───── SERVICES ───── -->
-  <section class="services">
-    <div class="content-wrapper">
-      <div class="services-grid fade-in">
-
-        <!-- Row 1 -->
-        <div class="service-card">
-          <h3>Business &amp; Creative Strategy</h3>
-          <p>We find the angle others miss. New revenue streams, market positioning, and product concepts grounded in what's actually working. We bring ideas that come with a plan to execute them.</p>
-        </div>
-
-        <div class="service-card">
-          <h3>Closing Deals &amp; Strategic Partnerships</h3>
-          <p>We don't just open doors, we close them. From structuring partnerships to getting signatures. Our enterprise experience (IBM, JP Morgan, Maersk) means we speak the language on both sides of the table.</p>
-        </div>
-
-        <!-- Row 2 -->
-        <div class="service-card">
-          <h3>AI Operations &amp; Agent Infrastructure</h3>
-          <p>You installed the tools. We make them work. Most companies invest in AI and see no return, not because the technology is wrong, but because nobody built the operations layer. We design, deploy, and manage AI systems that run your business processes autonomously. The difference between an AI demo and an AI employee is what we build.</p>
-        </div>
-
-        <div class="service-card">
-          <h3>Growth &amp; Brand Strategy</h3>
-          <p>We build the story, positioning, and go-to-market approach that makes companies impossible to ignore. Brand integrity, audience mapping, content pillars, and platform strategy, for your team's easy access.</p>
-        </div>
-
-        <!-- Row 3: Centered -->
-        <div class="service-card">
-          <h3>Content Intelligence &amp; Distribution</h3>
-          <p>AI-researched, human-reviewed content that compounds your authority across LinkedIn, X, TikTok, and AI search — published consistently, on-brand, without adding to your plate.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ───── GTM AUDIT BANNER ───── -->
-  <section style="padding:3.5rem 1.5rem;background:#0d1117;border-top:1px solid rgba(0,158,150,0.25);border-bottom:1px solid rgba(0,158,150,0.25);">
-    <div style="max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;">
-      <div>
-        <p style="font-size:0.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#009e96;margin:0 0 0.5rem;">Free Tool</p>
-        <h2 style="font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;margin:0 0 0.5rem;line-height:1.2;color:#fff;">Are You Pipeline-Ready?</h2>
-        <p style="margin:0;color:#b0b8c4;font-size:1rem;line-height:1.5;">10 questions. 2 minutes. Find out exactly what's broken in your GTM and what to fix first.</p>
-      </div>
-      <a href="/gtm-audit" style="display:inline-block;background:#009e96;color:#fff;font-size:1rem;font-weight:700;padding:0.85rem 2rem;border-radius:8px;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background 0.2s;" onmouseover="this.style.background='#00b8ad'" onmouseout="this.style.background='#009e96'">Take the Free Audit</a>
-    </div>
-  </section>
-
-  <!-- ───── CONTENT INTELLIGENCE ───── -->
-  
-
-  <!-- ───── AI PHILOSOPHY ───── -->
-  <section class="ai-philosophy fade-in">
-    <div class="content-wrapper">
-      <h2>Great Ideas + Great AI = &#x1F680;</h2>
-      <p class="subtitle">Bad Ideas + Great AI = &#x1F4C9;</p>
-    </div>
-  </section>
-
-  <!-- ───── PAST EXPERIENCE ───── -->
-  <section class="logo-section logo-section--experience" id="past-experience">
-    <div class="content-wrapper">
-      <p class="logo-section-title">Past Experience</p>
-      <div class="logo-grid">
-        <img src="images/logos/ibm.png" alt="IBM">
-        <img src="images/logos/jpmorgan.png" alt="JPMorgan">
-        <img src="images/logos/maersk.png" alt="Maersk">
-        <img src="images/logos/mto.png" alt="MTO">
-        <img src="images/logos/gpc.png" alt="GPC">
-        <img src="images/logos/ameriprise.png" alt="Ameriprise">
-        <img src="images/logos/unum.png" alt="Unum">
-        <img src="images/logos/dexmedia.png" alt="Dex Media">
-      </div>
-    </div>
-  </section>
-
-  <!-- ───── CURRENT CLIENTS ───── -->
-  <section class="logo-section logo-section--clients">
-    <div class="content-wrapper">
-      <p class="logo-section-title">Past and Current Clients Include</p>
-      <div class="logo-grid">
-        <img src="images/logos/logo-bis.png" alt="BIS">
-        <img src="images/logos/logo-pbn.png" alt="Pale Blue Nexus">
-        <img src="images/logos/logo1-cc.png" alt="CC">
-        <img src="images/logos/logo1-cs.png" alt="CS">
-        <img src="images/logos/logo1-tt.png" alt="TT">
-        <img src="images/logos/logo1-eg.png" alt="EG">
-      </div>
-    </div>
-  </section>
-
-  <!-- ───── WORKED DEALS ───── -->
-  <section class="logo-section logo-section--deals">
-    <div class="content-wrapper">
-      <p class="logo-section-title">Worked Deals With</p>
-      <div class="logo-grid">
-        <img src="images/logos/-logo1-ab.svg.png" alt="AB">
-        <img src="images/logos/logo-av.png" alt="AV">
-        <img src="images/logos/-logo1-dk.png" alt="DK">
-        <img src="images/logos/-logo1-tv.png" alt="TV">
-        <img src="images/logos/-logo1-ml.png" alt="ML">
-        <img src="images/logos/logo-raas.png" alt="RaaS">
-        <img src="images/logos/-logo1-pg.svg.png" alt="PG">
-        <img src="images/logos/-logo1-tz.png" alt="TZ">
-        <img src="images/logos/-logo1-socio.png" alt="Socio">
-        <img src="images/logos/-logo1-dl.png" alt="DL">
-      </div>
-    </div>
-  </section>
-
-  <!-- ───── CONTACT / CONSULTATION FORM ───── -->
-  <section class="contact-section fade-in" id="contact">
-    <div class="content-wrapper">
-      <div class="contact-header">
-        <h2>Start a Conversation</h2>
-        <p>Tell us where you are and where you want to go. We'll tell you honestly if we're the right fit.</p>
-      </div>
-
-      <form
-        id="consultationForm"
-        action="/api/contact"
-        method="POST"
-        webmcp-action="request_ai_consultation"
-        webmcp-description="Use this form to request a discovery call or consultation with Aloomii — a business strategy and AI operations agency that helps companies build real operational infrastructure, brand strategy, content systems, and close enterprise deals."
-        class="consultation-form"
-      >
-        <div class="form-grid">
-          <!-- Left Column -->
-          <div class="form-col">
-            <div class="form-group">
-              <label for="name">Full Name <span class="required">*</span></label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                webmcp-field="client_full_name"
-                placeholder="Jane Smith"
-                required
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="email">Business Email <span class="required">*</span></label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                webmcp-field="client_email"
-                placeholder="jane@company.com"
-                required
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="company">Company Name</label>
-              <input
-                type="text"
-                id="company"
-                name="company"
-                webmcp-field="client_company_name"
-                placeholder="Acme Corp"
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="service">What Are You Looking For?</label>
-              <select id="service" name="service" webmcp-field="client_service_interest">
-                <option value="" disabled selected>Select a service</option>
-                <option value="openclaw-nemoclaw">OpenClaw / NemoClaw Install and Configuration</option>
-                <option value="ai-operations">AI Operations &amp; Agent Infrastructure</option>
-                <option value="business-strategy">Business &amp; Creative Strategy</option>
-                <option value="growth-brand">Growth &amp; Brand Strategy</option>
-                <option value="deals-partnerships">Closing Deals &amp; Strategic Partnerships</option>
-                <option value="video-podcast">Video &amp; Podcast Production</option>
-                <option value="content-intelligence">Aloomii Content Intelligence / ACI (Signal / Engine / Command)</option>
-                <option value="full-service">Full-Service (Multiple)</option>
-                <option value="not-sure">Not Sure Yet — Let's Talk</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Right Column -->
-          <div class="form-col">
-            <div class="form-group">
-              <label for="budget">Budget Range</label>
-              <select id="budget" name="budget" webmcp-field="client_budget_range">
-                <option value="" disabled selected>Select a range</option>
-                <option value="under-5k">Under $5,000 / mo</option>
-                <option value="5k-10k">$5,000 – $10,000 / mo</option>
-                <option value="10k-25k">$10,000 – $25,000 / mo</option>
-                <option value="25k-plus">$25,000+ / mo</option>
-                <option value="project">Project-Based / One-Time</option>
-                <option value="discuss">Prefer to Discuss</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="timeline">Timeline</label>
-              <select id="timeline" name="timeline" webmcp-field="client_timeline">
-                <option value="" disabled selected>When do you want to start?</option>
-                <option value="immediately">Immediately</option>
-                <option value="1-2-weeks">Within 1–2 Weeks</option>
-                <option value="1-month">Within a Month</option>
-                <option value="exploring">Just Exploring</option>
-              </select>
-            </div>
-
-            <div class="form-group form-group--full">
-              <label for="details">Tell Us More</label>
-              <textarea
-                id="details"
-                name="details"
-                webmcp-field="client_project_details"
-                placeholder="What's the biggest problem you're trying to solve right now?"
-                rows="5"
-              ></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-submit">
-          <button type="submit" id="contactSubmitBtn">Book My Discovery Call</button>
-        </div>
-
-        <div class="form-success" id="contactSuccess">
-          <div class="success-icon">&#10003;</div>
-          <p>We got your request. Someone from the team will reach out within 24 hours.</p>
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <!-- ───── FOOTER ───── -->
-  <footer class="footer">
-    <div class="content-wrapper">
-      <div class="footer-content">
-        <ul class="footer-links">
-          <li><a href="/gtm-audit">Free GTM Audit</a></li>
-          <li><a href="#">Client Terms</a></li>
-          <li><a href="#">Privacy</a></li>
-          <li><a href="#">Terms and Conditions</a></li>
+<!-- OFFERINGS -->
+<section class="offerings" id="offerings">
+  <div class="offerings-inner">
+    <div class="section-label reveal">Two ways we help</div>
+    <h2 class="section-heading reveal">Choose where you need intelligence.</h2>
+    <p class="section-sub reveal">Whether you're a founder building pipeline or a business protecting existing relationships, the core is the same: know who to talk to, when, and why.</p>
+    <div class="offering-grid">
+      <div class="offering-card founders glass reveal-scale">
+        <div class="card-tag">For Founders</div>
+        <h3>The Table</h3>
+        <div class="price">$3,300/month &middot; 90-day engagement</div>
+        <p>Founder-focused GTM that runs while you build. We keep your voice in market, get you on podcasts, and deliver at least 12 conversations with qualified customers and partners in 90 days.</p>
+        <ul class="features">
+          <li>2 LinkedIn posts per week in your voice</li>
+          <li>2 podcast pitches per week to targeted shows</li>
+          <li>Weekly market intelligence brief</li>
+          <li>Weekly competitor notes + trend signals</li>
+          <li>1-hour strategy call every week</li>
+          <li>All deliverables are reviewed by a human</li>
         </ul>
+        <div class="card-cta-row">
+          <a href="#contact" class="card-cta">Start a Conversation</a>
+          <a href="https://aloomii.com/table" class="card-cta card-cta-outline">More Information</a>
+        </div>
+      </div>
+      <div class="offering-card businesses glass reveal-scale">
+        <div class="card-tag">For Businesses With More Than 100 Accounts</div>
+        <h3>Relationship Intelligence</h3>
+        <div class="price">$2,000-8,000/month &middot; Based on CRM contact size</div>
+        <p>We monitor the relationships that drive your revenue and tell your team exactly who needs attention, when, and why. Works on top of your existing CRM.</p>
+        <ul class="features">
+          <li>Weekly Relationship Health Brief</li>
+          <li>Reconnection prompts: who to call and what to say</li>
+          <li>Relationship signals your team doesn't have time to catch</li>
+          <li>Monthly relationship report. Top issues flagged red, amber, green. Dashboard or inbox, your call.</li>
+          <li>Proactively drafted client communications</li>
+          <li>CRM hygiene: regular cleanup of stale data</li>
+        </ul>
+        <a href="#contact" class="card-cta">Start a Conversation</a>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <!-- ───── UNICORN STUDIO SCRIPT ───── -->
-  <script type="text/javascript">
-    !function(){
-      var u=window.UnicornStudio;
-      if(u&&u.init){
-        if(document.readyState==="loading"){
-          document.addEventListener("DOMContentLoaded",function(){u.init()})
-        }else{u.init()}
-      }else{
-        window.UnicornStudio={isInitialized:!1};
-        var i=document.createElement("script");
-        i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.4/dist/unicornStudio.umd.js";
-        i.onload=function(){
-          if(document.readyState==="loading"){
-            document.addEventListener("DOMContentLoaded",function(){UnicornStudio.init()})
-          }else{UnicornStudio.init()}
-        };
-        (document.head||document.body).appendChild(i)
+<!-- HOW IT WORKS -->
+<section class="how-it-works reveal" id="how">
+  <div class="glass" style="padding: 56px 48px;">
+    <div class="section-label">How it works</div>
+    <h2 class="section-heading">AI scans. Humans judge. You act.</h2>
+    <div class="steps reveal-stagger">
+      <div class="step reveal-child"><div class="step-num">01</div><div class="step-content"><h3>Right place, right time, right relationship</h3><p>Your CRM, your socials (LinkedIn/X), your future clients &amp; partners. We connect to the signals that matter, not just what's in your database, but what's happening around your relationships in real time.</p></div></div>
+      <div class="step reveal-child"><div class="step-num">02</div><div class="step-content"><h3>AI detects what humans miss</h3><p>Our agents monitor hundreds of touchpoints simultaneously: client activity, competitor moves, life events, job changes, market shifts, engagement signals.</p></div></div>
+      <div class="step reveal-child"><div class="step-num">03</div><div class="step-content"><h3>Humans add the last 20%</h3><p>AI gets you 80% of the way there. The last 20%, tone, timing, judgment, the sense that something is off or an opportunity is opening, that's where our team steps in.</p></div></div>
+      <div class="step reveal-child"><div class="step-num">04</div><div class="step-content"><h3>You get a clear action list</h3><p>Call this person. For this reason. Say this. Send this message. Show up to this event.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF POINT -->
+<section class="proof-point reveal">
+  <div class="proof-point-inner">
+    <div class="proof-story glass reveal-scale" style="max-width: 750px; margin: 0 auto;">
+      <div class="eyebrow">Real Story</div>
+      <h3>17 years from 5 emails.</h3>
+      <p>Jim Rogers wasn't a lead. He was a name in a CRM that hadn't been touched in months. Our system flagged a signal, drafted the outreach, and our team refined the timing. Five emails later, he became a 17-year client relationship.</p>
+      <span class="proof-highlight">That's what relationship intelligence looks like.</span>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIATOR -->
+<section class="differentiator reveal">
+  <div class="differentiator-inner">
+    <h2 class="section-heading">What we are not.</h2>
+    <div class="diff-grid reveal-stagger">
+      <div class="diff-card glass reveal-child"><h3>Not a traditional agency</h3><p>We don't spend three months onboarding. We don't send reports full of impressions. We track pipeline, relationships, and conversations that matter.</p></div>
+      <div class="diff-card glass reveal-child"><h3>Not an AI tool you manage</h3><p>We don't hand you a login and wish you luck. Most AI tools get abandoned in 60 days. We handle the review, the tone, the decisions.</p></div>
+      <div class="diff-card glass reveal-child"><h3>Not a CRM</h3><p>We work with your existing CRM, Salesforce, HubSpot, Wealthbox, Bullhorn, whatever you use. We add the intelligence layer they're missing.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCROLLING TICKER -->
+<div class="ticker-wrap reveal">
+  <div class="ticker">
+    <span>Relationship Intelligence</span><span>AI-Powered Insights</span><span>Founder-Focused GTM</span>
+    <span>Revenue Protection</span><span>Signal Detection</span><span>Human Judgment</span>
+    <span>Relationship Intelligence</span><span>AI-Powered Insights</span><span>Founder-Focused GTM</span>
+    <span>Revenue Protection</span><span>Signal Detection</span><span>Human Judgment</span>
+  </div>
+</div>
+
+<!-- GTM AUDIT -->
+<section class="gtm-audit reveal" id="gtm-audit">
+  <div class="gtm-audit-inner glass">
+    <div class="audit-badge">Not sure where to start?</div>
+    <h2>Take the 2-minute GTM Audit</h2>
+    <p>Find out exactly what's broken in your pipeline and what to fix first.</p>
+    <p style="font-size: 14px; color: var(--text-body); margin-bottom: 4px; margin-top: 20px;">10 questions. 2 minutes. Instant score.</p>
+    <p style="font-size: 14px; color: var(--text-body); margin-bottom: 4px;">Built for founders at $50K-$150K MRR with no dedicated marketing function.</p>
+    <p style="font-size: 14px; color: var(--accent); margin-bottom: 28px;">Free. No pitch. Just the diagnosis.</p>
+    <a href="https://aloomii.com/gtm-audit/" class="audit-cta">Take the Audit</a>
+  </div>
+</section>
+
+<!-- VERTICALS -->
+<section class="verticals reveal">
+  <h2>Built for businesses that run on relationships.</h2>
+  <p class="sub">If your revenue depends on who you know and how well you know them, we can help.</p>
+  <div class="vertical-pills reveal-stagger">
+    <div class="vertical-pill reveal-child">B2B Tech &amp; SaaS</div>
+    <div class="vertical-pill reveal-child">Real Estate Brokerages</div>
+    <div class="vertical-pill reveal-child">Consulting Firms</div>
+    <div class="vertical-pill reveal-child">Customer Success Teams</div>
+    <div class="vertical-pill reveal-child">Event &amp; Conference Companies</div>
+    <div class="vertical-pill reveal-child">AI-Native Startups</div>
+    <div class="vertical-pill reveal-child">Contractors &amp; Trades</div>
+    <div class="vertical-pill reveal-child">Web3 &amp; Blockchain</div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team reveal" id="team">
+  <div class="section-label">Who runs this</div>
+  <h2 class="section-heading">Operators, not consultants.</h2>
+  <div class="team-grid reveal-stagger">
+    <div class="team-member glass reveal-child">
+      <img src="images/yohann-calpu.jpg" alt="Yohann Calpu" class="team-member-photo">
+      <div class="team-member-info">
+        <h3>Yohann Calpu</h3>
+        <div class="role">Co-Founder &middot; Strategy &amp; Judgment</div>
+        <p>Enterprise operator turned startup builder. JP Morgan, IBM, Ontario Government, then CryptoSlam, where he closed $2M in deals and helped raise a $9M seed round backed by Mark Cuban. He runs every strategy call. He reviews every deliverable.</p>
+      </div>
+    </div>
+    <div class="team-member glass reveal-child">
+      <img src="images/jenny-calpu.jpeg" alt="Jenny Calpu" class="team-member-photo">
+      <div class="team-member-info">
+        <h3>Jenny Calpu</h3>
+        <div class="role">Co-Founder &middot; Creative Director</div>
+        <p>Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking, taught herself design, video editing, web development, and AI creative tools. She owns brand voice, visual identity, and the emotional intelligence that makes the work land.</p>
+      </div>
+    </div>
+  </div>
+  <div class="team-bottom glass reveal"><p><strong>The human layer is the product.</strong> AI scans signals and drafts insights. Our team reviews everything before it reaches yours. No generic output. No hallucinated data. No CRM pollution.</p></div>
+</section>
+
+<!-- BLOG PREVIEW -->
+<section class="blog-preview reveal">
+  <div class="blog-preview-inner">
+    <div class="section-label">From the blog</div>
+    <h2 class="section-heading">Ideas we're thinking about.</h2>
+    <div class="blog-grid reveal-stagger">
+      <div class="blog-card glass reveal-child">
+        <div class="blog-tag">Relationships</div>
+        <h3>The Client You're About to Lose</h3>
+        <p>Most churn doesn't start with a complaint. It starts with silence. Here's how to read the signals before it's too late.</p>
+        <a href="https://aloomii.com/blog/the-client-youre-about-to-lose/" class="blog-link">Read more &rarr;</a>
+      </div>
+      <div class="blog-card glass reveal-child">
+        <div class="blog-tag">Founder Playbooks</div>
+        <h3>What Is a Fractional GTM Team? (And When a Startup Actually Needs One)</h3>
+        <p>A fractional GTM team runs your go-to-market operations for a fixed monthly fee. Here is what you get, what it costs, and how it compares to a hire, an agency, and doing it yourself.</p>
+        <a href="https://aloomii.com/blog/fractional-gtm-team-startups-what-it-actually-costs/" class="blog-link">Read more &rarr;</a>
+      </div>
+      <div class="blog-card glass reveal-child">
+        <div class="blog-tag">AI Sales System</div>
+        <h3>Business Development 2.0: The AI Agent Manager</h3>
+        <p>The BD role isn't dead. It's evolving. Here's what BD 2.0 looks like when you manage a fleet of AI agents instead of sending emails.</p>
+        <a href="https://aloomii.com/blog/bus-dev-2-0/" class="blog-link">Read more &rarr;</a>
+      </div>
+    </div>
+    <div class="blog-view-all">
+      <a href="https://aloomii.com/blog/">View All Posts &rarr;</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section class="contact-section reveal" id="contact">
+  <div class="contact-header">
+    <h2>Start a Conversation</h2>
+    <p>Tell us where you are and where you want to go. We'll tell you honestly if we're the right fit.</p>
+  </div>
+  <form id="consultationForm" action="/api/contact" method="POST" class="consultation-form">
+    <div class="form-grid">
+      <div class="form-col">
+        <div class="form-group">
+          <label for="name">Full Name <span class="required">*</span></label>
+          <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Business Email <span class="required">*</span></label>
+          <input type="email" id="email" name="email" placeholder="jane@company.com" required>
+        </div>
+        <div class="form-group">
+          <label for="company">Company Name</label>
+          <input type="text" id="company" name="company" placeholder="Acme Corp">
+        </div>
+        <div class="form-group">
+          <label for="service">What Are You Looking For?</label>
+          <select id="service" name="service">
+            <option value="" disabled selected>Select a service</option>
+            <option value="the-table">The Table (Founder-Focused GTM)</option>
+            <option value="relationship-intelligence">Relationship Intelligence</option>
+            <option value="both">Both</option>
+            <option value="not-sure">Not Sure Yet — Let's Talk</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-col">
+        <div class="form-group">
+          <label for="timeline">Timeline</label>
+          <select id="timeline" name="timeline">
+            <option value="" disabled selected>When do you want to start?</option>
+            <option value="immediately">Immediately</option>
+            <option value="1-2-weeks">Within 1–2 Weeks</option>
+            <option value="1-month">Within a Month</option>
+            <option value="exploring">Just Exploring</option>
+          </select>
+        </div>
+        <div class="form-group form-group--full">
+          <label for="details">Tell Us More</label>
+          <textarea id="details" name="details" placeholder="What's the biggest problem you're trying to solve right now?" rows="5"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="form-submit">
+      <button type="submit" id="contactSubmitBtn">Book My Discovery Call</button>
+    </div>
+    <div class="form-success" id="contactSuccess">
+      <div class="success-icon">&#10003;</div>
+      <p>We got your request. Someone from the team will reach out within 24 hours.</p>
+    </div>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="images/logos/Aloomii - final.png" alt="Aloomii"></div>
+      <p>Relationship intelligence for businesses that run on trust. AI scans. Humans judge. You act.</p>
+    </div>
+    <div class="footer-col"><h4>Services</h4><a href="#offerings">The Table</a><a href="#offerings">Relationship Intelligence</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="#team">About</a><a href="https://aloomii.com/blog/">Blog</a><a href="#contact">Contact</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="client-terms.html">Client Terms</a></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Aloomii &middot; <a href="https://palebluenexus.com" target="_blank">Pale Blue Nexus</a></span>
+    <div class="footer-social"><a href="https://linkedin.com" target="_blank">LinkedIn</a><a href="mailto:yohann@aloomii.com">Email</a></div>
+  </div>
+</footer>
+
+</div><!-- /page-content -->
+
+<!-- ==================== GHOST CATS BACKGROUND ==================== -->
+<script>
+(function() {
+  const canvas = document.getElementById('ghostCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  const mouse = { x: -9999, y: -9999 };
+
+  function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+
+  // ==================== TINY STAR (drifting) ====================
+  class TinyStar {
+    constructor() {
+      this.bx = Math.random()*w; this.by = Math.random()*h;
+      this.size = Math.random()*1.4+0.2; this.alpha = Math.random()*0.5+0.1;
+      this.speed = 0.005+Math.random()*0.015; this.phase = Math.random()*Math.PI*2;
+      this.depth = 0.2+Math.random()*0.8;
+      const driftAngle = Math.random()*Math.PI*2;
+      const driftSpeed = 0.05 + Math.random()*0.15;
+      this.vx = Math.cos(driftAngle) * driftSpeed;
+      this.vy = Math.sin(driftAngle) * driftSpeed;
+    }
+    update() {
+      this.phase += this.speed;
+      this.bx += this.vx; this.by += this.vy;
+      if (this.bx < -10) this.bx = w + 10;
+      if (this.bx > w + 10) this.bx = -10;
+      if (this.by < -10) this.by = h + 10;
+      if (this.by > h + 10) this.by = -10;
+      const m = mouse.x === -9999 ? { x: w/2, y: h/2 } : mouse;
+      this.x = this.bx + (m.x - w/2) * 0.015 * this.depth;
+      this.y = this.by + (m.y - h/2) * 0.015 * this.depth;
+    }
+    draw() {
+      let a = this.alpha*(0.4+0.6*Math.sin(this.phase));
+      let s = this.size;
+      // Glow
+      if (mouse.x !== -9999) {
+        const dx = this.x - mouse.x, dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist < 200) { const f = 1-dist/200; a += f*0.4; s += f*2; }
       }
-    }();
-  </script>
-
-  <!-- ───── SCRIPTS ───── -->
-  <script>
-    // Mobile menu toggle
-    function toggleMenu() {
-      document.querySelector('.hamburger').classList.toggle('active');
-      document.getElementById('mobileMenu').classList.toggle('active');
+      ctx.beginPath(); ctx.arc(this.x, this.y, s, 0, Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${a})`; ctx.fill();
     }
+  }
 
-    function closeMenu() {
-      document.querySelector('.hamburger').classList.remove('active');
-      document.getElementById('mobileMenu').classList.remove('active');
+  // ==================== GHOST CAT ====================
+  class GhostCat {
+    constructor(personality) {
+      this.x = Math.random()*w; this.y = Math.random()*h;
+      this.targetX = this.x; this.targetY = this.y;
+      this.eyeGap = 18 + Math.random()*12;
+      this.eyeSize = 8 + Math.random()*10;
+      this.depth = 0.3 + Math.random()*0.8;
+      this.alpha = 0; this.maxAlpha = 0.12 + Math.random()*0.08;
+      this.lookAngle = Math.random()*Math.PI*2;
+      this.blinkPhase = Math.random()*Math.PI*2;
+      this.blinkSpeed = 0.004 + Math.random()*0.004;
+      const pals = [[0,200,190],[0,180,210],[100,70,200],[0,230,200]];
+      this.color = pals[Math.floor(Math.random()*pals.length)];
+      this.state = 'gone'; this.stateTimer = Math.random()*400+100;
+      this.speed = 0; this.history = []; this.maxHistory = 20;
+      this.personality = personality || 'watcher';
+      this.pounceCount = 0; this.maxPounces = 2 + Math.floor(Math.random()*4);
+      this.blinkCycles = 0; this.maxBlinkCycles = 3 + Math.floor(Math.random()*5);
     }
-
-    // Scroll fade-in animations
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+    transition(state) {
+      this.state = state;
+      if (state === 'appear') { this.stateTimer = 40 + Math.random()*60; }
+      else if (state === 'watch') {
+        if (this.personality === 'blinker') { this.stateTimer = 400 + Math.random()*800; this.blinkCycles = 0; }
+        else if (this.personality === 'zoomer') { this.stateTimer = 150 + Math.random()*300; }
+        else if (this.personality === 'pouncer') { this.stateTimer = 200 + Math.random()*400; this.pounceCount = 0; }
+        else { this.stateTimer = 300 + Math.random()*600; }
+      }
+      else if (state === 'blink_out') { this.stateTimer = 18 + Math.random()*10; }
+      else if (state === 'gone') { this.stateTimer = 200 + Math.random()*500; this.x = Math.random()*w; this.y = Math.random()*h; this.history = []; }
+      else if (state === 'blink_in') { this.stateTimer = 25 + Math.random()*15; }
+      else if (state === 'dart') { this.targetX = this.x + (Math.random()-0.5)*w*0.6; this.targetY = this.y + (Math.random()-0.5)*h*0.4; this.stateTimer = 20 + Math.random()*35; this.speed = 0; }
+      else if (state === 'pounce') {
+        const dist = 80 + Math.random()*180, angle = Math.random()*Math.PI*2;
+        this.targetX = Math.max(50, Math.min(w-50, this.x + Math.cos(angle)*dist));
+        this.targetY = Math.max(50, Math.min(h-50, this.y + Math.sin(angle)*dist));
+        this.stateTimer = 10 + Math.random()*15; this.speed = 0; this.pounceCount++;
+      }
+      else if (state === 'zoom') { this.targetX = Math.random()*w; this.targetY = Math.random()*h; this.stateTimer = 15 + Math.random()*20; this.speed = 0; }
+      else if (state === 'blink_pause') { this.stateTimer = 30 + Math.random()*40; this.blinkCycles++; }
+    }
+    update() {
+      this.blinkPhase += this.blinkSpeed; this.stateTimer--;
+      if (this.state === 'appear') {
+        this.alpha = Math.min(this.maxAlpha, this.alpha + this.maxAlpha/30);
+        if (this.stateTimer <= 0) this.transition('watch');
+      } else if (this.state === 'watch') {
+        this.alpha = this.maxAlpha;
+        // Curious: lock on intensely
+        if (mouse.x !== -9999) {
+          const target = Math.atan2(mouse.y - this.y, mouse.x - this.x);
+          this.lookAngle += (target - this.lookAngle) * 0.08;
+        } else { this.lookAngle += Math.sin(this.blinkPhase*0.5)*0.01; }
+        this.x += Math.sin(this.blinkPhase*0.7)*0.15;
+        this.y += Math.cos(this.blinkPhase*0.5)*0.1;
+        if (this.stateTimer <= 0) {
+          if (this.personality === 'zoomer') this.transition(Math.random() < 0.6 ? 'zoom' : 'blink_out');
+          else if (this.personality === 'pouncer') this.transition(this.pounceCount < this.maxPounces ? 'pounce' : 'blink_out');
+          else if (this.personality === 'blinker') this.transition(this.blinkCycles < this.maxBlinkCycles ? 'blink_pause' : (Math.random() < 0.3 ? 'dart' : 'blink_out'));
+          else this.transition(Math.random() < 0.25 ? 'dart' : 'blink_out');
         }
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -40px 0px'
+        // Playful: spontaneous darts
+        if (mouse.x !== -9999 && Math.random() < 0.003) this.transition('dart');
+      } else if (this.state === 'blink_out') {
+        this.alpha = this.maxAlpha * (this.stateTimer / 15);
+        if (this.stateTimer <= 0) this.transition('gone');
+      } else if (this.state === 'gone') {
+        this.alpha = 0;
+        if (this.stateTimer <= 0) this.transition('blink_in');
+      } else if (this.state === 'blink_in') {
+        this.alpha = this.maxAlpha * (1 - this.stateTimer / 20);
+        if (this.stateTimer <= 0) this.transition('watch');
+      } else if (this.state === 'dart' || this.state === 'zoom') {
+        const topSpeed = this.state === 'zoom' ? 28 : 18;
+        this.speed = Math.min(this.speed + (this.state === 'zoom' ? 2.5 : 1.2), topSpeed);
+        const dx = this.targetX - this.x, dy = this.targetY - this.y, dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist > 1) { this.x += (dx/dist)*this.speed; this.y += (dy/dist)*this.speed; this.lookAngle = Math.atan2(dy, dx); }
+        this.history.push({x:this.x, y:this.y});
+        if (this.history.length > this.maxHistory) this.history.shift();
+        this.alpha = this.maxAlpha * Math.max(0, this.stateTimer / 30);
+        if (this.stateTimer <= 0) this.transition('gone');
+      } else if (this.state === 'pounce') {
+        this.speed = Math.min(this.speed + 3, 22);
+        const dx = this.targetX - this.x, dy = this.targetY - this.y, dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist > 1) { this.x += (dx/dist)*this.speed; this.y += (dy/dist)*this.speed; this.lookAngle = Math.atan2(dy, dx); }
+        this.history.push({x:this.x, y:this.y});
+        if (this.history.length > this.maxHistory) this.history.shift();
+        if (this.stateTimer <= 0) this.transition('watch');
+      } else if (this.state === 'blink_pause') {
+        this.alpha = this.maxAlpha;
+        this.x += Math.sin(this.blinkPhase*0.7)*0.1;
+        this.y += Math.cos(this.blinkPhase*0.5)*0.08;
+        if (this.stateTimer <= 0) this.transition('watch');
+      }
+    }
+    drawEye(ex, ey, blink) {
+      const [r,g,b] = this.color;
+      let a = this.alpha, s = this.eyeSize;
+      // Glow
+      if (mouse.x !== -9999) {
+        const dx = ex-mouse.x, dy = ey-mouse.y, dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist < 200) { const f = 1-dist/200; a += f*0.15; s += f*4; }
+      }
+      // Curious: wider eyes near mouse
+      if (mouse.x !== -9999) {
+        const dx = ex-mouse.x, dy = ey-mouse.y, dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist < 300) { const f = 1-dist/300; a += f*0.1; s += f*5; }
+      }
+      const scaleY = 0.3 + 0.7*blink;
+      const grad = ctx.createRadialGradient(ex,ey,0,ex,ey,s*1.5);
+      grad.addColorStop(0, `rgba(${r},${g},${b},${a*blink})`);
+      grad.addColorStop(0.4, `rgba(${r},${g},${b},${a*0.4*blink})`);
+      grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+      ctx.save(); ctx.translate(ex,ey); ctx.scale(1, scaleY); ctx.translate(-ex,-ey);
+      ctx.beginPath(); ctx.arc(ex,ey,s*1.5,0,Math.PI*2); ctx.fillStyle = grad; ctx.fill();
+      const px = ex + Math.cos(this.lookAngle)*s*0.15;
+      const py = ey + Math.sin(this.lookAngle)*s*0.15;
+      ctx.beginPath(); ctx.arc(px,py,s*0.3,0,Math.PI*2);
+      ctx.fillStyle = `rgba(${r},${g},${b},${a*2.5*blink})`; ctx.fill();
+      ctx.restore();
+    }
+    draw() {
+      if (this.alpha < 0.005) return;
+      const m = mouse.x === -9999 ? { x: w/2, y: h/2 } : mouse;
+      const px = this.x + (m.x - w/2)*0.015*this.depth;
+      const py = this.y + (m.y - h/2)*0.015*this.depth;
+      if ((this.state === 'dart' || this.state === 'zoom' || this.state === 'pounce') && this.history.length > 2) {
+        const [r,g,b] = this.color;
+        for (let i = 1; i < this.history.length; i++) {
+          const t = i/this.history.length;
+          const hpx = this.history[i].x + (m.x-w/2)*0.015*this.depth;
+          const hpy = this.history[i].y + (m.y-h/2)*0.015*this.depth;
+          const hpx2 = this.history[i-1].x + (m.x-w/2)*0.015*this.depth;
+          const hpy2 = this.history[i-1].y + (m.y-h/2)*0.015*this.depth;
+          ctx.beginPath(); ctx.moveTo(hpx2,hpy2); ctx.lineTo(hpx,hpy);
+          ctx.strokeStyle = `rgba(${r},${g},${b},${t*this.alpha*0.25})`;
+          ctx.lineWidth = this.eyeSize*t*0.3; ctx.lineCap='round'; ctx.stroke();
+        }
+      }
+      const blinkRaw = Math.sin(this.blinkPhase);
+      let blink = 1;
+      if (this.state === 'watch' && blinkRaw > 0.92) blink = 1-(blinkRaw-0.92)/0.08;
+      if (this.state === 'blink_out') blink = this.stateTimer/15;
+      if (this.state === 'blink_in') blink = 1-this.stateTimer/20;
+      if (this.state === 'blink_pause') { blink = Math.sin(this.blinkPhase*8) > 0.3 ? 1 : 0.1; }
+      this.drawEye(px - this.eyeGap/2, py, blink);
+      this.drawEye(px + this.eyeGap/2, py, blink);
+    }
+  }
+
+  let stars = [], cats = [];
+
+  function init() {
+    const starCount = Math.min(Math.floor(w*h/7000), 130);
+    stars = []; for (let i=0;i<starCount;i++) stars.push(new TinyStar());
+    const personalities = ['watcher','watcher','watcher','blinker','blinker','blinker','zoomer','zoomer','pouncer','pouncer','pouncer','watcher'];
+    cats = [];
+    for (let i=0;i<12;i++) {
+      const gc = new GhostCat(personalities[i]);
+      gc.stateTimer = Math.random()*400;
+      cats.push(gc);
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0,0,w,h);
+    try {
+      for (const s of stars) { s.update(); s.draw(); }
+      for (const c of cats) { c.update(); c.draw(); }
+    } catch(e) { console.error('Animation error:', e); }
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', () => { resize(); init(); });
+  window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+  window.addEventListener('touchmove', e => { if(e.touches.length) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; } }, { passive: true });
+  window.addEventListener('touchend', () => { mouse.x = -9999; mouse.y = -9999; });
+
+  resize(); init(); animate();
+})();
+</script>
+
+<!-- ==================== PAGE SCRIPTS ==================== -->
+<script>
+  function toggleMenu() { document.querySelector('.hamburger').classList.toggle('active'); document.getElementById('mobileMenu').classList.toggle('active'); }
+  function closeMenu() { document.querySelector('.hamburger').classList.remove('active'); document.getElementById('mobileMenu').classList.remove('active'); }
+
+  // ==================== SCROLL REVEAL ====================
+  // Observe all reveal elements for entrance animation
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
     });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal, .reveal-scale, .reveal-stagger').forEach(el => revealObserver.observe(el));
 
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  // Consultation form submission
+  const consultationForm = document.getElementById('consultationForm');
+  if (consultationForm) {
+    consultationForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('contactSubmitBtn');
+      const originalText = btn.textContent;
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
 
-    // Consultation form submission
-    const consultationForm = document.getElementById('consultationForm');
-    if (consultationForm) {
-      consultationForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('contactSubmitBtn');
-        const originalText = btn.textContent;
-        btn.textContent = 'Sending...';
-        btn.disabled = true;
+      const formData = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        company: document.getElementById('company').value.trim(),
+        service: document.getElementById('service').value,
+        budget: document.getElementById('budget').value,
+        timeline: document.getElementById('timeline').value,
+        details: document.getElementById('details').value.trim(),
+      };
 
-        const formData = {
-          name: document.getElementById('name').value.trim(),
-          email: document.getElementById('email').value.trim(),
-          company: document.getElementById('company').value.trim(),
-          service: document.getElementById('service').value,
-          budget: document.getElementById('budget').value,
-          timeline: document.getElementById('timeline').value,
-          details: document.getElementById('details').value.trim(),
-        };
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
 
-        try {
-          const res = await fetch('/api/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
-          });
-
-          if (res.ok) {
-            consultationForm.querySelector('.form-grid').style.display = 'none';
-            consultationForm.querySelector('.form-submit').style.display = 'none';
-            document.getElementById('contactSuccess').classList.add('visible');
-          } else {
-            btn.textContent = 'Something went wrong — try again';
-            btn.disabled = false;
-            setTimeout(() => { btn.textContent = originalText; }, 3000);
-          }
-        } catch (err) {
-          btn.textContent = 'Connection error — try again';
+        if (res.ok) {
+          consultationForm.querySelector('.form-grid').style.display = 'none';
+          consultationForm.querySelector('.form-submit').style.display = 'none';
+          document.getElementById('contactSuccess').classList.add('visible');
+        } else {
+          btn.textContent = 'Something went wrong — try again';
           btn.disabled = false;
           setTimeout(() => { btn.textContent = originalText; }, 3000);
         }
-      });
-    }
-  </script>
+      } catch (err) {
+        btn.textContent = 'Connection error — try again';
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = originalText; }, 3000);
+      }
+    });
+  }
+
+</script>
 
 </body>
 </html>
