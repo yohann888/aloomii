@@ -922,7 +922,7 @@
 </section>
 
 <!-- GTM BAR -->
-<a href="https://aloomii.com/gtm-audit/" class="gtm-bar">Take the 2-minute GTM audit to see how you're doing &rarr;</a>
+<a href="https://aloomii.com/gtm-audit/" class="gtm-bar">How much revenue are you leaving on the table? Find out in 2 minutes &rarr;</a>
 
 <!-- FOOTER -->
 <footer class="site-footer">
@@ -1202,9 +1202,8 @@
         name: document.getElementById('name').value.trim(),
         email: document.getElementById('email').value.trim(),
         company: document.getElementById('company').value.trim(),
-        service: document.getElementById('service').value,
-        budget: document.getElementById('budget').value,
-        timeline: document.getElementById('timeline').value,
+        service: document.getElementById('service') ? document.getElementById('service').value : '',
+        timeline: document.getElementById('timeline') ? document.getElementById('timeline').value : '',
         details: document.getElementById('details').value.trim(),
       };
 
