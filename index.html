@@ -56,9 +56,11 @@
     top: 0; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
     padding: 18px 48px;
-    background: rgba(11,11,20,0.75);
+    background: rgba(11,11,20,0.92);
     backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
     border-bottom: 1px solid var(--border);
+    -webkit-transform: translateZ(0); transform: translateZ(0);
+    will-change: transform;
   }
   .nav-logo { text-decoration: none; }
   .nav-logo img { height: 36px; width: auto; }
@@ -128,12 +130,12 @@
   }
   .btn-primary:hover { background: #00e0d5; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,200,190,0.3); }
   .btn-secondary {
-    display: inline-block; background: transparent; color: #fff;
+    display: inline-block; background: transparent; color: var(--accent);
     padding: 16px 36px; border-radius: 10px; font-size: 15px;
     font-weight: 600; text-decoration: none;
-    border: 2px solid rgba(255,255,255,0.35); transition: all 0.3s;
+    border: 2px solid var(--accent); transition: all 0.3s;
   }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .btn-secondary:hover { background: rgba(0,200,190,0.1); transform: translateY(-2px); }
 
   /* ==================== SOCIAL PROOF ==================== */
   .proof-bar { padding: 48px; text-align: center; border-top: 1px solid var(--border); }
@@ -369,8 +371,16 @@
     .form-grid { grid-template-columns: 1fr; }
   }
 
+  /* ==================== GTM BAR ==================== */
+  .gtm-bar {
+    display: block; background: var(--accent); color: #000; text-align: center;
+    padding: 18px 24px; font-size: 15px; font-weight: 600; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .gtm-bar:hover { background: #00e0d5; }
+
   /* ==================== FOOTER ==================== */
-  .site-footer { color: var(--text-muted); padding: 64px 48px 40px; border-top: 2px solid var(--accent); }
+  .site-footer { color: var(--text-muted); padding: 64px 48px 40px; }
   .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
   .footer-brand .footer-logo img { height: 28px; width: auto; margin-bottom: 16px; }
   .footer-brand p { font-size: 14px; line-height: 1.6; color: var(--text-muted); max-width: 280px; }
@@ -541,6 +551,8 @@
     color: #fff;
     z-index: 101;
     position: relative;
+    -webkit-transform: translateZ(0); transform: translateZ(0);
+    will-change: transform;
   }
   .gtm-banner a {
     color: #fff;
@@ -645,7 +657,7 @@
   <p class="sub">We handle the 90% that builds the relationship. You show up for the conversation that counts.</p>
   <div class="hero-ctas">
     <a href="#offerings" class="btn-primary">See Our Services</a>
-    <a href="https://aloomii.com/gtm-audit/" class="btn-secondary">Take the 2-minute GTM check</a>
+    <a href="https://aloomii.com/gtm-audit/" class="btn-secondary">Take the 2-minute GTM audit</a>
   </div>
 </section>
 
@@ -908,6 +920,9 @@
     </div>
   </form>
 </section>
+
+<!-- GTM BAR -->
+<a href="https://aloomii.com/gtm-audit/" class="gtm-bar">Take the 2-minute GTM audit to see how you're doing &rarr;</a>
 
 <!-- FOOTER -->
 <footer class="site-footer">
