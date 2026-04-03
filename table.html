@@ -996,6 +996,10 @@
         <input type="text" name="name" required style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;">
       </div>
       <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">Email <span style="color:#c0392b;">*</span></label>
+        <input type="email" name="email" required placeholder="you@company.com" style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;">
+      </div>
+      <div style="margin-bottom:1.25rem;">
         <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">Company <span style="color:#c0392b;">*</span></label>
         <input type="text" name="company" required style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;">
       </div>
@@ -1037,6 +1041,7 @@
         btn.disabled = true;
         var data = {
           name: form.querySelector('[name="name"]').value.trim(),
+          email: form.querySelector('[name="email"]').value.trim(),
           company: form.querySelector('[name="company"]').value.trim(),
           whatYouSell: form.querySelector('[name="whatYouSell"]').value.trim(),
           mrr: form.querySelector('[name="mrr"]').value,
