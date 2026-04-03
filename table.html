@@ -602,9 +602,9 @@
       </div>
       <div class="deliverable">
         <div class="deliverable-icon">🎙</div>
-        <div class="qty">2 per week</div>
-        <h3>Podcast Pitches</h3>
-        <p>Sent to shows your buyers actually listen to. We research the right ones, write pitches that lead with your story, and handle all follow-up. You show up and talk.</p>
+        <div class="qty">Guest strategy + booking + repurposing</div>
+        <h3>Podcast-Powered GTM</h3>
+        <p>This is the engine, not a tactic. We build your guest strategy, handle all booking and follow-up, and repurpose every episode into 8-10 content pieces. Each conversation adds a new relationship to your network and fills your content pipeline for weeks. You show up and talk. We turn it into pipeline.</p>
       </div>
       <div class="deliverable">
         <div class="deliverable-icon">📊</div>
@@ -856,7 +856,7 @@
       <div class="per">per month · 90-day engagement</div>
       <ul class="pricing-includes">
         <li>2 LinkedIn posts per week, written and drafted in your voice, for you to post</li>
-        <li>2 podcast guest pitches per week sent to targeted shows</li>
+        <li>Podcast-powered GTM: guest strategy, booking, and each episode repurposed into 8-10 content pieces</li>
         <li>Weekly market intelligence brief</li>
         <li>Weekly competitor notes</li>
         <li>Weekly notable trends (3-5 signals from your market)</li>
@@ -969,23 +969,103 @@
   </div>
 </section>
 
-<!-- BOOK (Calendly embed) -->
+<!-- PROOF POINTS: WHY PODCASTS -->
+<section class="section section-dark" style="background:var(--bg-dark);">
+  <div class="section-inner">
+    <div class="section-label" style="text-align:center;">Why Podcasts Are The Engine</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;">
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:2rem;">
+        <p style="font-size:0.95rem;color:rgba(255,255,255,0.75);line-height:1.8;">A podcast with 58,000 subscribers just sold for hundreds of millions. Not for the audience. For the relationships every episode created. We build that same infrastructure for founders who don't have time to produce a show.</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:2rem;">
+        <p style="font-size:0.95rem;color:rgba(255,255,255,0.75);line-height:1.8;">We cold-emailed a billionaire investor in 2009. 17 years later, he was our first podcast guest. That's what relationship-driven GTM looks like when you play the long game.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK (Application Form) -->
 <section class="section booking-section" id="book">
   <div class="section-inner">
     <div class="section-label" style="text-align:center;">Apply</div>
     <h2>Start a Conversation.</h2>
     <p class="lead">Tell us what you are building. We will tell you if The Table is the right fit and what your first 30 days would look like. We review weekly and respond within 48 hours.</p>
-    <div class="calendly-wrapper">
-      <iframe
-        src="https://calendly.com/yohann8/15min?embed_domain=aloomii.com&embed_type=Inline&hide_landing_page_details=1&hide_gdpr_banner=1"
-        width="100%"
-        height="700"
-        frameborder="0"
-        scrolling="no"
-        title="Book a 15-minute call with Aloomii"
-        loading="lazy">
-      </iframe>
-    </div>
+    <form id="tableApplicationForm" action="/api/contact" method="POST" style="max-width:600px;margin:0 auto;">
+      <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">Full Name <span style="color:#c0392b;">*</span></label>
+        <input type="text" name="name" required style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;">
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">Company <span style="color:#c0392b;">*</span></label>
+        <input type="text" name="company" required style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;">
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">What you sell <span style="color:#c0392b;">*</span></label>
+        <textarea name="whatYouSell" required placeholder="Describe your product or service in one sentence" rows="2" style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;resize:vertical;"></textarea>
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">Current MRR</label>
+        <select name="mrr" style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;">
+          <option value="" disabled selected>Select range</option>
+          <option value="pre-revenue">Pre-revenue</option>
+          <option value="under-10k">Under $10K</option>
+          <option value="10k-50k">$10K-$50K</option>
+          <option value="50k-100k">$50K-$100K</option>
+          <option value="100k-plus">$100K+</option>
+        </select>
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">Biggest GTM challenge right now <span style="color:#c0392b;">*</span></label>
+        <textarea name="gtmChallenge" required placeholder="What's not working?" rows="3" style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;resize:vertical;"></textarea>
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">How you heard about us</label>
+        <input type="text" name="source" style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:Inter,sans-serif;font-size:0.9rem;width:100%;margin-top:0.4rem;background:#fff;color:var(--text);outline:none;">
+      </div>
+      <button type="submit" style="display:block;background:var(--teal);color:#fff;border:none;width:100%;padding:1rem;border-radius:8px;font-family:Inter,sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background 0.2s;margin-top:1.5rem;">Apply for a Seat at The Table</button>
+      <div id="tableAppSuccess" style="display:none;text-align:center;padding:2rem;color:var(--teal);font-weight:600;font-size:1rem;">Application received. We review weekly and respond within 48 hours. If it's not a fit, we'll tell you.</div>
+    </form>
+    <script>
+    (function(){
+      var form = document.getElementById('tableApplicationForm');
+      if(!form) return;
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        var btn = form.querySelector('button[type="submit"]');
+        var orig = btn.textContent;
+        btn.textContent = 'Submitting...';
+        btn.disabled = true;
+        var data = {
+          name: form.querySelector('[name="name"]').value.trim(),
+          company: form.querySelector('[name="company"]').value.trim(),
+          whatYouSell: form.querySelector('[name="whatYouSell"]').value.trim(),
+          mrr: form.querySelector('[name="mrr"]').value,
+          gtmChallenge: form.querySelector('[name="gtmChallenge"]').value.trim(),
+          source: form.querySelector('[name="source"]').value.trim(),
+          formType: 'table-application'
+        };
+        try {
+          var res = await fetch('/api/contact', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(data)
+          });
+          if(res.ok){
+            Array.from(form.children).forEach(function(c){ if(c.tagName!=='SCRIPT') c.style.display='none'; });
+            document.getElementById('tableAppSuccess').style.display='block';
+          } else {
+            btn.textContent='Something went wrong. Try again.';
+            btn.disabled=false;
+            setTimeout(function(){ btn.textContent=orig; },3000);
+          }
+        } catch(err){
+          btn.textContent='Connection error. Try again.';
+          btn.disabled=false;
+          setTimeout(function(){ btn.textContent=orig; },3000);
+        }
+      });
+    })();
+    <\/script>
   </div>
 </section>
 
