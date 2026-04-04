@@ -327,6 +327,78 @@ nav {
 }
 .tl-item:last-child .tl-stat { color: var(--warm); background: var(--warm-dim); }
 
+/* ── COLLAGE ── */
+.collage {
+  padding: 80px 0;
+  border-top: 1px solid var(--border);
+}
+.collage-heading {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 40px;
+}
+.collage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 12px;
+}
+.collage-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  aspect-ratio: 16/10;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.collage-item:hover {
+  transform: scale(1.02);
+  border-color: var(--border-accent);
+  z-index: 2;
+}
+.collage-item.featured {
+  grid-column: span 2;
+  aspect-ratio: 16/9;
+}
+.collage-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  filter: brightness(0.88) saturate(0.85);
+  transition: filter 0.3s;
+}
+.collage-item:hover img {
+  filter: brightness(1) saturate(1);
+}
+.collage-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 10px 14px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.collage-item:hover .collage-caption { opacity: 1; }
+@media (max-width: 768px) {
+  .collage-grid { grid-template-columns: 1fr 1fr; }
+  .collage-item.featured { grid-column: span 2; }
+}
+@media (max-width: 500px) {
+  .collage-grid { grid-template-columns: 1fr; }
+  .collage-item.featured { grid-column: span 1; }
+}
+
 /* ── NUMBERS ── */
 .numbers {
   padding: 72px 0;
@@ -673,6 +745,35 @@ nav {
         <div class="tl-format">Flagship Podcast</div>
         <div class="tl-desc">The culmination. Jim Rogers as first guest. Austin Armstrong (4M+ followers). Technologies reshaping the world — AI, space, physics, human implications. Distributed across YouTube, Apple Podcasts, Spotify, and iHeart. Listeners in NYC, London, Seattle, and Denver.</div>
         <div class="tl-stat">33.5K plays · 7.2K listeners · 953 followers · 3,000 hours listened</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLAGE -->
+<section class="collage">
+  <div class="container">
+    <div class="collage-heading reveal">9 years in the room</div>
+    <div class="collage-grid">
+      <div class="collage-item featured reveal">
+        <img src="/images/studio/blockone-hq.png" alt="At Block.one HQ with EOS Go" loading="lazy">
+        <div class="collage-caption">Block.one HQ · EOS Go era</div>
+      </div>
+      <div class="collage-item reveal">
+        <img src="/images/studio/yat-siu-interview.png" alt="Yat Siu interview on NFT Hype" loading="lazy">
+        <div class="collage-caption">Yat Siu · NFT Hype (future CryptoSlam lead investor)</div>
+      </div>
+      <div class="collage-item reveal">
+        <img src="/images/studio/eos-go-launch-vote.png" alt="EOS GO/NO-GO Launch Vote livestream" loading="lazy">
+        <div class="collage-caption">EOS GO/NO-GO Launch Vote · 16K live viewers</div>
+      </div>
+      <div class="collage-item reveal">
+        <img src="/images/studio/orange-cubicle-panel.png" alt="Orange Cubicle live panel" loading="lazy">
+        <div class="collage-caption">Orange Cubicle · SLAMvision powered by CryptoSlam</div>
+      </div>
+      <div class="collage-item featured reveal">
+        <img src="/images/studio/eos-go-streams.png" alt="EOS Go launch party streams" loading="lazy">
+        <div class="collage-caption">EOS Go · Launch Party series · 94 videos · 3.6K subscribers</div>
       </div>
     </div>
   </div>
