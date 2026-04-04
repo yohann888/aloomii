@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Studio — Aloomii | Podcast-Powered GTM for Founders</title>
+<meta name="description" content="We spent 17 years booking one guest. He said yes. Podcast-powered GTM for founders. 5 shows. 56,000+ downloads. 3,000 hours listened. Apply for The Table.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Studio — Aloomii | Podcast-Powered GTM for Founders">
+<meta property="og:description" content="We spent 17 years booking one guest. He said yes. 5 shows. 56,000+ downloads. Now we build it for you.">
+<meta property="og:url" content="https://aloomii.com/studio">
+<meta property="og:site_name" content="Aloomii">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://aloomii.com/studio">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b14;
+  --bg-elevated: #0f1018;
+  --bg-card: rgba(255,255,255,0.05);
+  --bg-card-hover: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.10);
+  --border-accent: rgba(0,200,190,0.25);
+  --accent: #00c8be;
+  --accent-dark: #009e96;
+  --accent-dim: rgba(0,200,190,0.08);
+  --accent-mid: rgba(0,200,190,0.20);
+  --warm: #f5c562;
+  --warm-dim: rgba(245,197,98,0.10);
+  --text: #f0f0f0;
+  --text-body: rgba(255,255,255,0.72);
+  --text-muted: rgba(255,255,255,0.38);
+  --nav-height: 72px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 48px;
+  background: rgba(11,11,20,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { text-decoration: none; }
+.nav-logo img { height: 36px; width: auto; }
+.nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+.nav-links a { color: var(--text-body); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: #fff; }
+.nav-links .nav-cta {
+  background: var(--accent); color: #000; padding: 10px 22px;
+  border-radius: 8px; font-weight: 600; font-size: 13px; transition: all 0.25s;
+}
+.nav-links .nav-cta:hover { background: #00e0d5; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,200,190,0.3); }
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; padding: 8px; background: none; border: none;
+}
+.hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: all 0.3s; border-radius: 2px; }
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.mobile-menu {
+  display: none; position: fixed; top: var(--nav-height); left: 0; right: 0;
+  background: rgba(11,11,20,0.97); backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px); padding: 24px 40px;
+  border-bottom: 1px solid var(--border); z-index: 99;
+}
+.mobile-menu.active { display: block; }
+.mobile-menu a { display: block; padding: 14px 0; color: var(--text-body); text-decoration: none; font-size: 1rem; border-bottom: 1px solid var(--border); }
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: #fff; }
+@media (max-width: 768px) { nav { padding: 14px 20px; } .nav-links { display: none; } .hamburger { display: flex; } }
+
+/* ── LAYOUT ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 600px) { .container { padding: 0 20px; } }
+
+/* ── HERO ── */
+.hero {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 100px 0 80px;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 15% 30%, rgba(0,200,190,0.05) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 70%, rgba(245,197,98,0.03) 0%, transparent 50%);
+  z-index: 0; pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; }
+
+.hero-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.2s;
+}
+.hero-title {
+  font-size: clamp(38px, 6.5vw, 80px);
+  font-weight: 700;
+  line-height: 1.06;
+  color: var(--text);
+  max-width: 900px;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.35s;
+  letter-spacing: -0.02em;
+}
+.hero-title em { font-style: italic; color: var(--accent); }
+.hero-sub {
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--text-body);
+  max-width: 560px;
+  margin-bottom: 52px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.5s;
+}
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.65s;
+}
+.hero-stat { }
+.hero-stat-num {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ── SECTION COMMONS ── */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.section-heading {
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 56px;
+}
+
+/* ── STORY ── */
+.story {
+  padding: 110px 0;
+  border-top: 1px solid var(--border);
+}
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: start;
+}
+.story-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--warm);
+  margin-bottom: 20px;
+}
+.story-heading {
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 28px;
+  letter-spacing: -0.02em;
+}
+.story-text {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--text-body);
+  margin-bottom: 18px;
+}
+.story-text strong { color: var(--text); font-weight: 600; }
+
+.story-aside {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 40px;
+  position: relative;
+}
+.story-aside::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 40px; right: 40px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.quote-mark {
+  font-size: 64px;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.25;
+  font-weight: 800;
+  margin-bottom: -12px;
+}
+.quote-text {
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text);
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+.quote-attr {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.quote-attr strong { color: var(--text-body); font-weight: 500; }
+
+@media (max-width: 900px) { .story-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+/* ── TIMELINE ── */
+.timeline {
+  padding: 110px 0;
+  border-top: 1px solid var(--border);
+}
+.timeline-track {
+  position: relative;
+  padding-left: 44px;
+}
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  left: 7px; top: 8px; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, var(--accent), var(--border) 80%, transparent);
+}
+.tl-item {
+  position: relative;
+  margin-bottom: 52px;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -40px; top: 8px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent-mid);
+}
+.tl-item:last-child::before {
+  background: var(--warm);
+  box-shadow: 0 0 14px var(--warm-dim);
+}
+.tl-year {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.tl-item:last-child .tl-year { color: var(--warm); }
+.tl-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+.tl-format {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.tl-desc {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-body);
+  max-width: 580px;
+}
+.tl-stat {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-dim);
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-top: 12px;
+  letter-spacing: 0.3px;
+}
+.tl-item:last-child .tl-stat { color: var(--warm); background: var(--warm-dim); }
+
+/* ── NUMBERS ── */
+.numbers {
+  padding: 72px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.number-item { text-align: center; }
+.number-value {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+}
+.number-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+@media (max-width: 900px) { .numbers-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; } }
+@media (max-width: 600px) { .numbers-grid { grid-template-columns: 1fr 1fr; gap: 32px; } .number-value { font-size: 36px; } }
+
+/* ── SERVICES ── */
+.services {
+  padding: 110px 0;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 56px;
+}
+.service-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  transition: border-color 0.3s, background 0.3s, transform 0.2s;
+}
+.service-card:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+.service-icon { font-size: 22px; margin-bottom: 14px; }
+.service-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.service-desc {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-body);
+}
+@media (max-width: 900px) { .services-grid { grid-template-columns: 1fr; } }
+
+/* ── PROOF POINT ── */
+.proof {
+  padding: 110px 0;
+  border-top: 1px solid var(--border);
+}
+
+/* ── TEAM ── */
+.team {
+  padding: 110px 0;
+  border-top: 1px solid var(--border);
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+.team-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px;
+}
+.team-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+.team-role {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.team-bio {
+  font-size: 14px;
+  line-height: 1.82;
+  color: var(--text-body);
+}
+@media (max-width: 900px) { .team-grid { grid-template-columns: 1fr; } }
+
+/* ── CTA ── */
+.cta {
+  padding: 120px 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+.cta::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(0,200,190,0.05) 0%, transparent 65%);
+  pointer-events: none;
+}
+.cta .container { position: relative; }
+.cta-heading {
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+.cta-heading em { font-style: italic; color: var(--accent); }
+.cta-sub {
+  font-size: 17px;
+  color: var(--text-body);
+  max-width: 500px;
+  margin: 0 auto 44px;
+  line-height: 1.75;
+}
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 40px;
+  background: var(--accent);
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.cta-button:hover {
+  background: #00e0d5;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,200,190,0.3);
+}
+.cta-footnote {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 18px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.cat-line {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 48px;
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  padding: 56px 32px 32px;
+  border-top: 1px solid var(--border);
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+}
+.footer-brand p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-top: 12px;
+  max-width: 260px;
+}
+.footer-logo img { height: 32px; width: auto; }
+.footer-col h4 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.footer-col a {
+  display: block;
+  color: var(--text-body);
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--accent); }
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.footer-bottom a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+.footer-bottom a:hover { color: var(--accent); }
+@media (max-width: 768px) {
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+@media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://aloomii.com" class="nav-logo"><img src="/images/logos/Aloomii - final.png" alt="Aloomii"></a>
+  <ul class="nav-links">
+    <li><a href="https://aloomii.com#offerings">Services</a></li>
+    <li><a href="https://aloomii.com/blog/">Blog</a></li>
+    <li><a href="https://palebluenexus.com" target="_blank">Podcast</a></li>
+    <li><a href="https://aloomii.com/table" class="nav-cta">Apply for The Table</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="https://aloomii.com#offerings" onclick="closeMenu()">Services</a>
+  <a href="https://aloomii.com/blog/" onclick="closeMenu()">Blog</a>
+  <a href="https://palebluenexus.com" onclick="closeMenu()">Podcast</a>
+  <a href="https://aloomii.com/table" onclick="closeMenu()">Apply for The Table</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-label">The Studio · Aloomii</div>
+    <h1 class="hero-title">We spent 17 years booking <em>one guest.</em><br>He said yes.</h1>
+    <p class="hero-sub">Aloomii has been producing podcasts, live panels, and founder media since 2017. We don't pitch media strategy. We ship episodes. Now we build it for you.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">5</div>
+        <div class="hero-stat-label">Shows produced</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">56K+</div>
+        <div class="hero-stat-label">All-time downloads</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">9</div>
+        <div class="hero-stat-label">Years producing media</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3,000</div>
+        <div class="hero-stat-label">Hours listened on PBN</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JIM ROGERS STORY -->
+<section class="story">
+  <div class="container">
+    <div class="story-grid">
+      <div class="reveal">
+        <div class="story-label">The Jim Rogers Story</div>
+        <h2 class="story-heading">A cold email in 2009.<br>A podcast guest in 2026.</h2>
+        <p class="story-text">In 2009, Yohann sent a cold email to <strong>Jim Rogers</strong> — co-founder of the Quantum Fund with George Soros. 4,200% returns in a single decade. One of the most sought-after investors alive.</p>
+        <p class="story-text">Rogers replied. Most people would have asked for something immediately. Yohann didn't. He kept the conversation going. Year after year. <strong>No pitch. No ask.</strong> Just genuine connection maintained over time.</p>
+        <p class="story-text">Seventeen years later, Jim sat down as the first guest on Pale Blue Nexus. That episode is <a href="https://youtu.be/t3dDHRRZyHk" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:500;">live right now</a>.</p>
+        <p class="story-text">No agency would have kept that thread alive for 17 years. Most wouldn't last 17 weeks. This is the difference between transactional media and <strong>relationship-driven media</strong>. We build the second kind.</p>
+      </div>
+      <div class="story-aside reveal">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">Please figure out a way to find out what you love the most. Many people never find it. Or even if they find it, they're afraid to do it. Pursue it, pursue it, pursue it.</p>
+        <p class="quote-attr"><strong>Jim Rogers</strong> — Pale Blue Nexus, Episode 1</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline">
+  <div class="container">
+    <div class="section-label reveal">Five shows · Three eras · One through line</div>
+    <h2 class="section-heading reveal">We showed up early. Every time.</h2>
+    <div class="timeline-track">
+      <div class="tl-item reveal">
+        <div class="tl-year">2017 — 2018</div>
+        <div class="tl-title">EOS Go</div>
+        <div class="tl-format">Podcast + Live Streams</div>
+        <div class="tl-desc">Early crypto. Hosted and produced across Podbean and all major directories. Broadcast the EOS blockchain launch live to thousands of viewers worldwide. Sat down with Dan Larimer at Block.one headquarters (now Bullish, BLSH on NYSE).</div>
+        <div class="tl-stat">16K views on launch livestream · 3.6K subscribers</div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-year">2018</div>
+        <div class="tl-title">Orange Cubicle</div>
+        <div class="tl-format">Pilot Series</div>
+        <div class="tl-desc">Early format experimentation. Testing what works before it matters. Format R&D that informed everything that came after.</div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-year">2020 — 2023</div>
+        <div class="tl-title">NFT Hype + CryptoSlam Clubhouse</div>
+        <div class="tl-format">Podcast + Live Panels</div>
+        <div class="tl-desc">50,000+ downloads across rare digital art, Bitcoin Ordinals, AI and NFTs. Ran live Clubhouse rooms for CryptoSlam — the Mark Cuban-backed NFT data platform where Yohann closed $2M in deals and helped raise a $9M seed round.</div>
+        <div class="tl-stat">56K all-time downloads · 50K+ milestone</div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-year">2026 — Present</div>
+        <div class="tl-title">Pale Blue Nexus</div>
+        <div class="tl-format">Flagship Podcast</div>
+        <div class="tl-desc">The culmination. Jim Rogers as first guest. Austin Armstrong (4M+ followers). Technologies reshaping the world — AI, space, physics, human implications. Distributed across YouTube, Apple Podcasts, Spotify, and iHeart. Listeners in NYC, London, Seattle, and Denver.</div>
+        <div class="tl-stat">33.5K plays · 7.2K listeners · 953 followers · 3,000 hours listened</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="numbers">
+  <div class="container">
+    <div class="numbers-grid">
+      <div class="number-item reveal">
+        <div class="number-value">5M+</div>
+        <div class="number-label">Total impressions</div>
+      </div>
+      <div class="number-item reveal">
+        <div class="number-value">9</div>
+        <div class="number-label">Years producing shows</div>
+      </div>
+      <div class="number-item reveal">
+        <div class="number-value">3,000</div>
+        <div class="number-label">Hours listened on PBN</div>
+      </div>
+      <div class="number-item reveal">
+        <div class="number-value">75%</div>
+        <div class="number-label">Listeners who aren't followers</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services">
+  <div class="container">
+    <div class="section-label reveal">What we build for founders</div>
+    <h2 class="section-heading reveal">Your show. Our studio.</h2>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">🎙</div>
+        <div class="service-title">End-to-end podcast production</div>
+        <div class="service-desc">Concept, format design, recording, editing, publishing, distribution. You show up and talk. We handle everything else. From zero to published in under two weeks.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🤝</div>
+        <div class="service-title">Guest booking that opens doors</div>
+        <div class="service-desc">Not cold DMs to people with 500 followers. Operators, investors, and founders who move markets. Every guest becomes a relationship asset, not a content credit.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🎬</div>
+        <div class="service-title">One conversation, 10 content pieces</div>
+        <div class="service-desc">Every episode becomes LinkedIn posts, newsletter editions, blog articles, YouTube Shorts, and social clips. Your AI-powered content engine multiplies a single hour into weeks of visibility.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">📡</div>
+        <div class="service-title">Live panels and audio events</div>
+        <div class="service-desc">We ran live Clubhouse rooms during the NFT boom for a Mark Cuban-backed platform. We know how to fill a room, keep it sharp, and make you the convener — not the attendee.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🎨</div>
+        <div class="service-title">Brand voice and creative direction</div>
+        <div class="service-desc">Your show sounds like you, not a template. AI-enhanced visuals, soundscapes, and editing. Jenny's creative direction has defined brand identities across crypto, NFTs, and founder content for 8+ years.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">📈</div>
+        <div class="service-title">Relationship compounding</div>
+        <div class="service-desc">Every guest is tracked in your relationship intelligence system. Post-episode follow-ups. Reconnection triggers. The person from Episode 3 introduces you to your biggest client by Episode 20.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF POINT: TBPN -->
+<section class="proof">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-aside reveal">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">TBPN is my favorite tech show. We want them to keep that going and for them to do what they do so well.</p>
+        <p class="quote-attr"><strong>Sam Altman</strong> — on acquiring TBPN for OpenAI, April 2026</p>
+      </div>
+      <div class="reveal">
+        <div class="story-label">Why this matters</div>
+        <h2 class="story-heading">A podcast with 58K subscribers just sold for hundreds of millions.</h2>
+        <p class="story-text">OpenAI didn't buy TBPN for the audience size. They bought it for the <strong>relationships every episode created</strong>. Zuckerberg, Nadella, Altman — they came on the show because the hosts had built genuine connections over years.</p>
+        <p class="story-text">TBPN started from a text message. 18 months later: $30M in annual revenue and an acquisition by the most valuable AI company in the world.</p>
+        <p class="story-text"><strong>Media isn't content. Media is infrastructure.</strong> The show is the excuse to have the conversation. The conversation builds the relationship. The relationship is the asset.</p>
+        <p class="story-text">We've been building this way for 9 years. Now we build it for you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team">
+  <div class="container">
+    <div class="section-label reveal">Who runs this</div>
+    <h2 class="section-heading reveal">Operators, not consultants.</h2>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-name">Yohann Calpu</div>
+        <div class="team-role">Host · Strategy · Guest Relations</div>
+        <div class="team-bio">Books the guests, runs the strategy, and hosts. JP Morgan, IBM, Ontario Government — then CryptoSlam, where he closed $2M in deals and helped raise a $9M seed round backed by Mark Cuban. Yohann's edge isn't a playbook. It's the ability to sit in a conversation and feel when something is about to shift. He cold-emailed Jim Rogers in 2009. The relationship took 17 years. That's the kind of patience no agency has.</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-name">Jenny Calpu</div>
+        <div class="team-role">Creative Director · Production · Design</div>
+        <div class="team-bio">Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking — years of building trust face to face. Self-taught design, video editing, web development, and AI creative tools from the ground up. Every visual, every soundscape, every cut goes through her. Built aloomii.com, vibrnt.ai, and palebluenexus.com from scratch. Yohann books the guests. Jenny makes it look and sound like it belongs on a real network.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2 class="cta-heading reveal">Which 20 relationships would<br><em>change your business?</em></h2>
+    <p class="cta-sub reveal">A podcast with the right guests puts you in rooms you can't buy your way into. We've done this five times for ourselves. Now we build it for you.</p>
+    <a href="https://aloomii.com/table" class="cta-button reveal">Apply for The Table →</a>
+    <div class="cta-footnote reveal">3 seats · 90-day engagement · $3,300/month</div>
+    <p class="cat-line reveal">Aloomii is named after our two cats, Aloo and Mittens. The company is slightly more productive than they are.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="/images/logos/Aloomii - final.png" alt="Aloomii"></div>
+      <p>Relationship intelligence for founders who run on trust. AI scans. Humans judge. You act.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="https://aloomii.com/table">The Table</a>
+      <a href="https://aloomii.com/studio">The Studio</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="https://aloomii.com">Home</a>
+      <a href="https://aloomii.com/blog/">Blog</a>
+      <a href="https://palebluenexus.com" target="_blank">Pale Blue Nexus</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/client-terms.html">Client Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Aloomii. All rights reserved.</span>
+    <span><a href="mailto:hello@aloomii.com">hello@aloomii.com</a></span>
+  </div>
+</footer>
+
+<script>
+// Mobile menu
+function toggleMenu() {
+  document.querySelector('.hamburger').classList.toggle('active');
+  document.getElementById('mobileMenu').classList.toggle('active');
+}
+function closeMenu() {
+  document.querySelector('.hamburger').classList.remove('active');
+  document.getElementById('mobileMenu').classList.remove('active');
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
