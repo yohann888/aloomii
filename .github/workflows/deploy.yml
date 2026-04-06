@@ -1,24 +1,20 @@
 name: Deploy to Cloudflare Pages
 
-# IMPORTANT: Do NOT use wrangler pages deploy directly.
-# This workflow exists only as a placeholder.
-# The actual deployment is handled by Cloudflare Pages Git integration.
-# See SOP in MEMORY.md: "NEVER run wrangler pages deploy directly"
-
 on:
   push:
     branches:
       - main
 
 jobs:
-  notify:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deployment note
-        run: |
-          echo "✅ Changes pushed to main."
-          echo "Cloudflare Pages should automatically deploy from Git integration."
-          echo "If changes are not appearing, hard refresh or purge cache in Cloudflare."
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 12f075345f13fd7cfbdb3bb663755334
+          command: pages deploy . --project-name=aloomii --commit-dirty=true
