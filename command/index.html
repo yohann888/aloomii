@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aloomii HQ — Command Center</title>
+    <link rel="stylesheet" href="styles.css?v=20260406-new-draft-fix">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="app.js?v=20260406-new-draft-fix" defer></script>
+</head>
+<body>
+    <!-- Password Gate -->
+    <div id="gate-overlay" class="gate-overlay">
+        <div class="gate-content">
+            <div class="logo-gate">🦁 ALOOMII</div>
+            <h1 class="gate-title">Command Center</h1>
+            <div class="password-form">
+                <input type="password" id="password-input" placeholder="Enter access code" autocomplete="off">
+                <button onclick="attemptLogin()" class="auth-btn">Authenticate</button>
+            </div>
+            <div class="access-request">
+                <h3>Request Access</h3>
+                <input type="text" id="req-name" placeholder="Your name">
+                <input type="email" id="req-email" placeholder="Email">
+                <button onclick="requestAccess()" class="request-btn">Submit Request</button>
+            </div>
+            <div id="gate-message" class="gate-message"></div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">🦁 ALOOMII</div>
+            </div>
+            
+            <div class="nav-items">
+                <div onclick="showSection('hq')" class="nav-item active" id="nav-hq">
+                    🏠 <span class="nav-text">HQ</span>
+                </div>
+                <div onclick="showSection('crm')" class="nav-item" id="nav-crm">
+                    📇 <span class="nav-text">CRM</span>
+                </div>
+                <div onclick="showSection('signals')" class="nav-item" id="nav-signals">
+                    🚨 <span class="nav-text">Signals</span>
+                </div>
+                <div onclick="showSection('content')" class="nav-item" id="nav-content">
+                    ✍️ <span class="nav-text">Content</span>
+                </div>
+                <div onclick="showSection('intel')" class="nav-item" id="nav-intel">
+                    📊 <span class="nav-text">Intel</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <button onclick="toggleSidebar()" class="collapse-btn">→</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Global Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="logo-small">🦁</div>
+                    <div>
+                        <span class="pulse-dot"></span>
+                        <span class="header-title">Command Center</span>
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <div class="header-time" id="header-timestamp"></div>
+                    <button class="header-btn" onclick="openPalette()">⌘K</button>
+                    <div class="notification-bell" onclick="toggleNotifications()">
+                        🔔 <span id="notif-count" class="badge">3</span>
+                    </div>
+                    <div id="notification-dropdown" class="notif-dropdown hidden">
+                        <div class="notif-header">Notifications</div>
+                        <div id="notif-list" class="notif-list"></div>
+                    </div>
+                    <button onclick="toggleTheme()" class="header-btn">⚙</button>
+                </div>
+            </header>
+
+            <!-- HQ Section -->
+            <section id="section-hq" class="content-section active">
+                <!-- Morning Briefing -->
+                <div id="briefing-container" class="briefing-card">
+                    <div class="briefing-greeting" id="briefing-greeting">Good evening, Yohann.</div>
+                    <div class="briefing-lines">
+                        <a href="#section-crm" class="briefing-line briefing-line--red">🔴 2 contacts going cold — Vincent Pronesti, NationGraph</a>
+                        <a href="#section-crm" class="briefing-line briefing-line--orange">🟠 3 outreach drafts waiting for approval</a>
+                        <a href="#section-crm" class="briefing-line briefing-line--yellow">🟡 1 opportunity stalled (Westland Insurance, 14d)</a>
+                        <a href="#section-hq" class="briefing-line briefing-line--green">✅ Signal scout ran overnight — 8 new signals, 2 score ≥4.5</a>
+                    </div>
+                </div>
+
+                <!-- Outreach Logger -->
+                <div class="outreach-logger-card" id="outreach-logger">
+                  <div class="outreach-logger-label">Log outreach</div>
+                  <div class="outreach-logger-row">
+                    <input type="text" id="outreach-log-name" placeholder="Contact name" class="outreach-log-input" />
+                    <select id="outreach-log-outcome" class="outreach-log-select">
+                      <option value="sent">Sent</option>
+                      <option value="replied">Replied</option>
+                      <option value="meeting_booked">Meeting booked</option>
+                      <option value="not_interested">Not interested</option>
+                      <option value="no_reply">No reply</option>
+                    </select>
+                    <input type="text" id="outreach-log-note" placeholder="Note (optional)" class="outreach-log-input outreach-log-note" />
+                    <button onclick="submitOutreachLog()" class="outreach-log-btn">Log</button>
+                  </div>
+                  <div id="outreach-log-recent" class="outreach-log-recent"></div>
+                </div>
+
+                <!-- Hero Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-agents">15</div>
+                        <div class="stat-label">Active Agents</div>
+                        <div class="stat-sub">Fleet operational <span class="pulse-dot-small"></span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-contacts">208</div>
+                        <div class="stat-label">Network Contacts</div>
+                        <div class="stat-sub">T1: 14 · T2: 38 · T3: 156</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-cost">$12.10</div>
+                        <div class="stat-label">Weekly Compute</div>
+                        <div class="stat-sub delta-negative">↓ 8% vs last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-roi">108x</div>
+                        <div class="stat-label">ROI Multiplier</div>
+                        <div class="stat-sub">return on AI spend</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Fleet Health -->
+                    <div class="card fleet-health">
+                        <h2>Fleet Health</h2>
+                        <div class="donut-container">
+                            <svg width="160" height="160" class="donut">
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="#222" stroke-width="24"></circle>
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="#10b981" stroke-width="24" stroke-dasharray="377" stroke-dashoffset="113" transform="rotate(-90 80 80)"></circle>
+                            </svg>
+                            <div class="donut-center">
+                                <div class="donut-percentage">70%</div>
+                            </div>
+                        </div>
+                        <div class="legend">
+                            <div class="legend-item"><span class="legend-dot green"></span> Healthy — 21 crons</div>
+                            <div class="legend-item"><span class="legend-dot amber"></span> Needs Attention — 6 crons</div>
+                            <div class="legend-item"><span class="legend-dot red"></span> Offline — 3 crons</div>
+                        </div>
+                        
+                        <table class="agent-table">
+                            <tr><td>Lead Intelligence</td><td class="status active">● active</td></tr>
+                            <tr><td>Relationship Ops</td><td class="status active">● active</td></tr>
+                            <tr><td>Content Engine</td><td class="status attention">● attention</td></tr>
+                            <tr><td>Dev Velocity</td><td class="status active">● active</td></tr>
+                            <tr><td>Signal Scout</td><td class="status active">● active</td></tr>
+                        </table>
+                    </div>
+
+                    <!-- System Economics -->
+                    <div class="card economics-card">
+                        <h2>System Economics</h2>
+                        <div class="economics-bars">
+                            <div class="bar-group">
+                                <div class="bar-label">Weekly AI Cost</div>
+                                <div class="bar-container"><div class="bar bar-small" style="width: 18%"></div></div>
+                                <div class="bar-value">$12.10</div>
+                            </div>
+                            <div class="bar-group">
+                                <div class="bar-label">Human-Equivalent Value</div>
+                                <div class="bar-container"><div class="bar bar-large" style="width: 100%"></div></div>
+                                <div class="bar-value">$1,258</div>
+                            </div>
+                        </div>
+                        
+                        <div class="roi-big">108x <span class="gradient-text">ROI</span></div>
+                        
+                        <svg width="100%" height="80" class="sparkline">
+                            <polyline points="10,65 35,45 60,55 85,25" fill="none" stroke="#009e96" stroke-width="3"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Quick Metrics -->
+                <div class="metrics-row">
+                    <div class="metric-tile"><div class="metric-num">34</div><div class="metric-label">Signals This Week</div></div>
+                    <div class="metric-tile"><div class="metric-num">25</div><div class="metric-label">Hot Leads</div></div>
+                    <div class="metric-tile"><div class="metric-num">6</div><div class="metric-label">Active Opps</div></div>
+                    <div class="metric-tile"><div class="metric-num">$114K</div><div class="metric-label">Pipeline Value</div></div>
+                    <div class="metric-tile pulse-red"><div class="metric-num">1</div><div class="metric-label">Overdue Outreach</div></div>
+                    <div class="metric-tile pulse-red"><div class="metric-num">2</div><div class="metric-label">Decay Alerts</div></div>
+                </div>
+
+                <!-- Tasks Widget -->
+                <div class="card tasks-widget">
+                    <h2>Tasks</h2>
+                    <div id="tasks-container" class="tasks-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Events -->
+                <div class="events-strip" id="events-strip"></div>
+            </section>
+
+            <!-- CRM Section -->
+            <section id="section-crm" class="content-section">
+                <div class="crm-container">
+                    <!-- Filter Bar -->
+                    <div class="crm-header">
+                        <h2>CRM & Outreach</h2>
+                        <div class="filter-bar">
+                            <input type="text" id="crm-search" placeholder="Search contacts or companies..." class="crm-search">
+                            
+                            <div class="filter-chips">
+                                <div onclick="toggleFilter(this)" class="chip active" data-filter="hot">🔴 Hot</div>
+                                <div onclick="toggleFilter(this)" class="chip" data-filter="warm">🟠 Warm</div>
+                                <div onclick="toggleFilter(this)" class="chip" data-filter="cool">🟡 Cool</div>
+                            </div>
+                            
+                            <select id="tier-filter" class="crm-select">
+                                <option value="">All Tiers</option>
+                                <option value="T1">T1</option>
+                                <option value="T2">T2</option>
+                            </select>
+                            
+                            <button onclick="clearFilters()" class="btn-secondary">Clear</button>
+                            <button onclick="exportLeads()" class="btn-primary">Export CSV</button>
+                        </div>
+                    </div>
+
+                    <!-- CRM Tab Bar -->
+                    <div class="crm-tabs">
+                        <button class="tab-btn active" onclick="switchCrmTab(0)">Contacts</button>
+                        <button class="tab-btn" onclick="switchCrmTab(1)">Outreach Queue</button>
+                        <button class="tab-btn" onclick="switchCrmTab(2)">Pipeline</button>
+                    </div>
+                    
+                    <!-- CRM Panels -->
+                    <div id="heatmap-container" class="crm-panel active">
+                        <table class="crm-table">
+                            <thead>
+                                <tr>
+                                    <th>Temp</th>
+                                    <th>Contact</th>
+                                    <th>Company</th>
+                                    <th>Tier</th>
+                                    <th>Last Touch</th>
+                                    <th>Signals</th>
+                                    <th>Follow-up</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="heatmap-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div id="outreach-queue-container" class="crm-panel"></div>
+                    <div id="pipeline-container" class="crm-panel">
+                        <div id="pipeline-funnel-crm" class="funnel"></div>
+                    </div>
+                    
+                    <!-- Draft Edit Panel (slide-in) -->
+                    <div id="draft-edit-panel" class="draft-panel hidden">
+                        <div class="draft-panel-header">
+                            <h3>Edit Draft</h3>
+                            <button onclick="closeDraftPanel()" class="close-btn">×</button>
+                        </div>
+                        <textarea id="draft-textarea" class="draft-textarea" placeholder="Draft message..."></textarea>
+                        <div class="draft-panel-actions">
+                            <button onclick="saveDraft()" class="btn-secondary">Save</button>
+                            <button onclick="approveDraft()" class="btn-primary">Approve</button>
+                        </div>
+                    </div>
+
+                    <!-- Contact Detail Panel (slide-in) -->
+                    <div id="contact-detail-panel" class="detail-panel hidden">
+                        <div class="detail-panel-header">
+                            <h3 id="detail-contact-name">Contact</h3>
+                            <button onclick="closeDetailPanel()" class="close-btn">×</button>
+                        </div>
+                        <div id="detail-panel-body" class="detail-panel-body"></div>
+                    </div>
+
+                    <!-- Quick Outreach Panel (slide-in) -->
+                    <div id="outreach-panel" class="detail-panel hidden">
+                        <div class="detail-panel-header">
+                            <h3 id="outreach-contact-name">Outreach</h3>
+                            <button onclick="closeOutreachPanel()" class="close-btn">×</button>
+                        </div>
+                        <div id="outreach-panel-body" class="detail-panel-body"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content Section -->
+            <section id="section-content" class="content-section">
+                <h2>Content Engine</h2>
+                <div class="content-tabs">
+                    <button class="tab-btn active" onclick="switchContentTab(0)">LinkedIn Drafts</button>
+                    <button class="tab-btn" onclick="switchContentTab(1)">PBN Briefs</button>
+                    <button class="tab-btn" onclick="switchContentTab(2)">All Content</button>
+                    <button onclick="newLinkedInDraft()" class="new-draft-btn">+ New Draft</button>
+                </div>
+                <div id="linkedin-drafts-panel" class="content-panel active"></div>
+                <div id="pbn-briefs-panel" class="content-panel"></div>
+                <div id="all-content-panel" class="content-panel"></div>
+            </section>
+
+            <!-- Signals Section (top-level) -->
+            <section id="section-signals" class="content-section">
+                <h2>Signals Intelligence</h2>
+                <div id="signals-feed-main" class="signals-container"></div>
+            </section>
+
+            <!-- Intel Section -->
+            <section id="section-intel" class="content-section">
+                <div class="intel-container">
+                    <h2>Content & Intelligence</h2>
+                    
+                    <!-- Live Score -->
+                    <div class="intel-row">
+                        <div class="intel-card">
+                            <h3>Live Score</h3>
+                            <div id="live-score-display" class="live-score">—</div>
+                        </div>
+                        <div class="intel-card">
+                            <h3>Pipeline Funnel</h3>
+                            <div id="pipeline-funnel" class="funnel"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Events & Content Queue -->
+                    <div class="intel-row">
+                        <div class="intel-card">
+                            <h3>Upcoming Events</h3>
+                            <div id="events-container" class="events-list">
+                                <p class="empty-state">No upcoming events</p>
+                            </div>
+                        </div>
+                        <div class="intel-card">
+                            <h3>Content Queue</h3>
+                            <div id="content-queue-container" class="content-list">
+                                <p class="empty-state">No content in queue</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- New LinkedIn Draft Composer -->
+    <div id="new-draft-panel" class="detail-panel new-draft-modal hidden" aria-hidden="true">
+        <div class="new-draft-backdrop" onclick="closeNewDraftPanel()"></div>
+        <div class="new-draft-dialog" role="dialog" aria-modal="true" aria-labelledby="new-draft-title" onclick="event.stopPropagation()">
+            <div class="detail-panel-header new-draft-header">
+                <h3 id="new-draft-title">New LinkedIn Draft</h3>
+                <button type="button" onclick="closeNewDraftPanel()" class="close-btn" aria-label="Close new draft modal">×</button>
+            </div>
+            <div class="detail-panel-body new-draft-body">
+                <label class="new-draft-label" for="new-draft-author">Author</label>
+                <select id="new-draft-author" class="draft-author-select">
+                    <option value="yohann">👔 Yohann Calpu</option>
+                    <option value="jenny">🎨 Jenny Calpu</option>
+                </select>
+
+                <label class="new-draft-label" for="new-draft-text">Post draft</label>
+                <textarea id="new-draft-text" class="new-draft-textarea" placeholder="Write your LinkedIn post here..." rows="12"></textarea>
+                <div class="cta-note">✉️ The Last 20% newsletter CTA will be automatically appended on save.</div>
+            </div>
+            <div class="detail-panel-footer new-draft-footer">
+                <button type="button" onclick="closeNewDraftPanel()" class="btn-secondary">Cancel</button>
+                <button type="button" onclick="saveNewDraft()" class="btn-primary">Save as Draft</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Command Palette -->
+    <div id="command-palette" class="palette hidden">
+        <div class="palette-backdrop" onclick="closePalette()"></div>
+        <div class="palette-modal">
+            <input type="text" id="palette-input" placeholder="Type a command..." autocomplete="off" autofocus>
+            <div id="palette-results" class="palette-results"></div>
+            <div class="palette-footer">
+                <span class="palette-hint">↑↓ navigate</span>
+                <span class="palette-hint">↵ select</span>
+                <span class="palette-hint">esc close</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
