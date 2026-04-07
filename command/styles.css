@@ -2763,6 +2763,86 @@ body.modal-open {
     }
 }
 
+/* Model Spend Breakdown */
+.model-spend-section {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border, #2a2a3e);
+}
+.model-spend-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.model-spend-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim, #888);
+}
+.model-spend-period {
+    font-size: 11px;
+    color: var(--text-dim, #888);
+    font-style: italic;
+}
+.model-spend-bars { display: flex; flex-direction: column; gap: 8px; }
+.model-spend-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.model-spend-bar-row--highlight .model-spend-name {
+    color: #cc785c;
+    font-weight: 600;
+}
+.model-spend-bar-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 160px;
+    flex-shrink: 0;
+}
+.model-spend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.model-spend-name { font-size: 12px; color: var(--text, #e0e0e0); }
+.model-spend-runs { font-size: 10px; color: var(--text-dim, #888); margin-left: 2px; }
+.model-spend-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--border, #2a2a3e);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.model-spend-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    opacity: 0.85;
+}
+.model-spend-cost {
+    font-size: 12px;
+    color: var(--text-dim, #888);
+    min-width: 48px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+.model-spend-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-dim, #888);
+}
+.model-spend-link { color: var(--accent, #6c63ff); text-decoration: none; }
+.model-spend-link:hover { text-decoration: underline; }
+.model-spend-empty { font-size: 12px; color: var(--text-dim, #888); font-style: italic; }
+
 /* Intel Section — Events */
 .intel-event-card {
     background: var(--input-bg, #0f0f1a);

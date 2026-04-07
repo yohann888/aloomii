@@ -681,6 +681,7 @@ function updateHQFromData(data) {
     
     // 3. Update economics section
     updateEconomics(data.economics);
+    if (data.fleet && data.fleet.agents) renderModelSpend(data.fleet.agents);
     
     // 4. Update metrics row
     updateMetricsRow(data);
@@ -2618,6 +2619,106 @@ async function saveNewDraft() {
     } finally {
         isSavingNewDraft = false;
     }
+}
+
+// ─── Model Spend Breakdown ──────────────────────────────────────────────────────────
+
+const MODEL_PRICING = {
+  'anthropic/claude-sonnet-4-6':    { input: 3.0,   output: 15.0,  name: 'Sonnet 4.6',     provider: 'anthropic' },
+  'anthropic/claude-opus-4-6':      { input: 15.0,  output: 75.0,  name: 'Opus 4.6',        provider: 'anthropic' },
+  'google/gemini-3.1-pro-preview':  { input: 2.0,   output: 12.0,  name: 'Gemini 3.1 Pro',  provider: 'google' },
+  'google/gemini-3-flash':          { input: 0.5,   output: 0.5,   name: 'Gemini Flash',    provider: 'google' },
+  'xai/grok-4-2-fast':              { input: 0.2,   output: 0.5,   name: 'Grok 4.2',        provider: 'xai' },
+  'minimax/MiniMax-M2.7-Lightning': { input: 0.3,   output: 1.2,   name: 'MiniMax M2.7',    provider: 'minimax' },
+  'minimax/MiniMax-M2.5-Lightning': { input: 0.015, output: 0.06,  name: 'MiniMax M2.5',    provider: 'minimax' },
+  'ollama/minimax-m2.7:cloud':      { input: 0.3,   output: 1.2,   name: 'MiniMax M2.7',    provider: 'minimax' },
+  'ollama/gemma4:26b':              { input: 0,     output: 0,     name: 'Gemma4 26b',      provider: 'local' },
+  'ollama/gemma4:31b-cloud':        { input: 0,     output: 0,     name: 'Gemma4 31b',      provider: 'local' },
+  'zai/glm-4.7-flash':              { input: 0,     output: 0,     name: 'GLM Flash',       provider: 'local' },
+  'zai/glm-5':                      { input: 0,     output: 0,     name: 'GLM-5',           provider: 'local' },
+};
+
+const PROVIDER_COLORS = {
+  anthropic: '#cc785c',
+  google:    '#4285f4',
+  xai:       '#ffffff',
+  minimax:   '#a78bfa',
+  local:     '#10b981',
+};
+
+function estimateWeeklySpend(agents) {
+  if (!agents || agents.length === 0) return [];
+
+  const AVG_INPUT_TOKENS = 10000;  // avg per run
+  const AVG_OUTPUT_TOKENS = 2500;
+
+  const modelMap = {};
+
+  agents.forEach(agent => {
+    if (!agent.enabled) return;
+    const model = agent.model || '';
+    const schedule = agent.schedule || '';
+
+    // Estimate weekly runs from cron expression
+    const parts = schedule.split(' ');
+    if (parts.length < 5) return;
+    const [, hour, dom, , dow] = parts;
+    let weeklyRuns = 7; // default daily
+    if (hour.includes(',')) weeklyRuns = hour.split(',').length * 7;
+    else if (dow !== '*') weeklyRuns = (dow.includes(',') ? dow.split(',').length : 1);
+    else if (dom === '1') weeklyRuns = 0.25; // monthly
+
+    if (!modelMap[model]) modelMap[model] = 0;
+    modelMap[model] += weeklyRuns;
+  });
+
+  const results = [];
+  for (const [model, runs] of Object.entries(modelMap)) {
+    const p = MODEL_PRICING[model] || { input: 1.0, output: 5.0, name: model.split('/').pop(), provider: 'unknown' };
+    const cost = runs * (AVG_INPUT_TOKENS / 1e6 * p.input + AVG_OUTPUT_TOKENS / 1e6 * p.output);
+    if (cost > 0.001) {
+      results.push({ model, name: p.name, provider: p.provider, runs: Math.round(runs), cost });
+    }
+  }
+
+  results.sort((a, b) => b.cost - a.cost);
+  return results;
+}
+
+function renderModelSpend(agents) {
+  const container = document.getElementById('model-spend-bars');
+  const totalEl = document.getElementById('model-spend-total');
+  if (!container) return;
+
+  const breakdown = estimateWeeklySpend(agents);
+  if (breakdown.length === 0) {
+    container.innerHTML = '<div class="model-spend-empty">No spend data available</div>';
+    return;
+  }
+
+  const total = breakdown.reduce((s, r) => s + r.cost, 0);
+  const maxCost = breakdown[0].cost;
+
+  container.innerHTML = breakdown.map(r => {
+    const pct = Math.round((r.cost / maxCost) * 100);
+    const color = PROVIDER_COLORS[r.provider] || '#888';
+    const isAnthropicSonnet = r.model === 'anthropic/claude-sonnet-4-6';
+    const isAnthropicOpus = r.model === 'anthropic/claude-opus-4-6';
+    const highlight = (isAnthropicSonnet || isAnthropicOpus) ? ' model-spend-bar-row--highlight' : '';
+    return `<div class="model-spend-bar-row${highlight}">
+      <div class="model-spend-bar-label">
+        <span class="model-spend-dot" style="background:${color}"></span>
+        <span class="model-spend-name">${r.name}</span>
+        <span class="model-spend-runs">${r.runs} runs/wk</span>
+      </div>
+      <div class="model-spend-bar-track">
+        <div class="model-spend-bar-fill" style="width:${pct}%;background:${color}"></div>
+      </div>
+      <span class="model-spend-cost">$${r.cost.toFixed(3)}</span>
+    </div>`;
+  }).join('');
+
+  if (totalEl) totalEl.textContent = `Est. weekly total: $${total.toFixed(2)}`;
 }
 
 window.newLinkedInDraft = newLinkedInDraft;

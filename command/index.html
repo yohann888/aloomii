@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aloomii HQ — Command Center</title>
-    <link rel="stylesheet" href="styles.css?v=20260407-intel-events">
+    <link rel="stylesheet" href="styles.css?v=20260407-model-spend">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="app.js?v=20260407-intel-events" defer></script>
+    <script src="app.js?v=20260407-model-spend" defer></script>
 </head>
 <body>
     <!-- Password Gate -->
@@ -184,7 +184,22 @@
                         </div>
                         
                         <div class="roi-big">108x <span class="gradient-text">ROI</span></div>
-                        
+
+                        <!-- Model Spend Breakdown -->
+                        <div class="model-spend-section">
+                            <div class="model-spend-header">
+                                <span class="model-spend-title">🧠 Model Spend Breakdown</span>
+                                <span class="model-spend-period">est. weekly</span>
+                            </div>
+                            <div id="model-spend-bars" class="model-spend-bars">
+                                <!-- Populated by JS -->
+                            </div>
+                            <div class="model-spend-footer">
+                                <span id="model-spend-total">Loading…</span>
+                                <span class="model-spend-note">est. · <a href="https://console.anthropic.com/settings/usage" target="_blank" class="model-spend-link">Anthropic Console ↗</a></span>
+                            </div>
+                        </div>
+
                         <svg width="100%" height="80" class="sparkline">
                             <polyline points="10,65 35,45 60,55 85,25" fill="none" stroke="#009e96" stroke-width="3"></polyline>
                         </svg>
