@@ -401,6 +401,7 @@ function renderEventsStrip(events) {
         empty.className = 'event-card';
         empty.innerHTML = '<div class="event-title">No upcoming events</div><div class="event-meta">Check back later</div>';
         container.appendChild(empty);
+        renderIntelEvents(events);
         return;
     }
     
@@ -419,6 +420,41 @@ function renderEventsStrip(events) {
         `;
         container.appendChild(card);
     });
+
+    // Also populate Intel section
+    renderIntelEvents(events);
+}
+
+function renderIntelEvents(events) {
+    const container = document.getElementById('events-container');
+    if (!container) return;
+
+    if (!events || events.length === 0) {
+        container.innerHTML = '<p class="empty-state">No upcoming events. Run event-scanner to populate.</p>';
+        return;
+    }
+
+    container.innerHTML = events.map(event => {
+        const date = event.date ? new Date(event.date).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'}) : 'TBD';
+        const location = event.location || 'Online';
+        const overlap = event.contact_overlap || 0;
+        const priority = event.priority || 'monitor';
+        const priorityEmoji = priority === 'attend' ? '🔥' : priority === 'consider' ? '🟡' : '⚪';
+        const contacts = event.matching_contacts || [];
+
+        return `<div class="intel-event-card">
+            <div class="intel-event-header">
+                <span class="intel-event-priority">${priorityEmoji}</span>
+                <div class="intel-event-info">
+                    <div class="intel-event-title">${event.title || event.name || 'Event'}</div>
+                    <div class="intel-event-meta">${date} · ${location}</div>
+                </div>
+                <span class="badge ${priority}">${priority}</span>
+            </div>
+            ${overlap > 0 ? `<div class="intel-event-overlap">👥 ${overlap} contact${overlap !== 1 ? 's' : ''} in your network${contacts.length > 0 ? ': ' + contacts.slice(0,3).join(', ') + (contacts.length > 3 ? ` +${contacts.length-3}` : '') : ''}</div>` : ''}
+            ${event.url ? `<a href="${event.url}" target="_blank" class="intel-event-link">View event ↗</a>` : ''}
+        </div>`;
+    }).join('');
 }
 
 // === COMMAND PALETTE ===
