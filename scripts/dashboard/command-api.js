@@ -418,7 +418,13 @@ module.exports = function registerCommandAPI(app, pool = null) {
                 healthy: healthy,
                 attention: attention,
                 offline: offline,
-                agents: agents.slice(0, 20) // limit for UI
+                agents: agents
+                  .sort((a, b) => {
+                    // enabled first, then by status: healthy > attention > offline > disabled
+                    const statusOrder = { healthy: 0, attention: 1, offline: 2, disabled: 3 };
+                    return (statusOrder[a.status] ?? 4) - (statusOrder[b.status] ?? 4);
+                  })
+                  .slice(0, 50) // show up to 50 agents
               };
               
               // Real economics from economics_daily table (Bridge C)
