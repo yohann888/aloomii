@@ -1090,6 +1090,79 @@ module.exports = function registerCommandAPI(app, pool = null) {
     }
   });
 
+  // POST /api/command/contacts/:id/village-paths — query Village API for warm intro paths
+  app.post('/api/command/contacts/:id/village-paths', async (req, res) => {
+    const { id } = req.params;
+    try {
+      // Get contact info
+      const contactResult = await query(
+        'SELECT id, name, email, metadata, mutual_connection FROM contacts WHERE id = $1',
+        [id]
+      );
+      if (contactResult.rows.length === 0) return res.status(404).json({ error: 'Contact not found' });
+      const contact = contactResult.rows[0];
+
+      // Get company from contacts join or signals
+      const companyResult = await query(
+        `SELECT COALESCE(c.metadata->>'company', os.company, '') as company
+         FROM contacts c
+         LEFT JOIN prospect_signals os ON os.contact_id = c.id
+         WHERE c.id = $1 LIMIT 1`,
+        [id]
+      );
+      const company = companyResult.rows[0]?.company || '';
+
+      // Query Village API
+      const VILLAGE_TOKEN = process.env.VILLAGE_USER_TOKEN || process.env.VILLAGE_API_KEY || 'demo_token_global';
+      let paths = [];
+      let mutualConnection = contact.mutual_connection;
+
+      if (company) {
+        // Extract domain from company name (best effort)
+        const domain = company.toLowerCase()
+          .replace(/[^a-z0-9.]/g, '')
+          .replace(/^www\./, '') || company.toLowerCase().replace(/\s+/g, '') + '.com';
+
+        const villageRes = await fetch('https://api.village.do/v2/companies/paths', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${VILLAGE_TOKEN}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ domain })
+        });
+
+        if (villageRes.ok) {
+          const villageData = await villageRes.json();
+          paths = Array.isArray(villageData) ? villageData : (villageData.paths || []);
+
+          // Save to contact metadata
+          const existing = contact.metadata || {};
+          await query(
+            `UPDATE contacts SET metadata = $1, updated_at = NOW() WHERE id = $2`,
+            [JSON.stringify({ ...existing, village_paths: paths, village_refreshed_at: new Date().toISOString() }), id]
+          );
+
+          // Build mutual_connection summary from paths
+          if (paths.length > 0) {
+            const connectors = paths.slice(0, 3).map(p =>
+              Array.isArray(p.connectors) ? p.connectors[0] : (p.connector || p.name || 'Unknown')
+            );
+            mutualConnection = connectors.join(', ') + (paths.length > 3 ? ` + ${paths.length - 3} others` : '');
+            await query(
+              `UPDATE contacts SET mutual_connection = $1 WHERE id = $2`,
+              [mutualConnection, id]
+            );
+          }
+        }
+      }
+
+      res.json({ success: true, paths, mutual_connection: mutualConnection, contact_name: contact.name });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
   // POST /api/command/outreach/log — quick one-liner outreach outcome logger
   app.post('/api/command/outreach/log', async (req, res) => {
     const { contact_name, channel = 'unknown', outcome = 'sent', note = '' } = req.body;

@@ -1978,6 +1978,16 @@ function editContact(id) {
             ${contact.decay_alert ? '<div class="decay-alert">⚠️ Decay Alert: This contact is going cold</div>' : ''}
         </div>
 
+        <div class="detail-section warm-intro-section">
+            <h4 class="detail-section-title">🤝 Warm Intro Paths</h4>
+            <div id="warm-intro-body" class="warm-intro-body">
+              ${renderWarmIntroPaths(contact)}
+            </div>
+            <button class="warm-intro-refresh" onclick="refreshVillagePaths('${id}', '${(contact.company || '').replace(/'/g, '')}')">
+              🔄 Refresh from Village
+            </button>
+        </div>
+
         <div class="detail-panel-footer">
             <button onclick="saveContactDetail('${id}')" class="btn-primary">Save Changes</button>
             <button onclick="closeDetailPanel()" class="btn-secondary">Cancel</button>
@@ -2625,6 +2635,97 @@ async function loadRecentOutreach() {
 }
 
 window.submitOutreachLog = submitOutreachLog;
+
+// ─── Warm Intro Paths ──────────────────────────────────────────────────────────
+
+function renderWarmIntroPaths(contact) {
+  const mutual = contact.mutual_connection;
+  const villagePaths = contact.metadata?.village_paths;
+
+  let html = '';
+
+  // Village API paths (structured)
+  if (villagePaths && villagePaths.length > 0) {
+    html += villagePaths.slice(0, 5).map((path, i) => {
+      const connectors = Array.isArray(path.connectors) ? path.connectors : [path.connector || path.name || 'Unknown'];
+      const strength = path.strength || path.score;
+      const strengthBadge = strength >= 0.8 ? '🟢 Strong' : strength >= 0.5 ? '🟡 Medium' : '⚪ Weak';
+      return `<div class="intro-path">
+        <span class="intro-path-num">${i + 1}</span>
+        <div class="intro-path-detail">
+          <span class="intro-path-connectors">${connectors.join(' → ')} → ${contact.name}</span>
+          ${strength ? `<span class="intro-path-strength">${strengthBadge}</span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Fallback: mutual_connection field (raw text from DB)
+  if (!html && mutual) {
+    const isUrl = mutual.startsWith('http');
+    if (isUrl) {
+      html = `<div class="intro-path">
+        <span class="intro-path-num">1</span>
+        <div class="intro-path-detail">
+          <a href="${mutual}" target="_blank" class="intro-path-link">LinkedIn connection ↗</a>
+        </div>
+      </div>`;
+    } else {
+      // Parse "Name1, Name2 + N others" format
+      const parts = mutual.split('+');
+      const names = parts[0].split(',').map(n => n.trim()).filter(Boolean);
+      const others = parts[1] ? parts[1].trim() : '';
+      html = names.map((name, i) => `<div class="intro-path">
+        <span class="intro-path-num">${i + 1}</span>
+        <div class="intro-path-detail">
+          <span class="intro-path-connectors">${name} → ${contact.name || 'Contact'}</span>
+          <span class="intro-path-strength">🟡 Via network</span>
+        </div>
+      </div>`).join('');
+      if (others) html += `<div class="intro-path-more">${others}</div>`;
+    }
+  }
+
+  if (!html) {
+    html = '<div class="intro-path-empty">No warm paths found. Click Refresh to query Village.</div>';
+  }
+
+  return html;
+}
+
+async function refreshVillagePaths(contactId, company) {
+  const body = document.getElementById('warm-intro-body');
+  if (!body) return;
+  body.innerHTML = '<div class="intro-path-loading">⏳ Querying Village…</div>';
+
+  try {
+    const res = await fetch(`/api/command/contacts/${contactId}/village-paths`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+
+    // Update local contact data
+    if (commandData?.contacts) {
+      const idx = commandData.contacts.findIndex(c => String(c.id) === String(contactId));
+      if (idx !== -1) {
+        if (!commandData.contacts[idx].metadata) commandData.contacts[idx].metadata = {};
+        commandData.contacts[idx].metadata.village_paths = data.paths;
+        commandData.contacts[idx].mutual_connection = data.mutual_connection || commandData.contacts[idx].mutual_connection;
+        body.innerHTML = renderWarmIntroPaths(commandData.contacts[idx]);
+      }
+    }
+
+    if (data.paths && data.paths.length > 0) {
+      showToast(`${data.paths.length} intro paths found`, 'success');
+    } else {
+      showToast('No warm paths found in Village', 'info');
+    }
+  } catch (e) {
+    body.innerHTML = '<div class="intro-path-empty">Village query failed. Check API connection.</div>';
+    showToast('Village refresh failed: ' + e.message, 'error');
+  }
+}
+
+window.refreshVillagePaths = refreshVillagePaths;
 
 // Load recent on page init
 document.addEventListener('DOMContentLoaded', () => { loadRecentOutreach(); });
