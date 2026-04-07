@@ -662,6 +662,28 @@ function renderBriefing(briefing) {
         };
         linesContainer.appendChild(line);
     }
+
+    // DMS alerts
+    if (briefing.dms_alert_count && briefing.dms_alert_count > 0) {
+        (briefing.dms_alerts || []).forEach(alert => {
+            const line = document.createElement('div');
+            line.className = 'briefing-line briefing-line--red';
+            const typeLabel = alert.type === 'dms_content_heartbeat' ? '🚨 Content engine silent 48h+'
+              : alert.type === 'dms_signal_expiry' ? `⏰ ${(alert.payload?.expiring_count || 'High-value')} signals expiring unacted`
+              : `⚠️ Fleet alert: ${alert.type.replace('dms_','').replace(/_/g,' ')}`;
+            line.innerHTML = typeLabel;
+            linesContainer.appendChild(line);
+        });
+    }
+
+    // Fleet failures from last audit
+    if (briefing.fleet_failures_count && briefing.fleet_failures_count > 0) {
+        const line = document.createElement('div');
+        line.className = 'briefing-line briefing-line--red';
+        const failNames = (briefing.fleet_failures || []).slice(0,3).join(', ');
+        line.innerHTML = `❌ ${briefing.fleet_failures_count} cron failure${briefing.fleet_failures_count > 1 ? 's' : ''} last night${failNames ? ': ' + failNames : ''}`;
+        linesContainer.appendChild(line);
+    }
 }
 
 // === PHASE 4: HQ Live Data Renderer ===
@@ -1044,14 +1066,21 @@ function renderHeatmap(contacts) {
     const followupBadge = contact.follow_up_date ? 
       `<span class="badge followup">📅 ${contact.follow_up_date}</span>` : '';
     
+    const rhsVal = parseFloat(contact.rhs_current) || 0;
+    const rhsBadge = rhsVal > 0
+      ? `<span class="rhs-badge ${rhsVal >= 70 ? 'rhs-high' : rhsVal >= 40 ? 'rhs-mid' : 'rhs-low'}">${Math.round(rhsVal)}</span>`
+      : '<span class="rhs-badge rhs-none">—</span>';
+    const decayBadge = contact.decay_alert ? '<span class="decay-badge">⚠️</span>' : '';
+
     const row = document.createElement('tr');
     row.innerHTML = `
       <td><span class="temp-dot ${temp.cssClass}">${temp.emoji}</span> ${temp.label}</td>
-      <td><strong>${contact.name || 'Unknown'}</strong></td>
+      <td><strong>${contact.name || 'Unknown'}</strong>${decayBadge}</td>
       <td>${contact.company || contact.handle || ''}</td>
       <td>${contact.tier || 3}</td>
       <td>${lastTouch}</td>
       <td>${contact.signal_count || 0}</td>
+      <td>${rhsBadge}</td>
       <td>${followupBadge}</td>
       <td>
         <button onclick="editContact('${contact.id}')" class="btn-small">Edit</button>
@@ -1294,15 +1323,26 @@ function renderOutreachQueue(items) {
   items.forEach(item => {
     const card = document.createElement('div');
     card.className = 'queue-card';
+    const overdueBadge = item.overdue_days > 0 ? `<span class="queue-overdue">${item.overdue_days}d overdue</span>` : '';
+    const tierBadge = item.contact_tier ? `<span class="queue-tier">T${item.contact_tier}</span>` : '';
+    const draftPreview = item.draft ? `<div class="queue-draft">${item.draft.substring(0, 120)}${item.draft.length > 120 ? '…' : ''}</div>` : '';
     card.innerHTML = `
       <div class="queue-header">
-        <span class="contact-name">${item.contact_name || 'Contact'}</span>
-        <span class="fire-date">${item.fire_date}</span>
+        <div class="queue-contact">
+          ${tierBadge}
+          <span class="contact-name">${item.contact_name || 'Contact'}</span>
+          ${item.contact_company ? `<span class="queue-company">${item.contact_company}</span>` : ''}
+        </div>
+        <div class="queue-meta">
+          ${overdueBadge}
+          <span class="fire-date">${item.fire_date || 'TBD'}</span>
+        </div>
       </div>
       <div class="queue-body">
-        <div class="queue-type">${item.type || 'outreach'}</div>
-        <div class="queue-channel">${item.channel || 'email'}</div>
+        <span class="queue-type-badge">${item.type || 'outreach'}</span>
+        <span class="queue-channel-badge">${item.channel || 'email'}</span>
       </div>
+      ${draftPreview}
       <div class="queue-actions">
         <button onclick="snoozeQueueItem('${item.id}', 7)" class="btn-snooze">Snooze 7d</button>
         <button onclick="skipQueueItem('${item.id}')" class="btn-skip">Skip</button>

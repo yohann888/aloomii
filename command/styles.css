@@ -2763,6 +2763,23 @@ body.modal-open {
     }
 }
 
+/* RHS badges in CRM table */
+.rhs-badge { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; font-variant-numeric: tabular-nums; }
+.rhs-high { background: #10b98120; color: #10b981; }
+.rhs-mid  { background: #f59e0b20; color: #f59e0b; }
+.rhs-low  { background: #ef444420; color: #ef4444; }
+.rhs-none { background: transparent; color: var(--text-dim, #888); font-weight: 400; }
+.decay-badge { font-size: 12px; margin-left: 4px; }
+
+/* Outreach queue cards — enhanced */
+.queue-contact { display: flex; align-items: center; gap: 6px; flex: 1; }
+.queue-tier { font-size: 10px; font-weight: 700; background: var(--accent, #6c63ff); color: #fff; border-radius: 3px; padding: 1px 5px; }
+.queue-company { font-size: 11px; color: var(--text-dim, #888); }
+.queue-meta { display: flex; align-items: center; gap: 6px; }
+.queue-overdue { font-size: 10px; font-weight: 700; color: #ef4444; background: #ef444420; border-radius: 3px; padding: 1px 5px; }
+.queue-type-badge, .queue-channel-badge { font-size: 10px; background: var(--input-bg, #0f0f1a); border-radius: 4px; padding: 2px 7px; color: var(--text-dim, #888); }
+.queue-draft { font-size: 12px; color: var(--text-dim, #aaa); background: var(--input-bg, #0f0f1a); border-radius: 6px; padding: 8px 10px; margin: 6px 0; line-height: 1.5; font-style: italic; }
+
 /* Model Spend Breakdown */
 .model-spend-section {
     margin-top: 18px;

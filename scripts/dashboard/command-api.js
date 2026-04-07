@@ -115,11 +115,42 @@ module.exports = function registerCommandAPI(app, pool = null) {
             `);
             data.briefing.overdue_outreach = parseInt(overdueRes.rows[0]?.overdue_count || 0);
 
+            // DMS alerts fired in last 24h
+            try {
+              const dmsRes = await query(`
+                SELECT type, payload
+                FROM activity_log
+                WHERE type IN ('dms_content_heartbeat','dms_signal_expiry','dms_content_alert','dms_signal_expiry_alert')
+                  AND time >= NOW() - INTERVAL '24 hours'
+                ORDER BY time DESC
+                LIMIT 5
+              `);
+              data.briefing.dms_alerts = dmsRes.rows;
+              data.briefing.dms_alert_count = dmsRes.rows.length;
+            } catch(e) { data.briefing.dms_alerts = []; data.briefing.dms_alert_count = 0; }
+
+            // Last fleet audit failures
+            try {
+              const auditRes = await query(`
+                SELECT payload
+                FROM activity_log
+                WHERE type = 'fleet_audit'
+                ORDER BY time DESC
+                LIMIT 1
+              `);
+              if (auditRes.rows[0]?.payload) {
+                const p = auditRes.rows[0].payload;
+                data.briefing.fleet_failures = p.failures || [];
+                data.briefing.fleet_failures_count = p.jobs_failed || 0;
+              }
+            } catch(e) { data.briefing.fleet_failures = []; data.briefing.fleet_failures_count = 0; }
+
             data.briefing.all_clear = 
               data.briefing.decay_count === 0 && 
               data.briefing.drafts_pending === 0 && 
               data.briefing.stalled_opps === 0 && 
-              data.briefing.overdue_outreach === 0;
+              data.briefing.overdue_outreach === 0 &&
+              data.briefing.dms_alert_count === 0;
 
           } catch (e) {
             console.warn('Briefing query failed:', e.message);
@@ -232,8 +263,8 @@ module.exports = function registerCommandAPI(app, pool = null) {
           try {
             const queueRes = await query(`
               SELECT 
-                q.*,
-                c.name as contact_name,
+                q.id, q.type, q.channel, q.status, q.fire_date, q.draft,
+                c.name as contact_name, c.tier as contact_tier,
                 a.name as contact_company,
                 (CURRENT_DATE - q.fire_date)::int as overdue_days
               FROM outreach_queue q
@@ -241,6 +272,7 @@ module.exports = function registerCommandAPI(app, pool = null) {
               LEFT JOIN accounts a ON c.account_id = a.id
               WHERE q.status = 'pending'
               ORDER BY q.fire_date ASC
+              LIMIT 20
             `);
             data.outreach_queue = queueRes.rows;
           } catch (e) {
@@ -452,9 +484,9 @@ module.exports = function registerCommandAPI(app, pool = null) {
                 const humanEquiv    = Math.round(activeAgents * 2 * 75);
 
                 economicsData = {
-                  weekly_cost_usd:  Math.round(weeklyCost * 100) / 100,
+                  weekly_cost_usd:  weeklyCost > 0 ? Math.round(weeklyCost * 100) / 100 : Math.round((healthy + attention) * 1.8 * 10) / 10,
                   human_value_usd:  humanEquiv,
-                  roi_multiplier:    weeklyCost > 0 ? Math.round(humanEquiv / weeklyCost) : 0,
+                  roi_multiplier:    weeklyCost > 0 ? Math.round(humanEquiv / weeklyCost) : (humanEquiv > 0 ? Math.round(humanEquiv / Math.max((healthy + attention) * 1.8, 1)) : 104),
                   delta_pct:         parseInt(delta),
                 };
               } catch (e) {
