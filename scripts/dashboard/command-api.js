@@ -1203,29 +1203,42 @@ module.exports = function registerCommandAPI(app, pool = null) {
 
   // POST /api/command/outreach/log — quick one-liner outreach outcome logger
   app.post('/api/command/outreach/log', async (req, res) => {
-    const { contact_name, channel = 'unknown', outcome = 'sent', note = '' } = req.body;
+    const { contact_name, channel = 'unknown', outcome = 'sent', note = '', email = '' } = req.body;
     if (!contact_name) return res.status(400).json({ error: 'contact_name required' });
     try {
       const contactMatch = await query(
-        `SELECT id, name FROM contacts WHERE name ILIKE $1 LIMIT 1`,
+        `SELECT id, name, email FROM contacts WHERE name ILIKE $1 LIMIT 1`,
         [`%${contact_name}%`]
       );
       const contactId = contactMatch.rows[0]?.id || null;
       const resolvedName = contactMatch.rows[0]?.name || contact_name;
+      const existingEmail = contactMatch.rows[0]?.email || '';
+
+      // Write to activity_log
       await query(`
         INSERT INTO activity_log (time, type, source, contact_id, payload)
         VALUES (NOW(), 'outreach_logged', 'command_center', $1, $2)
       `, [
         contactId || null,
-        JSON.stringify({ contact_name: resolvedName, channel, outcome, note })
+        JSON.stringify({ contact_name: resolvedName, channel, outcome, note, ...(email ? { email } : {}) })
       ]);
+
+      let emailUpdated = false;
       if (contactId) {
-        await query(
-          `UPDATE contacts SET last_outreach_date = NOW() WHERE id = $1`,
-          [contactId]
-        );
+        const cleanEmail = email && email.includes('@') ? email.trim() : null;
+        if (cleanEmail && cleanEmail !== existingEmail) {
+          // New or updated email — save to contacts
+          await query(
+            `UPDATE contacts SET last_outreach_date = NOW(), email = $1 WHERE id = $2`,
+            [cleanEmail, contactId]
+          );
+          emailUpdated = true;
+        } else {
+          await query(`UPDATE contacts SET last_outreach_date = NOW() WHERE id = $1`, [contactId]);
+        }
       }
-      res.json({ success: true, contact: resolvedName, outcome, note });
+
+      res.json({ success: true, contact: resolvedName, outcome, note, email_updated: emailUpdated, email: email || null });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

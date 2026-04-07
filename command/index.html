@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aloomii HQ — Command Center</title>
-    <link rel="stylesheet" href="styles.css?v=20260407-logo">
+    <link rel="stylesheet" href="styles.css?v=20260407-email-capture">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="app.js?v=20260407-logo" defer></script>
+    <script src="app.js?v=20260407-email-capture" defer></script>
 </head>
 <body>
     <!-- Password Gate -->
@@ -113,6 +113,7 @@
                       <option value="no_reply">No reply</option>
                     </select>
                     <input type="text" id="outreach-log-note" placeholder="Note (optional)" class="outreach-log-input outreach-log-note" />
+                    <input type="email" id="outreach-log-email" placeholder="Email (if shared)" class="outreach-log-input outreach-log-email" />
                     <button onclick="submitOutreachLog()" class="outreach-log-btn">Log</button>
                   </div>
                   <div id="outreach-log-recent" class="outreach-log-recent"></div>

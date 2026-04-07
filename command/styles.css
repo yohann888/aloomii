@@ -2962,6 +2962,10 @@ body.modal-open {
 .outreach-log-input.outreach-log-note {
     flex: 2;
 }
+.outreach-log-input.outreach-log-email {
+    flex: 1.5;
+    min-width: 160px;
+}
 .outreach-log-select {
     background: var(--input-bg, #0f0f1a);
     border: 1px solid var(--border, #2a2a3e);

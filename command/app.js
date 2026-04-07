@@ -2770,20 +2770,25 @@ async function submitOutreachLog() {
   const name = document.getElementById('outreach-log-name').value.trim();
   const outcome = document.getElementById('outreach-log-outcome').value;
   const note = document.getElementById('outreach-log-note').value.trim();
+  const email = document.getElementById('outreach-log-email')?.value.trim() || '';
   if (!name) { showToast('Enter a contact name', 'error'); return; }
 
   try {
     const res = await fetch('/api/command/outreach/log', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contact_name: name, outcome, note, channel: 'manual' })
+      body: JSON.stringify({ contact_name: name, outcome, note, channel: 'manual', email })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Log failed');
-    showToast(`Logged: ${data.contact} — ${outcome}`, 'success');
+    const emailMsg = data.email_updated ? ` · email saved` : '';
+    showToast(`Logged: ${data.contact} — ${outcome}${emailMsg}`, 'success');
     document.getElementById('outreach-log-name').value = '';
     document.getElementById('outreach-log-note').value = '';
+    if (document.getElementById('outreach-log-email')) document.getElementById('outreach-log-email').value = '';
     loadRecentOutreach();
+    // Refresh CRM contacts so email shows up immediately
+    if (data.email_updated) refreshAll();
   } catch (e) {
     showToast('Failed to log: ' + e.message, 'error');
   }
