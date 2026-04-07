@@ -143,8 +143,8 @@ module.exports = function registerCommandAPI(app, pool = null) {
                 END as temperature
               FROM contacts c
               LEFT JOIN accounts a ON c.account_id = a.id
-              ORDER BY COALESCE(c.last_outreach_date, c.created_at) DESC
-              LIMIT 100
+              ORDER BY c.tier ASC NULLS LAST, COALESCE(c.last_outreach_date, c.created_at) DESC
+              LIMIT 500
             `);
             data.contacts = contactsRes.rows;
           } catch (e) {
