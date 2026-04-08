@@ -126,6 +126,8 @@ function showSection(section) {
             if (commandData.signals) renderSignals(commandData.signals);
         } else if (section === 'intel') {
             if (commandData.pipeline) renderPipeline(commandData);
+        } else if (section === 'backlog') {
+            renderBacklog();
         }
     }
 }
@@ -843,6 +845,7 @@ async function fetchCommandData() {
         if (commandData.outreach_queue) renderOutreachQueue(commandData.outreach_queue);
         if (commandData.signals) renderSignals(commandData.signals);
         if (commandData.pipeline) renderPipeline(commandData);
+        if (typeof renderBacklog === 'function') renderBacklog();
         if (commandData.tasks && typeof renderTasks === 'function') {
             renderTasks(commandData.tasks);
         }
@@ -2908,6 +2911,86 @@ async function refreshVillagePaths(contactId, company) {
 }
 
 window.refreshVillagePaths = refreshVillagePaths;
+
+function renderBacklog() {
+  const container = document.getElementById('backlog-container');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  if (!commandData.backlog || commandData.backlog.length === 0) {
+    container.innerHTML = '<div class="empty-state">No backlog items found.</div>';
+    return;
+  }
+
+  commandData.backlog.forEach(group => {
+    const groupDiv = document.createElement('div');
+    groupDiv.className = 'backlog-group';
+    groupDiv.innerHTML = `<div class="backlog-group-header">${group.category}</div>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'backlog-grid';
+
+    group.items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = `backlog-card priority-${item.priority || 'medium'} status-${item.status || 'pending'}`;
+      card.innerHTML = `
+        <div class="backlog-card-header">
+          <span class="backlog-title">${item.title}</span>
+          <span class="backlog-badge">${item.status}</span>
+        </div>
+        <div class="backlog-description">${item.description}</div>
+        <div class="backlog-actions">
+          <button class="backlog-btn action-now" onclick="promoteBacklogItem('${item.id}')">Action Now</button>
+          <button class="backlog-btn remove" onclick="removeBacklogItem('${item.id}')">Remove</button>
+        </div>
+        <div class="backlog-footer">
+          <span class="backlog-priority-tag">${item.priority}</span>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    groupDiv.appendChild(grid);
+    container.appendChild(groupDiv);
+  });
+}
+
+async function promoteBacklogItem(id) {
+  if (!confirm('Promote this item to an active task?')) return;
+  try {
+    const res = await fetch(`/api/command/backlog/${id}/promote`, { method: 'POST' });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Promoted to active task');
+      refreshAll();
+    } else {
+      showToast('Promotion failed: ' + data.error, 'error');
+    }
+  } catch (e) {
+    showToast('Network error: ' + e.message, 'error');
+  }
+}
+
+async function removeBacklogItem(id) {
+  if (!confirm('Permanently remove this item from backlog?')) return;
+  try {
+    const res = await fetch(`/api/command/backlog/${id}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Item removed');
+      refreshAll();
+    } else {
+      showToast('Removal failed: ' + data.error, 'error');
+    }
+  } catch (e) {
+    showToast('Network error: ' + e.message, 'error');
+  }
+}
+
+window.renderBacklog = renderBacklog;
+window.promoteBacklogItem = promoteBacklogItem;
+window.removeBacklogItem = removeBacklogItem;
 
 // Load recent on page init
 document.addEventListener('DOMContentLoaded', () => { loadRecentOutreach(); });

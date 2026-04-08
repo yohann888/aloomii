@@ -1,0 +1,9 @@
+name = "pbn-content-worker"
+main = "auth.js"
+compatibility_date = "2024-01-01"
+account_id = "12f075345f13fd7cfbdb3bb663755334"
+
+[env.production]
+routes = [
+  { pattern = "palebluenexus.com/content/*", zone_name = "palebluenexus.com" }
+]

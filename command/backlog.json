@@ -1,0 +1,131 @@
+[
+  {
+    "category": "P0/P1 Fixes",
+    "items": [
+      {
+        "id": "p0-fix-1",
+        "title": "qualify-signal.js calibration review \u2014 FIXED: ICP data required, scout score 3 gated, CRM score reduced",
+        "priority": "high",
+        "category": "operational",
+        "status": "done",
+        "created": "2026-04-08"
+      },
+      {
+        "id": "p0-fix-2",
+        "title": "Obsidian vault backup fix \u2014 restore automated vault sync \u2014 FIXED: B2 cap increased, backup confirmed running",
+        "priority": "high",
+        "category": "operational",
+        "status": "done",
+        "created": "2026-04-08"
+      },
+      {
+        "id": "p0-done-1",
+        "title": "Anthropic credits top-up (day 5) [REMOVED \u2014 completed]",
+        "priority": "high",
+        "category": "operational",
+        "status": "removed",
+        "created": "2026-04-08"
+      },
+      {
+        "id": "p1-done-1",
+        "title": "xAI Grok credit replenishment [REMOVED \u2014 completed]",
+        "priority": "medium",
+        "category": "operational",
+        "status": "removed",
+        "created": "2026-04-08"
+      }
+    ]
+  },
+  {
+    "category": "Growth Execution",
+    "items": [
+      {
+        "id": "backlog-1",
+        "title": "Phase 2 \u2014 X Launch",
+        "description": "First wave of traffic into lead magnets + Table applications. Hooks + threads ready in sops/growth/x-viral-launch-v2.md.",
+        "status": "pending",
+        "priority": "high"
+      },
+      {
+        "id": "backlog-2",
+        "title": "Phase 3 \u2014 Influencer + UGC",
+        "description": "Spin up in parallel once foundation stable. SOPs: sops/growth/influencer-playbook-v2.md, ugc-farm-v2.md.",
+        "status": "pending",
+        "priority": "medium"
+      }
+    ]
+  },
+  {
+    "category": "5-Layer Moat Build",
+    "items": [
+      {
+        "id": "backlog-5",
+        "title": "L2 \u2014 Client voice profiles",
+        "description": "2h per client. Best 5 posts, phrases used/avoided, 3 resonant angles. Scalability unlock for content layer.",
+        "status": "pending",
+        "priority": "medium"
+      },
+      {
+        "id": "backlog-6",
+        "title": "L4 \u2014 Relationship health scores",
+        "description": "recency x quality x value, time-decaying. Weekly surface: '3 going cold + draft touchpoints.'",
+        "status": "pending",
+        "priority": "medium"
+      },
+      {
+        "id": "backlog-7",
+        "title": "L5 \u2014 Ops runbooks",
+        "description": "Document top 5 workflow breakdowns + fixes. Prerequisite for hiring second ops person.",
+        "status": "pending",
+        "priority": "low"
+      }
+    ]
+  },
+  {
+    "category": "Pending / Blocked",
+    "items": [
+      {
+        "id": "backlog-8",
+        "title": "SEMrush ranking",
+        "description": "aloomii.com not in SEMrush. Low DA, no backlinks, pages not indexed. Audit needed.",
+        "status": "blocked",
+        "priority": "medium"
+      },
+      {
+        "id": "backlog-9",
+        "title": "Exploding Topics",
+        "description": "7-day free trial ($39/mo). For Aloomii positioning only.",
+        "status": "pending",
+        "priority": "low"
+      },
+      {
+        "id": "backlog-10",
+        "title": "Village.do LinkedIn export",
+        "description": "Part 2 pending. Upload via POST /v1/user/paths when received.",
+        "status": "pending",
+        "priority": "medium"
+      },
+      {
+        "id": "backlog-11",
+        "title": "Azure AD (CR-J12)",
+        "description": "BACKLOGGED. Raise only when Yohann asks about Vincent/Westland demo.",
+        "status": "pending",
+        "priority": "low"
+      },
+      {
+        "id": "backlog-12",
+        "title": "DB migration + signal idempotency fix",
+        "description": "queued Senior Coder.",
+        "status": "pending",
+        "priority": "medium"
+      },
+      {
+        "id": "backlog-13",
+        "title": "Kit newsletter Form ID",
+        "description": "waiting on Yohann.",
+        "status": "pending",
+        "priority": "low"
+      }
+    ]
+  }
+]

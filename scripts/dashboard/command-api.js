@@ -65,6 +65,7 @@ module.exports = function registerCommandAPI(app, pool = null) {
         client_pilots: [],
         webhooks: [],
         tasks: [],
+        backlog: [],
         last_updated: new Date().toISOString(),
         _meta: { query_time_ms: 0 }
       };
@@ -611,6 +612,22 @@ module.exports = function registerCommandAPI(app, pool = null) {
             console.warn('Tasks query failed:', e.message);
             data.tasks = [];
           }
+        },
+
+        // 15. Strategic Backlog (from backlog.json)
+        async () => {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const backlogPath = path.join(__dirname, '..', '..', 'command', 'backlog.json');
+            if (fs.existsSync(backlogPath)) {
+              const content = fs.readFileSync(backlogPath, 'utf8');
+              data.backlog = JSON.parse(content);
+            }
+          } catch (e) {
+            console.warn('Backlog read failed:', e.message);
+            data.backlog = [];
+          }
         }
       ];
 
@@ -1002,6 +1019,75 @@ module.exports = function registerCommandAPI(app, pool = null) {
     }
   });
 
+  // POST /api/command/backlog/:id/promote — mark as in_progress and create a task
+  app.post('/api/command/backlog/:id/promote', async (req, res) => {
+    const { id } = req.params;
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const backlogPath = path.join(__dirname, '..', '..', 'command', 'backlog.json');
+      if (!fs.existsSync(backlogPath)) return res.status(404).json({ error: 'Backlog file missing' });
+
+      let backlog = JSON.parse(fs.readFileSync(backlogPath, 'utf8'));
+      let targetItem = null;
+      let targetCategory = null;
+
+      // Find the item
+      backlog.forEach(group => {
+        const item = group.items.find(i => i.id === id);
+        if (item) {
+          targetItem = item;
+          targetCategory = group.category;
+        }
+      });
+
+      if (!targetItem) return res.status(404).json({ error: 'Backlog item not found' });
+
+      // Create task in DB
+      const taskResult = await query(`
+        INSERT INTO tasks (title, description, source, category, status, priority)
+        VALUES ($1, $2, 'backlog', $3, 'pending', $4)
+        RETURNING *
+      `, [targetItem.title, targetItem.description, targetCategory, targetItem.priority || 'normal']);
+
+      // Mark backlog item as active
+      targetItem.status = 'active';
+      fs.writeFileSync(backlogPath, JSON.stringify(backlog, null, 2));
+
+      res.json({ success: true, task: taskResult.rows[0] });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // DELETE /api/command/backlog/:id — remove from backlog
+  app.delete('/api/command/backlog/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const backlogPath = path.join(__dirname, '..', '..', 'command', 'backlog.json');
+      if (!fs.existsSync(backlogPath)) return res.status(404).json({ error: 'Backlog file missing' });
+
+      let backlog = JSON.parse(fs.readFileSync(backlogPath, 'utf8'));
+      let removed = false;
+
+      backlog.forEach(group => {
+        const initialLen = group.items.length;
+        group.items = group.items.filter(i => i.id !== id);
+        if (group.items.length < initialLen) removed = true;
+      });
+
+      if (!removed) return res.status(404).json({ error: 'Backlog item not found' });
+
+      fs.writeFileSync(backlogPath, JSON.stringify(backlog, null, 2));
+      res.json({ success: true });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+
   // === CONTENT DRAFT WORKFLOW ===
 
   // GET /api/command/content/:id — get full content post
@@ -1225,7 +1311,9 @@ module.exports = function registerCommandAPI(app, pool = null) {
 
       let emailUpdated = false;
       if (contactId) {
-        const cleanEmail = email && email.includes('@') ? email.trim() : null;
+        // Auto-extract email from note if not explicitly provided in email field
+        const emailFromNote = (!email && note) ? (note.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/)?.[0] || null) : null;
+        const cleanEmail = (email && email.includes('@')) ? email.trim() : emailFromNote;
         if (cleanEmail && cleanEmail !== existingEmail) {
           // New or updated email — save to contacts
           await query(

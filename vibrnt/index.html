@@ -421,7 +421,16 @@ async function loadTrends() {
         return s.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 80) === trendNorm;
       });
 
-      entries.push({ trendName, vol, vel, pod, comp, body: block, matchedScripts, matchedProducts, date: report.date, actedOn });
+      // Extract source URL from body or allTrends
+      let sourceUrl = '';
+      const sourceMatch = block.match(/\[View original\]\((https?:\/\/[^\)]+)\)/);
+      if (sourceMatch) sourceUrl = sourceMatch[1];
+      if (!sourceUrl && window.__VIBRNT_DATA__ && window.__VIBRNT_DATA__.allTrends) {
+        const at = window.__VIBRNT_DATA__.allTrends.find(t => t.title && trendName && t.title.toLowerCase().trim() === trendName.toLowerCase().trim());
+        if (at && at.sourceUrl) sourceUrl = at.sourceUrl;
+      }
+
+      entries.push({ trendName, vol, vel, pod, comp, body: block, matchedScripts, matchedProducts, date: report.date, actedOn, sourceUrl });
     }
   }
 
@@ -486,6 +495,7 @@ async function loadTrends() {
           </li>`).join('')}
         </ul>
       ` : ''}
+      ${e.sourceUrl ? `<div style="margin:8px 0;"><a href="${escHtml(e.sourceUrl)}" target="_blank" rel="noopener" style="color:#00e5ff;text-decoration:none;font-size:12px;font-family:var(--mono);" onclick="event.stopPropagation()">&#128279; View original source on Reddit</a></div>` : ''}
       <div class="trend-read-more" onclick="event.stopPropagation()">Read full analysis <span class="trend-arrow">&#9658;</span></div>
       <div class="trend-detail">${escHtml(e.body)}</div>
     </div>
@@ -568,6 +578,7 @@ async function loadCatalog() {
       ${p.relatedTrend ? `<div class="catalog-trend-link" style="font-size:11px;color:#00e5a0;margin:6px 0;padding:6px 10px;background:rgba(0,229,160,0.08);border-radius:6px;border-left:3px solid #00e5a0;">
         <span style="opacity:0.7;">Trend:</span> ${escHtml(p.relatedTrend)}
         ${p.relatedReason ? `<br><span style="opacity:0.6;font-size:10px;">${escHtml(p.relatedReason)}</span>` : ''}
+        ${p.sourceUrl ? `<br><a href="${escHtml(p.sourceUrl)}" target="_blank" rel="noopener" style="color:#00e5ff;text-decoration:none;font-size:10px;">&#128279; View original source</a>` : ''}
       </div>` : ''}
       ${p.style ? `<div class="catalog-style">${escHtml(p.style)}</div>` : ''}
       ${p.moods && p.moods.length ? `<div class="catalog-mood-tags">${p.moods.map(m => `<span class="catalog-mood-tag">${escHtml(m)}</span>`).join('')}</div>` : ''}

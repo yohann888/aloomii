@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PBN Content Trends - What's Working This Week</title>
+  <meta name="description" content="Weekly content intelligence for podcast creators. See what hooks, formats, and opening lines are driving engagement right now.">
+  <meta property="og:title" content="PBN Content Trends">
+  <meta property="og:description" content="Weekly intelligence on what hooks and formats are winning this week.">
+  <meta property="og:type" content="website">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --border: #1e1e2e;
+      --accent: #6366f1;
+      --accent-dim: #4f51d4;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --text-muted: #64748b;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .header {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+      background: var(--surface);
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .week-badge {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+    }
+
+    .hero {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: var(--text-dim);
+      max-width: 520px;
+    }
+
+    .winner-banner {
+      max-width: 960px;
+      margin: 0 auto 32px;
+      padding: 0 24px;
+    }
+
+    .winner-card {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .winner-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .winner-type {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .winner-summary {
+      font-size: 14px;
+      color: var(--text-dim);
+      max-width: 680px;
+    }
+
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .cards-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: border-color 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--accent-dim);
+    }
+
+    .card-rank {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .card-text {
+      font-size: 16px;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .metric {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .metric-value {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .card-source {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .fail-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .fail-icon {
+      color: var(--red);
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .fail-text {
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .fail-reason {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── Trending Topics ──────────────────────────────────────────────── */
+    .topic-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .topic-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0 16px;
+      align-items: start;
+    }
+
+    .topic-heat {
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .topic-body {}
+
+    .topic-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .topic-hook {
+      font-size: 13px;
+      color: var(--accent);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+
+    .topic-why {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .topic-stats {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .topic-stat {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--green);
+      display: block;
+    }
+
+    /* ── Caption Toolkit ──────────────────────────────────────────────── */
+    .caption-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .caption-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      position: relative;
+    }
+
+    .caption-card:hover { border-color: var(--accent-dim); }
+
+    .caption-text {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .caption-chars {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .caption-copy {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+
+    .caption-copy:hover { color: var(--text); }
+
+    .hashtag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .hashtag-pill {
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-family: var(--mono);
+    }
+
+    .hashtag-pill.good {
+      background: rgba(34,197,94,0.1);
+      color: var(--green);
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+
+    .hashtag-pill.bad {
+      background: rgba(239,68,68,0.08);
+      color: var(--red);
+      border: 1px solid rgba(239,68,68,0.2);
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .hashtag-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .hashtag-tooltip {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* ── Platform Trends ──────────────────────────────────────────────── */
+    .platform-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .platform-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .platform-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+
+    .platform-name {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .platform-trend {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1.45;
+    }
+
+    .platform-proof {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .platform-thumb {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .breakout-card {
+      background: linear-gradient(135deg, #0f1a0f 0%, #0d1a10 100%);
+      border: 1px solid rgba(34,197,94,0.4);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 12px;
+    }
+
+    .breakout-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .breakout-format {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .breakout-proof {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .breakout-proof strong {
+      color: var(--green);
+      font-family: var(--mono);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--text-muted);
+    }
+
+    .empty-state h2 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--text-dim);
+    }
+
+    .error-state {
+      text-align: center;
+      padding: 64px 24px;
+    }
+
+    .error-state h2 {
+      font-size: 18px;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .footer a {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .footer a:hover { color: var(--text-dim); }
+
+    @media (min-width: 640px) {
+      .hero h1 { font-size: 34px; }
+      .winner-type { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="https://palebluenexus.com" class="logo">
+        <div class="logo-dot"></div>
+        <span class="logo-text">Pale Blue Nexus</span>
+      </a>
+      <span class="week-badge" id="week-badge">Loading...</span>
+    </div>
+  </header>
+
+  <div id="app">
+    <div class="hero">
+      <h1>PBN Content Trends</h1>
+      <p>What's working this week for podcast clips, interview hooks, and short-form content.</p>
+    </div>
+    <div class="main">
+      <div class="empty-state">
+        <h2>Loading...</h2>
+        <p>Fetching this week's content intelligence.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <a href="https://palebluenexus.com">palebluenexus.com</a>
+  </footer>
+
+  <script>
+    window.__PBN_TRENDS_DATA__ = {"schemaVersion":2,"week":"2026-03-30","generatedAt":"2026-04-07T00:59:35.441Z","winningHookType":"Contrast hook","summary":"Contrast hooks dominated engagement in finance/investing, AI, and geopolitics clips this week. They cut through noise by immediately sparking curiosity, driving likes/views far above averages.","winningHooks":[{"text":"Instead of watching a 2-hour movie, watch this podcast with Claude's CEO.","metric":"AI interview clip, 3K+ likes, 200K+ views","score":3},{"text":"78 years of investing wisdom in 60 minutes by Howard Marks.","metric":"Investing wisdom compilation, 689 likes, 49K views","score":2},{"text":"Over the last 17 years: China: +505% GDP, largest index down 35% / U.S.: +75% GDP, S&P500 up 440%.","metric":"Kyle Bass interview clip, 598 likes, 100K+ views","score":1}],"topPerformingExamples":[{"text":"Instead of watching a 2-hour movie, watch this podcast with Claude's CEO.","likes":3000,"views":200000,"source":"AI interview clip, 3K+ likes, 200K+ views"},{"text":"78 years of investing wisdom in 60 minutes by Howard Marks.","likes":689000,"views":49000,"source":"Investing wisdom compilation, 689 likes, 49K views"},{"text":"Over the last 17 years: China: +505% GDP, largest index down 35% / U.S.: +75% GDP, S&P500 up 440%.","likes":598000,"views":100000,"source":"Kyle Bass interview clip, 598 likes, 100K+ views"}],"failingHooks":[{"text":"Question hooks (e.g. \"Will AI agents replace coding?\" at fewer than 30 likes)","reason":"~fewer than 30 likes this week"},{"text":"Vague inner-peace wisdom without authority (generic serenity quotes, 0-20 likes)","reason":"~20 likes this week"},{"text":"Listicle openers (e.g. \"Most ESP migrations fail for one of these three reasons\", 13 likes)","reason":"~13 likes this week"},{"text":"Long promo summaries and weekly market overviews (0 likes)","reason":"~0 likes this week"}],"trendingTopics":[{"topic":"AI Model Compression & Efficiency Breakthroughs","whyHot":"AI compute costs are skyrocketing; this slashes them dramatically amid scaling debates (38k likes, 5k reposts, 18M+ views). Global investors eye it for trillion-dollar infrastructure plays.","clipHook":"What if AI could run 8x faster on your phone - without losing a single fact?","heat":"hot","likes":38000,"views":18000000},{"topic":"Decentralized AI Data Infrastructure","whyHot":"Centralization bottlenecks exposed; viral rewards program (31k likes, 29k reposts, 35k replies, 340k views) draws entrepreneurs building Web3 AI stacks.","clipHook":"AI giants need YOUR internet scraps - earn crypto while they train the future?","heat":"hot","likes":31000,"views":340},{"topic":"US-Iran Geopolitics & Energy Shifts","whyHot":"Oil market chaos (9k likes on State Dept, 14k on Polymarket) fuels volatility; sophisticated portfolios hedge geopolitics amid Strait of Hormuz risks.","clipHook":"Iran war games: Will oil hit $120 or crash on secret ceasefires?","heat":"warm","likes":9000,"views":0},{"topic":"Political Bias in AI via RLHF Training","whyHot":"Truth-seeking AI vs. censored models divides tech elite (16k likes, 5k reposts); investors debate xAI vs. Big Tech moats.","clipHook":"Is your AI woke or truthful - Elon says it's lying on purpose?","heat":"hot","likes":16000,"views":0},{"topic":"Revival of Wealth Taxes","whyHot":"Populist policy amid inequality (18k likes, 16k replies, 2.3M views); global wealth managers scramble on tax havens and asset protection.","clipHook":"2% tax on $50M+ fortunes: Innovation boost or billionaire exodus?","heat":"hot","likes":18000,"views":2300000}],"captionTemplates":[{"text":"Everyone chases AI hype + Jim Rogers bets against it quietly + What's his edge? Listen now!","charCount":92},{"text":"Short-term wins dazzle + True fortunes build in decades of calm + Hear Jim break it down","charCount":85},{"text":"Markets scream 'buy now!' + Legends like Jim say 'wait for blood' + Clip reveals why!","charCount":84}],"hashtags":{"recommended":[{"tag":"#PodcastClips","reason":"Ideal for clips; high discoverability in podcast niche, low saturation"},{"tag":"#InvestingTips","reason":"Strong for investing clips; practical advice drives shares/views"},{"tag":"#EntrepreneurMindset","reason":"Perfect for motivational entrepreneur interviews; mindset content explodes on X"},{"tag":"#FinancialFreedom","reason":"Wealth mindset gold; evergreen reach for finance podcasts"},{"tag":"#WealthBuilding","reason":"Niche wealth tips; pairs well with investing/AI clips"},{"tag":"#MoneyMindset","reason":"High engagement for mindset shifts; less crowded than #Motivation"},{"tag":"#Geopolitics","reason":"Niche reach for global strategy clips; timely with 2026 tensions"},{"tag":"#Geostrategy","reason":"Deeper geopolitics angle; expert-level engagement"}],"avoid":[{"tag":"#Investing","reason":"Oversaturated"},{"tag":"#AI","reason":"Oversaturated"},{"tag":"#Entrepreneur","reason":"Oversaturated"},{"tag":"#Business","reason":"Oversaturated"},{"tag":"#Motivation","reason":"Oversaturated"},{"tag":"#Success","reason":"Oversaturated"},{"tag":"#Podcast","reason":"Oversaturated"}]},"platformTrends":[{"platform":"X","trend":"On X this week (week of 2026-03-30), #AINativeGTM trends #3 among B2B circles with 45K posts; @shl (Shlomi, 12","proof":"45K posts","thumbnailTip":null},{"platform":"YouTube","trend":"I Built [AI Tool] in 24 Hours - $XK Revenue Day 1","proof":"25M views","thumbnailTip":null}],"breakoutAngle":{"format":"AI Fail Compilations  Pivot Wins","proof":"4.2M views in 3 days"},"archive":[]};
+
+    (function() {
+      const app = document.getElementById('app');
+      const weekBadge = document.getElementById('week-badge');
+
+      function fmt(n) {
+        if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+        if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+        return n.toString();
+      }
+
+      function render(data) {
+        if (!data || !data.schemaVersion) {
+          app.innerHTML = '<div class="main"><div class="error-state"><h2>Data failed to load</h2><p>Check back soon or contact the team.</p></div></div>';
+          return;
+        }
+
+        weekBadge.textContent = 'Week of ' + data.week;
+
+        const winners = Array.isArray(data.topPerformingExamples) ? data.topPerformingExamples : [];
+        const failing = Array.isArray(data.failingHooks) ? data.failingHooks : [];
+
+        if (winners.length === 0) {
+          app.innerHTML = '<div class="hero"><h1>PBN Content Trends</h1><p>What\'s working this week for podcast clips, interview hooks, and short-form content.</p></div><div class="main"><div class="empty-state"><h2>No brief this week</h2><p>Check back Monday for fresh content intelligence.</p></div></div>';
+          return;
+        }
+
+        let html = '';
+
+        html += '<div class="hero"><h1>PBN Content Trends</h1><p>What\'s working this week for podcast clips, interview hooks, and short-form content.</p></div>';
+
+        html += '<div class="winner-banner"><div class="winner-card">';
+        html += '<div class="winner-label">This Week\'s Winning Format</div>';
+        html += '<div class="winner-type">' + esc(data.winningHookType) + '</div>';
+        if (data.summary) html += '<div class="winner-summary">' + esc(data.summary) + '</div>';
+        html += '</div></div>';
+
+        html += '<div class="main">';
+
+        html += '<div class="section"><div class="section-header"><span class="section-title">Top Performing Hooks</span><div class="section-line"></div></div><div class="cards-grid">';
+        winners.forEach((ex, i) => {
+          html += '<div class="card">';
+          html += '<div class="card-rank">#' + (i + 1) + ' this week</div>';
+          html += '<div class="card-text">"' + esc(ex.text) + '"</div>';
+          html += '<div class="card-meta">';
+          if (ex.likes > 0) html += '<div class="metric"><span class="metric-value">' + fmt(ex.likes) + '</span><span class="metric-label">likes</span></div>';
+          if (ex.views > 0) html += '<div class="metric"><span class="metric-value">' + fmt(ex.views) + '</span><span class="metric-label">views</span></div>';
+          html += '</div>';
+          if (ex.source) html += '<div class="card-source">' + esc(ex.source) + '</div>';
+          html += '</div>';
+        });
+        html += '</div></div>';
+
+        if (failing.length > 0) {
+          html += '<div class="section"><div class="section-header"><span class="section-title">What\'s Not Working</span><div class="section-line"></div></div><div class="cards-grid">';
+          failing.forEach(f => {
+            html += '<div class="fail-card">';
+            html += '<span class="fail-icon">x</span>';
+            html += '<div><div class="fail-text">' + esc(f.text) + '</div>';
+            if (f.reason) html += '<div class="fail-reason">' + esc(f.reason) + '</div>';
+            html += '</div></div>';
+          });
+          html += '</div></div>';
+        }
+
+        // ── Priority 1: Trending Topics ──────────────────────────────────
+        const topics = Array.isArray(data.trendingTopics) ? data.trendingTopics : [];
+        if (topics.length > 0) {
+          html += '<div class="section"><div class="section-header"><span class="section-title">🔥 Trending Topics This Week</span><div class="section-line"></div></div>';
+          html += '<div class="topic-grid">';
+          topics.forEach(t => {
+            const heatIcon = t.heat === 'hot' ? '🔴' : t.heat === 'warm' ? '🟠' : '🟡';
+            html += '<div class="topic-card">';
+            html += '<div class="topic-heat">' + heatIcon + '</div>';
+            html += '<div class="topic-body">';
+            html += '<div class="topic-name">' + esc(t.topic) + '</div>';
+            if (t.clipHook) html += '<div class="topic-hook">"' + esc(t.clipHook) + '"</div>';
+            if (t.whyHot)   html += '<div class="topic-why">'  + esc(t.whyHot.substring(0, 160))  + '</div>';
+            html += '</div>';
+            if (t.likes || t.views) {
+              html += '<div class="topic-stats">';
+              if (t.likes)  html += '<span class="topic-stat">' + fmt(t.likes) + ' ♥</span>';
+              if (t.views)  html += '<span class="topic-stat">' + fmt(t.views) + ' 👁</span>';
+              html += '</div>';
+            }
+            html += '</div>';
+          });
+          html += '</div></div>';
+        }
+
+        // ── Priority 3: Caption + Hashtag Toolkit ────────────────────────
+        const captions = Array.isArray(data.captionTemplates) ? data.captionTemplates : [];
+        const hashRec  = data.hashtags && Array.isArray(data.hashtags.recommended) ? data.hashtags.recommended : [];
+        const hashAvoid= data.hashtags && Array.isArray(data.hashtags.avoid)       ? data.hashtags.avoid       : [];
+
+        if (captions.length > 0 || hashRec.length > 0) {
+          html += '<div class="section"><div class="section-header"><span class="section-title">📝 Caption + Hashtag Toolkit</span><div class="section-line"></div></div>';
+
+          if (captions.length > 0) {
+            html += '<div class="caption-grid">';
+            captions.forEach((c, i) => {
+              html += '<div class="caption-card" data-text="' + esc(c.text) + '">';
+              html += '<button class="caption-copy" onclick="copyCaption(this)">Copy</button>';
+              html += '<div class="caption-text">"' + esc(c.text) + '"</div>';
+              html += '<div class="caption-chars">' + (c.charCount || c.text.length) + ' chars</div>';
+              html += '</div>';
+            });
+            html += '</div>';
+          }
+
+          if (hashRec.length > 0 || hashAvoid.length > 0) {
+            html += '<div style="margin-top:20px">';
+            if (hashRec.length > 0) {
+              html += '<div class="hashtag-label">✅ Use these</div>';
+              html += '<div class="hashtag-row">';
+              hashRec.forEach(h => {
+                html += '<span class="hashtag-pill good" title="' + esc(h.reason) + '">' + esc(h.tag) + '</span>';
+              });
+              html += '</div>';
+            }
+            if (hashAvoid.length > 0) {
+              html += '<div class="hashtag-label" style="margin-top:12px">❌ Avoid (oversaturated)</div>';
+              html += '<div class="hashtag-row">';
+              hashAvoid.forEach(h => {
+                html += '<span class="hashtag-pill bad">' + esc(h.tag) + '</span>';
+              });
+              html += '</div>';
+            }
+            html += '<div class="hashtag-tooltip">Hover any tag for details. Use 2-4 per post: one broad + 1-2 niche + #PodcastClips</div>';
+            html += '</div>';
+          }
+
+          html += '</div>';
+        }
+
+        // ── Priority 4: Platform Trends ───────────────────────────────────
+        const platforms    = Array.isArray(data.platformTrends) ? data.platformTrends : [];
+        const breakout     = data.breakoutAngle;
+
+        if (platforms.length > 0 || breakout) {
+          html += '<div class="section"><div class="section-header"><span class="section-title">📊 Platform Trends</span><div class="section-line"></div></div>';
+
+          if (platforms.length > 0) {
+            html += '<div class="platform-grid">';
+            platforms.forEach(p => {
+              html += '<div class="platform-card">';
+              html += '<div class="platform-name">' + esc(p.platform) + '</div>';
+              html += '<div class="platform-trend">' + esc(p.trend) + '</div>';
+              if (p.proof) html += '<div class="platform-proof">' + esc(p.proof) + '</div>';
+              if (p.thumbnailTip) html += '<div class="platform-thumb">Thumbnail: ' + esc(p.thumbnailTip) + '</div>';
+              html += '</div>';
+            });
+            html += '</div>';
+          }
+
+          if (breakout) {
+            html += '<div class="breakout-card">';
+            html += '<div class="breakout-label">💡 Breakout Angle — Underutilized This Week</div>';
+            html += '<div class="breakout-format">' + esc(breakout.format) + '</div>';
+            html += '<div class="breakout-proof"><strong>' + esc(breakout.proof) + '</strong> — &lt;5% of videos use this. Early mover wins.</div>';
+            html += '</div>';
+          }
+
+          html += '</div>';
+        }
+
+        html += '</div>';
+        app.innerHTML = html;
+      }
+
+      function esc(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      try {
+        if (typeof window.__PBN_TRENDS_DATA__ !== 'undefined') {
+          render(window.__PBN_TRENDS_DATA__);
+        } else {
+          app.innerHTML = '<div class="main"><div class="error-state"><h2>Data failed to load</h2><p>The data injection did not complete. This is a build issue.</p></div></div>';
+        }
+      } catch(e) {
+        app.innerHTML = '<div class="main"><div class="error-state"><h2>Data failed to load</h2><p>' + e.message + '</p></div></div>';
+      }
+    })();
+
+    function copyCaption(btn) {
+      const card = btn.closest('.caption-card');
+      const text = card.getAttribute('data-text');
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.color = '#22c55e';
+        setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 1800);
+      });
+    }
+  </script>
+</body>
+</html>

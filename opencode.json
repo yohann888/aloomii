@@ -1,0 +1,20 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "providers": {
+    "ollama": {
+      "api": "openai",
+      "name": "Ollama (Local)",
+      "baseURL": "http://10.211.55.2:11434/v1",
+      "apiKey": "ollama",
+      "models": {
+        "gemma4:31b": {
+          "name": "Gemma 4 31B",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": false,
+          "tool_call": true
+        }
+      }
+    }
+  }
+}

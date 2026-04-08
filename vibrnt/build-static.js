@@ -83,7 +83,8 @@ async function build() {
 
       if (!title) continue;
 
-      allTrends.push({ date: reportDate, file: f.name, title, podFit, composite, platform, keywords, tags: keywords });
+      const sourceUrl = (trendMeta['source_url'] || '').replace(/^"|"$/g, '');
+      allTrends.push({ date: reportDate, file: f.name, title, podFit, composite, platform, keywords, tags: keywords, sourceUrl });
 
       if (podFit >= 6) filePasses = true;
     }
@@ -187,8 +188,31 @@ async function build() {
     if (current.name) products.push(current);
     catalog.products = products;
 
-    // Link products to trends using keyword + mood matching
+    // Link products to trends — prefer explicit Trend Source from product file,
+    // only fall back to keyword matching if no explicit source was set.
     catalog.products.forEach(product => {
+      // If the product file already has a Trend Source, trust it — do NOT override
+      if (product.relatedTrend && product.relatedTrend.trim()) {
+        // Normalize for fuzzy matching (strip emoji, special chars, extra whitespace)
+        const normalize = s => (s || '').toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+        const productTrendNorm = normalize(product.relatedTrend);
+        
+        // Try to find the matching trend object for metadata (date, podFit, sourceUrl)
+        const matchedTrend = allTrends.find(t => {
+          const tNorm = normalize(t.title);
+          return tNorm === productTrendNorm || productTrendNorm.includes(tNorm) || tNorm.includes(productTrendNorm);
+        });
+        if (matchedTrend) {
+          product.relatedTrendDate = product.relatedTrendDate || matchedTrend.date;
+          product.sourceUrl = matchedTrend.sourceUrl || '';
+          if (!product.relatedReason) {
+            product.relatedReason = `Directly linked (POD Fit ${matchedTrend.podFit}/10)`;
+          }
+        }
+        return; // Skip keyword matching — explicit source wins
+      }
+
+      // Fallback: keyword + mood matching (only when no explicit Trend Source)
       const productMoods = product.moods || [];
       const productName = (product.name || '').toLowerCase();
 
@@ -200,13 +224,11 @@ async function build() {
         const trendTitle = t.title.toLowerCase();
         const trendKeywords = t.keywords || [];
 
-        // Keyword overlap
         productMoods.forEach(mood => {
           if (trendTitle.includes(mood.toLowerCase())) score += 2;
           if (trendKeywords.some(k => k.toLowerCase().includes(mood.toLowerCase()))) score += 1;
         });
 
-        // Name overlap
         if (trendTitle.includes(productName.slice(0, 6))) score += 3;
         
         if (score > bestScore) {
@@ -215,7 +237,6 @@ async function build() {
         }
       });
 
-      // Fallback: use highest composite score trend
       if (!bestTrend && allTrends.length > 0) {
         bestTrend = allTrends.sort((a, b) => b.composite - a.composite)[0];
       }
@@ -230,6 +251,7 @@ async function build() {
         });
         product.relatedTrend = bestTrend.title;
         product.relatedTrendDate = bestTrend.date;
+        product.sourceUrl = bestTrend.sourceUrl || '';
         product.relatedReason = matchReasons.length > 0
           ? `Matches via ${matchReasons.join(', ')} (POD Fit ${bestTrend.podFit}/10)`
           : `Best trending signal from ${bestTrend.date} (POD Fit ${bestTrend.podFit}/10)`;
