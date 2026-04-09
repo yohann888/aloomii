@@ -1212,6 +1212,7 @@ function registerCommandAPI(app, pool = null) {
       };
       
       // Update DB
+      const approver = adapter || 'yohann';
       const result = await query(`
         UPDATE content_posts SET 
           status = 'approved',
@@ -1222,10 +1223,10 @@ function registerCommandAPI(app, pool = null) {
           edit_categories = $4,
           learning_processed = false,
           approved_at = NOW(),
-          approved_by = 'yohann',
-          adapter = COALESCE($5, adapter)
+          approved_by = $5,
+          adapter = $5
         WHERE id = $6 RETURNING *
-      `, [finalText, edited_text || finalText, editDist, JSON.stringify(editCats), adapter || null, id]);
+      `, [finalText, edited_text || finalText, editDist, JSON.stringify(editCats), approver, id]);
       
       const approved = result.rows[0];
       
