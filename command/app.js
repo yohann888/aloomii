@@ -1696,52 +1696,100 @@ function switchContentTab(idx) {
 function renderLinkedInDrafts(drafts) {
   const container = document.getElementById('linkedin-drafts-panel');
   if (!container) return;
+
+  // Filter bar — create once, persist across re-renders
+  let filterBar = document.getElementById('draft-filter-bar');
+  if (!filterBar) {
+    filterBar = document.createElement('div');
+    filterBar.id = 'draft-filter-bar';
+    filterBar.style.cssText = 'display:flex;gap:8px;padding:10px 16px;background:#1a1a2e;border-bottom:1px solid #2a2a4a;align-items:center;flex-wrap:wrap;margin-bottom:12px;border-radius:8px;';
+    const btns = [
+      { label: 'All', filter: 'all' },
+      { label: 'Jenny', filter: 'jenny' },
+      { label: 'Yohann', filter: 'yohann' },
+    ];
+    const label = document.createElement('span');
+    label.textContent = 'Filter:';
+    label.style.cssText = 'color:#888;font-size:12px;';
+    filterBar.appendChild(label);
+    btns.forEach(function(b) {
+      const btn = document.createElement('button');
+      btn.textContent = b.label;
+      btn.dataset.filter = b.filter;
+      btn.className = 'draft-filter-btn' + (b.filter === 'all' ? ' active' : '');
+      btn.style.cssText = b.filter === 'all'
+        ? 'background:#2a2a4a;color:#fff;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:12px;'
+        : 'background:#1a1a2e;color:#888;border:1px solid #2a2a4a;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:12px;';
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.draft-filter-btn').forEach(function(el) {
+          el.classList.remove('active');
+          el.style.background = '#1a1a2e';
+          el.style.color = '#888';
+          el.style.border = '1px solid #2a2a4a';
+        });
+        btn.classList.add('active');
+        btn.style.background = '#2a2a4a';
+        btn.style.color = '#fff';
+        btn.style.border = 'none';
+        window.linkedInDraftFilter = btn.dataset.filter;
+        renderLinkedInDrafts(commandData.linkedin_drafts);
+      });
+      filterBar.appendChild(btn);
+    });
+    container.parentNode.insertBefore(filterBar, container);
+  }
+
+  const filter = window.linkedInDraftFilter || 'all';
+  const filtered = filter === 'all' ? (drafts || []) : (drafts || []).filter(function(d) { return d.adapter === filter; });
+
   container.innerHTML = '';
-  
-  if (!drafts || drafts.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div style="font-size:48px;margin-bottom:12px">✍️</div>
-        <div>No LinkedIn drafts yet.</div>
-        <div style="color:var(--text-dim);font-size:13px;margin-top:8px">Drafts from the content engine will appear here when generated.</div>
-      </div>`;
+
+  if (!filtered || filtered.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.innerHTML = '<div style="font-size:48px;margin-bottom:12px">&#x270D;</div><div>No LinkedIn drafts.</div><div style="color:var(--text-dim);font-size:13px;margin-top:8px">Drafts from the content engine will appear here.</div>';
+    container.appendChild(empty);
     return;
   }
-  
-  // Group by author/adapter
-  const yohannDrafts = drafts.filter(d => !d.adapter || d.adapter === 'yohann');
-  const jennyDrafts = drafts.filter(d => d.adapter === 'jenny');
-  
+
+  const jennyDrafts = filtered.filter(function(d) { return d.adapter === 'jenny'; });
+  const yohannDrafts = filtered.filter(function(d) { return d.adapter !== 'jenny'; });
+
   function renderGroup(title, emoji, items) {
-    if (items.length === 0) return '';
-    let html = `<div class="draft-group">`;
-    html += `<h3 class="draft-group-header">${emoji} ${title}</h3>`;
-    items.forEach(draft => {
-      const date = draft.scheduled_at ? new Date(draft.scheduled_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Unscheduled';
-      const status = draft.external_id ? '✅ Queued' : '✏️ Draft';
+    if (!items || items.length === 0) return;
+    const group = document.createElement('div');
+    group.className = 'draft-group';
+    const header = document.createElement('h3');
+    header.className = 'draft-group-header';
+    header.textContent = emoji + ' ' + title;
+    group.appendChild(header);
+    items.forEach(function(draft) {
+      const date = draft.scheduled_at
+        ? new Date(draft.scheduled_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : 'Unscheduled';
       const preview = (draft.content_text || '').substring(0, 200);
-      html += `
-        <div class="linkedin-draft-card">
-          <div class="draft-card-header">
-            <span class="draft-topic">${draft.topic || draft.post_type || 'LinkedIn Post'}</span>
-            <span class="draft-date">${date}</span>
-            <span class="draft-status-badge">${status}</span>
-          </div>
-          <div class="draft-preview">${preview}${preview.length >= 200 ? '...' : ''}</div>
-          <div class="draft-card-actions">
-            <button onclick="expandDraft(${draft.id})" class="btn-small">View Full</button>
-            <button onclick="editLinkedInDraft(${draft.id})" class="btn-small primary">Edit</button>
-            <button onclick="approveLinkedInDraft(${draft.id})" class="btn-small" style="background:var(--accent-success);color:#000">Approve → Buffer</button>
-            <button onclick="rejectLinkedInDraft(${draft.id})" class="btn-small" style="background:var(--accent-danger);color:#fff">Reject</button>
-          </div>
-          <div id="draft-editor-${draft.id}" class="draft-editor hidden"></div>
-        </div>`;
+      const card = document.createElement('div');
+      card.className = 'linkedin-draft-card';
+      card.innerHTML =
+        '<div class="draft-card-header">' +
+          '<span class="draft-topic">' + (draft.topic || draft.post_type || 'LinkedIn Post') + '</span>' +
+          '<span class="draft-date">' + date + '</span>' +
+        '</div>' +
+        '<div class="draft-preview">' + preview + (preview.length >= 200 ? '...' : '') + '</div>' +
+        '<div class="draft-card-actions">' +
+          '<button onclick="expandDraft(' + draft.id + ')" class="btn-small">View Full</button>' +
+          '<button onclick="editLinkedInDraft(' + draft.id + ')" class="btn-small primary">Edit</button>' +
+          '<button onclick="approveLinkedInDraft(' + draft.id + ')" class="btn-small" style="background:var(--accent-success);color:#000">Approve &rarr; Buffer</button>' +
+          '<button onclick="rejectLinkedInDraft(' + draft.id + ')" class="btn-small" style="background:var(--accent-danger);color:#fff">Reject</button>' +
+        '</div>' +
+        '<div id="draft-editor-' + draft.id + '" class="draft-editor hidden"></div>';
+      group.appendChild(card);
     });
-    html += '</div>';
-    return html;
+    container.appendChild(group);
   }
-  
-  container.innerHTML = renderGroup('Yohann Calpu', '👔', yohannDrafts) + renderGroup('Jenny Calpu', '🎨', jennyDrafts);
+
+  renderGroup('Jenny Calpu', '\uD83C\uDFA8', jennyDrafts);
+  renderGroup('Yohann Calpu', '\uD83D\uDC54', yohannDrafts);
 }
 
 function renderPBNBriefs(posts) {
@@ -1857,35 +1905,40 @@ function saveLinkedInEdit(id) {
 
 function approveLinkedInDraft(id) {
   const textarea = document.getElementById('draft-edit-area-' + id);
-  const editedText = textarea ? textarea.value : null;
+  const editedBody = textarea ? textarea.value : null;
   
   fetch('/api/command/content/' + id + '/approve', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ edited_text: editedText })
+    body: JSON.stringify({ edited_text: editedBody }),
   })
   .then(r => r.json())
-  .then(result => {
-    if (result.success) {
-      const bufferMsg = result.buffer_id ? 'Pushed to Buffer queue.' : 'Approved (Buffer push pending).';
-      showToast('\u2705 ' + bufferMsg + ' Learn Loop will analyze your edits.', 'success');
-      refreshAll();
-    } else {
-      showToast('Approval failed: ' + (result.error || 'unknown'), 'error');
-    }
+  .then(data => {
+    // Remove approved draft from local state and re-render
+    commandData.linkedin_drafts = commandData.linkedin_drafts.filter(d => d.id !== id);
+    renderLinkedInDrafts(commandData.linkedin_drafts);
+    showToast('Sent to Buffer successfully', 'success');
+  })
+  .catch(err => {
+    console.error('Buffer send failed:', err);
+    showToast('Failed to send to Buffer', 'error');
   });
 }
 
 function rejectLinkedInDraft(id) {
   fetch('/api/command/content/' + id + '/reject', {
-    method: 'PATCH'
+    method: 'PATCH',
   })
   .then(r => r.json())
-  .then(result => {
-    if (result.success) {
-      showToast('Draft rejected.', 'warning');
-      refreshAll();
-    }
+  .then(data => {
+    // Remove from local state and re-render
+    commandData.linkedin_drafts = commandData.linkedin_drafts.filter(d => d.id !== id);
+    renderLinkedInDrafts(commandData.linkedin_drafts);
+    showToast('Draft rejected', 'info');
+  })
+  .catch(err => {
+    console.error('Reject failed:', err);
+    showToast('Failed to reject draft', 'error');
   });
 }
 

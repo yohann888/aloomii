@@ -34,7 +34,9 @@ function getPool() {
 /**
  * Main function to register the /api/command endpoint
  */
-module.exports = function registerCommandAPI(app, pool = null) {
+module.exports = registerCommandAPI;
+
+function registerCommandAPI(app, pool = null) {
   if (pool) {
     poolInstance = pool; // Use provided pool if passed
   }
@@ -62,6 +64,7 @@ module.exports = function registerCommandAPI(app, pool = null) {
         events: [],
         content_queue: [],
         linkedin_drafts: [],
+        snipe_drafts: [],
         client_pilots: [],
         webhooks: [],
         tasks: [],
@@ -537,7 +540,24 @@ module.exports = function registerCommandAPI(app, pool = null) {
           }
         },
 
-        // 11. Content queue + LinkedIn drafts
+        // 11. Snipe drafts (from content_posts, post_origin = snipe)
+        async () => {
+          try {
+            const snipeRes = await query(`
+              SELECT id, draft_text, topic, pillar, pillar_name, score_total, source_url, created_at
+              FROM content_posts
+              WHERE post_origin = 'snipe' AND status = 'draft'
+              ORDER BY created_at DESC
+              LIMIT 10
+            `);
+            data.snipe_drafts = snipeRes.rows;
+          } catch (e) {
+            console.warn('Snipe drafts query failed:', e.message);
+            data.snipe_drafts = [];
+          }
+        },
+
+        // 12. Content queue + LinkedIn drafts
         async () => {
           try {
             const contentRes = await query(`
@@ -555,7 +575,7 @@ module.exports = function registerCommandAPI(app, pool = null) {
           try {
             const linkedinRes = await query(`
               SELECT * FROM content_posts 
-              WHERE platform = 'linkedin'
+              WHERE platform = 'linkedin' AND status = 'draft'
               ORDER BY COALESCE(scheduled_at, published_at) DESC 
               LIMIT 20
             `);
@@ -1088,6 +1108,24 @@ module.exports = function registerCommandAPI(app, pool = null) {
   });
 
 
+  
+  // POST /api/command/learn-loop/run
+  app.post('/api/command/learn-loop/run', async (req, res) => {
+    try {
+      const { runLearnLoop } = require('./learn-loop-cron');
+      const client = await getPool().connect();
+      try {
+        const result = await runLearnLoop(client);
+        res.json(result);
+      } finally {
+        client.release();
+      }
+    } catch (e) {
+      console.error('Learn loop manual run failed:', e.message);
+      res.status(500).json({ error: e.message });
+    }
+  });
+
   // === CONTENT DRAFT WORKFLOW ===
 
   // GET /api/command/content/:id — get full content post
@@ -1102,17 +1140,32 @@ module.exports = function registerCommandAPI(app, pool = null) {
     }
   });
 
-  // PATCH /api/command/content/:id/edit — save edits to a content draft
+  // PATCH /api/command/content/:id/edit — save edits or set owner (adapter)
   app.patch('/api/command/content/:id/edit', async (req, res) => {
     const { id } = req.params;
-    const { edited_text } = req.body;
+    const { edited_text, adapter } = req.body;
     try {
-      if (!edited_text) return res.status(400).json({ error: 'edited_text required' });
-      const result = await query(`
-        UPDATE content_posts 
-        SET edited_text = $1, original_text = COALESCE(original_text, content_text)
-        WHERE id = $2 RETURNING *
-      `, [edited_text, id]);
+      if (!edited_text && !adapter) return res.status(400).json({ error: 'edited_text or adapter required' });
+      
+      let result;
+      if (edited_text && adapter) {
+        result = await query(`
+          UPDATE content_posts 
+          SET edited_text = $1, adapter = $2, original_text = COALESCE(original_text, content_text)
+          WHERE id = $3 RETURNING *
+        `, [edited_text, adapter, id]);
+      } else if (edited_text) {
+        result = await query(`
+          UPDATE content_posts 
+          SET edited_text = $1, original_text = COALESCE(original_text, content_text)
+          WHERE id = $2 RETURNING *
+        `, [edited_text, id]);
+      } else {
+        result = await query(`
+          UPDATE content_posts SET adapter = $1 WHERE id = $2 RETURNING *
+        `, [adapter, id]);
+      }
+      
       res.json({ success: true, post: result.rows[0] });
     } catch (e) {
       res.status(500).json({ error: e.message });
@@ -1122,15 +1175,15 @@ module.exports = function registerCommandAPI(app, pool = null) {
   // POST /api/command/content/:id/approve — approve, compute learning, push to Buffer
   app.post('/api/command/content/:id/approve', async (req, res) => {
     const { id } = req.params;
-    const { edited_text } = req.body;
+    const { edited_text, adapter } = req.body;
     try {
       // Get current draft
       const current = await query('SELECT * FROM content_posts WHERE id = $1', [id]);
       if (current.rows.length === 0) return res.status(404).json({ error: 'Not found' });
       const post = current.rows[0];
       
-      const finalText = edited_text || post.edited_text || post.content_text;
-      const originalText = post.original_text || post.content_text;
+      const finalText = edited_text || post.edited_text || post.content_text || post.draft_text;
+      const originalText = post.original_text || post.content_text || post.draft_text || '';
       
       // Compute edit distance (word-level)
       const origWords = originalText.split(/\s+/);
@@ -1159,9 +1212,10 @@ module.exports = function registerCommandAPI(app, pool = null) {
           edit_categories = $4,
           learning_processed = false,
           approved_at = NOW(),
-          approved_by = 'yohann'
-        WHERE id = $5 RETURNING *
-      `, [finalText, edited_text || finalText, editDist, JSON.stringify(editCats), id]);
+          approved_by = 'yohann',
+          adapter = COALESCE($5, adapter)
+        WHERE id = $6 RETURNING *
+      `, [finalText, edited_text || finalText, editDist, JSON.stringify(editCats), adapter || null, id]);
       
       const approved = result.rows[0];
       
@@ -1374,11 +1428,10 @@ async function pushToBuffer(text, adapter) {
   const channelId = CHANNELS[adapter] || CHANNELS.yohann;
   
   const mutation = JSON.stringify({
-    query: `mutation CreatePost($input: PostInput!) { createPost(input: $input) { ... on PostActionSuccess { post { id } } ... on PostActionError { message } } }`,
+    query: `mutation CreatePost($input: CreatePostInput!) { createPost(input: $input) { ... on PostActionSuccess { post { id } } } }`,
     variables: {
       input: {
-        organizationId: ORG_ID,
-        channelIds: [channelId],
+        channelId: channelId,
         text: text,
         saveToDraft: true,
         schedulingType: 'automatic',
@@ -1421,3 +1474,6 @@ async function pushToBuffer(text, adapter) {
 process.on('SIGTERM', () => {
   if (poolInstance) poolInstance.end();
 });
+
+module.exports.query = query;
+module.exports.getPool = getPool;

@@ -880,8 +880,8 @@ A million products are about to launch. Most will be invisible. Yours doesn’t 
           <input type="email" id="email" name="email" placeholder="jane@company.com" required>
         </div>
         <div class="form-group">
-          <label for="company">Company Name</label>
-          <input type="text" id="company" name="company" placeholder="Acme Corp">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
         </div>
         <div class="form-group">
           <label for="service">What Are You Looking For?</label>
@@ -1200,6 +1200,7 @@ A million products are about to launch. Most will be invisible. Yours doesn’t 
 
       const formData = {
         name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone') ? document.getElementById('phone').value.trim() : '',
         email: document.getElementById('email').value.trim(),
         company: document.getElementById('company').value.trim(),
         service: document.getElementById('service') ? document.getElementById('service').value : '',

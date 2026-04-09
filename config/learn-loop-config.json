@@ -1,0 +1,8 @@
+{
+  "min_sample_size": 5,
+  "confidence_threshold_shorter": 0.6,
+  "confidence_threshold_longer": 0.6,
+  "confidence_threshold_personalization": 0.4,
+  "confidence_threshold_cta": 0.5,
+  "confidence_threshold_style": 0.4
+}
