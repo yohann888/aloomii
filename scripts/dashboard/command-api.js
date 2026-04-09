@@ -1162,7 +1162,17 @@ function registerCommandAPI(app, pool = null) {
         `, [edited_text, id]);
       } else {
         result = await query(`
-          UPDATE content_posts SET adapter = $1 WHERE id = $2 RETURNING *
+          UPDATE content_posts
+          SET adapter = $1,
+              approved_by = CASE
+                WHEN $1 IN ('yohann', 'jenny') THEN $1
+                ELSE approved_by
+              END,
+              status = CASE
+                WHEN status = 'draft' AND $1 IN ('yohann', 'jenny') THEN 'approved'
+                ELSE status
+              END
+          WHERE id = $2 RETURNING *
         `, [adapter, id]);
       }
       
