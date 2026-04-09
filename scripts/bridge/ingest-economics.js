@@ -8,7 +8,7 @@
  *
  * Usage (require):
  *   const { ingestEconomics } = require('./bridge/ingest-economics');
- *   await ingestEconomics({ date, cost_usd, input_tokens, output_tokens });
+ *   await ingestEconomics({ date, cost_usd, input_tokens, output_tokens, metadata });
  */
 
 'use strict';
@@ -63,7 +63,7 @@ async function ingestEconomics(opts) {
         output_tokens    = EXCLUDED.output_tokens,
         cache_read_tokens = EXCLUDED.cache_read_tokens,
         cache_write_tokens = EXCLUDED.cache_write_tokens,
-        metadata         = EXCLUDED.metadata,
+        metadata         = COALESCE(EXCLUDED.metadata, economics_daily.metadata),
         created_at       = NOW()
       RETURNING id, date, cost_usd
     `;
