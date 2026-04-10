@@ -10,8 +10,6 @@
 const { Pool } = require('pg');
 
 const connectionString = 'postgresql://superhana@localhost:5432/aloomii';
-const LMSTUDIO_URL = 'http://127.0.0.1:1234/v1/chat/completions';
-const LMSTUDIO_MODEL = 'qwen2.5-coder-14b-instruct-abliterated';
 
 // In-memory cache for the full response (30s)
 let cachedResponse = null;
@@ -31,63 +29,6 @@ function getPool() {
     });
   }
   return poolInstance;
-}
-
-async function rewriteSnipeToBrandVoice(post, adapter, editedText) {
-  if (post.post_origin !== 'snipe') {
-    return editedText || post.edited_text || post.content_text || post.draft_text;
-  }
-
-  const pool = getPool();
-  const brandRes = await pool.query('SELECT * FROM brand_profiles WHERE owner = $1 LIMIT 1', [adapter]);
-  const brand = brandRes.rows[0];
-  if (!brand) {
-    return editedText || post.edited_text || post.content_text || post.draft_text;
-  }
-
-  const sourceText = editedText || post.edited_text || post.content_text || post.draft_text || '';
-  const prompt = `Rewrite this LinkedIn draft in ${brand.display_name}'s voice.
-
-BRAND PROFILE:
-Core position: ${brand.core_position || ''}
-Behaviors: ${(brand.behaviors || []).join(' | ')}
-Phraseology: ${JSON.stringify(brand.phraseology || {})}
-
-RULES:
-- Keep the same topic and core point
-- Keep it concise and native to LinkedIn
-- No hashtags
-- No emojis
-- No em dashes
-- Preserve any concrete facts unless they are clearly persona-specific and wrong for this author
-- Output only the rewritten post text
-
-ORIGINAL DRAFT:
-${sourceText}`;
-
-  const resp = await fetch(LMSTUDIO_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer lm-studio'
-    },
-    body: JSON.stringify({
-      model: LMSTUDIO_MODEL,
-      messages: [
-        { role: 'system', content: 'You rewrite social posts to match a target founder brand voice exactly.' },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.6,
-      max_tokens: 500
-    })
-  });
-
-  if (!resp.ok) {
-    throw new Error(`LM Studio rewrite failed: ${resp.status}`);
-  }
-
-  const json = await resp.json();
-  return json?.choices?.[0]?.message?.content?.trim() || sourceText;
 }
 
 /**
@@ -1205,20 +1146,14 @@ function registerCommandAPI(app, pool = null) {
     const { edited_text, adapter } = req.body;
     try {
       if (!edited_text && !adapter) return res.status(400).json({ error: 'edited_text or adapter required' });
-
-      const brandProfileIdFor = async (owner) => {
-        const r = await query('SELECT id FROM brand_profiles WHERE owner = $1 LIMIT 1', [owner]);
-        return r.rows[0]?.id || null;
-      };
       
       let result;
       if (edited_text && adapter) {
-        const brandProfileId = ['yohann', 'jenny'].includes(adapter) ? await brandProfileIdFor(adapter) : null;
         result = await query(`
           UPDATE content_posts 
-          SET edited_text = $1, adapter = $2, brand_profile_id = COALESCE($3, brand_profile_id), original_text = COALESCE(original_text, content_text)
-          WHERE id = $4 RETURNING *
-        `, [edited_text, adapter, brandProfileId, id]);
+          SET edited_text = $1, adapter = $2, original_text = COALESCE(original_text, content_text)
+          WHERE id = $3 RETURNING *
+        `, [edited_text, adapter, id]);
       } else if (edited_text) {
         result = await query(`
           UPDATE content_posts 
@@ -1226,11 +1161,9 @@ function registerCommandAPI(app, pool = null) {
           WHERE id = $2 RETURNING *
         `, [edited_text, id]);
       } else {
-        const brandProfileId = ['yohann', 'jenny'].includes(adapter) ? await brandProfileIdFor(adapter) : null;
         result = await query(`
           UPDATE content_posts
           SET adapter = $1,
-              brand_profile_id = COALESCE($2, brand_profile_id),
               approved_by = CASE
                 WHEN $1 IN ('yohann', 'jenny') THEN $1
                 ELSE approved_by
@@ -1239,8 +1172,8 @@ function registerCommandAPI(app, pool = null) {
                 WHEN status = 'draft' AND $1 IN ('yohann', 'jenny') THEN 'approved'
                 ELSE status
               END
-          WHERE id = $3 RETURNING *
-        `, [adapter, brandProfileId, id]);
+          WHERE id = $2 RETURNING *
+        `, [adapter, id]);
       }
       
       res.json({ success: true, post: result.rows[0] });
@@ -1259,7 +1192,7 @@ function registerCommandAPI(app, pool = null) {
       if (current.rows.length === 0) return res.status(404).json({ error: 'Not found' });
       const post = current.rows[0];
       
-      const finalText = await rewriteSnipeToBrandVoice(post, adapter || post.adapter || 'yohann', edited_text);
+      const finalText = edited_text || post.edited_text || post.content_text || post.draft_text;
       const originalText = post.original_text || post.content_text || post.draft_text || '';
       
       // Compute edit distance (word-level)
@@ -1280,8 +1213,6 @@ function registerCommandAPI(app, pool = null) {
       
       // Update DB
       const approver = adapter || 'yohann';
-      const brandProfileRes = await query('SELECT id FROM brand_profiles WHERE owner = $1 LIMIT 1', [approver]);
-      const brandProfileId = brandProfileRes.rows[0]?.id || post.brand_profile_id || null;
       const result = await query(`
         UPDATE content_posts SET 
           status = 'approved',
@@ -1293,10 +1224,9 @@ function registerCommandAPI(app, pool = null) {
           learning_processed = false,
           approved_at = NOW(),
           approved_by = $5,
-          adapter = $5,
-          brand_profile_id = $6
-        WHERE id = $7 RETURNING *
-      `, [finalText, edited_text || finalText, editDist, JSON.stringify(editCats), approver, brandProfileId, id]);
+          adapter = $5
+        WHERE id = $6 RETURNING *
+      `, [finalText, edited_text || finalText, editDist, JSON.stringify(editCats), approver, id]);
       
       const approved = result.rows[0];
       
@@ -1335,15 +1265,14 @@ function registerCommandAPI(app, pool = null) {
 
   // POST /api/command/content/new — create new LinkedIn draft
   app.post('/api/command/content/new', async (req, res) => {
-    const { platform = 'linkedin', post_type = 'draft', topic, content_text, adapter = 'yohann', brand_profile_id = null } = req.body;
+    const { platform = 'linkedin', post_type = 'draft', topic, content_text, adapter = 'yohann' } = req.body;
     try {
       if (!content_text) return res.status(400).json({ error: 'content_text required' });
-      const resolvedBrandProfileId = brand_profile_id || (await query('SELECT id FROM brand_profiles WHERE owner = $1 LIMIT 1', [adapter])).rows[0]?.id || null;
       const result = await query(`
-        INSERT INTO content_posts (platform, post_type, topic, content_text, adapter, brand_profile_id, status)
-        VALUES ($1, $2, $3, $4, $5, $6, 'draft')
+        INSERT INTO content_posts (platform, post_type, topic, content_text, adapter, status)
+        VALUES ($1, $2, $3, $4, $5, 'draft')
         RETURNING *
-      `, [platform, post_type, topic, content_text, adapter, resolvedBrandProfileId]);
+      `, [platform, post_type, topic, content_text, adapter]);
       res.json({ success: true, post: result.rows[0] });
     } catch (e) {
       res.status(500).json({ error: e.message });

@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const VAULT = process.env.VIBRNT_VAULT || '/Users/superhana/Documents/VibrntVault/VIBRNT';
+const VAULT = path.join(__dirname, '..', 'vibrntvault');
 const TRENDS_DIR = path.join(VAULT, 'Trends');
 const SCRIPTS_DIR = path.join(VAULT, 'Scripts');
 const PRODUCTS_DIR = path.join(VAULT, 'Products');

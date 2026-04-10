@@ -10,8 +10,6 @@
 const { Pool } = require('pg');
 
 const connectionString = 'postgresql://superhana@localhost:5432/aloomii';
-const LMSTUDIO_URL = 'http://127.0.0.1:1234/v1/chat/completions';
-const LMSTUDIO_MODEL = 'qwen2.5-coder-14b-instruct-abliterated';
 
 // In-memory cache for the full response (30s)
 let cachedResponse = null;
@@ -31,63 +29,6 @@ function getPool() {
     });
   }
   return poolInstance;
-}
-
-async function rewriteSnipeToBrandVoice(post, adapter, editedText) {
-  if (post.post_origin !== 'snipe') {
-    return editedText || post.edited_text || post.content_text || post.draft_text;
-  }
-
-  const pool = getPool();
-  const brandRes = await pool.query('SELECT * FROM brand_profiles WHERE owner = $1 LIMIT 1', [adapter]);
-  const brand = brandRes.rows[0];
-  if (!brand) {
-    return editedText || post.edited_text || post.content_text || post.draft_text;
-  }
-
-  const sourceText = editedText || post.edited_text || post.content_text || post.draft_text || '';
-  const prompt = `Rewrite this LinkedIn draft in ${brand.display_name}'s voice.
-
-BRAND PROFILE:
-Core position: ${brand.core_position || ''}
-Behaviors: ${(brand.behaviors || []).join(' | ')}
-Phraseology: ${JSON.stringify(brand.phraseology || {})}
-
-RULES:
-- Keep the same topic and core point
-- Keep it concise and native to LinkedIn
-- No hashtags
-- No emojis
-- No em dashes
-- Preserve any concrete facts unless they are clearly persona-specific and wrong for this author
-- Output only the rewritten post text
-
-ORIGINAL DRAFT:
-${sourceText}`;
-
-  const resp = await fetch(LMSTUDIO_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer lm-studio'
-    },
-    body: JSON.stringify({
-      model: LMSTUDIO_MODEL,
-      messages: [
-        { role: 'system', content: 'You rewrite social posts to match a target founder brand voice exactly.' },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.6,
-      max_tokens: 500
-    })
-  });
-
-  if (!resp.ok) {
-    throw new Error(`LM Studio rewrite failed: ${resp.status}`);
-  }
-
-  const json = await resp.json();
-  return json?.choices?.[0]?.message?.content?.trim() || sourceText;
 }
 
 /**
@@ -1259,7 +1200,7 @@ function registerCommandAPI(app, pool = null) {
       if (current.rows.length === 0) return res.status(404).json({ error: 'Not found' });
       const post = current.rows[0];
       
-      const finalText = await rewriteSnipeToBrandVoice(post, adapter || post.adapter || 'yohann', edited_text);
+      const finalText = edited_text || post.edited_text || post.content_text || post.draft_text;
       const originalText = post.original_text || post.content_text || post.draft_text || '';
       
       // Compute edit distance (word-level)

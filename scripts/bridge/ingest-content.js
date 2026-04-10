@@ -25,7 +25,9 @@ async function ingestContent(payload) {
     topic,
     content_text,
     media_url,
-    scheduled_at
+    scheduled_at,
+    adapter,
+    brand_profile_id
   } = payload;
 
   if (!platform || !content_text) {
@@ -50,8 +52,8 @@ async function ingestContent(payload) {
     const queryText = `
       INSERT INTO content_posts (
         platform, post_type, topic, content_text, media_url,
-        scheduled_at, published_at, adapter
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        scheduled_at, published_at, adapter, brand_profile_id
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING id
     `;
 
@@ -63,7 +65,8 @@ async function ingestContent(payload) {
       media_url || null,
       scheduledAt,
       publishedAt,
-      'bridge_ingest'
+      adapter || 'bridge_ingest',
+      brand_profile_id || null
     ];
 
     const res = await client.query(queryText, queryParams);
