@@ -128,6 +128,7 @@ function registerCommandAPI(app, pool = null) {
         webhooks: [],
         tasks: [],
         backlog: [],
+        influencer_pipeline: [],
         last_updated: new Date().toISOString(),
         _meta: { query_time_ms: 0 }
       };
@@ -693,7 +694,22 @@ function registerCommandAPI(app, pool = null) {
           }
         },
 
-        // 15. Strategic Backlog (from backlog.json)
+        // 15. Vibrnt Influencer Pipeline
+        async () => {
+          try {
+            const infRes = await query(`
+              SELECT * FROM influencer_pipeline
+              ORDER BY vibe_score DESC, created_at DESC
+              LIMIT 20
+            `);
+            data.influencer_pipeline = infRes.rows;
+          } catch (e) {
+            console.warn('Influencer pipeline query failed:', e.message);
+            data.influencer_pipeline = [];
+          }
+        },
+
+        // 16. Strategic Backlog (from backlog.json)
         async () => {
           try {
             const fs = require('fs');

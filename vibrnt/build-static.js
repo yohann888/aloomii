@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 
 const VAULT = process.env.VIBRNT_VAULT || '/Users/superhana/Documents/VibrntVault/VIBRNT';
+const CMD_API = process.env.CMD_API_URL || 'http://localhost:3200/api';
 const TRENDS_DIR = path.join(VAULT, 'Trends');
 const SCRIPTS_DIR = path.join(VAULT, 'Scripts');
 const PRODUCTS_DIR = path.join(VAULT, 'Products');
@@ -259,14 +260,38 @@ async function build() {
     });
   }
 
+  // -- Load influencer pipeline from Command Center API --------------------------
+  let influencerPipeline = [];
+  try {
+    const https = require('https');
+    const data = await new Promise((resolve, reject) => {
+      const req = https.get(`${CMD_API}/command`, { timeout: 5000 }, res => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => { try { resolve(JSON.parse(body)); } catch { resolve(null); } });
+        res.on('error', reject);
+      });
+      req.on('error', () => resolve(null));
+      req.on('timeout', () => { req.destroy(); resolve(null); });
+    });
+    if (data && Array.isArray(data.influencer_pipeline)) {
+      influencerPipeline = data.influencer_pipeline;
+      console.log(`   Influencer pipeline: ${influencerPipeline.length} candidates loaded from Command Center API`);
+    }
+  } catch (e) {
+    console.warn('   Influencer pipeline: could not reach Command Center API (' + e.message + ') — running without it');
+  }
+
+
   // -- Build summary -----------------------------------------------------------
   const summary = {
     latestTrend: trends[0]?.date || null,
     latestScripts: scripts.slice(0, 3).map(s => s.file),
     trendCount: trends.length,
     scriptCount: scripts.length,
+    productCount: catalog.products.length,
     lastBuilt: new Date().toISOString(),
-    filter: "POD Fit ≥ 6 only"
+    filter: 'POD Fit ≥ 6 only'
   };
 
   // -- Load seen trends (dedup) -----------------------------------------------
@@ -283,7 +308,7 @@ async function build() {
 
   // Inject embedded data + fetchJSON override (single </head> replacement)
   const embeddedScript = `<script>
-window.__VIBRNT_DATA__ = ${JSON.stringify({ trends, allTrends, scripts, catalog, summary, seenTrends })};
+window.__VIBRNT_DATA__ = ${JSON.stringify({ trends, allTrends, scripts, catalog, summary, seenTrends, influencerPipeline })};
 window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date().toISOString()}';
 (function() {
   var _d = window.__VIBRNT_DATA__ || { trends: [], scripts: [], catalog: { products: [] }, summary: {}, seenTrends: [] };
@@ -293,6 +318,7 @@ window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date(
     '/api/trends': { trends: _d.trends },
     '/api/scripts': { scripts: _d.scripts },
     '/api/catalog': _d.catalog,
+    '/api/influencer_pipeline': { candidates: _d.influencerPipeline || [] },
   };
   // Expose embedded data lookup - fetchJSON will check this first
   window.__embed = function(url) {

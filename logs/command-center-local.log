@@ -365,3 +365,167 @@ GET     /api/command                             200  2ms
 Snipe drafts query failed: column "created_at" does not exist
 GET     /api/command                             200  2ms
 Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  4ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  4ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  4ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  4ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  4ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  1ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  3ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  4ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  68ms
+GET     /api/command                             200  2ms
+Snipe drafts query failed: column "created_at" does not exist
+GET     /api/command                             200  65ms
+GET     /api/command                             200  64ms
+
+  SIGTERM received — shutting down gracefully...
+  HTTP server closed.
+  Goodbye.
+

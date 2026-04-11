@@ -128,6 +128,8 @@ function showSection(section) {
             if (commandData.pipeline) renderPipeline(commandData);
         } else if (section === 'backlog') {
             renderBacklog();
+        } else if (section === 'vibrnt') {
+            renderVibrntPipeline(commandData.influencer_pipeline || []);
         }
     }
 }
@@ -2964,6 +2966,128 @@ async function refreshVillagePaths(contactId, company) {
 }
 
 window.refreshVillagePaths = refreshVillagePaths;
+
+function renderVibrntPipeline(candidates = []) {
+  const container = document.getElementById('vibrnt-pipeline-container');
+  const statsEl = document.getElementById('vibrnt-stats');
+  if (!container) return;
+
+
+  container.innerHTML = '';
+
+  // Stats bar
+  if (statsEl) {
+    const total = candidates.length;
+    const avgVibe = total ? (candidates.reduce((s, c) => s + (c.vibe_score || 0), 0) / total).toFixed(1) : 0;
+    const identified = candidates.filter(c => c.status === 'Identified').length;
+    const contacted = candidates.filter(c => c.status === 'Contacted').length;
+    const confirmed = candidates.filter(c => c.status === 'Confirmed').length;
+    const posted = candidates.filter(c => c.status === 'Posted').length;
+    statsEl.innerHTML = `
+      <div class="vibrnt-stat-card"><div class="v-stat-val">${total}</div><div class="v-stat-label">Candidates</div></div>
+      <div class="vibrnt-stat-card"><div class="v-stat-val">${avgVibe}</div><div class="v-stat-label">Avg Vibe Score</div></div>
+      <div class="vibrnt-stat-card"><div class="v-stat-val">${identified}</div><div class="v-stat-label">Identified</div></div>
+      <div class="vibrnt-stat-card"><div class="v-stat-val">${contacted}</div><div class="v-stat-label">Contacted</div></div>
+      <div class="vibrnt-stat-card"><div class="v-stat-val">${confirmed}</div><div class="v-stat-label">Confirmed</div></div>
+      <div class="vibrnt-stat-card"><div class="v-stat-val">${posted}</div><div class="v-stat-label">Posted</div></div>
+    `;
+  }
+
+  if (!candidates.length) {
+    container.innerHTML = '<div class="empty-state">No influencer candidates yet. First scout run populates this.</div>';
+    return;
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'vibrnt-grid';
+
+
+  candidates.forEach(c => {
+    const platformIcons = (c.platform || '').split('/').map(p => {
+      const icon = p.trim() === 'TikTok' ? '📱' : p.trim() === 'Instagram' ? '📸' : '🌐';
+      const label = p.trim();
+      return `<span class="platform-icon" title="${label}">${icon}</span>`;
+       }).join('');
+
+    const vibeColor = c.vibe_score >= 8 ? '#22c55e' : c.vibe_score >= 6 ? '#f59e0b' : '#6b7280';
+    const statusBadge = {
+      'Identified': 'badge-identified', 'Contacted': 'badge-contacted',
+      'Responded': 'badge-responded', 'Confirmed': 'badge-confirmed', 'Posted': 'badge-posted'
+    }[c.status] || 'badge-identified';
+
+    const nicheTags = (c.niche_tags || '').split(',').filter(Boolean).map(t =>
+      `<span class="niche-tag">${t.trim()}</span>`
+       ).join('');
+
+    const profileUrl = c.profile_url || `#`;
+    const contactMethod = c.contact_method || 'DM';
+
+    const card = document.createElement('div');
+    card.className = 'vibrnt-card';
+    card.innerHTML = `
+      <div class="vibrnt-card-header">
+        <div class="vibrnt-handle-row">
+          <a href="${profileUrl}" target="_blank" class="vibrnt-handle">${c.handle}</a>
+          <span class="platform-icons">${platformIcons}</span>
+        </div>
+        <span class="vibe-badge" style="background:${vibeColor}">${c.vibe_score || '?'}/10</span>
+      </div>
+      <div class="vibrnt-card-meta">
+        <span class="meta-item">👥 ${c.followers?.toLocaleString() || '?'}</span>
+        <span class="meta-item">💬 ${c.engagement_rate || '?'}%</span>
+        <span class="meta-item">📬 ${contactMethod}</span>
+      </div>
+      ${nicheTags ? `<div class="vibrnt-niche-tags">${nicheTags}</div>` : ''}
+      <div class="vibrnt-pricing">💰 ${c.pricing_estimate || 'Standard offer'}</div>
+      <div class="vibrnt-notes">${c.notes || ''}</div>
+      <div class="vibrnt-card-footer">
+        <span class="vibrnt-status ${statusBadge}">${c.status || 'Identified'}</span>
+        <button class="vibrnt-draft-btn" onclick="openVibrntDraft('${c.handle}', ${c.id})">📧 Draft Email</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  container.appendChild(grid);
+}
+
+function openVibrntDraft(handle, id) {
+  const candidate = (commandData.influencer_pipeline || []).find(c => c.id === id);
+  if (!candidate) { showToast('Candidate not found', 'error'); return; }
+  const draft = generateVibrntDraft(candidate);
+  const panel = document.getElementById('new-draft-panel');
+  if (!panel) { showToast('Draft panel not available', 'error'); return; }
+  document.getElementById('new-draft-title').textContent = `Vibrnt Draft — ${handle}`;
+  document.getElementById('new-draft-author').value = 'jenny';
+  document.getElementById('new-draft-text').value = draft;
+  panel.classList.remove('hidden');
+  panel.setAttribute('aria-hidden', 'false');
+}
+
+function generateVibrntDraft(candidate) {
+  const name = candidate.handle.replace('@', '');
+  return `To: via ${candidate.contact_method || 'DM'}
+CC: jenny@aloomii.com
+Subject: ${candidate.handle} — Vibrnt collab?
+
+Hey ${name},
+
+[Specific observation about their content — genuine, specific, not generic.]
+
+
+I run creator partnerships for Vibrnt. We make mood-based graphic apparel for women — bold tees and hoodies that say something. Your audience vibes with that.
+
+We'd love to send you something free to try. No strings. Just want you to have it.
+
+Your call if you actually like it. If you do and want to share — we'd love that. If not, no hard feelings.
+
+Check us out: vibrnt.ai
+
+Yohann`;
+}
+
+window.renderVibrntPipeline = renderVibrntPipeline;
+window.openVibrntDraft = openVibrntDraft;
 
 function renderBacklog() {
   const container = document.getElementById('backlog-container');
