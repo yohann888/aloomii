@@ -129,7 +129,7 @@ function showSection(section) {
         } else if (section === 'backlog') {
             renderBacklog();
         } else if (section === 'vibrnt') {
-            renderVibrntPipeline(commandData.influencer_pipeline || []);
+            renderVibrntSection();
         }
     }
 }
@@ -2967,6 +2967,21 @@ async function refreshVillagePaths(contactId, company) {
 
 window.refreshVillagePaths = refreshVillagePaths;
 
+function showVibrntTab(tab = 'influencers') {
+  document.querySelectorAll('.vibrnt-subtab').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.vibrnt-panel').forEach(el => el.classList.remove('active'));
+  document.getElementById(`vibrnt-subtab-${tab}`)?.classList.add('active');
+  document.getElementById(`vibrnt-panel-${tab}`)?.classList.add('active');
+}
+
+function renderVibrntSection() {
+  renderVibrntPipeline(commandData.influencer_pipeline || []);
+  renderVibrntTrends(commandData.vibrnt?.trends || []);
+  renderVibrntScripts(commandData.vibrnt?.scripts || []);
+  renderVibrntCatalog(commandData.vibrnt?.catalog || {});
+  showVibrntTab('influencers');
+}
+
 function renderVibrntPipeline(candidates = []) {
   const container = document.getElementById('vibrnt-pipeline-container');
   const statsEl = document.getElementById('vibrnt-stats');
@@ -3086,7 +3101,48 @@ Check us out: vibrnt.ai
 Yohann`;
 }
 
+function renderVibrntTrends(trends = []) {
+  const container = document.getElementById('vibrnt-trends-container');
+  if (!container) return;
+  if (!trends.length) {
+    container.innerHTML = '<div class="empty-state">No Vibrnt trends found.</div>';
+    return;
+  }
+  container.innerHTML = trends.map(t => `
+    <div class="vibrnt-card" style="margin-bottom:12px;">
+      <div class="vibrnt-card-header"><strong>${t.date}</strong></div>
+      <div class="vibrnt-notes" style="white-space:pre-wrap;max-height:260px;overflow:auto;">${(t.body || '').replace(/</g,'&lt;')}</div>
+    </div>
+  `).join('');
+}
+
+function renderVibrntScripts(scripts = []) {
+  const container = document.getElementById('vibrnt-scripts-container');
+  if (!container) return;
+  if (!scripts.length) {
+    container.innerHTML = '<div class="empty-state">No Vibrnt scripts found.</div>';
+    return;
+  }
+  container.innerHTML = scripts.slice(0, 12).map(s => `
+    <div class="vibrnt-card" style="margin-bottom:12px;">
+      <div class="vibrnt-card-header"><strong>${s.file}</strong><span class="vibrnt-status badge-identified">${s.type || 'script'}</span></div>
+      <div class="vibrnt-notes" style="white-space:pre-wrap;max-height:220px;overflow:auto;">${(s.body || '').replace(/</g,'&lt;')}</div>
+    </div>
+  `).join('');
+}
+
+function renderVibrntCatalog(catalog = {}) {
+  const container = document.getElementById('vibrnt-catalog-container');
+  if (!container) return;
+  const body = catalog.body || '';
+  container.innerHTML = body
+    ? `<div class="vibrnt-card"><div class="vibrnt-notes" style="white-space:pre-wrap;max-height:480px;overflow:auto;">${body.replace(/</g,'&lt;')}</div></div>`
+    : '<div class="empty-state">No Vibrnt catalog found.</div>';
+}
+
 window.renderVibrntPipeline = renderVibrntPipeline;
+window.renderVibrntSection = renderVibrntSection;
+window.showVibrntTab = showVibrntTab;
 window.openVibrntDraft = openVibrntDraft;
 
 function renderBacklog() {

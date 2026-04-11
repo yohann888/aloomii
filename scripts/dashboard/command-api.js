@@ -8,10 +8,16 @@
  */
 
 const { Pool } = require('pg');
+const fs = require('fs');
+const path = require('path');
 
 const connectionString = 'postgresql://superhana@localhost:5432/aloomii';
 const LMSTUDIO_URL = 'http://127.0.0.1:1234/v1/chat/completions';
 const LMSTUDIO_MODEL = 'qwen2.5-coder-14b-instruct-abliterated';
+const VIBRNT_VAULT = process.env.VIBRNT_VAULT || '/Users/superhana/Documents/VibrntVault/VIBRNT';
+const VIBRNT_TRENDS_DIR = path.join(VIBRNT_VAULT, 'Trends');
+const VIBRNT_SCRIPTS_DIR = path.join(VIBRNT_VAULT, 'Scripts');
+const VIBRNT_CATALOG_PATH = path.join(VIBRNT_VAULT, 'product-catalog-template.md');
 
 // In-memory cache for the full response (30s)
 let cachedResponse = null;
@@ -129,6 +135,7 @@ function registerCommandAPI(app, pool = null) {
         tasks: [],
         backlog: [],
         influencer_pipeline: [],
+        vibrnt: { trends: [], scripts: [], catalog: { products: [] }, summary: {} },
         last_updated: new Date().toISOString(),
         _meta: { query_time_ms: 0 }
       };
@@ -712,8 +719,6 @@ function registerCommandAPI(app, pool = null) {
         // 16. Strategic Backlog (from backlog.json)
         async () => {
           try {
-            const fs = require('fs');
-            const path = require('path');
             const backlogPath = path.join(__dirname, '..', '..', 'command', 'backlog.json');
             if (fs.existsSync(backlogPath)) {
               const content = fs.readFileSync(backlogPath, 'utf8');
@@ -722,6 +727,51 @@ function registerCommandAPI(app, pool = null) {
           } catch (e) {
             console.warn('Backlog read failed:', e.message);
             data.backlog = [];
+          }
+        },
+
+        // 17. Vibrnt content bundle
+        async () => {
+          try {
+            const readDir = (dir, ext) => {
+              if (!fs.existsSync(dir)) return [];
+              return fs.readdirSync(dir)
+                .filter(f => !ext || f.endsWith(ext))
+                .map(f => ({ name: f, path: path.join(dir, f), mtime: fs.statSync(path.join(dir, f)).mtime }))
+                .sort((a, b) => b.mtime - a.mtime);
+            };
+
+            const trendFiles = readDir(VIBRNT_TRENDS_DIR, '.md').slice(0, 10);
+            data.vibrnt.trends = trendFiles.map(f => ({
+              date: f.name.replace('.md', ''),
+              file: f.name,
+              title: `Trend Report - ${f.name.replace('.md', '')}`,
+              body: fs.readFileSync(f.path, 'utf-8'),
+              mtime: f.mtime
+            }));
+
+            const scriptFiles = readDir(VIBRNT_SCRIPTS_DIR, '.md').slice(0, 20);
+            data.vibrnt.scripts = scriptFiles.map(f => ({
+              file: f.name,
+              date: f.name.split('-').slice(0, 3).join('-'),
+              type: f.name.includes('hook') ? 'hook' : f.name.includes('slideshow') ? 'slideshow' : 'script',
+              body: fs.readFileSync(f.path, 'utf-8'),
+              mtime: f.mtime
+            }));
+
+            if (fs.existsSync(VIBRNT_CATALOG_PATH)) {
+              data.vibrnt.catalog = { body: fs.readFileSync(VIBRNT_CATALOG_PATH, 'utf-8'), products: [] };
+            }
+
+            data.vibrnt.summary = {
+              trendCount: data.vibrnt.trends.length,
+              scriptCount: data.vibrnt.scripts.length,
+              productCount: data.vibrnt.catalog?.products?.length || 0,
+              latestTrend: data.vibrnt.trends[0]?.date || null,
+              latestScripts: data.vibrnt.scripts.slice(0, 3).map(s => s.file)
+            };
+          } catch (e) {
+            console.warn('Vibrnt bundle query failed:', e.message);
           }
         }
       ];

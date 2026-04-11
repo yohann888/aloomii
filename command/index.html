@@ -385,9 +385,26 @@
 
             <!-- Vibrnt Section -->
             <section id="section-vibrnt" class="content-section">
-                <h2>Vibrnt Influencer Pipeline</h2>
+                <h2>Vibrnt</h2>
+                <div class="vibrnt-subtabs">
+                    <button class="vibrnt-subtab active" id="vibrnt-subtab-influencers" onclick="showVibrntTab('influencers')">Influencers</button>
+                    <button class="vibrnt-subtab" id="vibrnt-subtab-trends" onclick="showVibrntTab('trends')">Trends</button>
+                    <button class="vibrnt-subtab" id="vibrnt-subtab-scripts" onclick="showVibrntTab('scripts')">Scripts</button>
+                    <button class="vibrnt-subtab" id="vibrnt-subtab-catalog" onclick="showVibrntTab('catalog')">Catalog</button>
+                </div>
                 <div id="vibrnt-stats" class="vibrnt-stats-row"></div>
-                <div id="vibrnt-pipeline-container" class="vibrnt-pipeline-grid"></div>
+                <div id="vibrnt-panel-influencers" class="vibrnt-panel active">
+                    <div id="vibrnt-pipeline-container" class="vibrnt-pipeline-grid"></div>
+                </div>
+                <div id="vibrnt-panel-trends" class="vibrnt-panel">
+                    <div id="vibrnt-trends-container"></div>
+                </div>
+                <div id="vibrnt-panel-scripts" class="vibrnt-panel">
+                    <div id="vibrnt-scripts-container"></div>
+                </div>
+                <div id="vibrnt-panel-catalog" class="vibrnt-panel">
+                    <div id="vibrnt-catalog-container"></div>
+                </div>
             </section>
 
             <!-- Backlog Section -->
