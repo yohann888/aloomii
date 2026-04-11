@@ -24,29 +24,35 @@ jobs:
       - name: Build static dashboard
         run: node vibrnt/build-static.js
 
-      - name: Inject dashboard HTML into Worker (base64)
+      - name: Inject dashboard HTML into Worker
         run: |
           python3 << 'PYEOF'
-          import base64, re
-          # Read the built dashboard HTML
-          with open('vibrnt/dist/index.html') as f:
-              dashboard_html = f.read()
-          # Read the worker script
-          with open('vibrnt/workers/auth.js') as f:
+          import json, os, re
+
+          # Read the built HTML
+          with open('vibrnt/dist/index.html', 'r') as f:
+              html = f.read()
+
+          # Escape template literal special chars so they don't break JS template literal
+          escaped = html.replace('`', '\\`').replace('${', '\\${')
+
+          # Read the worker
+          with open('vibrnt/workers/auth.js', 'r') as f:
               js = f.read()
-          # Encode as base64 to avoid JS template literal escaping issues
-          b64 = base64.b64encode(dashboard_html.encode('utf-8')).decode('ascii')
-          # Replace the base64-encoded placeholder
-          old_pattern = "const DASHBOARD_B64 = ''"
-          new_pattern = "const DASHBOARD_B64 = '" + b64 + "';"
-          if old_pattern in js:
-              js = js.replace(old_pattern, new_pattern)
-              with open('vibrnt/workers/auth.js', 'w') as f:
-                  f.write(js)
-              print('Dashboard injected as base64 (' + str(len(b64)) + ' chars)')
-          else:
-              print('ERROR: DASHBOARD_B64 marker not found')
+
+          # Find the marker line and replace it
+          marker = 'const DASHBOARD_HTML = `<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->`;'
+          if marker not in js:
+              print('ERROR: marker not found in auth.js')
               exit(1)
+
+          replacement = 'const DASHBOARD_HTML = `' + escaped + '`;'
+          js = js.replace(marker, replacement)
+
+          with open('vibrnt/workers/auth.js', 'w') as f:
+              f.write(js)
+
+          print(f'Dashboard injected ({len(html)} chars)')
           PYEOF
 
       - name: Deploy to Cloudflare Workers
@@ -62,7 +68,8 @@ jobs:
           echo "✅ Vibrnt dashboard live at: https://aloomii.com/vibrnt"
           echo ""
           echo "🔐 First-time setup (set your password):"
-          echo "   Go to: Cloudflare Dashboard > Workers & Pages > vibrnt-worker > Settings > Variables"
-          echo "   Add: VIBRNT_PASS = your-password"
+          echo "   1. Go to: https://dash.cloudflare.com > Workers & Pages > vibrnt-worker > Settings > Variables"
+          echo "   2. Add variable: VIBRNT_PASS = your-password"
+          echo "   3. Done!"
           echo ""
           echo "   Default password (until changed): vibrnt2026"
