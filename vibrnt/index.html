@@ -37,6 +37,33 @@
     .brand-tagline { font-size: 12px; color: var(--text-dim); font-family: var(--mono); margin-top: 1px; }
     .header-right { display: flex; align-items: center; gap: 16px; }
     .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  .tab-bar { display: flex; gap: 4px; margin: 0 0 0 24px; }
+  .tab-btn { font-size: 13px; font-family: var(--font); background: transparent; color: var(--text-dim); border: 1px solid transparent; border-radius: 8px; padding: 6px 14px; cursor: pointer; transition: all 0.15s; }
+  .tab-btn:hover { color: var(--text); background: var(--bg-card-hover); }
+  .tab-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(100,80,255,0.1); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .inf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .inf-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; transition: border-color 0.2s; }
+  .inf-card:hover { border-color: var(--accent); }
+  .inf-handle { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .inf-meta { display: flex; gap: 10px; font-size: 11px; color: var(--text-dim); margin: 6px 0; flex-wrap: wrap; }
+  .inf-tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+  .inf-tag { font-size: 10px; background: var(--bg-card-hover); color: var(--text-dim); border-radius: 20px; padding: 2px 7px; }
+  .inf-pricing { font-size: 12px; color: #f59e0b; margin: 4px 0; }
+  .inf-notes { font-size: 11px; color: var(--text-dim); margin: 6px 0; line-height: 1.4; }
+  .inf-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .inf-status { font-size: 10px; font-weight: 600; border-radius: 20px; padding: 2px 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .inf-status.identified { background: #1e3a5f; color: #60a5fa; }
+  .inf-status.contacted { background: #3d2a00; color: #fbbf24; }
+  .inf-status.responded { background: #1a3d2a; color: #34d399; }
+  .inf-status.confirmed { background: #14532d; color: #22c55e; }
+  .inf-status.posted { background: #2a1a3d; color: #a78bfa; }
+  .inf-vibe { font-size: 11px; font-weight: 700; border-radius: 20px; padding: 2px 7px; color: #fff; }
+  .inf-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .inf-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 80px; }
+  .inf-stat-val { font-size: 20px; font-weight: 700; color: var(--accent); }
+  .inf-stat-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
     .live-label { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
@@ -185,6 +212,11 @@
       <div class="brand-name">vibrnt<span>.ai</span></div>
       <div class="brand-tagline">Trends Dashboard</div>
     </div>
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-trends" onclick="switchTab('trends')">Trends</button>
+      <button class="tab-btn" id="tab-catalog" onclick="switchTab('catalog')">Catalog</button>
+      <button class="tab-btn" id="tab-influencers" onclick="switchTab('influencers')">Influencers</button>
+    </div>
   </div>
   <div class="header-right">
     <div class="live-dot"></div>
@@ -223,49 +255,51 @@
     </div>
   </div>
 
-  <!-- Trends + Scripts row -->
-  <div class="grid-2">
-
-    <!-- Trends card -->
-    <div class="card">
-      <div class="card-title">
-        <span class="icon">&#128293;</span> Trending Signals
-        <span id="trend-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+  <!-- Tab panels -->
+  <div id="panel-trends" class="tab-panel active">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">
+          <span class="icon">&#128293;</span> Trending Signals
+          <span id="trend-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+        </div>
+        <div class="card-body" id="trends-container">
+          <div class="empty-state"><div class="icon">&#128269;</div><p>No trends yet. Run <strong>vibrnt-trend-scout.js</strong> to pull signals.</p></div>
+        </div>
       </div>
-      <div class="card-body" id="trends-container">
-        <div class="empty-state">
-          <div class="icon">&#128269;</div>
-          <p>No trends yet. Run <strong>vibrnt-trend-scout.js</strong> to pull signals.</p>
+      <div class="card">
+        <div class="card-title">
+          <span class="icon">&#127916;</span> TikTok Scripts
+          <span id="script-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+        </div>
+        <div class="card-body" id="scripts-container">
+          <div class="empty-state"><div class="icon">&#127909;</div><p>No scripts yet. Run <strong>vibrnt-script-writer.js</strong> to generate today's scripts.</p></div>
         </div>
       </div>
     </div>
-
-    <!-- Scripts card -->
-    <div class="card">
-      <div class="card-title">
-        <span class="icon">&#127916;</span> TikTok Scripts
-        <span id="script-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
-      </div>
-      <div class="card-body" id="scripts-container">
-        <div class="empty-state">
-          <div class="icon">&#127909;</div>
-          <p>No scripts yet. Run <strong>vibrnt-script-writer.js</strong> to generate today's scripts.</p>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- Product catalog -->
-  <div class="card" style="margin-bottom:20px">
-    <div class="card-title">
-      <span class="icon">&#128722;</span> Product Catalog
-      <span id="catalog-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+  <div id="panel-catalog" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">&#128722;</span> Product Catalog
+        <span id="catalog-count-2" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+      </div>
+      <div class="card-body" id="catalog-container-2">
+        <div class="empty-state"><div class="icon">&#128230;</div><p>Loading product catalog...</p></div>
+      </div>
     </div>
-    <div class="card-body" id="catalog-container">
-      <div class="empty-state">
-        <div class="icon">&#128230;</div>
-        <p>Loading product catalog...</p>
+  </div>
+
+  <div id="panel-influencers" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">&#128101;</span> Influencer Pipeline
+        <span id="inf-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+      </div>
+      <div class="card-body">
+        <div id="inf-stats" class="inf-stats"></div>
+        <div id="inf-grid" class="inf-grid"></div>
       </div>
     </div>
   </div>
@@ -309,6 +343,7 @@ function fetchJSON(url) {
   if (url === '/api/trends') return Promise.resolve({ trends: d.trends || [] });
   if (url === '/api/scripts') return Promise.resolve({ scripts: d.scripts || [] });
   if (url === '/api/catalog') return Promise.resolve(d.catalog || {});
+  if (url === '/api/influencer_pipeline') return Promise.resolve({ candidates: (d.influencerPipeline || []) });
   if (url.startsWith('/api/scripts?file=')) {
     const file = decodeURIComponent(url.split('file=')[1] || '');
     const found = (d.scripts || []).find(s => s.file === file);
@@ -326,6 +361,60 @@ function loadSeenTrends() {
   } catch(e) {}
 }
 
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const btn = document.getElementById('tab-' + tab);
+  const panel = document.getElementById('panel-' + tab);
+  if (btn) btn.classList.add('active');
+  if (panel) panel.classList.add('active');
+  if (tab === 'catalog') { loadCatalog(); }
+  if (tab === 'influencers') { loadInfluencerPipeline(); }
+}
+
+function loadInfluencerPipeline() {
+  const candidates = window.__VIBRNT_DATA__ && window.__VIBRNT_DATA__.influencerPipeline || [];
+  const countEl = document.getElementById('inf-count');
+  const statsEl = document.getElementById('inf-stats');
+  const gridEl = document.getElementById('inf-grid');
+  if (!gridEl) return;
+  if (countEl) countEl.textContent = candidates.length + ' candidates';
+  if (!candidates.length) {
+    statsEl.innerHTML = '';
+    gridEl.innerHTML = '<div class="empty-state"><div class="icon">&#128101;</div><p>No candidates yet. First scout run populates this.</p></div>';
+    return;
+  }
+  const total = candidates.length;
+  const avgVibe = (candidates.reduce(function(s,c){ return s + (c.vibe_score||0); }, 0) / total).toFixed(1);
+  const identified = candidates.filter(function(c){ return c.status === 'Identified'; }).length;
+  const contacted = candidates.filter(function(c){ return c.status === 'Contacted'; }).length;
+  const confirmed = candidates.filter(function(c){ return c.status === 'Confirmed'; }).length;
+  statsEl.innerHTML = '<div class="inf-stat"><div class="inf-stat-val">' + total + '</div><div class="inf-stat-label">Total</div></div>' +
+    '<div class="inf-stat"><div class="inf-stat-val">' + avgVibe + '</div><div class="inf-stat-label">Avg Vibe</div></div>' +
+    '<div class="inf-stat"><div class="inf-stat-val">' + identified + '</div><div class="inf-stat-label">Identified</div></div>' +
+    '<div class="inf-stat"><div class="inf-stat-val">' + contacted + '</div><div class="inf-stat-label">Contacted</div></div>' +
+    '<div class="inf-stat"><div class="inf-stat-val">' + confirmed + '</div><div class="inf-stat-label">Confirmed</div></div>';
+  gridEl.innerHTML = candidates.map(function(c) {
+    var vibeColor = c.vibe_score >= 8 ? '#22c55e' : c.vibe_score >= 6 ? '#f59e0b' : '#6b7280';
+    var statusClass = (c.status||'Identified').toLowerCase();
+    var nicheTags = (c.niche_tags||'').split(',').filter(Boolean).map(function(t){ return '<span class="inf-tag">' + t.trim() + '</span>'; }).join('');
+    var profileUrl = c.profile_url || '#';
+    return '<div class="inf-card">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">' +
+        '<a href="' + escHtml(profileUrl) + '" target="_blank" class="inf-handle">' + escHtml(c.handle||'') + '</a>' +
+        '<span class="inf-vibe" style="background:' + vibeColor + '">' + (c.vibe_score||'?') + '/10</span></div>' +
+      '<div class="inf-meta"><span>👥 ' + (c.followers||'?') + '</span><span>💬 ' + (c.engagement_rate||'?') + '%</span><span>📬 ' + (c.contact_method||'DM') + '</span></div>' +
+      (nicheTags ? '<div class="inf-tags">' + nicheTags + '</div>' : '') +
+      '<div class="inf-pricing">💰 ' + escHtml(c.pricing_estimate||'Standard offer') + '</div>' +
+      (c.notes ? '<div class="inf-notes">' + escHtml(c.notes) + '</div>' : '') +
+      '<div class="inf-footer">' +
+        '<span class="inf-status ' + statusClass + '">' + (c.status||'Identified') + '</span>' +
+        '<a href="' + escHtml(profileUrl) + '" target="_blank" style="font-size:11px;color:var(--accent2);text-decoration:none;">View ↗</a>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
 async function refreshAll() {
   const btn = document.querySelector('.refresh-btn');
   const spinner = document.getElementById('spinner');
@@ -339,6 +428,7 @@ async function refreshAll() {
 
   if (btn) btn.classList.remove('loading');
   if (spinner) spinner.style.display = 'none';
+  loadInfluencerPipeline();
 }
 
 async function loadSummary() {
