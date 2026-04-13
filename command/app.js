@@ -1754,8 +1754,13 @@ function renderLinkedInDrafts(drafts) {
     return;
   }
 
-  const jennyDrafts = filtered.filter(function(d) { return d.adapter === 'jenny'; });
-  const yohannDrafts = filtered.filter(function(d) { return d.adapter !== 'jenny'; });
+  function getDraftOwner(draft) {
+    if (draft.adapter === 'jenny' || draft.brand_owner === 'jenny') return 'jenny';
+    return 'yohann';
+  }
+
+  const jennyDrafts = filtered.filter(function(d) { return getDraftOwner(d) === 'jenny'; });
+  const yohannDrafts = filtered.filter(function(d) { return getDraftOwner(d) === 'yohann'; });
 
   function renderGroup(title, emoji, items) {
     if (!items || items.length === 0) return;
@@ -2660,6 +2665,9 @@ function closeNewDraftPanel() {
     const panel = document.getElementById('new-draft-panel');
     if (!panel) return;
 
+    panel.removeAttribute('data-post-origin');
+    panel.removeAttribute('data-influencer-id');
+    panel.removeAttribute('data-influencer-handle');
     panel.classList.remove('visible');
     panel.classList.add('hidden');
     panel.setAttribute('aria-hidden', 'true');
@@ -2679,13 +2687,21 @@ async function saveNewDraft() {
         return;
     }
 
+    const panel = document.getElementById('new-draft-panel');
+    const postOrigin = panel?.getAttribute('data-post-origin') || null;
+    const influencerId = panel?.getAttribute('data-influencer-id') || null;
+    const influencerHandle = panel?.getAttribute('data-influencer-handle') || null;
+
     const payload = {
-        platform: 'linkedin',
+        platform: postOrigin ? 'email' : 'linkedin',
         post_type: 'draft',
-        topic: 'New LinkedIn Draft',
+        topic: influencerHandle ? `Vibrnt influencer outreach — ${influencerHandle}` : 'New LinkedIn Draft',
         content_text: text,
         adapter: author,
-        status: 'draft'
+        status: 'draft',
+        post_origin: postOrigin || 'command_center',
+        ...(influencerId ? { influencer_id: influencerId } : {}),
+        ...(influencerHandle ? { influencer_handle: influencerHandle } : {})
     };
 
     isSavingNewDraft = true;
@@ -3057,7 +3073,7 @@ function renderVibrntPipeline(candidates = []) {
       <div class="vibrnt-notes">${c.notes || ''}</div>
       <div class="vibrnt-card-footer">
         <span class="vibrnt-status ${statusBadge}">${c.status || 'Identified'}</span>
-        <button class="vibrnt-draft-btn" onclick="openVibrntDraft('${c.handle}', ${c.id})">📧 Draft Email</button>
+        ${c.vibe_score >= 8 ? `<button class="vibrnt-draft-btn" onclick="openVibrntDraft('${c.handle}', ${c.id})">📧 Draft Email</button>` : `<span class="vibrnt-draft-btn muted" title="Vibe score must be 8+ to draft">📧 Score ${c.vibe_score || '?'} — not draftable</span>`}
       </div>
     `;
     grid.appendChild(card);
@@ -3069,12 +3085,17 @@ function renderVibrntPipeline(candidates = []) {
 function openVibrntDraft(handle, id) {
   const candidate = (commandData.influencer_pipeline || []).find(c => c.id === id);
   if (!candidate) { showToast('Candidate not found', 'error'); return; }
+  if (candidate.vibe_score < 8) { showToast('Only candidates with vibe score 8+ (top 2/5) can be drafted', 'warning'); return; }
   const draft = generateVibrntDraft(candidate);
   const panel = document.getElementById('new-draft-panel');
   if (!panel) { showToast('Draft panel not available', 'error'); return; }
   document.getElementById('new-draft-title').textContent = `Vibrnt Draft — ${handle}`;
   document.getElementById('new-draft-author').value = 'jenny';
   document.getElementById('new-draft-text').value = draft;
+  // Tag this draft as a Vibrnt influencer outreach so it routes to content_posts
+  panel.setAttribute('data-post-origin', 'vibrnt_influencer');
+  panel.setAttribute('data-influencer-id', id);
+  panel.setAttribute('data-influencer-handle', handle);
   panel.classList.remove('hidden');
   panel.setAttribute('aria-hidden', 'false');
 }

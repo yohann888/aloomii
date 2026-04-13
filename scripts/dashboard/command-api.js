@@ -641,9 +641,11 @@ function registerCommandAPI(app, pool = null) {
           // LinkedIn drafts from content_posts (platform = 'linkedin')
           try {
             const linkedinRes = await query(`
-              SELECT * FROM content_posts 
-              WHERE platform = 'linkedin' AND status = 'draft'
-              ORDER BY COALESCE(scheduled_at, published_at) DESC 
+              SELECT cp.*, bp.owner AS brand_owner
+              FROM content_posts cp
+              LEFT JOIN brand_profiles bp ON bp.id = cp.brand_profile_id
+              WHERE cp.platform = 'linkedin' AND cp.status = 'draft'
+              ORDER BY COALESCE(cp.scheduled_at, cp.published_at) DESC 
               LIMIT 20
             `);
             data.linkedin_drafts = linkedinRes.rows;
