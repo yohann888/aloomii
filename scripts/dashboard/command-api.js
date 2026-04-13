@@ -1315,7 +1315,7 @@ function registerCommandAPI(app, pool = null) {
     }
   });
 
-  // POST /api/command/content/:id/approve — approve, compute learning, push to Buffer
+  // POST /api/command/content/:id/approve — approve and store in CC only
   app.post('/api/command/content/:id/approve', async (req, res) => {
     const { id } = req.params;
     const { edited_text, adapter } = req.body;
@@ -1366,21 +1366,7 @@ function registerCommandAPI(app, pool = null) {
       
       const approved = result.rows[0];
       
-      // Push to Buffer if LinkedIn
-      let bufferId = null;
-      if (approved.platform === 'linkedin') {
-        try {
-          bufferId = await pushToBuffer(finalText, approved.adapter);
-          if (bufferId) {
-            await query('UPDATE content_posts SET external_id = $1, status = $2 WHERE id = $3', 
-              [bufferId, 'published', id]);
-          }
-        } catch (bufErr) {
-          console.warn('Buffer push failed:', bufErr.message);
-        }
-      }
-      
-      res.json({ success: true, post: approved, buffer_id: bufferId });
+      res.json({ success: true, post: approved, buffer_id: null });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
@@ -1401,15 +1387,25 @@ function registerCommandAPI(app, pool = null) {
 
   // POST /api/command/content/new — create new LinkedIn draft
   app.post('/api/command/content/new', async (req, res) => {
-    const { platform = 'linkedin', post_type = 'draft', topic, content_text, adapter = 'yohann', brand_profile_id = null } = req.body;
+    const { platform = 'linkedin', post_type = 'draft', topic, content_text, adapter = 'yohann', brand_profile_id = null, post_origin = 'command_center', influencer_id = null, influencer_handle = null } = req.body;
     try {
       if (!content_text) return res.status(400).json({ error: 'content_text required' });
       const resolvedBrandProfileId = brand_profile_id || (await query('SELECT id FROM brand_profiles WHERE owner = $1 LIMIT 1', [adapter])).rows[0]?.id || null;
       const result = await query(`
-        INSERT INTO content_posts (platform, post_type, topic, content_text, adapter, brand_profile_id, status)
-        VALUES ($1, $2, $3, $4, $5, $6, 'draft')
+        INSERT INTO content_posts (platform, post_type, topic, content_text, adapter, brand_profile_id, status, post_origin)
+        VALUES ($1, $2, $3, $4, $5, $6, 'draft', $7)
         RETURNING *
-      `, [platform, post_type, topic, content_text, adapter, resolvedBrandProfileId]);
+      `, [platform, post_type, topic, content_text, adapter, resolvedBrandProfileId, post_origin]);
+
+      // If this draft came from an influencer, update the influencer_pipeline status
+      if (influencer_id && post_origin === 'vibrnt_influencer') {
+        try {
+          await query(`UPDATE influencer_pipeline SET status = 'Drafted' WHERE id = $1`, [influencer_id]);
+        } catch (e) {
+          console.warn('Failed to update influencer status after draft:', e.message);
+        }
+      }
+
       res.json({ success: true, post: result.rows[0] });
     } catch (e) {
       res.status(500).json({ error: e.message });

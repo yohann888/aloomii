@@ -45,8 +45,7 @@ async function ingestContent(payload) {
   try {
     await client.connect();
 
-    const now = new Date();
-    const publishedAt = scheduled_at ? null : now;
+    const publishedAt = null;
     const scheduledAt = scheduled_at ? new Date(scheduled_at) : null;
 
     const queryText = `
