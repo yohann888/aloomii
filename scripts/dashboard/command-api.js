@@ -611,10 +611,11 @@ function registerCommandAPI(app, pool = null) {
         async () => {
           try {
             const snipeRes = await query(`
-              SELECT id, draft_text, topic, pillar, pillar_name, score_total, source_url, created_at
+              SELECT id, draft_text, topic, pillar, pillar_name, score_total, source_url,
+                     COALESCE(scheduled_at, published_at) AS sort_at
               FROM content_posts
               WHERE post_origin = 'snipe' AND status = 'draft'
-              ORDER BY created_at DESC
+              ORDER BY COALESCE(scheduled_at, published_at) DESC
               LIMIT 10
             `);
             data.snipe_drafts = snipeRes.rows;
@@ -1394,8 +1395,8 @@ function registerCommandAPI(app, pool = null) {
       if (!content_text) return res.status(400).json({ error: 'content_text required' });
       const resolvedBrandProfileId = brand_profile_id || (await query('SELECT id FROM brand_profiles WHERE owner = $1 LIMIT 1', [adapter])).rows[0]?.id || null;
       const result = await query(`
-        INSERT INTO content_posts (platform, post_type, topic, content_text, adapter, brand_profile_id, status, post_origin)
-        VALUES ($1, $2, $3, $4, $5, $6, 'draft', $7)
+        INSERT INTO content_posts (platform, post_type, topic, content_text, draft_text, adapter, brand_profile_id, status, post_origin)
+        VALUES ($1, $2, $3, $4, $4, $5, $6, 'draft', $7)
         RETURNING *
       `, [platform, post_type, topic, content_text, adapter, resolvedBrandProfileId, post_origin]);
 
