@@ -1328,7 +1328,10 @@ function registerCommandAPI(app, pool = null) {
       if (current.rows.length === 0) return res.status(404).json({ error: 'Not found' });
       const post = current.rows[0];
       
-      const finalText = await rewriteSnipeToBrandVoice(post, adapter || post.adapter || 'yohann', edited_text);
+      const isSnipe = post.post_origin === 'snipe';
+      const finalText = isSnipe
+        ? (edited_text || post.edited_text || post.content_text || post.draft_text || '')
+        : await rewriteSnipeToBrandVoice(post, adapter || post.adapter || 'yohann', edited_text);
       const originalText = post.original_text || post.content_text || post.draft_text || '';
       
       // Compute edit distance (word-level)

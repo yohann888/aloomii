@@ -120,6 +120,7 @@ function showSection(section) {
             if (commandData.pipeline) renderPipelineCRM(commandData);
         } else if (section === 'content') {
             renderLinkedInDrafts(commandData.linkedin_drafts);
+            renderSnipeDrafts(commandData.snipe_drafts);
             renderPBNBriefs(commandData.content_queue);
             renderAllContent(commandData.content_queue);
         } else if (section === 'signals') {
@@ -1786,7 +1787,7 @@ function renderLinkedInDrafts(drafts) {
         '<div class="draft-card-actions">' +
           '<button onclick="expandDraft(' + draft.id + ')" class="btn-small">View Full</button>' +
           '<button onclick="editLinkedInDraft(' + draft.id + ')" class="btn-small primary">Edit</button>' +
-          '<button onclick="approveLinkedInDraft(' + draft.id + ')" class="btn-small" style="background:var(--accent-success);color:#000">Approve &rarr; Buffer</button>' +
+          '<button onclick="approveLinkedInDraft(' + draft.id + ')" class="btn-small" style="background:var(--accent-success);color:#000">Approve</button>' +
           '<button onclick="rejectLinkedInDraft(' + draft.id + ')" class="btn-small" style="background:var(--accent-danger);color:#fff">Reject</button>' +
         '</div>' +
         '<div id="draft-editor-' + draft.id + '" class="draft-editor hidden"></div>';
@@ -1797,6 +1798,39 @@ function renderLinkedInDrafts(drafts) {
 
   renderGroup('Jenny Calpu', '\uD83C\uDFA8', jennyDrafts);
   renderGroup('Yohann Calpu', '\uD83D\uDC54', yohannDrafts);
+}
+
+function renderSnipeDrafts(drafts) {
+  const container = document.getElementById('snipe-drafts-panel');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const items = drafts || [];
+  if (items.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div style="font-size:48px;margin-bottom:12px">🎯</div><div>No snipe drafts.</div><div style="color:var(--text-dim);font-size:13px;margin-top:8px">Fresh snipes will appear here automatically.</div></div>';
+    return;
+  }
+
+  items.forEach(function(draft) {
+    const date = draft.sort_at ? new Date(draft.sort_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Unscheduled';
+    const preview = (draft.draft_text || draft.content_text || '').substring(0, 220);
+    const card = document.createElement('div');
+    card.className = 'linkedin-draft-card';
+    card.innerHTML =
+      '<div class="draft-card-header">' +
+        '<span class="draft-topic">' + (draft.topic || 'Snipe Draft') + '</span>' +
+        '<span class="draft-date">' + date + '</span>' +
+      '</div>' +
+      '<div class="draft-preview">' + preview + (preview.length >= 220 ? '...' : '') + '</div>' +
+      '<div class="draft-card-actions">' +
+        '<button onclick="expandDraft(' + draft.id + ')" class="btn-small">View Full</button>' +
+        '<button onclick="editLinkedInDraft(' + draft.id + ')" class="btn-small primary">Edit</button>' +
+        '<button onclick="approveLinkedInDraft(' + draft.id + ')" class="btn-small" style="background:var(--accent-success);color:#000">Approve</button>' +
+        '<button onclick="rejectLinkedInDraft(' + draft.id + ')" class="btn-small" style="background:var(--accent-danger);color:#fff">Reject</button>' +
+      '</div>' +
+      '<div id="draft-editor-' + draft.id + '" class="draft-editor hidden"></div>';
+    container.appendChild(card);
+  });
 }
 
 function renderPBNBriefs(posts) {
