@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Login</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link " href="/chamber-demo">Home</a>
+          <a class="nav-link " href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link " href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <div class="card form-card" style="max-width:560px;margin:0 auto;">
+      <h1 style="margin-top:0">Member Login</h1>
+      <p class="muted">This is lightweight member-auth scaffolding. Enter a seeded member email to generate a demo magic link.</p>
+      <label>Email</label>
+      <input id="email" type="email" placeholder="member+caledonia-regional-chamber-of-commerce@caledoniachamberdemo.ca" />
+      <button id="sendBtn">Send magic link</button>
+      <div class="success" id="resultBox"></div>
+    </div>
+  </div>
+  <script>
+    document.getElementById('sendBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value.trim();
+      const res = await fetch('/api/chamber-demo/member-auth/request-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      const box = document.getElementById('resultBox');
+      box.style.display = 'block';
+      if (!res.ok) {
+        box.style.background = '#fff3f3';
+        box.style.color = '#9f2020';
+        box.textContent = data.error || 'Unable to issue magic link.';
+        return;
+      }
+      box.style.background = '#eef8f1';
+      box.style.color = '#1f6f42';
+      box.innerHTML = `Magic link generated (demo mode).<br /><a href="${data.magicLink}">Open member session</a><br /><small>Provider: ${data.provider}</small>`;
+    });
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>

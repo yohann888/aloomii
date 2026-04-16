@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Dashboard</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link " href="/chamber-demo">Home</a>
+          <a class="nav-link " href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link " href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <div class="card" id="memberCard">
+      <h1 style="margin-top:0">Member Dashboard</h1>
+      <p class="muted">Loading member session…</p>
+    </div>
+  </div>
+  <script>
+    function buildUsageRing(used, total) {
+      const radius = 42;
+      const circumference = 2 * Math.PI * radius;
+      const progress = total ? used / total : 0;
+      const dashOffset = circumference * (1 - progress);
+      return `
+        <svg width="100" height="100" viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <linearGradient id="benefitGold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#D4A843"></stop>
+              <stop offset="100%" stop-color="#E8C56D"></stop>
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#E2E8F0" stroke-width="8"></circle>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="url(#benefitGold)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}" transform="rotate(-90 50 50)"></circle>
+          <text x="50" y="46" text-anchor="middle" style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;fill:#1B2A4A;">${used}</text>
+          <text x="50" y="64" text-anchor="middle" style="font-family:'Outfit',sans-serif;font-size:12px;fill:#64748B;">of ${total}</text>
+        </svg>
+      `;
+    }
+
+    function buildSparkline(points) {
+      const width = 120;
+      const height = 40;
+      const max = Math.max(...points);
+      const min = Math.min(...points);
+      const range = max - min || 1;
+      const step = width / (points.length - 1);
+      const coords = points.map((point, i) => {
+        const x = i * step;
+        const y = height - ((point - min) / range) * (height - 8) - 4;
+        return `${x},${y}`;
+      }).join(' ');
+      const area = `0,40 ${coords} 120,40`;
+      return `
+        <svg width="120" height="40" viewBox="0 0 120 40" aria-hidden="true">
+          <path d="M ${area.replace(/ /g, ' L ')} Z" fill="rgba(212,168,67,0.12)"></path>
+          <polyline fill="none" stroke="#D4A843" stroke-width="2.5" points="${coords}" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        </svg>
+      `;
+    }
+
+    async function loadMember() {
+      const res = await fetch('/api/chamber-demo/member/me');
+      if (res.status === 401) {
+        location.href = '/chamber-demo/member-login';
+        return;
+      }
+      const data = await res.json();
+      const roiViews = 847;
+      const roiUsage = { used: 3, total: 5 };
+      const roiTrend = [18, 26, 24, 30, 34, 33, 38, 44, 40, 51, 58, 64];
+      const showRoiCard = data.user.role === 'member_admin';
+      const showUpgrade = !String(data.organization.tier_name || '').toLowerCase().includes('gold');
+      const roiCard = showRoiCard ? `
+            <div class="member-roi-card">
+              <h3>Member ROI</h3>
+              <div class="member-roi-section member-roi-usage">
+                ${buildUsageRing(roiUsage.used, roiUsage.total)}
+                <div class="member-roi-usage-copy">
+                  <div class="member-roi-kicker">Benefit Usage</div>
+                  <div class="member-roi-note">You have used ${roiUsage.used} of ${roiUsage.total} free event tickets included with your membership.</div>
+                </div>
+              </div>
+              <div class="member-roi-section">
+                <div class="member-roi-kicker">Profile Views, Last 90 Days</div>
+                <div style="margin-top:10px;">${buildSparkline(roiTrend)}</div>
+              </div>
+              <div class="member-roi-section">
+                <div class="member-roi-statline"><strong>${roiViews}</strong>Your listing was viewed ${roiViews} times this year</div>
+              </div>
+              ${showUpgrade ? '<div class="member-roi-upgrade"><a href="/chamber-demo/join">Upgrade to Gold →</a></div>' : ''}
+            </div>
+      ` : '';
+      
+      document.getElementById('memberCard').innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:24px;">
+          <div>
+            <h1 style="margin-top:0">Welcome, ${data.user.first_name || 'Member'}</h1>
+            <p class="muted">${data.organization.name} · ${data.organization.tier_name || 'Member'}</p>
+          </div>
+          <button id="logoutBtn" class="moderate-btn">Log out</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="label">Status</div><div class="value" style="font-size:22px">${data.organization.status}</div></div>
+          <div class="stat"><div class="label">Payment</div><div class="value" style="font-size:22px">${data.organization.payment_status || 'n/a'}</div></div>
+          <div class="stat"><div class="label">Renewal</div><div class="value" style="font-size:22px">${data.organization.renewal_date ? new Date(data.organization.renewal_date).toLocaleDateString() : '—'}</div></div>
+          <div class="stat"><div class="label">Hot Deals</div><div class="value" style="font-size:22px">${data.summary.hotDeals}</div></div>
+        </div>
+
+        <div class="layout" style="margin-top:32px;">
+          <div class="stack">
+            <div class="card form-card">
+              <h2>Update Organization</h2>
+              <form id="updateOrgForm">
+                <label>Organization Logo</label>
+                <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+                  <div class="logo">${(data.organization.name || '?').charAt(0)}</div>
+                  <input type="file" name="logo" accept="image/*" style="margin-bottom:0" />
+                </div>
+                
+                <label>Social Media Profiles</label>
+                <input name="linkedin" placeholder="LinkedIn URL" value="${data.organization.linkedin || ''}" />
+                <input name="twitter" placeholder="X / Twitter URL" value="${data.organization.twitter || ''}" />
+                <input name="facebook" placeholder="Facebook URL" value="${data.organization.facebook || ''}" />
+                
+                <button type="submit">Save Changes</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="stack">
+            ${roiCard}
+            <div class="card" style="background: var(--soft); border-color: var(--accent);">
+              <h2>Membership Dues</h2>
+              <p>Your next renewal is on <strong>${data.organization.renewal_date ? new Date(data.organization.renewal_date).toLocaleDateString() : 'TBD'}</strong>.</p>
+              <div style="margin-top:20px; padding:16px; background:white; border-radius:12px; border:1px solid var(--line);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                  <span>${data.organization.tier_name || 'Membership'} Fee</span>
+                  <span style="font-weight:700">$299.00</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--muted);">
+                  <span>Billing cycle</span>
+                  <span>Annual</span>
+                </div>
+              </div>
+              <button class="btn-join" style="width:100%; border:none; margin-left:0; margin-top:16px; cursor:pointer; display:block; text-align:center;">Pay Dues Now</button>
+            </div>
+
+            <div class="card">
+              <h3>Member Support</h3>
+              <p class="muted">Need help with your profile or membership? Contact our team.</p>
+              <a href="mailto:support@caledoniachamber.com" class="btn alt" style="width:100%; border-radius:10px; color:var(--brand); border-color:var(--line);">Email Support</a>
+            </div>
+          </div>
+        </div>
+      `;
+
+      async function doLogout() {
+        await fetch('/api/chamber-demo/member-auth/logout', { method: 'POST' });
+        location.href = '/chamber-demo/member-login';
+      }
+      document.getElementById('logoutBtn').addEventListener('click', doLogout);
+      
+      document.getElementById('updateOrgForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alert('Changes saved successfully! (Demo only)');
+      });
+    }
+    loadMember();
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>

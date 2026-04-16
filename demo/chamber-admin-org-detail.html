@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Organization Detail</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link " href="/chamber-demo">Home</a>
+          <a class="nav-link " href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link " href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <p><a href="/chamber-demo/admin">← Back to admin</a></p>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;gap:16px;align-items:start;">
+        <div>
+          <h1 id="name" style="margin-top:0"></h1>
+          <p class="muted" id="meta"></p>
+        </div>
+        <button id="approveBtn" class="btn" style="display:none">Approve application</button>
+      </div>
+      <p id="description" class="muted" style="font-size:16px;line-height:1.6"></p>
+      <div class="meta-grid">
+        <div class="meta-box"><strong>Email</strong><div class="muted" id="email"></div></div>
+        <div class="meta-box"><strong>Phone</strong><div class="muted" id="phone"></div></div>
+        <div class="meta-box"><strong>Website</strong><div class="muted" id="website"></div></div>
+        <div class="meta-box"><strong>Renewal</strong><div class="muted" id="renewal"></div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:24px;">
+      <h2 style="margin-top:0">Associated users</h2>
+      <div class="list" id="userList"></div>
+    </div>
+  </div>
+  <script>
+    const orgId = location.pathname.split('/').pop();
+    async function loadOrg() {
+      const response = await fetch(`/api/chamber-demo/admin/organizations/${orgId}`);
+      if (response.status === 401) {
+        location.href = '/chamber-demo/admin';
+        return;
+      }
+      const data = await response.json();
+      const org = data.organization;
+      document.title = org.name;
+      document.getElementById('name').textContent = org.name;
+      document.getElementById('meta').textContent = `${org.status} · ${org.tier_name || 'Member'} · ${org.city || ''}, ${org.province || ''}`;
+      document.getElementById('description').textContent = org.description || '';
+      document.getElementById('email').textContent = org.email || '—';
+      document.getElementById('phone').textContent = org.phone || '—';
+      document.getElementById('website').innerHTML = org.website ? `<a href="${org.website}" target="_blank" rel="noreferrer">${org.website}</a>` : '—';
+      document.getElementById('renewal').textContent = org.renewal_date || '—';
+      document.getElementById('userList').innerHTML = (org.users || []).map(user => `
+        <div class="item"><div><div style="font-weight:700">${[user.first_name, user.last_name].filter(Boolean).join(' ') || 'Member user'}</div><p>${user.email || ''}</p></div><div class="pill">${user.role || 'member_rep'}</div></div>
+      `).join('') || '<p class="muted">No users found.</p>';
+      if (org.status === 'pending') {
+        const btn = document.getElementById('approveBtn');
+        btn.style.display = 'inline-flex';
+        btn.onclick = async () => {
+          await fetch(`/api/chamber-demo/admin/organizations/${orgId}/approve`, { method: 'POST' });
+          await loadOrg();
+        };
+      }
+    }
+    loadOrg();
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>

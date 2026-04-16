@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chamber Events</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link " href="/chamber-demo">Home</a>
+          <a class="nav-link " href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link active" href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <section class="page-banner page-banner-night">
+      <div class="eyebrow">Events</div>
+      <h1 style="margin:10px 0 8px">Event Calendar</h1>
+      <p>Upcoming chamber and community events from the Caledonia Regional Chamber of Commerce.</p>
+    </section>
+    <div class="card">
+      <div class="events-page-header">
+        <div>
+          <h2 style="margin-top:0">Browse Events</h2>
+          <p class="sub">Filter upcoming chamber and community events by access type and month.</p>
+        </div>
+        <div class="events-page-filters">
+          <select id="statusFilter">
+            <option value="upcoming">Upcoming</option>
+            <option value="past">Past</option>
+            <option value="all">All events</option>
+          </select>
+          <select id="monthFilter">
+            <option value="all">All months</option>
+          </select>
+          <select id="accessFilter">
+            <option value="all">All access</option>
+            <option value="members">Members only</option>
+            <option value="public">Public</option>
+          </select>
+        </div>
+      </div>
+      <div class="events-page-grid" id="eventList"></div>
+    </div>
+  </div>
+  <script>
+    let allEvents = [];
+
+    function renderEvents() {
+      const monthValue = document.getElementById('monthFilter').value;
+      const accessValue = document.getElementById('accessFilter').value;
+      const statusValue = document.getElementById('statusFilter').value;
+      const now = new Date();
+      const filtered = allEvents.filter((event) => {
+        const startsAt = new Date(event.starts_at);
+        const monthKey = startsAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        const monthMatch = monthValue === 'all' || monthKey === monthValue;
+        const accessMatch = accessValue === 'all' || (accessValue === 'members' ? event.member_only : !event.member_only);
+        const statusMatch = statusValue === 'all' || (statusValue === 'upcoming' ? startsAt >= now : startsAt < now);
+        return monthMatch && accessMatch && statusMatch;
+      });
+
+      document.getElementById('eventList').innerHTML = filtered.map(event => {
+        const startsAt = new Date(event.starts_at);
+        return `
+          <article class="events-page-card">
+            <div class="events-page-date">
+              <div class="events-page-month">${startsAt.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}</div>
+              <div class="events-page-day">${startsAt.getDate()}</div>
+            </div>
+            <div class="events-page-body">
+              <div class="events-page-topline">
+                <span class="event-strip-mini-badge ${event.member_only ? '' : 'public'}">${event.member_only ? 'Members' : 'Public'}</span>
+              </div>
+              <h3><a href="/chamber-demo/events/${event.slug}" style="text-decoration:none">${event.title}</a></h3>
+              <p>${event.description || ''}</p>
+              <div class="events-page-meta">${startsAt.toLocaleString([], { month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</div>
+              <div class="events-page-meta">${event.location || ''}</div>
+              <a href="/chamber-demo/events/${event.slug}" class="event-strip-link" style="margin-top:16px; display:inline-flex;">View details →</a>
+            </div>
+          </article>
+        `;
+      }).join('') || '<div class="item"><p>No events match those filters right now.</p></div>';
+    }
+
+    fetch('/api/chamber-demo/events').then(r => r.json()).then(data => {
+      allEvents = data.events;
+      const monthFilter = document.getElementById('monthFilter');
+      const months = [...new Set(allEvents.map((event) => new Date(event.starts_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })))];
+      monthFilter.innerHTML += months.map(month => `<option value="${month}">${month}</option>`).join('');
+      renderEvents();
+      document.getElementById('statusFilter').addEventListener('change', renderEvents);
+      monthFilter.addEventListener('change', renderEvents);
+      document.getElementById('accessFilter').addEventListener('change', renderEvents);
+    }).catch(() => {
+      document.getElementById('eventList').innerHTML = '<div class="item"><p>We could not load events right now. Please try again shortly.</p></div>';
+    });
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>

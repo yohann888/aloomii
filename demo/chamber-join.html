@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join the Chamber</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link " href="/chamber-demo">Home</a>
+          <a class="nav-link " href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link " href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <div class="card form-card">
+      <h1>Join the Chamber</h1>
+      <p class="muted">Phase 1 join flow is intentionally simple: application + admin approval.</p>
+      <form id="joinForm">
+        <label>Organization name</label>
+        <input name="organization_name" required />
+        <label>Primary contact</label>
+        <input name="contact_name" required />
+        <label>Email</label>
+        <input name="email" type="email" required />
+        <label>Website</label>
+        <input name="website" />
+        <label>Tier</label>
+        <select name="tier_slug">
+          <option value="bronze">Bronze</option>
+          <option value="silver">Silver</option>
+          <option value="founding">Founding Partner</option>
+        </select>
+        <label>What would make membership valuable for you?</label>
+        <textarea name="notes" rows="5"></textarea>
+        <button type="submit">Submit application</button>
+      </form>
+      <div class="success" id="successBox">Application received. Your request is now in the chamber review queue.</div>
+      <div class="success" id="errorBox" style="display:none; background:#FDECEC; color:#C0392B;"></div>
+    </div>
+  </div>
+  <script>
+    document.getElementById('joinForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target).entries());
+      const successBox = document.getElementById('successBox');
+      const errorBox = document.getElementById('errorBox');
+      successBox.style.display = 'none';
+      errorBox.style.display = 'none';
+      try {
+        const res = await fetch('/api/chamber-demo/join', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        const payload = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          errorBox.textContent = payload.error || 'Something went wrong while submitting your application. Please try again.';
+          errorBox.style.display = 'block';
+          return;
+        }
+        successBox.style.display = 'block';
+        e.target.reset();
+      } catch (err) {
+        errorBox.textContent = 'Unable to reach the chamber application service right now. Please try again.';
+        errorBox.style.display = 'block';
+      }
+    });
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>

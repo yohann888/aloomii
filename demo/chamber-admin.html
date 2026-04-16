@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chamber Admin</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link " href="/chamber-demo">Home</a>
+          <a class="nav-link " href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link " href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <div class="card" id="loginCard" style="max-width:520px; margin:0 auto 24px; display:none;">
+      <h1 style="margin-top:0">Admin access</h1>
+      <p class="muted">Enter the chamber demo admin access code to unlock chamber operations surfaces.</p>
+      <div class="form-card">
+        <label>Access code</label>
+        <input id="accessCode" type="password" placeholder="Enter admin access code" />
+        <div class="muted" style="margin:-6px 0 14px; font-size:13px;">Temporary demo password: <strong style="color:var(--brand)">chamberdemo888</strong></div>
+        <button id="loginBtn">Unlock admin</button>
+      </div>
+      <div class="success" id="loginError" style="display:none; background:#fff3f3; color:#9f2020;">Invalid access code.</div>
+    </div>
+
+    <div class="layout" id="adminLayout" style="display:none;">
+      <div class="stack">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:start;gap:16px;">
+            <div>
+              <h1 style="margin-top:0">Chamber Admin</h1>
+              <p>Early admin scaffolding for the chamber-ops walkthrough. This is the next layer after public demo credibility.</p>
+            </div>
+            <button id="adminLogoutBtn" class="moderate-btn" style="display:none">Log out</button>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="label">Members</div><div class="value" id="memberCount">0</div></div>
+            <div class="stat"><div class="label">Pending applications</div><div class="value" id="pendingCount">0</div></div>
+            <div class="stat"><div class="label">Published events</div><div class="value" id="publishedEvents">0</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2 style="margin-top:0">Pending applications</h2>
+          <p>Join-flow records are now visible in admin instead of disappearing into a dead-end form.</p>
+          <div class="list" id="pendingList"></div>
+        </div>
+        <div class="card">
+          <h2 style="margin-top:0">Recent member organizations</h2>
+          <div class="list" id="orgList"></div>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h2 style="margin-top:0">Upcoming events</h2>
+          <div class="list" id="eventList"></div>
+        </div>
+        <div class="card">
+          <h2 style="margin-top:0">Content moderation queue</h2>
+          <p>Phase 1 content remains Hot Deals only, with a clear pending-review queue.</p>
+          <div class="list" id="contentList"></div>
+        </div>
+        <div class="card">
+          <h2 style="margin-top:0">Settings snapshot</h2>
+          <div id="settingsBox"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    async function loadAdmin() {
+      const response = await fetch('/api/chamber-demo/admin/overview');
+      if (response.status === 401) {
+        document.getElementById('loginCard').style.display = 'block';
+        document.getElementById('adminLayout').style.display = 'none';
+        document.getElementById('adminLogoutBtn').style.display = 'none';
+        return;
+      }
+      const data = await response.json();
+      document.getElementById('loginCard').style.display = 'none';
+      document.getElementById('adminLayout').style.display = 'grid';
+      document.getElementById('adminLogoutBtn').style.display = 'inline-flex';
+      document.getElementById('memberCount').textContent = data.summary.organizations;
+      document.getElementById('pendingCount').textContent = data.summary.pendingOrganizations;
+      document.getElementById('publishedEvents').textContent = data.summary.publishedEvents;
+      document.getElementById('pendingList').innerHTML = data.pendingOrganizations.map(org => `
+        <div class="item"><div><div style="font-weight:700"><a href="/chamber-demo/admin/organizations/${org.id}">${org.name}</a></div><p>${org.email || ''}</p></div><div class="pill">${org.status}</div></div>
+      `).join('') || '<p>No pending applications.</p>';
+      document.getElementById('orgList').innerHTML = data.organizations.map(org => `
+        <div class="item"><div><div style="font-weight:700"><a href="/chamber-demo/admin/organizations/${org.id}">${org.name}</a></div><p>${org.city || ''} · ${org.tier_name || 'Member'}</p></div><div class="pill">${org.payment_status || 'n/a'}</div></div>
+      `).join('');
+      document.getElementById('eventList').innerHTML = data.events.map(event => `
+        <div class="item"><div><div style="font-weight:700">${event.title}</div><p>${new Date(event.starts_at).toLocaleString()} · ${event.location || ''}</p></div><div class="pill">${event.status}</div></div>
+      `).join('');
+      document.getElementById('contentList').innerHTML = data.pendingContent.map(item => `
+        <div class="item"><div><div style="font-weight:700">${item.title}</div><p>${item.organization_name || ''}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;"><button data-id="${item.id}" data-action="approve" class="moderate-btn">Approve</button><button data-id="${item.id}" data-action="archive" class="moderate-btn">Archive</button></div></div>
+      `).join('') || '<p>No pending Hot Deals.</p>';
+      document.getElementById('settingsBox').innerHTML = `
+        <div style="font-weight:700">${data.settings.chamber_name}</div>
+        <p>${data.settings.tagline || ''}</p>
+        <p>${data.settings.contact_email || ''}</p>
+        <p>${data.settings.contact_phone || ''}</p>
+      `;
+
+      document.querySelectorAll('.moderate-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const action = btn.dataset.action;
+          await fetch(`/api/chamber-demo/admin/content/${id}/${action}`, { method: 'POST' });
+          await loadAdmin();
+        });
+      });
+    }
+
+    document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
+      await fetch('/api/chamber-demo/admin/logout', { method: 'POST' });
+      await loadAdmin();
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const code = document.getElementById('accessCode').value;
+      const res = await fetch('/api/chamber-demo/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+      if (!res.ok) {
+        document.getElementById('loginError').style.display = 'block';
+        return;
+      }
+      document.getElementById('loginError').style.display = 'none';
+      await loadAdmin();
+    });
+
+    loadAdmin();
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>
