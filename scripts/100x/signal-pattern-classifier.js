@@ -37,7 +37,7 @@ function sqlJSON(sql) {
 }
 
 async function callGemma(prompt) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const body = JSON.stringify({
       model: 'gemma4:31b',
       prompt,
@@ -52,11 +52,15 @@ async function callGemma(prompt) {
       let data = '';
       res.on('data', c => data += c);
       res.on('end', () => {
-        try { resolve(JSON.parse(data).response); }
-        catch { resolve(null); }
+        try {
+          const parsed = JSON.parse(data);
+          resolve({ ok: true, response: parsed.response || null, model: 'gemma4:31b', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` });
+        } catch {
+          resolve({ ok: false, response: null, model: 'gemma4:31b', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` });
+        }
       });
     });
-    req.on('error', () => resolve(null));
+    req.on('error', () => resolve({ ok: false, response: null, model: 'gemma4:31b', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` }));
     req.write(body);
     req.end();
   });
@@ -117,6 +121,9 @@ async function main() {
 
   let classified = 0;
   let skipped = 0;
+  let ruleCount = 0;
+  let gemmaCount = 0;
+  let gemmaReachable = false;
 
   for (const signal of signals) {
     // Try rule-based first (fast, $0)
@@ -140,11 +147,12 @@ Categories:
 
 Reply with exactly: {"pattern_type":"<category>","confidence":<1-10>,"urgency":"<today|this_week|this_month|monitor>"}`;
 
-      const response = await callGemma(prompt);
-      if (response) {
+      const gemma = await callGemma(prompt);
+      if (gemma.ok) gemmaReachable = true;
+      if (gemma.response) {
         try {
-          const match = response.match(/\{[^}]+\}/);
-          if (match) result = { ...JSON.parse(match[0]), method: 'gemma4' };
+          const match = gemma.response.match(/\{[^}]+\}/);
+          if (match) result = { ...JSON.parse(match[0]), method: 'gemma4', model: gemma.model, host: gemma.host };
         } catch {}
       }
     }
@@ -165,7 +173,9 @@ Reply with exactly: {"pattern_type":"<category>","confidence":<1-10>,"urgency":"
       ON CONFLICT DO NOTHING
     `);
 
-    console.log(`[signal-classifier] ✓ ${signal.contact_name || 'unknown'} — ${result.pattern_type} (${result.confidence}/10)`);
+    console.log(`[signal-classifier] ✓ ${signal.contact_name || 'unknown'} — ${result.pattern_type} (${result.confidence}/10) via ${result.method || 'unknown'}`);
+    if (result.method === 'rules') ruleCount++;
+    if (result.method === 'gemma4') gemmaCount++;
     classified++;
   }
 
@@ -185,7 +195,8 @@ Reply with exactly: {"pattern_type":"<category>","confidence":<1-10>,"urgency":"
     summary += `No patterns classified today.\n`;
   }
   summary += `Classified: ${classified} | Skipped: ${skipped}\n`;
-  summary += `_Build 3 | gemma4:31b local | $0_`;
+  summary += `Methods: rules=${ruleCount} | gemma4=${gemmaCount}\n`;
+  summary += `_Build 3 | classifier path: ${gemmaCount > 0 ? 'gemma4:31b + rules' : ruleCount > 0 ? 'rules-only' : 'no classifications'} | gemma reachable: ${gemmaReachable ? 'yes' : 'no'} | $0_`;
 
   console.log(summary);
 }

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Profile</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link " href="/chamber-demo">Home</a>
+          <a class="nav-link active" href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link " href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <p><a href="/chamber-demo/directory">← Back to directory</a></p>
+    <div class="card">
+      <div class="row">
+        <div class="logo" id="logo">?</div>
+        <div>
+          <h1 id="name" style="margin:0"></h1>
+          <p class="muted" id="tagline"></p>
+        </div>
+      </div>
+      <p id="description" class="muted" style="font-size:16px; line-height:1.6; margin-top:20px;"></p>
+      <div class="meta-grid">
+        <div class="meta-box"><strong>Category</strong><div class="muted" id="category"></div></div>
+        <div class="meta-box"><strong>Tier</strong><div class="muted" id="tier"></div></div>
+        <div class="meta-box"><strong>Location</strong><div class="muted" id="location"></div></div>
+        <div class="meta-box"><strong>Website</strong><div class="muted" id="website"></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const slug = location.pathname.split('/').pop();
+    fetch(`/api/chamber-demo/directory/${slug}`).then(r => r.json()).then(data => {
+      const org = data.organization;
+      document.title = org.name;
+      document.getElementById('logo').textContent = (org.name || '?').charAt(0);
+      document.getElementById('name').textContent = org.name;
+      document.getElementById('tagline').textContent = `${org.city || ''} · ${org.category || ''}`;
+      document.getElementById('description').textContent = org.description || '';
+      document.getElementById('category').textContent = org.category || '—';
+      document.getElementById('tier').textContent = org.tier_name || '—';
+      document.getElementById('location').textContent = [org.address, org.city, org.province].filter(Boolean).join(', ') || '—';
+      document.getElementById('website').innerHTML = org.website ? `<a href="${org.website}" target="_blank" rel="noreferrer">${org.website}</a>` : '—';
+    });
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>

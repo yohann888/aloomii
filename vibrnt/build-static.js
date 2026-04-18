@@ -263,9 +263,9 @@ async function build() {
   // -- Load influencer pipeline from Command Center API --------------------------
   let influencerPipeline = [];
   try {
-    const https = require('https');
+    const http = require('http');
     const data = await new Promise((resolve, reject) => {
-      const req = https.get(`${CMD_API}/command`, { timeout: 5000 }, res => {
+      const req = http.get(`${CMD_API}/command`, { timeout: 5000 }, res => {
         let body = '';
         res.on('data', chunk => body += chunk);
         res.on('end', () => { try { resolve(JSON.parse(body)); } catch { resolve(null); } });
@@ -307,21 +307,25 @@ async function build() {
   let html = fs.readFileSync(INPUT_HTML, 'utf-8');
 
   // Inject embedded data + fetchJSON override (single </head> replacement)
+  const embeddedData = JSON.stringify({ trends, allTrends, scripts, catalog, summary, seenTrends, influencerPipeline })
+    .replace(/<\//g, '<\\/')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
   const embeddedScript = `<script>
-window.__VIBRNT_DATA__ = ${JSON.stringify({ trends, allTrends, scripts, catalog, summary, seenTrends, influencerPipeline })};
+window.__VIBRNT_DATA__ = ${embeddedData};
 window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date().toISOString()}';
 (function() {
   var _d = window.__VIBRNT_DATA__ || { trends: [], scripts: [], catalog: { products: [] }, summary: {}, seenTrends: [] };
-  var _realFetch = window.fetchJSON; // undefined at this point
-  var _routes = {
-    '/api/summary': _d.summary,
-    '/api/trends': { trends: _d.trends },
-    '/api/scripts': { scripts: _d.scripts },
-    '/api/catalog': _d.catalog,
-    '/api/influencer_pipeline': { candidates: _d.influencerPipeline || [] },
-  };
   // Expose embedded data lookup - fetchJSON will check this first
   window.__embed = function(url) {
+    const d = window.__VIBRNT_DATA__ || {};
+    const _routes = {
+      '/api/summary': d.summary,
+      '/api/trends': { trends: d.trends || [] },
+      '/api/scripts': { scripts: d.scripts || [] },
+      '/api/catalog': d.catalog,
+      '/api/influencer_pipeline': { candidates: d.influencerPipeline || [] },
+    };
     if (_routes[url]) return Promise.resolve(_routes[url]);
     return undefined;
   };
@@ -332,7 +336,7 @@ window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date(
 
   // Patch the real fetchJSON to prefer embedded data
   const oldFetchCall = 'const r = await fetch(API + url);';
-  const newFetchCall = "const _embed = window.__embed && window.__embed(url); if (_embed) return _embed; const r = await fetch(API + url);";
+  const newFetchCall = "const _embed = window.__embed && window.__embed(url); if (_embed) return await _embed; const r = await fetch(API + url);";
   html = html.replace(oldFetchCall, newFetchCall);
 
   // -- Write output -----------------------------------------------------------

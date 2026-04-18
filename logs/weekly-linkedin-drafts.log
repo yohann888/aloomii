@@ -1,0 +1,149 @@
+[2026-04-15T00:34:11.027Z] === weekly-linkedin-drafts START ===
+[2026-04-15T00:34:11.074Z] Signal Scout context: 0 score-4+ signals loaded
+[2026-04-15T00:34:11.075Z] Pulling trending GTM/founder topic via Sonnet 4.6...
+[2026-04-15T00:34:18.977Z] Trending topic retrieved via claude-sonnet-4-6.
+[2026-04-15T00:34:18.977Z] Yohann Post 1: Contrarian Teardown | anecdote: undefined
+[2026-04-15T00:34:18.978Z] Yohann Post 2: Saveable List | anecdote: undefined
+[2026-04-15T00:34:18.978Z] Yohann Post 3: Founder Confession | anecdote: undefined
+[2026-04-15T00:34:18.978Z] Jenny Post 1:  Curious Creator | anecdote: brand story
+[2026-04-15T00:34:18.978Z] Jenny Post 2:  Before/After Craft | anecdote: brand story
+[2026-04-15T00:34:18.979Z] Jenny Post 3:  Behind the Work | anecdote: brand story
+[2026-04-15T00:34:18.979Z] Generating Yohann Calpu post: Contrarian Teardown
+[2026-04-15T00:34:28.497Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T00:34:28.497Z] Generating Yohann Calpu post: Saveable List
+[2026-04-15T00:34:38.229Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T00:34:38.230Z] Generating Yohann Calpu post: Founder Confession
+[2026-04-15T00:34:47.329Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T00:34:47.329Z] Generating Jenny Calpu post: Curious Creator
+[2026-04-15T00:34:54.200Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T00:34:54.201Z] Generating Jenny Calpu post: Before/After Craft
+[2026-04-15T00:35:04.063Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T00:35:04.063Z] Generating Jenny Calpu post: Behind the Work
+[2026-04-15T00:35:14.070Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T00:35:14.070Z] [INFO] Skipping Buffer push — drafts saved to Command Center for review/approval
+[2026-04-15T00:35:14.071Z] DISCORD_ALERT: 📝 **Weekly LinkedIn drafts ready** (4/14/2026)
+
+**Post 1 — Yohann Calpu** (Contrarian Teardown)
+The tools aren't killing your GTM budget. The measurement framework is.
+
+Most teams instrumented for ac...
+[2026-04-15T00:35:14.172Z] [DB] Bridge failed (non-fatal): Command failed: node /Users/superhana/Desktop/aloomii/scripts/bridge/ingest-content.js '{"platform":"linkedin","post_type":"draft","topic":"Contrarian Teardown","content_text":"The tools aren'\''t killing your GTM budget. The measurement framework is.\n\nMost teams instrumented for activity because activity used to predict revenue. Calls made. Emails sent. Content published. Then AI showed up and 10x'\''d all of it. Volume went up. Pipeline didn'\''t follow. And now CFOs are pulling budgets mid-cycle instead of waiting for renewal.\n\nThat'\''s not a tool problem. That'\''s an attribution model that never got rebuilt when the inputs changed.\n\nWe named Aloomii after two cats, Aloo and Mittens. We built a fleet of 15 AI agents. Operators building for operators. And the first thing we had to answer wasn'\''t \"what can the agents do?\" It was \"what does a closed deal actually trace back to?\" Because if you can'\''t answer that, you'\''re just adding more appliances to a kitchen where nobody decided what to cook.\n\nThe honest answer: most GTM teams are measuring effort in a world that only pays for outcomes.\n\nHere'\''s what we rebuilt around:\n\n→ Map every tool to a revenue moment, not an activity metric\n→ Kill anything that only touches top-of-funnel and can'\''t show influence on close\n→ Rebuild attribution before you add another seat, not after\n→ AI scans. Humans judge. You act. That sequence matters.\n→ The last 20% of a deal is still a human conversation. Instrument for that.\n\nCFOs aren'\''t wrong to ask hard questions right now. Most of us just haven'\''t built the model that answers them.\n\nWhat'\''s the one metric your board actually trusts when evaluating GTM spend?\n\n---\n\n✉️ Want the last 20% that makes the difference? Subscribe to The Last 20%:\nhttps://www.linkedin.com/newsletters/the-last-20-7445126674708451328","adapter":"yohann","brand_profile_id":"51ff7e82-7b3a-49ce-b67c-bb88dccab492","external_id":null}'
+ingestContent error: null value in column "published_at" of relation "content_posts" violates not-null constraint
+
+[2026-04-15T00:35:14.172Z] FATAL: ENOENT: no such file or directory, open '/Users/superhana/Desktop/aloomii/memory/content-engine-state.json'
+[2026-04-15T00:36:49.359Z] === weekly-linkedin-drafts START ===
+[2026-04-15T00:36:49.412Z] Signal Scout context: 5 score-4+ signals loaded
+[2026-04-15T00:36:49.412Z] Pulling trending GTM/founder topic via Sonnet 4.6...
+[2026-04-15T00:37:00.296Z] Trending topic retrieved via claude-sonnet-4-6.
+[2026-04-15T00:37:00.297Z] Yohann Post 1: Contrarian Teardown | anecdote: quit-government-after-8-years
+[2026-04-15T00:37:00.297Z] Yohann Post 2: Saveable List | anecdote: trinidad-work-from-home
+[2026-04-15T00:37:00.298Z] Yohann Post 3: Founder Confession | anecdote: quit-government-after-8-years
+[2026-04-15T00:37:00.298Z] Jenny Post 1:  Curious Creator | anecdote: slug-journey-florida
+[2026-04-15T00:37:00.298Z] Jenny Post 2:  Before/After Craft | anecdote: sandhill-cranes-always-driving
+[2026-04-15T00:37:00.298Z] Jenny Post 3:  Behind the Work | anecdote: slug-journey-florida
+[2026-04-15T00:37:00.298Z] Generating Yohann Calpu post: Contrarian Teardown
+[2026-04-15T00:37:10.959Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T00:37:10.959Z] Generating Yohann Calpu post: Saveable List
+[2026-04-15T00:37:19.445Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T00:37:19.446Z] Generating Yohann Calpu post: Founder Confession
+[2026-04-15T00:37:33.005Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T00:37:33.006Z] Generating Jenny Calpu post: Curious Creator
+[2026-04-15T00:37:41.111Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T00:37:41.112Z] Generating Jenny Calpu post: Before/After Craft
+[2026-04-15T00:37:48.946Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T00:37:48.946Z] Generating Jenny Calpu post: Behind the Work
+[2026-04-15T00:37:58.533Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T00:37:58.533Z] [INFO] Skipping Buffer push — drafts saved to Command Center for review/approval
+[2026-04-15T00:37:58.534Z] DISCORD_ALERT: 📝 **Weekly LinkedIn drafts ready** (4/14/2026)
+
+**Post 1 — Yohann Calpu** (Contrarian Teardown)
+Your ICP document isn't a strategy. It's a wish list.
+
+Most founders treat it like a compass. It's actu...
+[2026-04-15T00:37:59.079Z] [DB] LinkedIn drafts written to Command Center
+[2026-04-15T00:37:59.080Z] === weekly-linkedin-drafts COMPLETE — 6 posts generated (3 Yohann, 3 Jenny) ===
+[2026-04-15T02:38:40.009Z] === weekly-linkedin-drafts START [DRY RUN] ===
+[2026-04-15T02:38:40.063Z] Signal Scout context: 5 score-4+ signals loaded
+[2026-04-15T02:38:40.063Z] Pulling trending GTM/founder topic via Sonnet 4.6...
+[2026-04-15T02:38:47.970Z] Trending topic retrieved via claude-sonnet-4-6.
+[2026-04-15T02:38:47.971Z] Yohann Post 1: Data + Story | anecdote: small-town-over-big-city
+[2026-04-15T02:38:47.971Z] Yohann Post 2: Contrarian Teardown | anecdote: parents-in-their-70s
+[2026-04-15T02:38:47.971Z] Yohann Post 3: Saveable List | anecdote: small-town-over-big-city
+[2026-04-15T02:38:47.972Z] Jenny Post 1:  Curious Creator | anecdote: podcast-production-pacing
+[2026-04-15T02:38:47.972Z] Jenny Post 2:  Before/After Craft | anecdote: ai-art-first-experiments
+[2026-04-15T02:38:47.972Z] Jenny Post 3:  Behind the Work | anecdote: podcast-production-pacing
+[2026-04-15T02:38:47.973Z] Generating Yohann Calpu post: Data + Story
+[2026-04-15T02:38:58.099Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:38:58.100Z] Generating Yohann Calpu post: Contrarian Teardown
+[2026-04-15T02:39:07.794Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:39:07.795Z] Generating Yohann Calpu post: Saveable List
+[2026-04-15T02:39:19.399Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:39:19.399Z] Generating Jenny Calpu post: Curious Creator
+[2026-04-15T02:39:27.538Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:39:27.539Z] Generating Jenny Calpu post: Before/After Craft
+[2026-04-15T02:39:37.311Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:39:37.312Z] Generating Jenny Calpu post: Behind the Work
+[2026-04-15T02:39:46.945Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:39:46.946Z] [DRY RUN] Skipping Buffer push and state update.
+[2026-04-15T02:42:47.132Z] === weekly-linkedin-drafts START ===
+[2026-04-15T02:42:47.183Z] Signal Scout context: 5 score-4+ signals loaded
+[2026-04-15T02:42:47.183Z] Pulling trending GTM/founder topic via Sonnet 4.6...
+[2026-04-15T02:42:54.339Z] Trending topic retrieved via claude-sonnet-4-6.
+[2026-04-15T02:42:54.339Z] Yohann Post 1: Data + Story | anecdote: small-town-over-big-city
+[2026-04-15T02:42:54.339Z] Yohann Post 2: Contrarian Teardown | anecdote: parents-in-their-70s
+[2026-04-15T02:42:54.340Z] Yohann Post 3: Saveable List | anecdote: small-town-over-big-city
+[2026-04-15T02:42:54.340Z] Jenny Post 1:  Curious Creator | anecdote: podcast-production-pacing
+[2026-04-15T02:42:54.340Z] Jenny Post 2:  Before/After Craft | anecdote: ai-art-first-experiments
+[2026-04-15T02:42:54.340Z] Jenny Post 3:  Behind the Work | anecdote: podcast-production-pacing
+[2026-04-15T02:42:54.341Z] Generating Yohann Calpu post: Data + Story
+[2026-04-15T02:43:03.876Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:43:03.877Z] Generating Yohann Calpu post: Contrarian Teardown
+[2026-04-15T02:43:15.125Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:43:15.126Z] Generating Yohann Calpu post: Saveable List
+[2026-04-15T02:43:25.783Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:43:25.784Z] Generating Jenny Calpu post: Curious Creator
+[2026-04-15T02:43:33.556Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:43:33.556Z] Generating Jenny Calpu post: Before/After Craft
+[2026-04-15T02:43:41.240Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:43:41.241Z] Generating Jenny Calpu post: Behind the Work
+[2026-04-15T02:43:50.067Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:43:50.067Z] [INFO] Skipping Buffer push — drafts saved to Command Center for review/approval
+[2026-04-15T02:46:23.849Z] DISCORD_ALERT: 📝 **Weekly LinkedIn drafts ready** (4/14/2026)
+
+**Post 1 — Yohann Calpu** (Data + Story)
+Your deck had the data. Your competitor had the story. The deal went to them.
+
+Some GTM teams are reporting th...
+[2026-04-15T02:46:23.880Z] [DB] Draft/Hook Lab write failed (non-fatal): column "generation_run_id" of relation "content_hooks" does not exist
+[2026-04-15T02:46:23.882Z] === weekly-linkedin-drafts COMPLETE — 6 posts generated (3 Yohann, 3 Jenny) ===
+[2026-04-15T02:55:39.216Z] === weekly-linkedin-drafts START ===
+[2026-04-15T02:55:39.267Z] Signal Scout context: 5 score-4+ signals loaded
+[2026-04-15T02:55:39.268Z] Pulling trending GTM/founder topic via Sonnet 4.6...
+[2026-04-15T02:55:47.881Z] Trending topic retrieved via claude-sonnet-4-6.
+[2026-04-15T02:55:47.882Z] Yohann Post 1: Founder Confession | anecdote: jim-rogers-cold-email
+[2026-04-15T02:55:47.882Z] Yohann Post 2: Data + Story | anecdote: bis-bitcoin-conference
+[2026-04-15T02:55:47.882Z] Yohann Post 3: Contrarian Teardown | anecdote: jim-rogers-cold-email
+[2026-04-15T02:55:47.883Z] Jenny Post 1:  Curious Creator | anecdote: nft-bad-investment-cute-and-pink
+[2026-04-15T02:55:47.883Z] Jenny Post 2:  Before/After Craft | anecdote: ai-art-first-experiments
+[2026-04-15T02:55:47.883Z] Jenny Post 3:  Behind the Work | anecdote: nft-bad-investment-cute-and-pink
+[2026-04-15T02:55:47.884Z] Generating Yohann Calpu post: Founder Confession
+[2026-04-15T02:55:55.037Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:55:55.037Z] Generating Yohann Calpu post: Data + Story
+[2026-04-15T02:56:04.356Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:56:04.357Z] Generating Yohann Calpu post: Contrarian Teardown
+[2026-04-15T02:56:12.550Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-04-15T02:56:12.551Z] Generating Jenny Calpu post: Curious Creator
+[2026-04-15T02:56:20.432Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:56:20.433Z] Generating Jenny Calpu post: Before/After Craft
+[2026-04-15T02:56:28.419Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:56:28.419Z] Generating Jenny Calpu post: Behind the Work
+[2026-04-15T02:56:45.116Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-04-15T02:56:45.116Z] [INFO] Skipping Buffer push — drafts saved to Command Center for review/approval
+[2026-04-15T02:59:20.862Z] DISCORD_ALERT: 📝 **Weekly LinkedIn drafts ready** (4/14/2026)
+
+**Post 1 — Yohann Calpu** (Founder Confession)
+6 pilots. 6 "we love this." 6 ghosts when the contract landed.
+
+Most founders don't have a qualification...
+[2026-04-15T02:59:20.914Z] [DB] LinkedIn drafts and Hook Lab candidates written to Command Center
+[2026-04-15T02:59:20.942Z] === weekly-linkedin-drafts COMPLETE — 6 posts generated (3 Yohann, 3 Jenny) ===

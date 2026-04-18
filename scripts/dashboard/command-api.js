@@ -134,6 +134,7 @@ function registerCommandAPI(app, pool = null) {
         webhooks: [],
         tasks: [],
         backlog: [],
+        relationship_health: { human_attention: [], declining: [], reconnection_queue: [], summary: {} },
         influencer_pipeline: [],
         vibrnt: { trends: [], scripts: [], catalog: { products: [] }, summary: {} },
         last_updated: new Date().toISOString(),
@@ -334,7 +335,9 @@ function registerCommandAPI(app, pool = null) {
           try {
             const queueRes = await query(`
               SELECT 
-                q.id, q.type, q.channel, q.status, q.fire_date, q.draft,
+                q.id, q.type, q.channel, q.queue_type, q.block_reason, q.status, q.fire_date, q.draft,
+                q.personalization_source_type, q.personalization_source_url, q.personalization_note,
+                q.personalization_opener, q.personalization_status, q.personalized_by, q.personalized_at,
                 c.name as contact_name, c.tier as contact_tier,
                 a.name as contact_company,
                 (CURRENT_DATE - q.fire_date)::int as overdue_days
@@ -349,6 +352,62 @@ function registerCommandAPI(app, pool = null) {
           } catch (e) {
             console.warn('Outreach queue query failed:', e.message);
             data.outreach_queue = [];
+          }
+        },
+
+        // 4.5 Relationship health
+        async () => {
+          try {
+            const [humanRes, decliningRes, reconnectionRes, summaryRes, voiceRes] = await Promise.all([
+              query(`
+                SELECT id, name, tier, human_outreach_reason, follow_up_date, rhs_trend, rhs_velocity
+                FROM contacts
+                WHERE human_outreach_flag = true
+                ORDER BY follow_up_date ASC NULLS LAST, tier ASC NULLS LAST
+                LIMIT 12
+              `),
+              query(`
+                SELECT id, name, tier, rhs_current, rhs_trend, rhs_velocity
+                FROM contacts
+                WHERE rhs_trend = 'declining'
+                ORDER BY rhs_velocity ASC NULLS LAST
+                LIMIT 12
+              `),
+              query(`
+                SELECT q.id, q.fire_date, q.status, c.name AS contact_name
+                FROM outreach_queue q
+                LEFT JOIN contacts c ON q.contact_id = c.id
+                WHERE q.type = 'reconnection' AND q.status = 'pending'
+                ORDER BY q.fire_date ASC NULLS LAST
+                LIMIT 12
+              `),
+              query(`
+                SELECT
+                  COUNT(*) FILTER (WHERE human_outreach_flag = true) AS human_attention_count,
+                  COUNT(*) FILTER (WHERE rhs_trend = 'declining') AS declining_count,
+                  COUNT(*) FILTER (WHERE decay_alert = true) AS decay_alert_count,
+                  ROUND(AVG(rhs_current)::numeric, 2) AS avg_rhs
+                FROM contacts
+                WHERE status NOT IN ('do_not_contact')
+              `),
+              query(`
+                SELECT payload
+                FROM activity_log
+                WHERE type = 'relationship_monitor_run'
+                ORDER BY time DESC
+                LIMIT 1
+              `)
+            ]);
+            data.relationship_health = {
+              human_attention: humanRes.rows,
+              declining: decliningRes.rows,
+              reconnection_queue: reconnectionRes.rows,
+              summary: summaryRes.rows[0] || {},
+              voice_brief: voiceRes.rows[0]?.payload?.voice_brief || [],
+              watchlist: voiceRes.rows[0]?.payload?.watchlist || []
+            };
+          } catch (e) {
+            console.warn('Relationship health query failed:', e.message);
           }
         },
 
@@ -901,6 +960,8 @@ function registerCommandAPI(app, pool = null) {
   app.post('/api/command/signals/:id/act', async (req, res) => {
     const { id } = req.params;
     const { contactId, type = 'follow_up', channel = 'email' } = req.body;
+    const warmReplyChannels = new Set(['whatsapp', 'imessage', 'telegram']);
+    const queueType = channel === 'email' ? 'outbound_email' : (warmReplyChannels.has(channel) ? 'warm_reply' : 'outbound_email');
     
     try {
       // Mark signal as acted on
@@ -913,9 +974,9 @@ function registerCommandAPI(app, pool = null) {
       // Create queue item
       if (contactId) {
         await query(`
-          INSERT INTO outreach_queue (contact_id, type, channel, status, fire_date)
-          VALUES ($1, $2, $3, 'pending', CURRENT_DATE)
-        `, [contactId, type, channel]);
+          INSERT INTO outreach_queue (contact_id, type, channel, queue_type, status, fire_date)
+          VALUES ($1, $2, $3, $4, 'pending', CURRENT_DATE)
+        `, [contactId, type, channel, queueType]);
       }
       
       res.json({ success: true, message: 'Signal marked as acted on and queued' });
@@ -999,15 +1060,17 @@ function registerCommandAPI(app, pool = null) {
       }
 
       // 3. Determine channel from signal_source
-      const channelMap = { reddit: 'reddit', x_search: 'x', linkedin: 'linkedin', indiehackers: 'email', other: 'email' };
+      const channelMap = { reddit: 'reddit_dm', x_search: 'email', linkedin: 'email', indiehackers: 'email', other: 'email' };
       const channel = channelMap[signal.signal_source] || 'email';
 
       // 4. Create outreach_queue entry
+      const warmReplyChannels = new Set(['whatsapp', 'imessage', 'telegram']);
+      const queueType = channel === 'email' ? 'outbound_email' : (warmReplyChannels.has(channel) ? 'warm_reply' : 'outbound_email');
       const queueRes = await client.query(`
-        INSERT INTO outreach_queue (contact_id, type, channel, status, fire_date)
-        VALUES ($1, 'signal_outreach', $2, 'pending', CURRENT_DATE)
+        INSERT INTO outreach_queue (contact_id, type, channel, queue_type, status, fire_date)
+        VALUES ($1, 'signal_outreach', $2, $3, 'pending', CURRENT_DATE)
         RETURNING id
-      `, [contactId, channel]);
+      `, [contactId, channel, queueType]);
       const queueId = queueRes.rows[0].id;
 
       // 5. Generate draft from template engine (no LLM — static hydration)
@@ -1262,7 +1325,30 @@ function registerCommandAPI(app, pool = null) {
     try {
       const result = await query('SELECT * FROM content_posts WHERE id = $1', [id]);
       if (result.rows.length === 0) return res.status(404).json({ error: 'Not found' });
-      res.json(result.rows[0]);
+      const post = result.rows[0];
+
+      let hookLab = { session: null, candidates: [] };
+      try {
+        const sessionRes = await query(`
+          SELECT * FROM attention_line_sessions
+          WHERE post_id = $1
+          ORDER BY created_at DESC
+          LIMIT 1
+        `, [id]);
+        const session = sessionRes.rows[0] || null;
+        if (session) {
+          const hooksRes = await query(`
+            SELECT * FROM content_hooks
+            WHERE post_id = $1 AND loop_session_id = $2
+            ORDER BY is_selected DESC, judge_score DESC NULLS LAST, created_at ASC
+          `, [id, session.id]);
+          hookLab = { session, candidates: hooksRes.rows };
+        }
+      } catch (hookErr) {
+        console.warn('Hook Lab query failed:', hookErr.message);
+      }
+
+      res.json({ ...post, hook_lab: hookLab });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
@@ -1378,6 +1464,39 @@ function registerCommandAPI(app, pool = null) {
     }
   });
 
+  // POST /api/command/content/:id/hooks/:hookId/use
+  app.post('/api/command/content/:id/hooks/:hookId/use', async (req, res) => {
+    const { id, hookId } = req.params;
+    try {
+      const hookRes = await query('SELECT * FROM content_hooks WHERE id = $1 AND post_id = $2', [hookId, id]);
+      if (!hookRes.rows.length) return res.status(404).json({ error: 'Hook not found' });
+      const hook = hookRes.rows[0];
+
+      await query('UPDATE content_hooks SET is_selected = false WHERE post_id = $1', [id]);
+      await query('UPDATE content_hooks SET is_selected = true WHERE id = $1', [hookId]);
+      const postRes = await query(
+        `UPDATE content_posts
+         SET selected_hook_id = $2,
+             content_text = CASE
+               WHEN content_text LIKE hook_text_pattern.pattern THEN regexp_replace(content_text, hook_text_pattern.pattern, $3)
+               ELSE $3 || E'\n\n' || content_text
+             END,
+             draft_text = CASE
+               WHEN draft_text LIKE hook_text_pattern.pattern THEN regexp_replace(draft_text, hook_text_pattern.pattern, $3)
+               ELSE $3 || E'\n\n' || draft_text
+             END
+         FROM (SELECT '^(.*?)(\\n\\n|$)'::text AS pattern) AS hook_text_pattern
+         WHERE id = $1
+         RETURNING *`,
+        [id, hookId, hook.hook_text]
+      );
+
+      res.json({ success: true, post: postRes.rows[0], hook });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
   // PATCH /api/command/content/:id/reject
   app.patch('/api/command/content/:id/reject', async (req, res) => {
     const { id } = req.params;
@@ -1486,6 +1605,84 @@ function registerCommandAPI(app, pool = null) {
       }
 
       res.json({ success: true, paths, mutual_connection: mutualConnection, contact_name: contact.name });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // POST /api/command/queue/:id/execute — enforce phase-1 channel guardrails before send
+  app.post('/api/command/queue/:id/execute', async (req, res) => {
+    const { id } = req.params;
+    try {
+      const current = await query(`SELECT id, channel, queue_type, status FROM outreach_queue WHERE id = $1 LIMIT 1`, [id]);
+      const item = current.rows[0];
+      if (!item) return res.status(404).json({ error: 'queue item not found' });
+
+      const blockedChannels = {
+        whatsapp: 'warm channel not enabled for cold outbound',
+        imessage: 'warm channel not enabled for cold outbound',
+        telegram: 'warm channel not enabled for cold outbound',
+        reddit_dm: 'reddit dm outbound disabled; use reddit for reputation/inbound only',
+        reddit: 'reddit dm outbound disabled; use reddit for reputation/inbound only'
+      };
+      const blockReason = blockedChannels[item.channel];
+      if (blockReason) {
+        const blockedUpdate = await query(`
+          UPDATE outreach_queue
+          SET status = 'blocked', block_reason = $2
+          WHERE id = $1 AND status IN ('pending', 'approved')
+          RETURNING id, channel, queue_type, status
+        `, [id, blockReason]);
+        if (blockedUpdate.rows.length === 0) {
+          return res.status(400).json({ success: false, error: 'queue item not executable from current status' });
+        }
+        await query(`
+          INSERT INTO activity_log (time, type, source, payload)
+          VALUES (NOW(), 'outreach_queue_blocked', 'command_center', $1)
+        `, [JSON.stringify({ queue_id: id, channel: item.channel, queue_type: item.queue_type, status: 'blocked', block_reason: blockReason })]);
+        return res.status(400).json({ success: false, blocked: true, block_reason: blockReason, note: 'execution blocked in CC; external delivery did not occur' });
+      }
+
+      const sentUpdate = await query(`
+        UPDATE outreach_queue
+        SET status = 'sent', block_reason = NULL
+        WHERE id = $1 AND status IN ('pending', 'approved')
+        RETURNING id, channel, queue_type, status
+      `, [id]);
+      if (sentUpdate.rows.length === 0) {
+        return res.status(400).json({ success: false, error: 'queue item not executable from current status' });
+      }
+      await query(`
+        INSERT INTO activity_log (time, type, source, payload)
+        VALUES (NOW(), 'outreach_queue_executed', 'command_center', $1)
+      `, [JSON.stringify({ queue_id: id, channel: item.channel, queue_type: item.queue_type, status: 'sent', note: 'command center execution recorded; external delivery not guaranteed yet' })]);
+      res.status(202).json({ success: true, executed: true, channel: item.channel, note: 'command center execution recorded; external delivery not guaranteed yet' });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // PATCH /api/command/queue/:id/personalize — save personalization opener/context for outreach queue item
+  app.patch('/api/command/queue/:id/personalize', async (req, res) => {
+    const { id } = req.params;
+    const { personalization_source_type, personalization_source_url, personalization_note, personalization_opener, personalization_status = 'ready', personalized_by = 'leo' } = req.body || {};
+    try {
+      if (!personalization_opener) return res.status(400).json({ error: 'personalization_opener required' });
+      const allowed = new Set(['pending', 'ready', 'approved', 'skipped']);
+      if (!allowed.has(personalization_status)) return res.status(400).json({ error: 'invalid personalization_status' });
+      const result = await query(`
+        UPDATE outreach_queue
+        SET personalization_source_type = $1,
+            personalization_source_url = $2,
+            personalization_note = $3,
+            personalization_opener = $4,
+            personalization_status = $5,
+            personalized_by = $6,
+            personalized_at = NOW()
+        WHERE id = $7
+        RETURNING *
+      `, [personalization_source_type || null, personalization_source_url || null, personalization_note || null, personalization_opener, personalization_status, personalized_by, id]);
+      res.json({ success: true, item: result.rows[0] || null });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aloomii HQ — Command Center</title>
-    <link rel="stylesheet" href="styles.css?v=20260407-email-capture">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='48'%3E🦁%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css?v=20260415-auth-fix">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="app.js?v=20260407-email-capture" defer></script>
+    <script src="app.js?v=20260415-auth-fix" defer></script>
 </head>
 <body>
     <!-- Password Gate -->
@@ -16,13 +17,13 @@
             <h1 class="gate-title">Command Center</h1>
             <div class="password-form">
                 <input type="password" id="password-input" placeholder="Enter access code" autocomplete="off">
-                <button onclick="attemptLogin()" class="auth-btn">Authenticate</button>
+                <button id="auth-btn" class="auth-btn">Authenticate</button>
             </div>
             <div class="access-request">
                 <h3>Request Access</h3>
                 <input type="text" id="req-name" placeholder="Your name">
                 <input type="email" id="req-email" placeholder="Email">
-                <button onclick="requestAccess()" class="request-btn">Submit Request</button>
+                <button id="request-access-btn" class="request-btn">Submit Request</button>
             </div>
             <div id="gate-message" class="gate-message"></div>
         </div>
@@ -82,13 +83,6 @@
                 <div class="header-right">
                     <div class="header-time" id="header-timestamp"></div>
                     <button class="header-btn" onclick="openPalette()">⌘K</button>
-                    <div class="notification-bell" onclick="toggleNotifications()">
-                        🔔 <span id="notif-count" class="badge">3</span>
-                    </div>
-                    <div id="notification-dropdown" class="notif-dropdown hidden">
-                        <div class="notif-header">Notifications</div>
-                        <div id="notif-list" class="notif-list"></div>
-                    </div>
                     <button onclick="toggleTheme()" class="header-btn">⚙</button>
                 </div>
             </header>
@@ -230,6 +224,27 @@
                 <div class="card tasks-widget">
                     <h2>Tasks</h2>
                     <div id="tasks-container" class="tasks-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="card tasks-widget">
+                    <h2>Relationship Health</h2>
+                    <div id="relationship-health-container" class="tasks-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="card tasks-widget">
+                    <h2>Voice Outreach Brief</h2>
+                    <div id="relationship-voice-brief-container" class="tasks-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="card tasks-widget">
+                    <h2>Watch This Week</h2>
+                    <div id="relationship-watchlist-container" class="tasks-list">
                         <!-- Populated by JS -->
                     </div>
                 </div>

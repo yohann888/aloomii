@@ -25,20 +25,23 @@
 const fs   = require('fs');
 const path = require('path');
 const https = require('https');
+const { randomUUID } = require('crypto');
 const { Client } = require('pg');
+const { runHookLoop } = require('./hook-loop');
 
 // ── Config ─────────────────────────────────────────────────────────────────────
 
 const WORKSPACE = path.resolve(__dirname, '../..');
+const OPENCLAW_WORKSPACE = path.join(process.env.HOME, '.openclaw/workspace');
 
-const YOHANN_ANECDOTES_FILE  = path.join(WORKSPACE, 'content/anecdotes.json');
-const JENNY_ANECDOTES_FILE   = path.join(WORKSPACE, 'content/jenny-anecdotes.json');
-const YOHANN_VOICE_FILE      = path.join(WORKSPACE, 'config/voice-profiles/yohann-calpu.yaml');
-const JENNY_VOICE_FILE       = path.join(WORKSPACE, 'config/voice-profiles/jenny-calpu.yaml');
+const YOHANN_ANECDOTES_FILE  = fs.existsSync(path.join(WORKSPACE, 'content/anecdotes.json')) ? path.join(WORKSPACE, 'content/anecdotes.json') : path.join(OPENCLAW_WORKSPACE, 'content/anecdotes.json');
+const JENNY_ANECDOTES_FILE   = fs.existsSync(path.join(WORKSPACE, 'content/jenny-anecdotes.json')) ? path.join(WORKSPACE, 'content/jenny-anecdotes.json') : path.join(OPENCLAW_WORKSPACE, 'content/jenny-anecdotes.json');
+const YOHANN_VOICE_FILE      = fs.existsSync(path.join(WORKSPACE, 'config/voice-profiles/yohann-calpu.yaml')) ? path.join(WORKSPACE, 'config/voice-profiles/yohann-calpu.yaml') : path.join(OPENCLAW_WORKSPACE, 'config/voice-profiles/yohann-calpu.yaml');
+const JENNY_VOICE_FILE       = fs.existsSync(path.join(WORKSPACE, 'config/voice-profiles/jenny-calpu.yaml')) ? path.join(WORKSPACE, 'config/voice-profiles/jenny-calpu.yaml') : path.join(OPENCLAW_WORKSPACE, 'config/voice-profiles/jenny-calpu.yaml');
 const DB_URL                 = 'postgresql://superhana@localhost:5432/aloomii';
-const STATE_FILE             = path.join(WORKSPACE, 'memory/content-engine-state.json');
-const SIGNALS_FILE           = path.join(WORKSPACE, 'pipeline/signals.md');
-const LOG_FILE               = path.join(WORKSPACE, 'logs/weekly-linkedin-drafts.log');
+const STATE_FILE             = fs.existsSync(path.join(WORKSPACE, 'memory')) ? path.join(WORKSPACE, 'memory/content-engine-state.json') : path.join(OPENCLAW_WORKSPACE, 'memory/content-engine-state.json');
+const SIGNALS_FILE           = fs.existsSync(path.join(WORKSPACE, 'pipeline/signals.md')) ? path.join(WORKSPACE, 'pipeline/signals.md') : path.join(OPENCLAW_WORKSPACE, 'pipeline/signals.md');
+const LOG_FILE               = fs.existsSync(path.join(WORKSPACE, 'logs')) ? path.join(WORKSPACE, 'logs/weekly-linkedin-drafts.log') : path.join(OPENCLAW_WORKSPACE, 'logs/weekly-linkedin-drafts.log');
 
 const BUFFER_API_KEY         = 'GkB7cingsMpgX-DpfbRwdqAN1Spir8QxeEe7gp_9Jn1';
 const BUFFER_ENDPOINT        = 'https://api.buffer.com/graphql';
@@ -160,6 +163,7 @@ function loadJSON(file) {
 }
 
 function saveJSON(file, data) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
 }
 
@@ -577,29 +581,94 @@ async function main() {
     { author: 'Jenny Calpu',  template: jT3.name, text: jPost3, bufferId: null },
   ];
 
+  for (const r of results) {
+    try {
+      const hookRun = await runHookLoop({
+        business: 'Aloomii runs GTM for founders',
+        icp: r.author.includes('Jenny') ? 'creative operators and founders using AI in content' : 'B2B founders and GTM operators',
+        topic: r.template,
+        funnelStage: 'top',
+        platform: 'linkedin'
+      });
+      r.hookRun = hookRun;
+      const recommendedHook = hookRun?.recommended?.hook_text;
+      if (recommendedHook) {
+        r.text = `${recommendedHook}\n\n${r.text}`;
+      }
+    } catch (e) {
+      log(`[HOOK_LAB] failed for ${r.author} / ${r.template}: ${e.message}`);
+    }
+  }
+
   await alertDiscord(results, DRY_RUN);
 
-  // Write drafts to Command Center DB
+  // Write drafts and Hook Lab candidates to Command Center DB
   try {
-    const { execSync } = await import('child_process');
+    const client = new Client({ connectionString: DB_URL });
+    await client.connect();
     for (const r of results) {
       const adapter = r.author.includes('Jenny') ? 'jenny' : 'yohann';
       const brandProfileId = adapter === 'jenny' ? jennyProfile.id : yohannProfile.id;
-      const payload = JSON.stringify({
-        platform: 'linkedin',
-        post_type: 'draft',
-        topic: r.template || 'LinkedIn Post',
-        content_text: r.text,
-        adapter: adapter,
-        brand_profile_id: brandProfileId,
-        external_id: r.bufferId || null
-      });
-      const bridgePath = path.join(process.env.HOME, 'Desktop/aloomii/scripts/bridge/ingest-content.js');
-      execSync(`node ${bridgePath} '${payload.replace(/'/g, "'\\\''")}'`, { timeout: 5000 });
+      const postRes = await client.query(
+        `INSERT INTO content_posts (platform, post_type, topic, content_text, draft_text, adapter, brand_profile_id, status, published_at)
+         VALUES ('linkedin', 'draft', $1, $2, $2, $3, $4, 'draft', NULL)
+         RETURNING id`,
+        [r.template || 'LinkedIn Post', r.text, adapter, brandProfileId]
+      );
+      const postId = postRes.rows[0]?.id;
+
+      if (postId && r.hookRun?.candidates?.length) {
+        const sessionId = randomUUID();
+        await client.query(
+          `INSERT INTO attention_line_sessions (id, post_id, platform, asset_type, status, metadata)
+           VALUES ($1, $2, 'linkedin', 'hook', 'complete', $3::jsonb)`,
+          [sessionId, postId, JSON.stringify({ topic: r.template, author: r.author })]
+        );
+
+        let selectedHookId = null;
+        for (const candidate of r.hookRun.candidates) {
+          const hookRes = await client.query(
+            `INSERT INTO content_hooks (
+              post_id, platform, asset_type, loop_session_id, loop_role,
+              judge_score, judge_rationale, is_selected, brand_persona, topic_tag, hook_text, hook_confidence, metadata
+            ) VALUES (
+              $1, 'linkedin', 'hook', $2, $3,
+              $4, $5, $6, $7, $8, $9, $10, $11::jsonb
+            ) RETURNING id`,
+            [
+              postId,
+              sessionId,
+              candidate.type,
+              candidate.score_total || null,
+              candidate.metadata?.judge_reasoning || null,
+              !!candidate.recommended,
+              adapter,
+              r.template,
+              candidate.hook_text,
+              candidate.score_total || null,
+              JSON.stringify({ ...(candidate.metadata || {}), generation_run_id: r.hookRun.runId })
+            ]
+          );
+          const hookId = hookRes.rows[0]?.id;
+          if (candidate.recommended && hookId) selectedHookId = hookId;
+        }
+
+        if (selectedHookId) {
+          await client.query(
+            `UPDATE content_posts SET selected_hook_id = $2 WHERE id = $1`,
+            [postId, selectedHookId]
+          );
+          await client.query(
+            `UPDATE attention_line_sessions SET winner_hook_id = $2 WHERE id = $1`,
+            [sessionId, selectedHookId]
+          );
+        }
+      }
     }
-    log('[DB] LinkedIn drafts written to Command Center');
+    await client.end();
+    log('[DB] LinkedIn drafts and Hook Lab candidates written to Command Center');
   } catch (e) {
-    log(`[DB] Bridge failed (non-fatal): ${e.message}`);
+    log(`[DB] Draft/Hook Lab write failed (non-fatal): ${e.message}`);
   }
 
   // Update state

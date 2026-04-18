@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caledonia Regional Chamber of Commerce</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link active" href="/chamber-demo">Home</a>
+          <a class="nav-link " href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link " href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <section class="hero hero-photo">
+      <div class="eyebrow">Caledonia Regional Chamber</div>
+      <h1 id="chamberName">Caledonia Regional Chamber of Commerce</h1>
+      <p id="heroCopy">A modern chamber experience built for member visibility, event participation, and local growth.</p>
+      <div class="hero-actions">
+        <a href="/chamber-demo/directory" class="btn">Explore member directory</a>
+        <a href="/chamber-demo/events" class="btn alt">View event calendar</a>
+      </div>
+    </section>
+
+    <section class="hero-stats-bar" id="heroStatsBar">
+      <div class="hero-stats-grid">
+        <div class="hero-stat-item">
+          <div class="hero-stat-value" data-target="142">0</div>
+          <div class="hero-stat-label">Local Businesses</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-value" data-target="38">0</div>
+          <div class="hero-stat-label">Events This Year</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-value" data-target="2.3" data-prefix="$" data-suffix="M">0</div>
+          <div class="hero-stat-label">in Deals Redeemed</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-value" data-target="67">0</div>
+          <div class="hero-stat-label">Jobs Posted</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="member-spotlight-section" id="memberSpotlightSection">
+      <div class="member-spotlight-inner">
+        <h2 class="member-spotlight-title">What Our Members Say</h2>
+        <div class="member-spotlight-divider"></div>
+        <div class="member-spotlight-card" id="memberSpotlightCard"></div>
+        <div class="member-spotlight-dots" id="memberSpotlightDots"></div>
+      </div>
+    </section>
+
+    <section class="event-strip-section">
+      <div class="event-strip-header">
+        <div>
+          <h2>Upcoming Events</h2>
+          <p class="sub">Swipe or scroll through the next chamber and community events.</p>
+        </div>
+        <div class="event-strip-actions">
+          <button class="event-strip-arrow" id="eventsPrev" aria-label="Scroll events left">‹</button>
+          <button class="event-strip-arrow" id="eventsNext" aria-label="Scroll events right">›</button>
+          <a href="/chamber-demo/events" class="event-strip-link">View All →</a>
+        </div>
+      </div>
+      <div class="event-strip-viewport" id="eventStrip"></div>
+    </section>
+
+    <div class="layout">
+      <div class="stack">
+        <section class="card">
+          <h2>Featured members</h2>
+          <div class="sub">Explore local members, community organizations, and business connections across the Caledonia region.</div>
+          <div class="list" id="orgList"></div>
+          <div class="footer-note"><a href="/chamber-demo/directory">Open the full directory →</a></div>
+        </section>
+
+      </div>
+
+      <div class="stack">
+        <section class="card">
+          <h2>Why members join</h2>
+          <div class="timeline">
+            <div class="step"><span class="check">✓</span> Promote your organization in the member directory</div>
+            <div class="step"><span class="check">✓</span> Connect through chamber and community events</div>
+            <div class="step"><span class="check">✓</span> Stay visible through member highlights and updates</div>
+            <div class="step">Join the chamber to grow your reach in Caledonia and beyond</div>
+          </div>
+        </section>
+
+        <section class="card" id="member-highlights">
+          <h2>Member highlights</h2>
+          <div class="sub">Recent chamber updates and spotlight items.</div>
+          <div class="list" id="dealList"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadOverview() {
+      const res = await fetch('/api/chamber-demo/overview');
+      const data = await res.json();
+      // document.getElementById('navBrand').textContent = data.settings?.chamber_name || 'Chamber Demo';
+      document.getElementById('chamberName').textContent = data.settings?.chamber_name || 'Chamber Demo';
+      document.getElementById('heroCopy').textContent = data.settings?.hero_copy || '';
+
+      document.getElementById('orgList').innerHTML = data.featuredOrganizations.map(org => `
+        <div class="item">
+          <div class="row">
+            <div class="logo">${(org.name || '?').charAt(0)}</div>
+            <div>
+              <h3>${org.name}</h3>
+              <p>${org.description || ''}</p>
+              <p>${org.city || ''} · ${org.category || ''}</p>
+            </div>
+          </div>
+          <div class="pill">${org.tier_name || 'Member'}</div>
+        </div>
+      `).join('');
+
+      const eventCapacity = {
+        'haldimand-business-symposium': { spots: 28, total: 40 },
+        'caledonia-chili-cook-off': { spots: 11, total: 36 },
+        'chamber-members-speed-networking-event': { spots: 4, total: 20 },
+        'small-business-breakfast': { spots: 19, total: 28 },
+        'summer-waterfront-mixer': { spots: 7, total: 30 },
+        'fall-membership-open-house': { spots: 16, total: 22 },
+      };
+      document.getElementById('eventStrip').innerHTML = data.upcomingEvents.map(event => {
+        const startsAt = new Date(event.starts_at);
+        const meta = eventCapacity[event.slug] || { spots: 12, total: 24 };
+        const ratio = meta.total ? meta.spots / meta.total : 0;
+        const badge = ratio > 0.5
+          ? { className: 'good', text: `${meta.spots} spots remaining` }
+          : ratio > 0.2
+            ? { className: 'amber', text: `${meta.spots} spots remaining` }
+            : { className: 'bad', text: 'Almost full!' };
+        return `
+          <article class="event-strip-card">
+            <div class="event-strip-date">
+              <div class="event-strip-month">${startsAt.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}</div>
+              <div class="event-strip-day">${startsAt.getDate()}</div>
+            </div>
+            <div class="event-strip-body">
+              <h3><a href="/chamber-demo/events/${event.slug}" style="text-decoration:none">${event.title}</a></h3>
+              <p>${startsAt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} · ${event.location || ''}</p>
+              <div class="event-strip-meta">
+                ${event.member_only ? '<span class="event-strip-mini-badge">Members</span>' : '<span class="event-strip-mini-badge public">Public</span>'}
+                <span class="event-strip-badge ${badge.className}">${badge.text}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      document.getElementById('dealList').innerHTML = data.hotDeals.map(item => `
+        <div class="item">
+          <div>
+            <h3>${item.title}</h3>
+            <p>${item.teaser || item.body || ''}</p>
+          </div>
+          <div class="pill">${item.status}</div>
+        </div>
+      `).join('');
+
+      const testimonials = [
+        {
+          quote: "The chamber gave us visibility we could not get anywhere else — real connections that turned into steady referrals and local trust.",
+          name: 'Yohann Calpu',
+          title: 'Co-Founder',
+          business: 'Aloomii Inc',
+          tier: 'Gold',
+          logo_url: '/demo/assets/caledonia-chamber-logo-new.svg'
+        },
+        {
+          quote: 'Being part of the chamber made it easier for us to meet local partners and actually show up where business happens.',
+          name: 'Natalie Carter',
+          title: 'Owner',
+          business: 'Cafecito House',
+          tier: 'Silver',
+          logo_url: ''
+        },
+        {
+          quote: 'We joined for the directory listing, but the real value was the introductions that turned into lasting client relationships.',
+          name: 'Mark Henning',
+          title: 'CPA',
+          business: 'Julie A. Henning, CPA',
+          tier: 'Bronze',
+          logo_url: ''
+        }
+      ];
+
+      const tierColors = { Gold: '#D4A843', Silver: '#8A9BBF', Bronze: '#9CA3AF' };
+
+      let testimonialIndex = 0;
+      let testimonialTimer = null;
+      const spotlightCard = document.getElementById('memberSpotlightCard');
+      const spotlightDots = document.getElementById('memberSpotlightDots');
+
+      const renderTestimonial = (index) => {
+        const item = testimonials[index];
+        const color = tierColors[item.tier];
+        const logoHtml = item.logo_url
+          ? `<img src="${item.logo_url}" alt="${item.business}" style="width:100%;height:100%;object-fit:contain;" />`
+          : `<span class="testimonial-logo-letter" style="color:${color};">${item.business.charAt(0)}</span>`;
+
+        spotlightCard.classList.remove('is-visible');
+        requestAnimationFrame(() => {
+          spotlightCard.innerHTML = `
+            <div class="testimonial-quote-mark">“</div>
+            <div class="testimonial-quote-text">${item.quote}</div>
+            <div class="testimonial-attribution">
+              <div class="testimonial-logo" style="border-color:${color};background:#fff;">${logoHtml}</div>
+              <div class="testimonial-info">
+                <div class="testimonial-name">${item.name}</div>
+                <div class="testimonial-detail">${item.title}, ${item.business}</div>
+              </div>
+              <span class="testimonial-tier-badge" style="color:${color};border-color:${color};">${item.tier} Member</span>
+            </div>
+          `;
+          spotlightCard.classList.add('is-visible');
+        });
+
+        spotlightDots.innerHTML = testimonials.map((_, dotIndex) =>
+          `<button class="member-spotlight-dot ${dotIndex === index ? 'active' : ''}" data-index="${dotIndex}" aria-label="Show testimonial ${dotIndex + 1}"></button>`
+        ).join('');
+        spotlightDots.querySelectorAll('button').forEach((button) => {
+          button.addEventListener('click', () => {
+            testimonialIndex = Number(button.dataset.index);
+            renderTestimonial(testimonialIndex);
+            startTestimonials();
+          });
+        });
+      };
+
+      const startTestimonials = () => {
+        clearInterval(testimonialTimer);
+        testimonialTimer = setInterval(() => {
+          testimonialIndex = (testimonialIndex + 1) % testimonials.length;
+          renderTestimonial(testimonialIndex);
+        }, 6000);
+      };
+      renderTestimonial(testimonialIndex);
+      startTestimonials();
+
+      const spotlightSection = document.getElementById('memberSpotlightSection');
+      spotlightSection.addEventListener('mouseenter', () => clearInterval(testimonialTimer));
+      spotlightSection.addEventListener('mouseleave', startTestimonials);
+    }
+
+    loadOverview().catch(err => {
+      console.error(err);
+      document.body.insertAdjacentHTML('beforeend', '<p style="padding:24px;color:#b00020">Failed to load chamber overview.</p>');
+    });
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const values = entry.target.querySelectorAll('.hero-stat-value');
+        values.forEach((el) => {
+          if (el.dataset.animated === 'true') return;
+          el.dataset.animated = 'true';
+          const target = parseFloat(el.dataset.target || '0');
+          const prefix = el.dataset.prefix || '';
+          const suffix = el.dataset.suffix || '';
+          const start = performance.now();
+          const duration = 2000;
+          const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+          const tick = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = easeOut(progress);
+            const current = target * eased;
+            const formatted = target % 1 !== 0
+              ? current.toFixed(1)
+              : Math.round(current).toLocaleString();
+            el.textContent = `${prefix}${formatted}${suffix}`;
+            if (progress < 1) {
+              requestAnimationFrame(tick);
+            } else {
+              el.textContent = `${prefix}${target % 1 !== 0 ? target.toFixed(1) : Math.round(target).toLocaleString()}${suffix}`;
+            }
+          };
+
+          requestAnimationFrame(tick);
+        });
+        statsObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.35 });
+
+    statsObserver.observe(document.getElementById('heroStatsBar'));
+
+    const eventStrip = document.getElementById('eventStrip');
+    document.getElementById('eventsPrev').addEventListener('click', () => {
+      eventStrip.scrollBy({ left: -264, behavior: 'smooth' });
+    });
+    document.getElementById('eventsNext').addEventListener('click', () => {
+      eventStrip.scrollBy({ left: 264, behavior: 'smooth' });
+    });
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>

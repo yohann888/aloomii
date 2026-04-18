@@ -337,16 +337,38 @@ let catalogProducts = [];
 let todaysMatchedProductNames = new Set(); // products matched to today's qualifying trends
 let seenTrends = []; // trends that have already had scripts generated
 
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getVibrntData() {
+  const d = window.__VIBRNT_DATA__ || {};
+  return {
+    summary: d.summary || {},
+    trends: Array.isArray(d.trends) ? d.trends : [],
+    allTrends: Array.isArray(d.allTrends) ? d.allTrends : [],
+    scripts: Array.isArray(d.scripts) ? d.scripts : [],
+    influencerPipeline: Array.isArray(d.influencerPipeline) ? d.influencerPipeline : [],
+    catalog: d.catalog || {},
+    seenTrends: Array.isArray(d.seenTrends) ? d.seenTrends : []
+  };
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
 function fetchJSON(url) {
-  const d = (window.__VIBRNT_DATA__ || {});
-  if (url === '/api/summary') return Promise.resolve(d.summary || {});
-  if (url === '/api/trends') return Promise.resolve({ trends: d.trends || [] });
-  if (url === '/api/scripts') return Promise.resolve({ scripts: d.scripts || [] });
-  if (url === '/api/catalog') return Promise.resolve(d.catalog || {});
-  if (url === '/api/influencer_pipeline') return Promise.resolve({ candidates: (d.influencerPipeline || []) });
+  const d = getVibrntData();
+  if (url === '/api/summary') return Promise.resolve(d.summary);
+  if (url === '/api/trends') return Promise.resolve({ trends: d.trends });
+  if (url === '/api/scripts') return Promise.resolve({ scripts: d.scripts });
+  if (url === '/api/catalog') return Promise.resolve(d.catalog);
+  if (url === '/api/influencer_pipeline') return Promise.resolve({ candidates: d.influencerPipeline });
   if (url.startsWith('/api/scripts?file=')) {
     const file = decodeURIComponent(url.split('file=')[1] || '');
-    const found = (d.scripts || []).find(s => s.file === file);
+    const found = d.scripts.find(s => s.file === file);
     return Promise.resolve(found || { body: '' });
   }
   return Promise.resolve(null);
@@ -355,10 +377,10 @@ function fetchJSON(url) {
 // Load seenTrends from embedded data at startup
 function loadSeenTrends() {
   try {
-    if (window.__VIBRNT_DATA__ && window.__VIBRNT_DATA__.seenTrends) {
-      seenTrends = window.__VIBRNT_DATA__.seenTrends;
-    }
-  } catch(e) {}
+    seenTrends = getVibrntData().seenTrends;
+  } catch(e) {
+    seenTrends = [];
+  }
 }
 
 function switchTab(tab) {
@@ -373,11 +395,11 @@ function switchTab(tab) {
 }
 
 function loadInfluencerPipeline() {
-  const candidates = window.__VIBRNT_DATA__ && window.__VIBRNT_DATA__.influencerPipeline || [];
+  const candidates = getVibrntData().influencerPipeline;
   const countEl = document.getElementById('inf-count');
   const statsEl = document.getElementById('inf-stats');
   const gridEl = document.getElementById('inf-grid');
-  if (!gridEl) return;
+  if (!statsEl || !gridEl) return;
   if (countEl) countEl.textContent = candidates.length + ' candidates';
   if (!candidates.length) {
     statsEl.innerHTML = '';
@@ -418,35 +440,39 @@ function loadInfluencerPipeline() {
 async function refreshAll() {
   const btn = document.querySelector('.refresh-btn');
   const spinner = document.getElementById('spinner');
-  if (btn) btn.classList.add('loading');
-  if (spinner) spinner.style.display = 'inline-block';
-  loadSeenTrends();
+  try {
+    if (btn) btn.classList.add('loading');
+    if (spinner) spinner.style.display = 'inline-block';
+    loadSeenTrends();
 
-  // Load catalog first (needed by loadTrends for product matching)
-  await Promise.all([loadSummary(), loadCatalog()]);
-  await Promise.all([loadTrends(), loadScripts()]);
-
-  if (btn) btn.classList.remove('loading');
-  if (spinner) spinner.style.display = 'none';
-  loadInfluencerPipeline();
+    await Promise.all([loadSummary(), loadCatalog()]);
+    await Promise.all([loadTrends(), loadScripts()]);
+    loadInfluencerPipeline();
+  } catch (err) {
+    console.error('Vibrnt refresh failed', err, getVibrntData());
+  } finally {
+    if (btn) btn.classList.remove('loading');
+    if (spinner) spinner.style.display = 'none';
+  }
 }
 
 async function loadSummary() {
   const d = await fetchJSON('/api/summary');
   if (!d) return;
-  document.getElementById('stat-trends').textContent = d.trendCount || 0;
-  document.getElementById('stat-scripts').textContent = d.scriptCount || 0;
-  document.getElementById('stat-trends-sub').textContent = d.latestTrend ? `Latest: ${d.latestTrend}` : 'No trend data';
-  document.getElementById('stat-scripts-sub').textContent = d.latestScripts && d.latestScripts.length ? `Recent: ${d.latestScripts.length} files` : 'No scripts yet';
-  document.getElementById('stat-latest').textContent = d.latestTrend || '--';
-  document.getElementById('stat-latest-sub').textContent = d.latestScripts && d.latestScripts.length ? `${d.latestScripts.length} today` : '--';
+  setText('stat-trends', d.trendCount || 0);
+  setText('stat-scripts', d.scriptCount || 0);
+  setText('stat-trends-sub', d.latestTrend ? `Latest: ${d.latestTrend}` : 'No trend data');
+  setText('stat-scripts-sub', d.latestScripts && d.latestScripts.length ? `Recent: ${d.latestScripts.length} files` : 'No scripts yet');
+  setText('stat-latest', d.latestTrend || '--');
+  setText('stat-latest-sub', d.latestScripts && d.latestScripts.length ? `${d.latestScripts.length} today` : '--');
 }
 
 async function loadTrends() {
   const d = await fetchJSON('/api/trends');
   const container = document.getElementById('trends-container');
-  latestTrends = d && d.trends || [];
-  document.getElementById('trend-count').textContent = `${latestTrends.length} report${latestTrends.length !== 1 ? 's' : ''}`;
+  if (!container) return;
+  latestTrends = d && Array.isArray(d.trends) ? d.trends : [];
+  setText('trend-count', `${latestTrends.length} report${latestTrends.length !== 1 ? 's' : ''}`);
 
   if (!latestTrends.length) {
     container.innerHTML = `<div class="empty-state"><div class="icon">&#128269;</div><p>No trends yet. Run <strong>vibrnt-trend-scout.js</strong> to pull signals.</p></div>`;
@@ -515,8 +541,9 @@ async function loadTrends() {
       let sourceUrl = '';
       const sourceMatch = block.match(/\[View original\]\((https?:\/\/[^\)]+)\)/);
       if (sourceMatch) sourceUrl = sourceMatch[1];
-      if (!sourceUrl && window.__VIBRNT_DATA__ && window.__VIBRNT_DATA__.allTrends) {
-        const at = window.__VIBRNT_DATA__.allTrends.find(t => t.title && trendName && t.title.toLowerCase().trim() === trendName.toLowerCase().trim());
+      const allTrends = getVibrntData().allTrends;
+      if (!sourceUrl && allTrends.length) {
+        const at = allTrends.find(t => t.title && trendName && t.title.toLowerCase().trim() === trendName.toLowerCase().trim());
         if (at && at.sourceUrl) sourceUrl = at.sourceUrl;
       }
 
@@ -600,8 +627,9 @@ function toggleTrend(i) {
 async function loadScripts() {
   const d = await fetchJSON('/api/scripts');
   const container = document.getElementById('scripts-container');
-  latestScripts = d && d.scripts || [];
-  document.getElementById('script-count').textContent = `${latestScripts.length} scripts`;
+  if (!container) return;
+  latestScripts = d && Array.isArray(d.scripts) ? d.scripts : [];
+  setText('script-count', `${latestScripts.length} scripts`);
 
   if (!latestScripts.length) {
     container.innerHTML = `<div class="empty-state"><div class="icon">&#127909;</div><p>No scripts yet. Run <strong>vibrnt-script-writer.js</strong> to generate today's scripts.</p></div>`;
@@ -627,7 +655,8 @@ async function loadScripts() {
 async function loadCatalog() {
   const d = await fetchJSON('/api/catalog');
   const container = document.getElementById('catalog-container');
-  let products = (d && d.products) ? d.products : [];
+  if (!container) return;
+  let products = (d && Array.isArray(d.products)) ? d.products : [];
   if (!products.length && d && d.body) {
     const lines = d.body.split('\n');
     let current = {};
@@ -651,7 +680,7 @@ async function loadCatalog() {
     }
     if (current.name) products.push(current);
   }
-  document.getElementById('catalog-count').textContent = `${products.length} products`;
+  setText('catalog-count', `${products.length} products`);
   if (!products.length) {
     catalogProducts = [];
     container.innerHTML = `<div class="empty-state"><div class="icon">&#128230;</div><p>No products found.</p></div>`;
@@ -678,10 +707,6 @@ async function loadCatalog() {
       </div>
     </div>
   `).join('')}</div>`;
-}
-
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 async function viewScript(file) {
@@ -757,7 +782,9 @@ function showTrend(date) {
 }
 
 // Auto-load
-refreshAll();
+document.addEventListener('DOMContentLoaded', () => {
+  refreshAll();
+});
 </script>
 </body>
 </html>

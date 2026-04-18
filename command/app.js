@@ -3,6 +3,7 @@ let sidebarCollapsed = false;
 let currentTheme = 'dark';
 
 function init() {
+    wireAuthGate();
     checkAuth();
     renderLiveClock();
     setGreeting();
@@ -29,35 +30,52 @@ function checkAuth() {
     const gate = document.getElementById('gate-overlay');
     if (sessionStorage.getItem('cmd_auth_ok') === 'true') {
         gate.style.display = 'none';
-    } else {
-        const pwInput = document.getElementById('password-input');
+    }
+}
+
+function wireAuthGate() {
+    const pwInput = document.getElementById('password-input');
+    const authBtn = document.getElementById('auth-btn');
+    const requestBtn = document.getElementById('request-access-btn');
+    if (pwInput && !pwInput.dataset.wired) {
         pwInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') attemptLogin();
         });
+        pwInput.dataset.wired = 'true';
+    }
+    if (authBtn && !authBtn.dataset.wired) {
+        authBtn.addEventListener('click', attemptLogin);
+        authBtn.dataset.wired = 'true';
+    }
+    if (requestBtn && !requestBtn.dataset.wired) {
+        requestBtn.addEventListener('click', requestAccess);
+        requestBtn.dataset.wired = 'true';
     }
 }
 
 function attemptLogin() {
     const input = document.getElementById('password-input');
     const messageEl = document.getElementById('gate-message');
-    const code = [97,108,111,111,109,105,105,56,56,56]; // aloomii888
-    const entered = input.value.trim().toLowerCase();
+    const gate = document.getElementById('gate-overlay');
     
-    let matches = true;
-    if (entered.length !== code.length) matches = false;
+    // Robust password comparison — explicit string, no char code arrays
+    const entered = input.value.trim();
+    const code = 'aloomii888';
+    const matches = entered.toLowerCase() === code;
     
-    for (let i = 0; i < entered.length && matches; i++) {
-        if (entered.charCodeAt(i) !== code[i]) matches = false;
-    }
+    console.log('[auth] attemptLogin called, entered length:', entered.length, 'matches:', matches);
     
     if (matches) {
-        sessionStorage.setItem('cmd_auth_ok', 'true');
-        const gate = document.getElementById('gate-overlay');
-        gate.style.transition = 'opacity 0.6s';
-        gate.style.opacity = '0';
-        setTimeout(() => {
-            gate.style.display = 'none';
-        }, 600);
+        try {
+            sessionStorage.setItem('cmd_auth_ok', 'true');
+        } catch(e) {
+            console.error('[auth] sessionStorage write failed:', e);
+            messageEl.textContent = 'Storage unavailable';
+            messageEl.style.color = '#f59e0b';
+            return;
+        }
+        // Immediate hide — no animation delay needed
+        gate.style.display = 'none';
     } else {
         messageEl.textContent = 'Access denied';
         messageEl.style.color = '#ef4444';
@@ -249,96 +267,6 @@ function animateDonut(fleet = null) {
     console.log(`Fleet health updated: ${healthyPct}% healthy`);
 }
 
-function toggleNotifications() {
-    const dropdown = document.getElementById('notification-dropdown');
-    const isHidden = dropdown.classList.contains('hidden');
-    
-    // Close all other dropdowns
-    document.querySelectorAll('.notif-dropdown').forEach(d => d.classList.add('hidden'));
-    
-    if (isHidden && commandData && commandData.notifications) {
-        dropdown.classList.remove('hidden');
-        renderNotifications(commandData.notifications);
-    } else {
-        dropdown.classList.add('hidden');
-    }
-}
-
-function renderNotifications(notifications) {
-    const container = document.getElementById('notif-list');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    if (!notifications || notifications.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'notif-empty';
-        empty.innerHTML = 'No new notifications.<br><span style="font-size:11px">All systems running smoothly.</span>';
-        container.appendChild(empty);
-        return;
-    }
-    
-    const countEl = document.getElementById('notif-count');
-    if (countEl) countEl.textContent = notifications.length;
-    
-    notifications.forEach((notif, index) => {
-        const item = document.createElement('div');
-        item.className = `notif-item ${notif.urgency || 'medium'}`;
-        
-        let icon = '📌';
-        if (notif.type === 'decay_alert') icon = '❄️';
-        else if (notif.type === 'overdue_outreach') icon = '⏰';
-        else if (notif.type === 'high_score_signal') icon = '🔥';
-        
-        item.innerHTML = `
-            <div class="notif-icon">${icon}</div>
-            <div class="notif-content">
-                <div>${notif.message}</div>
-                <div class="notif-timestamp">just now</div>
-            </div>
-            <button class="notif-dismiss" onclick="dismissNotification(event, ${index})">×</button>
-        `;
-        
-        item.onclick = (e) => {
-            if (e.target.tagName !== 'BUTTON') {
-                if (notif.type === 'decay_alert' || notif.type === 'overdue_outreach') {
-                    showSection('crm');
-                } else if (notif.type === 'high_score_signal') {
-                    showSection('intel');
-                }
-                toggleNotifications(); // close dropdown
-            }
-        };
-        
-        container.appendChild(item);
-    });
-}
-
-function dismissNotification(e, index) {
-    e.stopImmediatePropagation();
-    if (commandData && commandData.notifications) {
-        commandData.notifications.splice(index, 1);
-        renderNotifications(commandData.notifications);
-    }
-}
-
-function mockNotification() {
-    const count = document.getElementById('notif-count');
-    let n = parseInt(count.textContent) || 0;
-    count.textContent = n + 1;
-    
-    const notif = document.createElement('div');
-    notif.style.cssText = 'position:fixed;bottom:30px;right:30px;background:#10b981;color:#000;padding:16px 22px;border-radius:12px;box-shadow:0 10px 30px -10px #000;z-index:9999;';
-    notif.textContent = 'New signal detected';
-    document.body.appendChild(notif);
-    
-    setTimeout(() => {
-        notif.style.transition = 'all 0.4s';
-        notif.style.opacity = 0;
-        notif.style.transform = 'translateY(20px)';
-        setTimeout(() => notif.remove(), 500);
-    }, 2200);
-}
 
 // Economics updater
 function updateEconomics(economics) {
@@ -718,15 +646,12 @@ function updateHQFromData(data) {
         renderEventsStrip(data.events);
     }
     
-    // 6. Update notifications badge
-    if (data.notifications && data.notifications.length > 0) {
-        const countEl = document.getElementById('notif-count');
-        if (countEl) countEl.textContent = data.notifications.length;
-    }
-    
     // NEW: Render Tasks Widget if tasks present (Bridge D frontend)
     if (data.tasks && typeof renderTasks === 'function') {
         renderTasks(data.tasks);
+    }
+    if (data.relationship_health && typeof renderRelationshipHealth === 'function') {
+        renderRelationshipHealth(data.relationship_health);
     }
     
     console.log('✅ HQ updated from live data (Bridge A events + Bridge D tasks active)');
@@ -851,6 +776,9 @@ async function fetchCommandData() {
         if (typeof renderBacklog === 'function') renderBacklog();
         if (commandData.tasks && typeof renderTasks === 'function') {
             renderTasks(commandData.tasks);
+        }
+        if (commandData.relationship_health && typeof renderRelationshipHealth === 'function') {
+            renderRelationshipHealth(commandData.relationship_health);
         }
         if (commandData.content_queue && typeof renderContentQueue === 'function') {
             renderContentQueue(commandData.content_queue);
@@ -1315,23 +1243,55 @@ function batchCreateDrafts(contacts) {
 }
 
 // Task 2.6: Outreach Queue Logic
+let outreachQueueFilter = 'all';
+
+function setOutreachQueueFilter(filter) {
+  outreachQueueFilter = filter;
+  refreshAll();
+}
+
 function renderOutreachQueue(items) {
   const container = document.getElementById('outreach-queue-container');
   if (!container) return;
-  
-  container.innerHTML = '';
-  
-  if (items.length === 0) {
-    container.innerHTML = '<div class="empty-state">No pending outreach. All clear.</div>';
+
+  const filteredItems = (items || []).filter(item => {
+    if (outreachQueueFilter === 'all') return true;
+    if (outreachQueueFilter === 'blocked') return item.status === 'blocked';
+    if (outreachQueueFilter === 'outbound_email') return item.queue_type === 'outbound_email';
+    if (outreachQueueFilter === 'warm_reply') return item.queue_type === 'warm_reply';
+    return true;
+  });
+
+  container.innerHTML = `
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+      <button onclick="setOutreachQueueFilter('all')" class="btn-small ${outreachQueueFilter === 'all' ? 'primary' : ''}">All</button>
+      <button onclick="setOutreachQueueFilter('outbound_email')" class="btn-small ${outreachQueueFilter === 'outbound_email' ? 'primary' : ''}">Email outbound</button>
+      <button onclick="setOutreachQueueFilter('warm_reply')" class="btn-small ${outreachQueueFilter === 'warm_reply' ? 'primary' : ''}">Warm reply</button>
+      <button onclick="setOutreachQueueFilter('blocked')" class="btn-small ${outreachQueueFilter === 'blocked' ? 'primary' : ''}">Blocked</button>
+    </div>
+  `;
+
+  if (filteredItems.length === 0) {
+    container.innerHTML += '<div class="empty-state">No matching outreach items.</div>';
     return;
   }
-  
-  items.forEach(item => {
+
+  filteredItems.forEach(item => {
     const card = document.createElement('div');
     card.className = 'queue-card';
     const overdueBadge = item.overdue_days > 0 ? `<span class="queue-overdue">${item.overdue_days}d overdue</span>` : '';
     const tierBadge = item.contact_tier ? `<span class="queue-tier">T${item.contact_tier}</span>` : '';
     const draftPreview = item.draft ? `<div class="queue-draft">${item.draft.substring(0, 120)}${item.draft.length > 120 ? '…' : ''}</div>` : '';
+    const blockedNotice = item.status === 'blocked' ? `<div style="margin-top:8px;padding:8px;border:1px solid #7f1d1d;border-radius:8px;background:#2b1212;color:#fca5a5;">Blocked: ${item.block_reason || 'Channel policy restriction'}</div>` : '';
+    const personalStatus = item.personalization_status && item.personalization_status !== 'pending'
+      ? `<div style="margin-top:8px;padding:8px;border:1px solid #2a2a4a;border-radius:8px;background:#111827;">
+          <div style="font-size:12px;color:#7dd3fc;margin-bottom:4px;">Personalization • ${item.personalization_status}</div>
+          <div style="margin-bottom:4px;">${item.personalization_opener || ''}</div>
+          ${item.personalization_note ? `<div style="font-size:12px;color:#9ca3af;">${item.personalization_note}</div>` : ''}
+          ${(item.personalized_by || item.personalized_at) ? `<div style="font-size:11px;color:#6b7280;margin-top:4px;">by ${item.personalized_by || 'unknown'}${item.personalized_at ? ` • ${new Date(item.personalized_at).toLocaleString()}` : ''}</div>` : ''}
+          ${item.personalization_source_url ? `<div style="font-size:12px;margin-top:4px;"><a href="${item.personalization_source_url}" target="_blank" rel="noopener">Source ↗</a></div>` : ''}
+        </div>`
+      : `<div style="margin-top:8px;"><button onclick="openPersonalizationEditor('${item.id}')" class="btn-small">Add Personalization</button></div>`;
     card.innerHTML = `
       <div class="queue-header">
         <div class="queue-contact">
@@ -1347,15 +1307,50 @@ function renderOutreachQueue(items) {
       <div class="queue-body">
         <span class="queue-type-badge">${item.type || 'outreach'}</span>
         <span class="queue-channel-badge">${item.channel || 'email'}</span>
+        <span class="queue-channel-badge">${item.queue_type || 'outbound_email'}</span>
       </div>
       ${draftPreview}
+      ${blockedNotice}
+      ${personalStatus}
       <div class="queue-actions">
         <button onclick="snoozeQueueItem('${item.id}', 7)" class="btn-snooze">Snooze 7d</button>
         <button onclick="skipQueueItem('${item.id}')" class="btn-skip">Skip</button>
-        <button onclick="executeQueueItem('${item.id}')" class="btn-primary">Send Now</button>
+        ${item.status === 'blocked' ? '' : `<button onclick="executeQueueItem('${item.id}')" class="btn-primary">Send Now</button>`}
       </div>
     `;
     container.appendChild(card);
+  });
+}
+
+function openPersonalizationEditor(id) {
+  const opener = window.prompt('Personalized opener');
+  if (!opener) return;
+  const note = window.prompt('Why this opener is grounded (optional)') || '';
+  const source = window.prompt('Source URL (optional)') || '';
+  fetch('/api/command/queue/' + id + '/personalize', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      personalization_source_type: source ? 'manual_research' : 'manual',
+      personalization_source_url: source,
+      personalization_note: note,
+      personalization_opener: opener,
+      personalization_status: 'ready',
+      personalized_by: 'leo'
+    })
+  })
+  .then(r => r.json())
+  .then(result => {
+    if (result.success) {
+      showToast('Personalization saved', 'success');
+      refreshAll();
+    } else {
+      showToast(result.error || 'Failed to save personalization', 'error');
+    }
+  })
+  .catch(err => {
+    console.error('Personalization save failed:', err);
+    showToast('Failed to save personalization', 'error');
   });
 }
 
@@ -1886,6 +1881,38 @@ function renderAllContent(posts) {
   });
 }
 
+function renderHookLab(post) {
+  const hookLab = post.hook_lab;
+  if (!hookLab || !hookLab.candidates || !hookLab.candidates.length) return '';
+  const cards = hookLab.candidates.slice(0, 3).map(function(hook) {
+    const meta = hook.metadata || {};
+    const score = hook.judge_score || meta.score_total || '';
+    const badge = (hook.is_selected || meta.recommended) ? '<span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;">Recommended</span>' : '';
+    return `
+      <div style="border:1px solid #2a2a4a;border-radius:8px;padding:10px;margin-bottom:8px;background:#141428;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+          <strong>${hook.loop_role || meta.candidate_type || 'Candidate'}</strong>
+          <div style="display:flex;gap:8px;align-items:center;">${badge}${score ? `<span style="color:#888;font-size:12px;">${score}</span>` : ''}</div>
+        </div>
+        <div style="margin-bottom:8px;">${hook.hook_text || ''}</div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="useHookCandidate(${post.id}, '${hook.id}')" class="btn-small primary">Use</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div style="margin-bottom:12px;padding:12px;border:1px solid #2a2a4a;border-radius:10px;background:#101522;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <strong>Hook Lab</strong>
+        <span style="color:#888;font-size:12px;">${hookLab.session.platform || 'linkedin'} • ${hookLab.session.asset_type || 'hook'}</span>
+      </div>
+      ${cards}
+    </div>
+  `;
+}
+
 function expandDraft(id) {
   const editor = document.getElementById('draft-editor-' + id);
   if (!editor) return;
@@ -1895,12 +1922,12 @@ function expandDraft(id) {
     return;
   }
   
-  // Fetch full content
   fetch('/api/command/content/' + id)
     .then(r => r.json())
     .then(post => {
       editor.classList.remove('hidden');
       editor.innerHTML = `
+        ${renderHookLab(post)}
         <div class="draft-full-text">${post.content_text || ''}</div>
       `;
     });
@@ -1915,6 +1942,7 @@ function editLinkedInDraft(id) {
     .then(post => {
       editor.classList.remove('hidden');
       editor.innerHTML = `
+        ${renderHookLab(post)}
         <textarea id="draft-edit-area-${id}" class="draft-edit-textarea" rows="12">${post.edited_text || post.content_text || ''}</textarea>
         <div class="draft-edit-actions">
           <button onclick="saveLinkedInEdit(${id})" class="btn-small primary">Save Edit</button>
@@ -1922,6 +1950,26 @@ function editLinkedInDraft(id) {
         </div>
       `;
     });
+}
+
+function useHookCandidate(postId, hookId) {
+  fetch('/api/command/content/' + postId + '/hooks/' + hookId + '/use', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(r => r.json())
+  .then(result => {
+    if (result.success) {
+      showToast('Hook applied to draft', 'success');
+      editLinkedInDraft(postId);
+    } else {
+      showToast(result.error || 'Failed to apply hook', 'error');
+    }
+  })
+  .catch(err => {
+    console.error('Use hook failed:', err);
+    showToast('Failed to apply hook', 'error');
+  });
 }
 
 function saveLinkedInEdit(id) {
@@ -2472,7 +2520,22 @@ function snoozeQueueItem(id, days) {
 function skipQueueItem(id) {
   fetch(`/api/command/queue/${id}/skip`, { method: 'PATCH' }).then(() => refreshAll());
 }
-function executeQueueItem(id) { console.log('Execute queue item:', id); }
+function executeQueueItem(id) {
+  fetch(`/api/command/queue/${id}/execute`, { method: 'POST' })
+    .then(async (res) => {
+      const data = await res.json();
+      if (!res.ok || data.blocked) {
+        showToast(data.block_reason || data.error || 'Execution blocked', 'error');
+      } else {
+        showToast('Queue item executed', 'success');
+      }
+      refreshAll();
+    })
+    .catch(err => {
+      console.error('Execute queue item failed:', err);
+      showToast('Execution failed', 'error');
+    });
+}
 function actOnSignal(id) {
   fetch(`/api/command/signals/${id}/act`, { method: 'POST' }).then(() => refreshAll());
 }
@@ -2542,6 +2605,69 @@ document.addEventListener('keydown', globalThis.keyboardHandler);
 console.log('%cPhase 5 polish loaded — keyboard nav, toasts, loading states, empty states active', 'color:#00e5a0; font-family:monospace');
 
 // === Bridge 4: Tasks Widget + Content Queue Renderer ===
+
+function renderRelationshipHealth(data = {}) {
+    const container = document.getElementById('relationship-health-container');
+    const briefContainer = document.getElementById('relationship-voice-brief-container');
+    if (!container) return;
+
+    const human = data.human_attention || [];
+    const declining = data.declining || [];
+    const reconnection = data.reconnection_queue || [];
+    const summary = data.summary || {};
+    const voiceBrief = data.voice_brief || [];
+    const watchlist = data.watchlist || [];
+    const bucketCounts = {
+      overdue: voiceBrief.filter(v => v.bucket === 'overdue').length,
+      due_soon: voiceBrief.filter(v => v.bucket === 'due_soon').length,
+      decay_risk: voiceBrief.filter(v => v.bucket === 'decay_risk').length,
+    };
+
+    container.innerHTML = `
+      <div class="task-item" style="display:block;">
+        <div><strong>Human attention</strong> ${summary.human_attention_count || 0}</div>
+        <div style="font-size:12px;color:#888;">Overdue: ${bucketCounts.overdue} · Due soon: ${bucketCounts.due_soon} · Decay risk: ${bucketCounts.decay_risk}</div>
+        <div style="font-size:12px;color:#888;">Declining: ${summary.declining_count || 0} · Decay alerts: ${summary.decay_alert_count || 0} · Avg RHS: ${summary.avg_rhs || 'n/a'}</div>
+      </div>
+      <div class="task-item" style="display:block;">
+        <div style="font-weight:600;margin-bottom:6px;">Human attention required</div>
+        ${human.length ? human.slice(0,8).map(c => `<div style="margin-bottom:6px;">• ${c.name} ${c.human_outreach_reason ? `<span style="color:#888;">(${String(c.human_outreach_reason).replaceAll('_',' ')})</span>` : ''}</div>`).join('') : '<div style="color:#888;">No human-routed contacts</div>'}
+      </div>
+      <div class="task-item" style="display:block;">
+        <div style="font-weight:600;margin-bottom:6px;">Declining trajectories</div>
+        ${declining.length ? declining.slice(0,5).map(c => `<div style="margin-bottom:6px;">• ${c.name} <span style="color:#888;">(${c.rhs_trend || 'declining'} ${c.rhs_velocity || ''})</span></div>`).join('') : '<div style="color:#888;">No declining contacts</div>'}
+      </div>
+      <div class="task-item" style="display:block;">
+        <div style="font-weight:600;margin-bottom:6px;">Reconnection queue</div>
+        ${reconnection.length ? reconnection.slice(0,5).map(c => `<div style="margin-bottom:6px;">• ${c.contact_name || 'Contact'} <span style="color:#888;">(${c.fire_date || 'TBD'})</span></div>`).join('') : '<div style="color:#888;">No pending reconnection items</div>'}
+      </div>
+    `;
+
+    if (briefContainer) {
+      briefContainer.innerHTML = voiceBrief.length
+        ? voiceBrief.map(v => `
+            <div class="task-item" style="display:block;">
+              <div style="font-size:11px;color:#888;text-transform:uppercase;margin-bottom:4px;">${String(v.bucket || '').replace('_', ' ')}</div>
+              <div style="font-weight:600;">${v.name}${v.company ? ` (${v.company})` : ''}</div>
+              <div style="font-size:12px;color:#888;margin:4px 0;">${v.trigger || v.reason || ''}</div>
+              <div>${v.script || ''}</div>
+            </div>
+          `).join('')
+        : '<div class="empty-state tasks-empty"><div>No voice brief yet.</div></div>';
+    }
+
+    const watchContainer = document.getElementById('relationship-watchlist-container');
+    if (watchContainer) {
+      watchContainer.innerHTML = watchlist.length
+        ? watchlist.map(v => `
+            <div class="task-item" style="display:block;">
+              <div style="font-weight:600;">${v.name}</div>
+              <div style="font-size:12px;color:#888;">${String(v.reason || 'watch_decay_risk').replaceAll('_', ' ')}</div>
+            </div>
+          `).join('')
+        : '<div class="empty-state tasks-empty"><div>No watchlist items this week.</div></div>';
+    }
+}
 
 function renderTasks(tasks = []) {
     const container = document.getElementById('tasks-container');
@@ -3276,9 +3402,18 @@ async function removeBacklogItem(id) {
   }
 }
 
+window.init = init;
+window.checkAuth = checkAuth;
+window.attemptLogin = attemptLogin;
+window.requestAccess = requestAccess;
+window.wireAuthGate = wireAuthGate;
+window.setOutreachQueueFilter = setOutreachQueueFilter;
 window.renderBacklog = renderBacklog;
 window.promoteBacklogItem = promoteBacklogItem;
 window.removeBacklogItem = removeBacklogItem;
 
 // Load recent on page init
-document.addEventListener('DOMContentLoaded', () => { loadRecentOutreach(); });
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+  loadRecentOutreach();
+});

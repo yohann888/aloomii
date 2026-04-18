@@ -3257,3 +3257,4 @@ body.modal-open {
   transition: opacity 0.15s;
 }
 .vibrnt-draft-btn:hover { opacity: 0.8; }
+.vibrnt-draft-btn.muted { opacity: 0.4; cursor: not-allowed; pointer-events: none; }

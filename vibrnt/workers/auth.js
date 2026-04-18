@@ -53,7 +53,817 @@ const LOGIN_HTML = `<!DOCTYPE html>
 </html>`;
 
 // Inline the dashboard HTML — this will be replaced at deploy time
-const DASHBOARD_HTML = `<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->`;
+const DASHBOARD_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibrnt Trends Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #111118;
+      --bg-card-hover: #16161f;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8e8f0;
+      --text-dim: #8888a0;
+      --accent: #e040fb;
+      --accent-dim: rgba(224,64,251,0.12);
+      --accent2: #00e5ff;
+      --accent2-dim: rgba(0,229,255,0.10);
+      --green: #00e5a0;
+      --amber: #f5a623;
+      --red: #ff4d6a;
+      --radius: 12px;
+      --font: 'Outfit', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.6; min-height: 100vh; }
+
+    /* -- Header -- */
+    .header { padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-logo { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; }
+    .brand-name { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
+    .brand-name span { color: var(--accent); }
+    .brand-tagline { font-size: 12px; color: var(--text-dim); font-family: var(--mono); margin-top: 1px; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  .tab-bar { display: flex; gap: 4px; margin: 0 0 0 24px; }
+  .tab-btn { font-size: 13px; font-family: var(--font); background: transparent; color: var(--text-dim); border: 1px solid transparent; border-radius: 8px; padding: 6px 14px; cursor: pointer; transition: all 0.15s; }
+  .tab-btn:hover { color: var(--text); background: var(--bg-card-hover); }
+  .tab-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(100,80,255,0.1); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .inf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .inf-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; transition: border-color 0.2s; }
+  .inf-card:hover { border-color: var(--accent); }
+  .inf-handle { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .inf-meta { display: flex; gap: 10px; font-size: 11px; color: var(--text-dim); margin: 6px 0; flex-wrap: wrap; }
+  .inf-tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+  .inf-tag { font-size: 10px; background: var(--bg-card-hover); color: var(--text-dim); border-radius: 20px; padding: 2px 7px; }
+  .inf-pricing { font-size: 12px; color: #f59e0b; margin: 4px 0; }
+  .inf-notes { font-size: 11px; color: var(--text-dim); margin: 6px 0; line-height: 1.4; }
+  .inf-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .inf-status { font-size: 10px; font-weight: 600; border-radius: 20px; padding: 2px 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .inf-status.identified { background: #1e3a5f; color: #60a5fa; }
+  .inf-status.contacted { background: #3d2a00; color: #fbbf24; }
+  .inf-status.responded { background: #1a3d2a; color: #34d399; }
+  .inf-status.confirmed { background: #14532d; color: #22c55e; }
+  .inf-status.posted { background: #2a1a3d; color: #a78bfa; }
+  .inf-vibe { font-size: 11px; font-weight: 700; border-radius: 20px; padding: 2px 7px; color: #fff; }
+  .inf-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .inf-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 80px; }
+  .inf-stat-val { font-size: 20px; font-weight: 700; color: var(--accent); }
+  .inf-stat-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+    .live-label { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* -- Container -- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 28px 24px 80px; }
+
+    /* -- Stats row -- */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: border-color 0.2s; }
+    .stat-card:hover { border-color: var(--accent); }
+    .stat-label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 700; color: var(--text); line-height: 1; }
+    .stat-value span.unit { font-size: 16px; font-weight: 400; color: var(--text-dim); margin-left: 2px; }
+    .stat-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; font-family: var(--mono); }
+
+    /* -- Cards -- */
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .card-title { padding: 16px 20px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .card-title .icon { font-size: 18px; }
+    .card-body { padding: 16px 20px; }
+
+    /* -- Grid layouts -- */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+    /* -- Trend list -- */
+    .trend-list { display: flex; flex-direction: column; gap: 16px; }
+    .trend-entry { padding: 18px 20px; border-radius: 10px; background: var(--bg-card-hover); border: 1px solid var(--border); transition: border-color 0.2s; cursor: pointer; }
+    .trend-entry:hover { border-color: var(--accent); }
+    .trend-entry.open { border-color: var(--accent); }
+    .trend-entry-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+    .trend-entry-name { font-size: 16px; font-weight: 600; line-height: 1.4; flex: 1; }
+    .trend-composite-badge { font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: var(--accent-dim); color: var(--accent); white-space: nowrap; font-family: var(--mono); }
+    .trend-score-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .trend-score-item { display: flex; flex-direction: column; gap: 2px; }
+    .trend-score-label { font-size: 11px; color: var(--text-dim); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.5px; }
+    .trend-score-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .trend-score-bar { width: 80px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .trend-score-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+    .trend-score-fill.vol { background: var(--accent2); }
+    .trend-score-fill.vel { background: var(--amber); }
+    .trend-score-fill.pod { background: var(--green); }
+    .trend-score-num { font-size: 13px; font-weight: 600; font-family: var(--mono); min-width: 28px; }
+    .trend-fit-label { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; padding: 6px 10px; background: var(--bg); border-radius: 6px; border-left: 3px solid var(--green); }
+    .trend-scripts-label { font-size: 12px; color: var(--text-dim); font-family: var(--mono); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .trend-script-bullets { list-style: none; padding: 0; margin: 0 0 10px 0; display: flex; flex-direction: column; gap: 6px; }
+    .trend-script-bullets li { font-size: 14px; display: flex; align-items: center; gap: 8px; }
+    .trend-script-bullets li::before { content: '->'; color: var(--accent); font-weight: 700; }
+    .trend-script-bullets .script-type-tag { font-size: 11px; font-family: var(--mono); padding: 1px 6px; border-radius: 3px; }
+    .trend-script-bullets .script-type-tag.self-film { background: rgba(0,229,160,0.12); color: var(--green); }
+    .trend-script-bullets .script-type-tag.ugc { background: rgba(245,166,35,0.12); color: var(--amber); }
+    .trend-script-bullets .script-type-tag.slideshow { background: rgba(0,229,255,0.10); color: var(--accent2); }
+    .trend-matched-products { margin-bottom: 10px; }
+    .trend-matched-label { font-size: 11px; color: var(--text-dim); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .trend-matched-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .trend-matched-item { padding: 6px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 2px; }
+    .trend-matched-item .product-name { font-weight: 600; font-size: 13px; }
+    .trend-matched-item .product-collection { font-family: var(--mono); font-size: 10px; color: var(--accent2); }
+    .trend-matched-item .product-from-trend { font-size: 11px; color: var(--green); font-family: var(--mono); }
+    .trend-acted-on-badge { font-size: 10px; font-family: var(--mono); padding: 2px 8px; border-radius: 4px; background: rgba(100,100,120,0.15); color: var(--text-dim); border: 1px solid var(--border); margin-left: 8px; }
+    .trend-read-more { font-size: 13px; color: var(--accent); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+    .trend-read-more:hover { text-decoration: underline; }
+    .trend-detail { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 14px; color: var(--text-dim); line-height: 1.6; white-space: pre-wrap; }
+    .trend-entry.open .trend-detail { display: block; }
+    .trend-entry.open .trend-read-more .arrow { transform: rotate(90deg); }
+    .trend-arrow { display: inline-block; transition: transform 0.2s; font-size: 12px; }
+
+    /* -- Script items -- */
+    .script-item { padding: 14px 16px; border-radius: 8px; margin-bottom: 8px; background: var(--bg-card-hover); border: 1px solid var(--border); transition: border-color 0.2s; }
+    .script-item:last-child { margin-bottom: 0; }
+    .script-item:hover { border-color: var(--accent); }
+    .script-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .script-date { font-family: var(--mono); font-size: 11px; color: var(--accent2); }
+    .script-type-badge { font-family: var(--mono); font-size: 11px; padding: 2px 10px; border-radius: 4px; font-weight: 500; }
+    .script-type-badge.self-film { background: rgba(0,229,160,0.12); color: var(--green); }
+    .script-type-badge.ugc { background: rgba(245,166,35,0.12); color: var(--amber); }
+    .script-type-badge.slideshow { background: rgba(0,229,255,0.10); color: var(--accent2); }
+    .script-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+    .script-preview { font-size: 13px; color: var(--text-dim); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .script-actions { margin-top: 10px; display: flex; gap: 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; font-family: var(--font); cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #c830e0; }
+    .btn-secondary { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
+    .btn-secondary:hover { border-color: var(--accent); }
+
+    /* -- Empty state -- */
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-dim); }
+    .empty-state .icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+    .empty-state p { font-size: 14px; }
+    .empty-state strong { color: var(--text); }
+
+    /* -- Refresh button -- */
+    .refresh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-family: var(--mono); background: var(--bg); border: 1px solid var(--border); color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+    .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .refresh-btn.loading { opacity: 0.6; pointer-events: none; }
+
+    /* -- Loading spinner -- */
+    .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* -- Product catalog -- */
+    .catalog-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .catalog-item { padding: 16px 18px; border-radius: 8px; background: var(--bg-card-hover); border: 1px solid var(--border); }
+    .catalog-name { font-weight: 600; font-size: 16px; margin-bottom: 2px; }
+    .catalog-meta { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; font-family: var(--mono); }
+    .catalog-style { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; font-style: italic; }
+    .catalog-mood-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .catalog-mood-tag { font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--accent-dim); color: var(--accent); }
+    .catalog-collection-tag { font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 4px; background: rgba(0,229,255,0.10); color: var(--accent2); margin-right: 6px; }
+    .catalog-from-trend { font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 4px; background: rgba(0,229,160,0.12); color: var(--green); margin-left: 6px; border: 1px solid var(--green); }
+    .catalog-bottom { display: flex; align-items: center; justify-content: space-between; }
+    .catalog-audience { font-size: 12px; color: var(--text-dim); }
+    .catalog-colors { font-size: 12px; color: var(--text-dim); font-family: var(--mono); }
+
+    /* -- Section header -- */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .section-title { font-size: 16px; font-weight: 600; }
+
+    /* -- Mood colors -- */
+    .mood-playful { color: #f472b6; }
+    .mood-fierce { color: #ef4444; }
+    .mood-cozy { color: #f59e0b; }
+    .mood-dark { color: #a78bfa; }
+    .mood-confident { color: #eab308; }
+    .mood-zen { color: #34d399; }
+    .mood-nostalgic { color: #60a5fa; }
+    .mood-sassy { color: #fb923c; }
+    .mood-adventurous { color: #fbbf24; }
+    .mood-bold { color: #22d3ee; }
+    .mood-chill { color: #22d3ee; }
+    .mood-mystical { color: #a78bfa; }
+
+    /* -- Responsive -- */
+    @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .stats-row { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .header { padding: 16px 20px; } .container { padding: 16px 16px 60px; } .stats-row { grid-template-columns: 1fr; } }
+  </style>
+<script>
+window.__VIBRNT_DATA__ = {"trends":[{"date":"2026-04-09","file":"2026-04-09.md","title":"Trend Report — 2026-04-09","tags":[],"body":"# VIBRNT Trend Report — 2026-04-09\n\n> Generated by Trend Scout Agent (qwen35 / Ollama qwen3.5-35B)\n> Threshold: POD Fit >= 6 | Top 5\n\n## 1. Turned a trash bin sticker into a hoodie design – does this concept work?\n\n---\ntype: trend\ndate: 2026-04-09\nplatform: [reddit]\ntrend_name: \"Turned a trash bin sticker into a hoodie design – does this concept work?\"\nvolume_score: 2\nvelocity_score: 5\npod_fit_score: 10\ncomposite_score: 5.7\nstatus: detected\nrelated_keywords: [turned, trash, sticker, into, hoodie, design]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1sfiqi6/turned_a_trash_bin_sticker_into_a_hoodie_design/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 5/10\n- **POD Fit:** 10/10\n- **Composite:** 5.7\n- **Keywords:** turned, trash, sticker, into, hoodie, design\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1sfiqi6/turned_a_trash_bin_sticker_into_a_hoodie_design/)\n\n\n---\n\n## 2. Alone in this world - retro alien apocalyptic Tshirt design\n\n---\ntype: trend\ndate: 2026-04-09\nplatform: [reddit]\ntrend_name: \"Alone in this world - retro alien apocalyptic Tshirt design\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [alone, world, retro, alien, apocalyptic, tshirt]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** alone, world, retro, alien, apocalyptic, tshirt\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/)\n\n\n---\n\n## 3. I designed this funny pasta lover shirt today. Would you wear it?\n\n---\ntype: trend\ndate: 2026-04-09\nplatform: [reddit]\ntrend_name: \"I designed this funny pasta lover shirt today. Would you wear it?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [designed, funny, pasta, lover, shirt, today]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** designed, funny, pasta, lover, shirt, today\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/)\n\n\n---\n\n## 4. Which AI shirt design maker tools are popular?\n\n---\ntype: trend\ndate: 2026-04-09\nplatform: [reddit]\ntrend_name: \"Which AI shirt design maker tools are popular?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [which, shirt, design, maker, tools, popular]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** which, shirt, design, maker, tools, popular\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/)\n\n\n---\n\n## 5. That moment you realize your t-shirt idea might flop, before it even prints\n\n---\ntype: trend\ndate: 2026-04-09\nplatform: [reddit]\ntrend_name: \"That moment you realize your t-shirt idea might flop, before it even prints\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [moment, realize, tshirt, idea, might, flop]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1sbk7p0/that_moment_you_realize_your_tshirt_idea_might/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** moment, realize, tshirt, idea, might, flop\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1sbk7p0/that_moment_you_realize_your_tshirt_idea_might/)\n\n\n---\n\n## Summary\n\n| # | Trend | POD Fit | Composite | Platform |\n|---|-------|---------|-----------|----------|\n| 1 | Turned a trash bin sticker into a hoodie design – does this concept work? | 10/10 | 5.7 | reddit |\n| 2 | Alone in this world - retro alien apocalyptic Tshirt design | 10/10 | 5 | reddit |\n| 3 | I designed this funny pasta lover shirt today. Would you wear it? | 10/10 | 5 | reddit |\n| 4 | Which AI shirt design maker tools are popular? | 10/10 | 5 | reddit |\n| 5 | That moment you realize your t-shirt idea might flop, before it even prints | 10/10 | 5 | reddit |\n\n*Next step: Script Writer agent picks up these trends for content generation.*","mtime":"2026-04-09T12:00:38.636Z"},{"date":"2026-04-02","file":"2026-04-02.md","title":"Trend Report — 2026-04-02","tags":[],"body":"# VIBRNT Trend Report — 2026-04-02\n\n> Generated by Trend Scout Agent (qwen35 / Ollama qwen3.5-35B)\n> Threshold: POD Fit >= 6 | Top 5\n\n## 1. let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n---\ntype: trend\ndate: 2026-04-02\nplatform: [reddit]\ntrend_name: \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\"\nvolume_score: 9\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 7.3\nstatus: detected\nrelated_keywords: [lets, switch, cottagecore, folk, horror, film]\nsource_url: \"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/\"\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 9/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 7.3\n- **Keywords:** lets, switch, cottagecore, folk, horror, film\n- **Source:** [View original](https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/)\n\n\n---\n\n## 2. cozy casual cottagecore outfit today 🪵\n\n---\ntype: trend\ndate: 2026-04-02\nplatform: [reddit]\ntrend_name: \"cozy casual cottagecore outfit today 🪵\"\nvolume_score: 4\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5.7\nstatus: detected\nrelated_keywords: [cozy, casual, cottagecore, outfit, today]\nsource_url: \"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/\"\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 4/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5.7\n- **Keywords:** cozy, casual, cottagecore, outfit, today\n- **Source:** [View original](https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/)\n\n\n---\n\n## 3. I designed this funny pasta lover shirt today. Would you wear it?\n\n---\ntype: trend\ndate: 2026-04-02\nplatform: [reddit]\ntrend_name: \"I designed this funny pasta lover shirt today. Would you wear it?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [designed, funny, pasta, lover, shirt, today]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** designed, funny, pasta, lover, shirt, today\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/)\n\n\n---\n\n## 4. Which AI shirt design maker tools are popular?\n\n---\ntype: trend\ndate: 2026-04-02\nplatform: [reddit]\ntrend_name: \"Which AI shirt design maker tools are popular?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [which, shirt, design, maker, tools, popular]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** which, shirt, design, maker, tools, popular\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/)\n\n\n---\n\n## 5. Alone in this world - retro alien apocalyptic Tshirt design\n\n---\ntype: trend\ndate: 2026-04-02\nplatform: [reddit]\ntrend_name: \"Alone in this world - retro alien apocalyptic Tshirt design\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [alone, world, retro, alien, apocalyptic, tshirt]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** alone, world, retro, alien, apocalyptic, tshirt\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/)\n\n\n---\n\n## Summary\n\n| # | Trend | POD Fit | Composite | Platform |\n|---|-------|---------|-----------|----------|\n| 1 | let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in. | 10/10 | 7.3 | reddit |\n| 2 | cozy casual cottagecore outfit today 🪵 | 10/10 | 5.7 | reddit |\n| 3 | I designed this funny pasta lover shirt today. Would you wear it? | 10/10 | 5 | reddit |\n| 4 | Which AI shirt design maker tools are popular? | 10/10 | 5 | reddit |\n| 5 | Alone in this world - retro alien apocalyptic Tshirt design | 10/10 | 5 | reddit |\n\n*Next step: Script Writer agent picks up these trends for content generation.*","mtime":"2026-04-02T12:01:01.297Z"},{"date":"2026-03-31","file":"2026-03-31.md","title":"Trend Report — 2026-03-31","tags":[],"body":"# VIBRNT Trend Report — 2026-03-31\n\n> Generated by Trend Scout Agent (qwen35 / Ollama qwen3.5-35B)\n> Threshold: POD Fit >= 6 | Top 5\n\n## 1. let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n---\ntype: trend\ndate: 2026-03-31\nplatform: [reddit]\ntrend_name: \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\"\nvolume_score: 9\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 7.3\nstatus: detected\nrelated_keywords: [lets, switch, cottagecore, folk, horror, film]\nsource_url: \"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/\"\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 9/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 7.3\n- **Keywords:** lets, switch, cottagecore, folk, horror, film\n- **Source:** [View original](https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/)\n\n\n---\n\n## 2. Alone in this world - retro alien apocalyptic Tshirt design\n\n---\ntype: trend\ndate: 2026-03-31\nplatform: [reddit]\ntrend_name: \"Alone in this world - retro alien apocalyptic Tshirt design\"\nvolume_score: 2\nvelocity_score: 7\npod_fit_score: 10\ncomposite_score: 6.3\nstatus: detected\nrelated_keywords: [alone, world, retro, alien, apocalyptic, tshirt]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 7/10\n- **POD Fit:** 10/10\n- **Composite:** 6.3\n- **Keywords:** alone, world, retro, alien, apocalyptic, tshirt\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/)\n\n\n---\n\n## 3. CHOKE ON THE SMOKE - 2 Sided Graphic Tee / Comfort Colors 1717\n\n---\ntype: trend\ndate: 2026-03-31\nplatform: [reddit]\ntrend_name: \"CHOKE ON THE SMOKE - 2 Sided Graphic Tee / Comfort Colors 1717\"\nvolume_score: 2\nvelocity_score: 7\npod_fit_score: 10\ncomposite_score: 6.3\nstatus: detected\nrelated_keywords: [choke, smoke, sided, graphic, comfort, colors]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1s7yphk/choke_on_the_smoke_2_sided_graphic_tee_comfort/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 7/10\n- **POD Fit:** 10/10\n- **Composite:** 6.3\n- **Keywords:** choke, smoke, sided, graphic, comfort, colors\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1s7yphk/choke_on_the_smoke_2_sided_graphic_tee_comfort/)\n\n\n---\n\n## 4. cozy casual cottagecore outfit today 🪵\n\n---\ntype: trend\ndate: 2026-03-31\nplatform: [reddit]\ntrend_name: \"cozy casual cottagecore outfit today 🪵\"\nvolume_score: 4\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5.7\nstatus: detected\nrelated_keywords: [cozy, casual, cottagecore, outfit, today]\nsource_url: \"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/\"\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 4/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5.7\n- **Keywords:** cozy, casual, cottagecore, outfit, today\n- **Source:** [View original](https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/)\n\n\n---\n\n## 5. I designed this funny pasta lover shirt today. Would you wear it?\n\n---\ntype: trend\ndate: 2026-03-31\nplatform: [reddit]\ntrend_name: \"I designed this funny pasta lover shirt today. Would you wear it?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [designed, funny, pasta, lover, shirt, today]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** designed, funny, pasta, lover, shirt, today\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/)\n\n\n---\n\n## Summary\n\n| # | Trend | POD Fit | Composite | Platform |\n|---|-------|---------|-----------|----------|\n| 1 | let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in. | 10/10 | 7.3 | reddit |\n| 2 | Alone in this world - retro alien apocalyptic Tshirt design | 10/10 | 6.3 | reddit |\n| 3 | CHOKE ON THE SMOKE - 2 Sided Graphic Tee / Comfort Colors 1717 | 10/10 | 6.3 | reddit |\n| 4 | cozy casual cottagecore outfit today 🪵 | 10/10 | 5.7 | reddit |\n| 5 | I designed this funny pasta lover shirt today. Would you wear it? | 10/10 | 5 | reddit |\n\n*Next step: Script Writer agent picks up these trends for content generation.*","mtime":"2026-03-31T17:00:37.627Z"},{"date":"2026-03-30","file":"2026-03-30.md","title":"Trend Report — 2026-03-30","tags":[],"body":"# VIBRNT Trend Report — 2026-03-30\n\n> Generated by Trend Scout Agent (qwen35 / Ollama qwen3.5-35B)\n> Threshold: POD Fit >= 6 | Top 5\n\n## 1. let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n---\ntype: trend\ndate: 2026-03-30\nplatform: [reddit]\ntrend_name: \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\"\nvolume_score: 9\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 7.3\nstatus: detected\nrelated_keywords: [lets, switch, cottagecore, folk, horror, film]\nsource_url: \"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/\"\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 9/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 7.3\n- **Keywords:** lets, switch, cottagecore, folk, horror, film\n- **Source:** [View original](https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/)\n\n\n---\n\n## 2. cozy casual cottagecore outfit today 🪵\n\n---\ntype: trend\ndate: 2026-03-30\nplatform: [reddit]\ntrend_name: \"cozy casual cottagecore outfit today 🪵\"\nvolume_score: 4\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5.7\nstatus: detected\nrelated_keywords: [cozy, casual, cottagecore, outfit, today]\nsource_url: \"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/\"\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 4/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5.7\n- **Keywords:** cozy, casual, cottagecore, outfit, today\n- **Source:** [View original](https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/)\n\n\n---\n\n## 3. I designed this funny pasta lover shirt today. Would you wear it?\n\n---\ntype: trend\ndate: 2026-03-30\nplatform: [reddit]\ntrend_name: \"I designed this funny pasta lover shirt today. Would you wear it?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [designed, funny, pasta, lover, shirt, today]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** designed, funny, pasta, lover, shirt, today\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/)\n\n\n---\n\n## 4. Which AI shirt design maker tools are popular?\n\n---\ntype: trend\ndate: 2026-03-30\nplatform: [reddit]\ntrend_name: \"Which AI shirt design maker tools are popular?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [which, shirt, design, maker, tools, popular]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** which, shirt, design, maker, tools, popular\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/)\n\n\n---\n\n## 5. 2026 International Football Design – Three Nations Flags T-Shirt\n\n---\ntype: trend\ndate: 2026-03-30\nplatform: [reddit]\ntrend_name: \"2026 International Football Design – Three Nations Flags T-Shirt\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [2026, international, football, design, three, nations]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1q7fgeq/2026_international_football_design_three_nations/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** 2026, international, football, design, three, nations\n- **Source:** [View original](https://reddit.com/r/tshirtdesigns/comments/1q7fgeq/2026_international_football_design_three_nations/)\n\n\n---\n\n## Summary\n\n| # | Trend | POD Fit | Composite | Platform |\n|---|-------|---------|-----------|----------|\n| 1 | let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in. | 10/10 | 7.3 | reddit |\n| 2 | cozy casual cottagecore outfit today 🪵 | 10/10 | 5.7 | reddit |\n| 3 | I designed this funny pasta lover shirt today. Would you wear it? | 10/10 | 5 | reddit |\n| 4 | Which AI shirt design maker tools are popular? | 10/10 | 5 | reddit |\n| 5 | 2026 International Football Design – Three Nations Flags T-Shirt | 10/10 | 5 | reddit |\n\n*Next step: Script Writer agent picks up these trends for content generation.*","mtime":"2026-03-30T17:00:41.772Z"},{"date":"2026-03-29","file":"2026-03-29.md","title":"Trend Report — 2026-03-29","tags":[],"body":"# VIBRNT Trend Report - 2026-03-29\n\n> Generated by Trend Scout Agent (qwen35 / Ollama qwen3.5-35B)\n> Threshold: POD Fit >= 6 | Top 5\n\n## 1. let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\"\nvolume_score: 9\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 7.3\nstatus: detected\nrelated_keywords: [lets, switch, cottagecore, folk, horror, film]\nsource_url: \"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/\"\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 9/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 7.3\n- **Keywords:** lets, switch, cottagecore, folk, horror, film\n\n\n---\n\n## 2. cozy casual cottagecore outfit today \n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"cozy casual cottagecore outfit today \"\nvolume_score: 4\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5.7\nstatus: detected\nrelated_keywords: [cozy, casual, cottagecore, outfit, today]\nsource_url: \"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/\"\n---\n\n- **Platform:** reddit (r/cottagecore)\n- **Volume:** 4/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5.7\n- **Keywords:** cozy, casual, cottagecore, outfit, today\n\n\n---\n\n## 3. I designed this funny pasta lover shirt today. Would you wear it?\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"I designed this funny pasta lover shirt today. Would you wear it?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [designed, funny, pasta, lover, shirt, today]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** designed, funny, pasta, lover, shirt, today\n\n\n---\n\n## 4. Which AI shirt design maker tools are popular?\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"Which AI shirt design maker tools are popular?\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [which, shirt, design, maker, tools, popular]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** which, shirt, design, maker, tools, popular\n\n\n---\n\n## 5. 2026 International Football Design - Three Nations Flags T-Shirt\n\n---\ntype: trend\ndate: 2026-03-29\nplatform: [reddit]\ntrend_name: \"2026 International Football Design - Three Nations Flags T-Shirt\"\nvolume_score: 2\nvelocity_score: 3\npod_fit_score: 10\ncomposite_score: 5\nstatus: detected\nrelated_keywords: [2026, international, football, design, three, nations]\nsource_url: \"https://reddit.com/r/tshirtdesigns/comments/1q7fgeq/2026_international_football_design_three_nations/\"\n---\n\n- **Platform:** reddit (r/tshirtdesigns)\n- **Volume:** 2/10\n- **Velocity:** 3/10\n- **POD Fit:** 10/10\n- **Composite:** 5\n- **Keywords:** 2026, international, football, design, three, nations\n\n\n---\n\n## Summary\n\n| # | Trend | POD Fit | Composite | Platform |\n|---|-------|---------|-----------|----------|\n| 1 | let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in. | 10/10 | 7.3 | reddit |\n| 2 | cozy casual cottagecore outfit today  | 10/10 | 5.7 | reddit |\n| 3 | I designed this funny pasta lover shirt today. Would you wear it? | 10/10 | 5 | reddit |\n| 4 | Which AI shirt design maker tools are popular? | 10/10 | 5 | reddit |\n| 5 | 2026 International Football Design - Three Nations Flags T-Shirt | 10/10 | 5 | reddit |\n\n*Next step: Script Writer agent picks up these trends for content generation.*","mtime":"2026-03-30T03:50:23.169Z"}],"allTrends":[{"date":"2026-04-09","file":"2026-04-09.md","title":"Turned a trash bin sticker into a hoodie design – does this concept work?","podFit":10,"composite":5.7,"platform":"reddit","keywords":["turned","trash","sticker","into","hoodie","design"],"tags":["turned","trash","sticker","into","hoodie","design"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1sfiqi6/turned_a_trash_bin_sticker_into_a_hoodie_design/"},{"date":"2026-04-09","file":"2026-04-09.md","title":"Alone in this world - retro alien apocalyptic Tshirt design","podFit":10,"composite":5,"platform":"reddit","keywords":["alone","world","retro","alien","apocalyptic","tshirt"],"tags":["alone","world","retro","alien","apocalyptic","tshirt"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/"},{"date":"2026-04-09","file":"2026-04-09.md","title":"I designed this funny pasta lover shirt today. Would you wear it?","podFit":10,"composite":5,"platform":"reddit","keywords":["designed","funny","pasta","lover","shirt","today"],"tags":["designed","funny","pasta","lover","shirt","today"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/"},{"date":"2026-04-09","file":"2026-04-09.md","title":"Which AI shirt design maker tools are popular?","podFit":10,"composite":5,"platform":"reddit","keywords":["which","shirt","design","maker","tools","popular"],"tags":["which","shirt","design","maker","tools","popular"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/"},{"date":"2026-04-09","file":"2026-04-09.md","title":"That moment you realize your t-shirt idea might flop, before it even prints","podFit":10,"composite":5,"platform":"reddit","keywords":["moment","realize","tshirt","idea","might","flop"],"tags":["moment","realize","tshirt","idea","might","flop"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1sbk7p0/that_moment_you_realize_your_tshirt_idea_might/"},{"date":"2026-04-02","file":"2026-04-02.md","title":"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.","podFit":10,"composite":7.3,"platform":"reddit","keywords":["lets","switch","cottagecore","folk","horror","film"],"tags":["lets","switch","cottagecore","folk","horror","film"],"sourceUrl":"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/"},{"date":"2026-04-02","file":"2026-04-02.md","title":"cozy casual cottagecore outfit today 🪵","podFit":10,"composite":5.7,"platform":"reddit","keywords":["cozy","casual","cottagecore","outfit","today"],"tags":["cozy","casual","cottagecore","outfit","today"],"sourceUrl":"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/"},{"date":"2026-04-02","file":"2026-04-02.md","title":"I designed this funny pasta lover shirt today. Would you wear it?","podFit":10,"composite":5,"platform":"reddit","keywords":["designed","funny","pasta","lover","shirt","today"],"tags":["designed","funny","pasta","lover","shirt","today"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/"},{"date":"2026-04-02","file":"2026-04-02.md","title":"Which AI shirt design maker tools are popular?","podFit":10,"composite":5,"platform":"reddit","keywords":["which","shirt","design","maker","tools","popular"],"tags":["which","shirt","design","maker","tools","popular"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/"},{"date":"2026-04-02","file":"2026-04-02.md","title":"Alone in this world - retro alien apocalyptic Tshirt design","podFit":10,"composite":5,"platform":"reddit","keywords":["alone","world","retro","alien","apocalyptic","tshirt"],"tags":["alone","world","retro","alien","apocalyptic","tshirt"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/"},{"date":"2026-03-31","file":"2026-03-31.md","title":"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.","podFit":10,"composite":7.3,"platform":"reddit","keywords":["lets","switch","cottagecore","folk","horror","film"],"tags":["lets","switch","cottagecore","folk","horror","film"],"sourceUrl":"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/"},{"date":"2026-03-31","file":"2026-03-31.md","title":"Alone in this world - retro alien apocalyptic Tshirt design","podFit":10,"composite":6.3,"platform":"reddit","keywords":["alone","world","retro","alien","apocalyptic","tshirt"],"tags":["alone","world","retro","alien","apocalyptic","tshirt"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1s853om/alone_in_this_world_retro_alien_apocalyptic/"},{"date":"2026-03-31","file":"2026-03-31.md","title":"CHOKE ON THE SMOKE - 2 Sided Graphic Tee / Comfort Colors 1717","podFit":10,"composite":6.3,"platform":"reddit","keywords":["choke","smoke","sided","graphic","comfort","colors"],"tags":["choke","smoke","sided","graphic","comfort","colors"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1s7yphk/choke_on_the_smoke_2_sided_graphic_tee_comfort/"},{"date":"2026-03-31","file":"2026-03-31.md","title":"cozy casual cottagecore outfit today 🪵","podFit":10,"composite":5.7,"platform":"reddit","keywords":["cozy","casual","cottagecore","outfit","today"],"tags":["cozy","casual","cottagecore","outfit","today"],"sourceUrl":"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/"},{"date":"2026-03-31","file":"2026-03-31.md","title":"I designed this funny pasta lover shirt today. Would you wear it?","podFit":10,"composite":5,"platform":"reddit","keywords":["designed","funny","pasta","lover","shirt","today"],"tags":["designed","funny","pasta","lover","shirt","today"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/"},{"date":"2026-03-30","file":"2026-03-30.md","title":"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.","podFit":10,"composite":7.3,"platform":"reddit","keywords":["lets","switch","cottagecore","folk","horror","film"],"tags":["lets","switch","cottagecore","folk","horror","film"],"sourceUrl":"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/"},{"date":"2026-03-30","file":"2026-03-30.md","title":"cozy casual cottagecore outfit today 🪵","podFit":10,"composite":5.7,"platform":"reddit","keywords":["cozy","casual","cottagecore","outfit","today"],"tags":["cozy","casual","cottagecore","outfit","today"],"sourceUrl":"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/"},{"date":"2026-03-30","file":"2026-03-30.md","title":"I designed this funny pasta lover shirt today. Would you wear it?","podFit":10,"composite":5,"platform":"reddit","keywords":["designed","funny","pasta","lover","shirt","today"],"tags":["designed","funny","pasta","lover","shirt","today"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/"},{"date":"2026-03-30","file":"2026-03-30.md","title":"Which AI shirt design maker tools are popular?","podFit":10,"composite":5,"platform":"reddit","keywords":["which","shirt","design","maker","tools","popular"],"tags":["which","shirt","design","maker","tools","popular"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/"},{"date":"2026-03-30","file":"2026-03-30.md","title":"2026 International Football Design – Three Nations Flags T-Shirt","podFit":10,"composite":5,"platform":"reddit","keywords":["2026","international","football","design","three","nations"],"tags":["2026","international","football","design","three","nations"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1q7fgeq/2026_international_football_design_three_nations/"},{"date":"2026-03-29","file":"2026-03-29.md","title":"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.","podFit":10,"composite":7.3,"platform":"reddit","keywords":["lets","switch","cottagecore","folk","horror","film"],"tags":["lets","switch","cottagecore","folk","horror","film"],"sourceUrl":"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/"},{"date":"2026-03-29","file":"2026-03-29.md","title":"cozy casual cottagecore outfit today ","podFit":10,"composite":5.7,"platform":"reddit","keywords":["cozy","casual","cottagecore","outfit","today"],"tags":["cozy","casual","cottagecore","outfit","today"],"sourceUrl":"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/"},{"date":"2026-03-29","file":"2026-03-29.md","title":"I designed this funny pasta lover shirt today. Would you wear it?","podFit":10,"composite":5,"platform":"reddit","keywords":["designed","funny","pasta","lover","shirt","today"],"tags":["designed","funny","pasta","lover","shirt","today"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/"},{"date":"2026-03-29","file":"2026-03-29.md","title":"Which AI shirt design maker tools are popular?","podFit":10,"composite":5,"platform":"reddit","keywords":["which","shirt","design","maker","tools","popular"],"tags":["which","shirt","design","maker","tools","popular"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/"},{"date":"2026-03-29","file":"2026-03-29.md","title":"2026 International Football Design - Three Nations Flags T-Shirt","podFit":10,"composite":5,"platform":"reddit","keywords":["2026","international","football","design","three","nations"],"tags":["2026","international","football","design","three","nations"],"sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1q7fgeq/2026_international_football_design_three_nations/"}],"scripts":[{"date":"2026-04-09","file":"2026-04-09-02.md","type":"slideshow","title":"Cottage Garden Tee","productName":"Cottage Garden Tee","trendSource":"Turned a trash bin sticker into a hoodie design – does this concept work?","mood":"","body":"# TikTok Script: Cottage Garden Tee\n\n> **Product:** Cottage Garden Tee (Mabel Collection)\n> **Trend:** Turned a trash bin sticker into a hoodie design – does this concept work?\n> **Why this product:** Inspired by the \"Turned a trash bin sticker into a hoodie design – does this concept work?\" trend (POD Fit 10/10)\n> **Target:** Women 25-40, cottagecore enthusiasts, farmers market shoppers, eco-conscious\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the turned shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Cottage Garden Tee — Hand-drawn botanical illustration — wildflowers, lavender sprigs, or a small gar\n**Colors:** Sage green, terracotta, oatmeal\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Cottage Garden Tee\"\n- Line 2 (5 sec): \"the cozy era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the cozy vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-04-09T11:54:08.268Z"},{"date":"2026-04-09","file":"2026-04-09-03.md","type":"slideshow","title":"Main Character Tee","productName":"Main Character Tee","trendSource":"Turned a trash bin sticker into a hoodie design – does this concept work?","mood":"","body":"# TikTok Script: Main Character Tee\n\n> **Product:** Main Character Tee (Zara Collection)\n> **Trend:** Turned a trash bin sticker into a hoodie design – does this concept work?\n> **Why this product:** Inspired by the \"Turned a trash bin sticker into a hoodie design – does this concept work?\" trend (POD Fit 10/10)\n> **Target:** Women who love a statement, that-girl aesthetic fans, empowerment seekers\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the turned shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Main Character Tee — Bold oversized serif or display font reading \"Main Character Energy\" or \"It's My\n**Colors:** Black, white, dusty pink\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Main Character Tee\"\n- Line 2 (5 sec): \"the confident era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the confident vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-04-09T11:54:08.268Z"},{"date":"2026-04-09","file":"2026-04-09-04.md","type":"slideshow","title":"Celestial Hoodie","productName":"Celestial Hoodie","trendSource":"Turned a trash bin sticker into a hoodie design – does this concept work?","mood":"","body":"# TikTok Script: Celestial Hoodie\n\n> **Product:** Celestial Hoodie (Sorlyn Collection)\n> **Trend:** Turned a trash bin sticker into a hoodie design – does this concept work?\n> **Why this product:** Inspired by the \"Turned a trash bin sticker into a hoodie design – does this concept work?\" trend (POD Fit 10/10)\n> **Target:** Astrology lovers, witchy aesthetic fans, spiritual women 18-30\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the turned shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Celestial Hoodie — Minimalist line art of a moon phase series, crescent moon with stars, or a singl\n**Colors:** Black, charcoal, midnight blue\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Celestial Hoodie\"\n- Line 2 (5 sec): \"the mystical era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the mystical vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-04-09T11:54:08.268Z"},{"date":"2026-04-09","file":"2026-04-09-05.md","type":"slideshow","title":"Villain Era Tee","productName":"Villain Era Tee","trendSource":"Turned a trash bin sticker into a hoodie design – does this concept work?","mood":"","body":"# TikTok Script: Villain Era Tee\n\n> **Product:** Villain Era Tee (Kaida Collection)\n> **Trend:** Turned a trash bin sticker into a hoodie design – does this concept work?\n> **Why this product:** Inspired by the \"Turned a trash bin sticker into a hoodie design – does this concept work?\" trend (POD Fit 10/10)\n> **Target:** Women who love edgy, dark feminine energy, anime fans, bold dressers\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the turned shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Villain Era Tee — Dark typography — bold sans-serif or gothic font reading \"Final Boss Energy,\" \"I\n**Colors:** Black, charcoal, deep purple\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Villain Era Tee\"\n- Line 2 (5 sec): \"the fierce era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the fierce vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-04-09T11:54:08.268Z"},{"date":"2026-04-09","file":"2026-04-09-01.md","type":"slideshow","title":"The Quiet Reader Tee","productName":"The Quiet Reader Tee","trendSource":"Turned a trash bin sticker into a hoodie design – does this concept work?","mood":"","body":"# TikTok Script: The Quiet Reader Tee\n\n> **Product:** The Quiet Reader Tee (Lumi Collection)\n> **Trend:** Turned a trash bin sticker into a hoodie design – does this concept work?\n> **Why this product:** Inspired by the \"Turned a trash bin sticker into a hoodie design – does this concept work?\" trend (POD Fit 10/10)\n> **Target:** Women 22-35, BookTok community, avid readers, book club crowd\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the turned shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** The Quiet Reader Tee — Vintage bookplate typography. Clean serif font reading \"One More Chapter\" or \"Pr\n**Colors:** Heather dust, natural, soft cream\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"The Quiet Reader Tee\"\n- Line 2 (5 sec): \"the cozy era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the cozy vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-04-09T11:54:08.267Z"},{"date":"2026-03-31","file":"2026-03-31-01.md","type":"slideshow","title":"The Quiet Reader Tee","productName":"The Quiet Reader Tee","trendSource":"Alone in this world - retro alien apocalyptic Tshirt design","mood":"","body":"# TikTok Script: The Quiet Reader Tee\n\n> **Product:** The Quiet Reader Tee (Lumi Collection)\n> **Trend:** Alone in this world - retro alien apocalyptic Tshirt design\n> **Why this product:** Inspired by the \"Alone in this world - retro alien apocalyptic Tshirt design\" trend (POD Fit 10/10)\n> **Target:** Women 22-35, BookTok community, avid readers, book club crowd\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the alone shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** The Quiet Reader Tee — Vintage bookplate typography. Clean serif font reading \"One More Chapter\" or \"Pr\n**Colors:** Heather dust, natural, soft cream\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"The Quiet Reader Tee\"\n- Line 2 (5 sec): \"the cozy era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the cozy vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-31T02:01:19.307Z"},{"date":"2026-03-31","file":"2026-03-31-02.md","type":"slideshow","title":"Cottage Garden Tee","productName":"Cottage Garden Tee","trendSource":"Alone in this world - retro alien apocalyptic Tshirt design","mood":"","body":"# TikTok Script: Cottage Garden Tee\n\n> **Product:** Cottage Garden Tee (Mabel Collection)\n> **Trend:** Alone in this world - retro alien apocalyptic Tshirt design\n> **Why this product:** Inspired by the \"Alone in this world - retro alien apocalyptic Tshirt design\" trend (POD Fit 10/10)\n> **Target:** Women 25-40, cottagecore enthusiasts, farmers market shoppers, eco-conscious\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the alone shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Cottage Garden Tee — Hand-drawn botanical illustration — wildflowers, lavender sprigs, or a small gar\n**Colors:** Sage green, terracotta, oatmeal\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Cottage Garden Tee\"\n- Line 2 (5 sec): \"the cozy era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the cozy vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-31T02:01:19.307Z"},{"date":"2026-03-31","file":"2026-03-31-03.md","type":"slideshow","title":"Main Character Tee","productName":"Main Character Tee","trendSource":"Alone in this world - retro alien apocalyptic Tshirt design","mood":"","body":"# TikTok Script: Main Character Tee\n\n> **Product:** Main Character Tee (Zara Collection)\n> **Trend:** Alone in this world - retro alien apocalyptic Tshirt design\n> **Why this product:** Inspired by the \"Alone in this world - retro alien apocalyptic Tshirt design\" trend (POD Fit 10/10)\n> **Target:** Women who love a statement, that-girl aesthetic fans, empowerment seekers\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the alone shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Main Character Tee — Bold oversized serif or display font reading \"Main Character Energy\" or \"It's My\n**Colors:** Black, white, dusty pink\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Main Character Tee\"\n- Line 2 (5 sec): \"the confident era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the confident vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-31T02:01:19.307Z"},{"date":"2026-03-31","file":"2026-03-31-04.md","type":"slideshow","title":"Celestial Hoodie","productName":"Celestial Hoodie","trendSource":"Alone in this world - retro alien apocalyptic Tshirt design","mood":"","body":"# TikTok Script: Celestial Hoodie\n\n> **Product:** Celestial Hoodie (Sorlyn Collection)\n> **Trend:** Alone in this world - retro alien apocalyptic Tshirt design\n> **Why this product:** Inspired by the \"Alone in this world - retro alien apocalyptic Tshirt design\" trend (POD Fit 10/10)\n> **Target:** Astrology lovers, witchy aesthetic fans, spiritual women 18-30\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the alone shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Celestial Hoodie — Minimalist line art of a moon phase series, crescent moon with stars, or a singl\n**Colors:** Black, charcoal, midnight blue\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Celestial Hoodie\"\n- Line 2 (5 sec): \"the mystical era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the mystical vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-31T02:01:19.307Z"},{"date":"2026-03-31","file":"2026-03-31-05.md","type":"slideshow","title":"Villain Era Tee","productName":"Villain Era Tee","trendSource":"Alone in this world - retro alien apocalyptic Tshirt design","mood":"","body":"# TikTok Script: Villain Era Tee\n\n> **Product:** Villain Era Tee (Kaida Collection)\n> **Trend:** Alone in this world - retro alien apocalyptic Tshirt design\n> **Why this product:** Inspired by the \"Alone in this world - retro alien apocalyptic Tshirt design\" trend (POD Fit 10/10)\n> **Target:** Women who love edgy, dark feminine energy, anime fans, bold dressers\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the alone shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Villain Era Tee — Dark typography — bold sans-serif or gothic font reading \"Final Boss Energy,\" \"I\n**Colors:** Black, charcoal, deep purple\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Villain Era Tee\"\n- Line 2 (5 sec): \"the fierce era\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the fierce vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-31T02:01:19.307Z"},{"date":"2026-03-29","file":"2026-03-29-02.md","type":"slideshow","title":"The Cottagecore Garden Tee","productName":"The Cottagecore Garden Tee","trendSource":"cozy casual cottagecore outfit today 🪵","mood":"","body":"# TikTok Script: The Cottagecore Garden Tee\n\n> **Product:** The Cottagecore Garden Tee (Mabel Collection)\n> **Trend:** cozy casual cottagecore outfit today 🪵\n> **Why this product:** Inspired by \"cozy casual cottagecore outfit today 🪵\" (POD Fit 10/10, platform: reddit). Keywords: cozy, casual, cottagecore, outfit.\n> **Target:** Women who love this aesthetic\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Snowfall - Øneheart & Reidenshi\" — start at the drop.\n**Text overlay:** \"POV: found the cozy shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** The Cottagecore Garden Tee — Hand-drawn botanicals, wildflowers, garden scenes, soft nature prints\n**Colors:** sage green, oatmeal, terracotta, blush\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"The Cottagecore Garden Tee\"\n- Line 2 (5 sec): \"obsessed\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the cozy vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-30T03:50:23.175Z"},{"date":"2026-03-29","file":"2026-03-29-03.md","type":"slideshow","title":"Pasta Lover Tee","productName":"Pasta Lover Tee","trendSource":"I designed this funny pasta lover shirt today. Would you wear it?","mood":"","body":"# TikTok Script: Pasta Lover Tee\n\n> **Product:** Pasta Lover Tee (Lumi Collection)\n> **Trend:** I designed this funny pasta lover shirt today. Would you wear it?\n> **Why this product:** Inspired by \"I designed this funny pasta lover shirt today. Would you wear it?\" (POD Fit 10/10, platform: reddit). Keywords: designed, funny, pasta, lover.\n> **Target:** Women who love this aesthetic\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"original sound - Sofia Coppola vibes\" — start at the drop.\n**Text overlay:** \"POV: found the designed shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** Pasta Lover Tee — Retro illustrated food graphics, fun Italian-inspired typography or line art\n**Colors:** tomato red, cream, warm yellow, olive green\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"Pasta Lover Tee\"\n- Line 2 (5 sec): \"obsessed\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the designed vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-30T03:50:23.175Z"},{"date":"2026-03-29","file":"2026-03-29-04.md","type":"slideshow","title":"The Creator Tee","productName":"The Creator Tee","trendSource":"Which AI shirt design maker tools are popular?","mood":"","body":"# TikTok Script: The Creator Tee\n\n> **Product:** The Creator Tee (Zara Collection)\n> **Trend:** Which AI shirt design maker tools are popular?\n> **Why this product:** Inspired by \"Which AI shirt design maker tools are popular?\" (POD Fit 10/10, platform: reddit). Keywords: which, shirt, design, maker.\n> **Target:** Women who love this aesthetic\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the which shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** The Creator Tee — Clean, modern typographic design or minimal graphic, creator-focused aesthetic\n**Colors:** black, white, warm grey, dusty pink\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"The Creator Tee\"\n- Line 2 (5 sec): \"obsessed\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the which vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-30T03:50:23.175Z"},{"date":"2026-03-29","file":"2026-03-29-05.md","type":"slideshow","title":"The 2026 Nations Tee","productName":"The 2026 Nations Tee","trendSource":"2026 International Football Design – Three Nations Flags T-Shirt","mood":"","body":"# TikTok Script: The 2026 Nations Tee\n\n> **Product:** The 2026 Nations Tee (Aria Collection)\n> **Trend:** 2026 International Football Design – Three Nations Flags T-Shirt\n> **Why this product:** Inspired by \"2026 International Football Design – Three Nations Flags T-Shirt\" (POD Fit 10/10, platform: reddit). Keywords: 2026, international, football, design.\n> **Target:** Women who love this aesthetic\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Aesthetic - Tollan Kim\" — start at the drop.\n**Text overlay:** \"POV: found the 2026 shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** The 2026 Nations Tee — Bold graphic design with flag or sports-inspired motifs, structured typography\n**Colors:** navy, red, white, gold\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"The 2026 Nations Tee\"\n- Line 2 (5 sec): \"obsessed\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the 2026 vibe — bedroom, coffee shop, outdoors\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-30T03:50:23.175Z"},{"date":"2026-03-29","file":"2026-03-29-01.md","type":"slideshow","title":"The Folk Horror Tee","productName":"The Folk Horror Tee","trendSource":"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.","mood":"","body":"# TikTok Script: The Folk Horror Tee\n\n> **Product:** The Folk Horror Tee (Ravyn Collection)\n> **Trend:** let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\n> **Why this product:** Inspired by \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\" (POD Fit 10/10, platform: reddit). Keywords: lets, switch, cottagecore, folk.\n> **Target:** Women who love this aesthetic\n\n## Framework: Hook → Show → Close\n\n### HOOK (0-2 sec)\n**Visual:** Close-up of the shirt detail — print, color, texture. Slow zoom out to reveal full look.\n**Audio:** \"Snowfall - Øneheart & Reidenshi\" — start at the drop.\n**Text overlay:** \"POV: found the dark cottagecore shirt that actually slaps\"\n\n### SHOW (3-8 sec)\n**Visual:** Wear it naturally — outfit transition, flat lay reveal, or lifestyle moment. Real life, not a catalogue shot.\n**Product focus:** The Folk Horror Tee — Gothic folk art imagery, dark woodcut-style illustration, moody silhouette, high-contrast line work\n**Colors:** black, charcoal, deep forest green, burgundy\n**Audio:** Sound continues. No talking.\n**Text overlays (staggered):**\n- Line 1 (3 sec): \"The Cottagecore Folk Tee\"\n- Line 2 (5 sec): \"obsessed\"\n\n### CLOSE (last 2 sec)\n**Visual:** Full outfit or product detail shot.\n**Text overlay:** \"link in bio ✨\"\n**Audio:** Sound fades.\n\n---\n\n## Production Notes\n- Film in natural light, vertical 9:16\n- Location: fits the dark folk horror vibe — dim lighting, moody setting, outdoors at dusk\n- Keep it under 12 seconds total\n- Edit in CapCut: 2-3 cuts max\n- Post between 10 AM–2 PM EST or 7 PM–10 PM EST\n- Tag: @vibrntai in caption","mtime":"2026-03-30T03:50:23.174Z"}],"catalog":{"products":[{"name":"The Folk Horror Tee","collection":"Ravyn","type":"t-shirt","moods":["dark"],"style":"Gothic folk art imagery, dark woodcut-style illustration, moody silhouette of a figure in a field, high-contrast line work","colors":"black, charcoal, deep forest green, burgundy","relatedTrend":"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.","relatedTrendDate":"2026-03-29","podFit":"10/10","relatedReason":"Inspired by \"let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.\" (POD Fit 10/10, platform: reddit). Keywords: cottagecore, folk, horror, dark.","sourceUrl":"https://reddit.com/r/cottagecore/comments/1s28pkp/lets_switch_it_up_a_bit_cottagecore_folk_horror/"},{"name":"The Cottagecore Garden Tee","collection":"Mabel","type":"t-shirt","moods":["cozy"],"style":"Hand-drawn botanicals, wildflowers, garden scenes, soft nature prints","colors":"sage green, oatmeal, terracotta, blush","relatedTrend":"cozy casual cottagecore outfit today 🪵","relatedTrendDate":"2026-03-29","podFit":"10/10","relatedReason":"Inspired by \"cozy casual cottagecore outfit today 🪵\" (POD Fit 10/10, platform: reddit). Keywords: cozy, casual, cottagecore, outfit.","sourceUrl":"https://reddit.com/r/cottagecore/comments/1s2w5j6/cozy_casual_cottagecore_outfit_today/"},{"name":"Pasta Lover Tee","collection":"Lumi","type":"t-shirt","moods":["playful"],"style":"Retro illustrated food graphics, fun Italian-inspired typography or line art","colors":"tomato red, cream, warm yellow, olive green","relatedTrend":"I designed this funny pasta lover shirt today. Would you wear it?","relatedTrendDate":"2026-03-29","podFit":"10/10","relatedReason":"Inspired by \"I designed this funny pasta lover shirt today. Would you wear it?\" (POD Fit 10/10, platform: reddit). Keywords: designed, funny, pasta, lover.","sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1rwyec7/i_designed_this_funny_pasta_lover_shirt_today/"},{"name":"The Creator Tee","collection":"Zara","type":"t-shirt","moods":["confident"],"style":"Clean, modern typographic design or minimal graphic, creator-focused aesthetic","colors":"black, white, warm grey, dusty pink","relatedTrend":"Which AI shirt design maker tools are popular?","relatedTrendDate":"2026-03-29","podFit":"10/10","relatedReason":"Inspired by \"Which AI shirt design maker tools are popular?\" (POD Fit 10/10, platform: reddit). Keywords: which, shirt, design, maker.","sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1r71y9q/which_ai_shirt_design_maker_tools_are_popular/"},{"name":"The 2026 Nations Tee","collection":"Aria","type":"t-shirt","moods":["bold"],"style":"Bold graphic design with flag or sports-inspired motifs, structured typography","colors":"navy, red, white, gold","relatedTrend":"2026 International Football Design – Three Nations Flags T-Shirt","relatedTrendDate":"2026-03-29","podFit":"10/10","relatedReason":"Inspired by \"2026 International Football Design – Three Nations Flags T-Shirt\" (POD Fit 10/10, platform: reddit). Keywords: 2026, international, football, design.","sourceUrl":"https://reddit.com/r/tshirtdesigns/comments/1q7fgeq/2026_international_football_design_three_nations/"}],"updated":"2026-03-29","source":"/Users/superhana/Documents/VibrntVault/VIBRNT/Products/2026-03-29.md"},"summary":{"latestTrend":"2026-04-09","latestScripts":["2026-04-09-02.md","2026-04-09-03.md","2026-04-09-04.md"],"trendCount":5,"scriptCount":15,"productCount":5,"lastBuilt":"2026-04-11T03:47:31.758Z","filter":"POD Fit ≥ 6 only"},"seenTrends":["let's switch it up a bit. cottagecore folk horror film suggestions for a windy, stormy night in.","cozy casual cottagecore outfit today 🪵","I designed this funny pasta lover shirt today. Would you wear it?","Which AI shirt design maker tools are popular?","2026 International Football Design – Three Nations Flags T-Shirt","Alone in this world - retro alien apocalyptic Tshirt design","CHOKE ON THE SMOKE - 2 Sided Graphic Tee / Comfort Colors 1717","Turned a trash bin sticker into a hoodie design – does this concept work?","That moment you realize your t-shirt idea might flop, before it even prints"],"influencerPipeline":[{"id":110,"handle":"@moodaestheticfashion","platform":"Instagram","followers":0,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.instagram.com/moodaestheticfashion","notes":"Auto-pulled via EnsembleData IG. Bio: ","status":"Identified","created_at":"2026-04-11T01:32:30.669Z"},{"id":108,"handle":"@ahmd_kmrdn","platform":"Instagram","followers":0,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.instagram.com/ahmd_kmrdn","notes":"Auto-pulled via EnsembleData IG. Bio: ","status":"Identified","created_at":"2026-04-11T01:32:30.669Z"},{"id":106,"handle":"@ae.moodboard.women","platform":"Instagram","followers":0,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.instagram.com/ae.moodboard.women","notes":"Auto-pulled via EnsembleData IG. Bio: Fashionable aesthetic","status":"Identified","created_at":"2026-04-11T01:32:30.669Z"},{"id":111,"handle":"@mentalhealthgraphict","platform":"Instagram","followers":17500,"engagement_rate":null,"niche_tags":"Mental Health, Graphic Tees","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.instagram.com/mentalhealthgraphict","notes":"Auto-pulled via EnsembleData IG. Bio: ","status":"Identified","created_at":"2026-04-11T01:32:30.669Z"},{"id":109,"handle":"@lade_s_closet","platform":"Instagram","followers":0,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.instagram.com/lade_s_closet","notes":"Auto-pulled via EnsembleData IG. Bio: ","status":"Identified","created_at":"2026-04-11T01:32:30.669Z"},{"id":107,"handle":"@mujer_mod","platform":"Instagram","followers":0,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.instagram.com/mujer_mod","notes":"Auto-pulled via EnsembleData IG. Bio: ","status":"Identified","created_at":"2026-04-11T01:32:30.669Z"},{"id":96,"handle":"@manifestationclothing","platform":"TikTok","followers":12,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifestationclothing","notes":"Auto-pulled via EnsembleData. Bio: Upcoming Christian Clothing Brand \n—————🤞🏾Stay Tuned🤞🏼—————","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":101,"handle":"@manifestationclaim888","platform":"TikTok","followers":14545,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifestationclaim888","notes":"Auto-pulled via EnsembleData. Bio: Helping You On Your Manifestation & Spiritual Journey ✨ Get Free Moon Reading ⬇️","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":104,"handle":"@manifestationclothing_","platform":"TikTok","followers":4,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifestationclothing_","notes":"Auto-pulled via EnsembleData. Bio: ","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":97,"handle":"@manifest_clothing_","platform":"TikTok","followers":2332,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifest_clothing_","notes":"Auto-pulled via EnsembleData. Bio: Custom embroidery, sustainable fashion \nBy Ting & Rob 🤠\n\n📍39 Westgate Street, Gloucester, GL1 2NW UK 🇬🇧","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":99,"handle":"@manifestationlivesinyou","platform":"TikTok","followers":604709,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifestationlivesinyou","notes":"Verified gender keywords found in bio. Bio: Attract your needs more money, better health and true love ❤️ 💰\n🔮Tap here 👇","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":100,"handle":"@manifestationfairy04","platform":"TikTok","followers":172956,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifestationfairy04","notes":"Auto-pulled via EnsembleData. Bio: LOVE SPELL\nEX BACK SPELL\n3RD PARTY REMOVAL🪐Message me privately👇👇👇WHATSAPP NUMBER\n+44 7379 358394","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":103,"handle":"@manifestclothingofficial","platform":"TikTok","followers":20,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifestclothingofficial","notes":"Auto-pulled via EnsembleData. Bio: www.manifestclothing.co.uk\n\nFollow on Insta @manifestclothingofficial\n🐍🐦‍🔥🪽","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":102,"handle":"@manifest_clothing1","platform":"TikTok","followers":261,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifest_clothing1","notes":"Auto-pulled via EnsembleData. Bio: https://www.themanifest.us/","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":98,"handle":"@manifestmeh","platform":"TikTok","followers":452779,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifestmeh","notes":"Auto-pulled via EnsembleData. Bio: Manifest success","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":105,"handle":"@manifestation3995","platform":"TikTok","followers":182236,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@manifestation3995","notes":"Auto-pulled via EnsembleData. Bio: Available 24/7 \n👇👇👇","status":"Identified","created_at":"2026-04-11T01:29:21.002Z"},{"id":94,"handle":"@ciganoorlando","platform":"TikTok","followers":3997328,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@ciganoorlando","notes":"Auto-pulled via EnsembleData. Bio: Tiktok 4 milhões \nKwai 6,1 milhões \nAmarração 15 92002-9975\nPublicidade\n⬇️⬇️","status":"Identified","created_at":"2026-04-11T01:29:17.529Z"},{"id":95,"handle":"@astrology557","platform":"TikTok","followers":7151,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@astrology557","notes":"Auto-pulled via EnsembleData. Bio: Quotes about life","status":"Identified","created_at":"2026-04-11T01:29:17.529Z"},{"id":91,"handle":"@starseek.astrolog","platform":"TikTok","followers":84,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@starseek.astrolog","notes":"Auto-pulled via EnsembleData. Bio: ✨Astrology | Human Design | Tarot 🔮\n\nDM for enquiries 🫶🏼","status":"Identified","created_at":"2026-04-11T01:29:17.529Z"},{"id":89,"handle":"@astrologyae","platform":"TikTok","followers":50007,"engagement_rate":null,"niche_tags":"","vibe_score":null,"collab_readiness":null,"pricing_estimate":null,"contact_method":null,"profile_url":"https://www.tiktok.com/@astrologyae","notes":"Auto-pulled via EnsembleData. Bio: 🤍🤍","status":"Identified","created_at":"2026-04-11T01:29:17.529Z"}]};
+window.__VIBRNT_BUILT__ = '<!-- DASHBOARD_HTML_REPLACED_AT_BUILD -->\${new Date().toISOString()}';
+(function() {
+  var _d = window.__VIBRNT_DATA__ || { trends: [], scripts: [], catalog: { products: [] }, summary: {}, seenTrends: [] };
+  // Expose embedded data lookup - fetchJSON will check this first
+  window.__embed = function(url) {
+    const d = window.__VIBRNT_DATA__ || {};
+    const _routes = {
+      '/api/summary': d.summary,
+      '/api/trends': { trends: d.trends || [] },
+      '/api/scripts': { scripts: d.scripts || [] },
+      '/api/catalog': d.catalog,
+      '/api/influencer_pipeline': { candidates: d.influencerPipeline || [] },
+    };
+    if (_routes[url]) return Promise.resolve(_routes[url]);
+    return undefined;
+  };
+})();
+</script>
+</head>
+<body>
+
+<!-- -- Header -- -->
+<header class="header">
+  <div class="brand">
+    <div class="brand-logo">V</div>
+    <div>
+      <div class="brand-name">vibrnt<span>.ai</span></div>
+      <div class="brand-tagline">Trends Dashboard</div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-trends" onclick="switchTab('trends')">Trends</button>
+      <button class="tab-btn" id="tab-catalog" onclick="switchTab('catalog')">Catalog</button>
+      <button class="tab-btn" id="tab-influencers" onclick="switchTab('influencers')">Influencers</button>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-dot"></div>
+    <div class="live-label">Fleet live</div>
+    <button class="refresh-btn" onclick="refreshAll()">
+      <span class="spinner" id="spinner" style="display:none"></span>
+      Refresh
+    </button>
+  </div>
+</header>
+
+<!-- -- Main -- -->
+<main class="container">
+
+  <!-- Stats row -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Trends captured</div>
+      <div class="stat-value" id="stat-trends">--</div>
+      <div class="stat-sub" id="stat-trends-sub">scanning...</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Scripts generated</div>
+      <div class="stat-value" id="stat-scripts">--</div>
+      <div class="stat-sub" id="stat-scripts-sub">scanning...</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Latest trend</div>
+      <div class="stat-value" id="stat-latest" style="font-size:18px">--</div>
+      <div class="stat-sub" id="stat-latest-sub">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Script types</div>
+      <div class="stat-value" id="stat-types" style="font-size:18px">--</div>
+      <div class="stat-sub">self-film  /  ugc  /  slideshow</div>
+    </div>
+  </div>
+
+  <!-- Tab panels -->
+  <div id="panel-trends" class="tab-panel active">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">
+          <span class="icon">&#128293;</span> Trending Signals
+          <span id="trend-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+        </div>
+        <div class="card-body" id="trends-container">
+          <div class="empty-state"><div class="icon">&#128269;</div><p>No trends yet. Run <strong>vibrnt-trend-scout.js</strong> to pull signals.</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="icon">&#127916;</span> TikTok Scripts
+          <span id="script-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+        </div>
+        <div class="card-body" id="scripts-container">
+          <div class="empty-state"><div class="icon">&#127909;</div><p>No scripts yet. Run <strong>vibrnt-script-writer.js</strong> to generate today's scripts.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-catalog" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">&#128722;</span> Product Catalog
+        <span id="catalog-count-2" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+      </div>
+      <div class="card-body" id="catalog-container-2">
+        <div class="empty-state"><div class="icon">&#128230;</div><p>Loading product catalog...</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-influencers" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">&#128101;</span> Influencer Pipeline
+        <span id="inf-count" style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-dim)"></span>
+      </div>
+      <div class="card-body">
+        <div id="inf-stats" class="inf-stats"></div>
+        <div id="inf-grid" class="inf-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick actions -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon">&#9889;</span> Quick Actions
+    </div>
+    <div class="card-body">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="downloadLatestScripts()">
+          &#11015; Download Latest Scripts
+        </button>
+        <button class="btn btn-secondary" onclick="downloadLatestTrends()">
+          &#11015; Download Latest Trend Report
+        </button>
+        <button class="btn btn-secondary" onclick="copyScript('selffilm')">
+          &#128203; Copy Self-Film Script
+        </button>
+        <button class="btn btn-secondary" onclick="copyScript('ugc')">
+          &#128203; Copy UGC Brief
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const API = ''; // Fully static - all data embedded at build time
+let latestScripts = [];
+let latestTrends = [];
+let catalogProducts = [];
+let todaysMatchedProductNames = new Set(); // products matched to today's qualifying trends
+let seenTrends = []; // trends that have already had scripts generated
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getVibrntData() {
+  const d = window.__VIBRNT_DATA__ || {};
+  return {
+    summary: d.summary || {},
+    trends: Array.isArray(d.trends) ? d.trends : [],
+    allTrends: Array.isArray(d.allTrends) ? d.allTrends : [],
+    scripts: Array.isArray(d.scripts) ? d.scripts : [],
+    influencerPipeline: Array.isArray(d.influencerPipeline) ? d.influencerPipeline : [],
+    catalog: d.catalog || {},
+    seenTrends: Array.isArray(d.seenTrends) ? d.seenTrends : []
+  };
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function fetchJSON(url) {
+  const d = getVibrntData();
+  if (url === '/api/summary') return Promise.resolve(d.summary);
+  if (url === '/api/trends') return Promise.resolve({ trends: d.trends });
+  if (url === '/api/scripts') return Promise.resolve({ scripts: d.scripts });
+  if (url === '/api/catalog') return Promise.resolve(d.catalog);
+  if (url === '/api/influencer_pipeline') return Promise.resolve({ candidates: d.influencerPipeline });
+  if (url.startsWith('/api/scripts?file=')) {
+    const file = decodeURIComponent(url.split('file=')[1] || '');
+    const found = d.scripts.find(s => s.file === file);
+    return Promise.resolve(found || { body: '' });
+  }
+  return Promise.resolve(null);
+}
+
+// Load seenTrends from embedded data at startup
+function loadSeenTrends() {
+  try {
+    seenTrends = getVibrntData().seenTrends;
+  } catch(e) {
+    seenTrends = [];
+  }
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const btn = document.getElementById('tab-' + tab);
+  const panel = document.getElementById('panel-' + tab);
+  if (btn) btn.classList.add('active');
+  if (panel) panel.classList.add('active');
+  if (tab === 'catalog') { loadCatalog(); }
+  if (tab === 'influencers') { loadInfluencerPipeline(); }
+}
+
+function loadInfluencerPipeline() {
+  const candidates = getVibrntData().influencerPipeline;
+  const countEl = document.getElementById('inf-count');
+  const statsEl = document.getElementById('inf-stats');
+  const gridEl = document.getElementById('inf-grid');
+  if (!statsEl || !gridEl) return;
+  if (countEl) countEl.textContent = candidates.length + ' candidates';
+  if (!candidates.length) {
+    statsEl.innerHTML = '';
+    gridEl.innerHTML = '<div class="empty-state"><div class="icon">&#128101;</div><p>No candidates yet. First scout run populates this.</p></div>';
+    return;
+  }
+  const total = candidates.length;
+  const avgVibe = (candidates.reduce(function(s,c){ return s + (c.vibe_score||0); }, 0) / total).toFixed(1);
+  const identified = candidates.filter(function(c){ return c.status === 'Identified'; }).length;
+  const contacted = candidates.filter(function(c){ return c.status === 'Contacted'; }).length;
+  const confirmed = candidates.filter(function(c){ return c.status === 'Confirmed'; }).length;
+  statsEl.innerHTML = '<div class="inf-stat"><div class="inf-stat-val">' + total + '</div><div class="inf-stat-label">Total</div></div>' +
+    '<div class="inf-stat"><div class="inf-stat-val">' + avgVibe + '</div><div class="inf-stat-label">Avg Vibe</div></div>' +
+    '<div class="inf-stat"><div class="inf-stat-val">' + identified + '</div><div class="inf-stat-label">Identified</div></div>' +
+    '<div class="inf-stat"><div class="inf-stat-val">' + contacted + '</div><div class="inf-stat-label">Contacted</div></div>' +
+    '<div class="inf-stat"><div class="inf-stat-val">' + confirmed + '</div><div class="inf-stat-label">Confirmed</div></div>';
+  gridEl.innerHTML = candidates.map(function(c) {
+    var vibeColor = c.vibe_score >= 8 ? '#22c55e' : c.vibe_score >= 6 ? '#f59e0b' : '#6b7280';
+    var statusClass = (c.status||'Identified').toLowerCase();
+    var nicheTags = (c.niche_tags||'').split(',').filter(Boolean).map(function(t){ return '<span class="inf-tag">' + t.trim() + '</span>'; }).join('');
+    var profileUrl = c.profile_url || '#';
+    return '<div class="inf-card">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">' +
+        '<a href="' + escHtml(profileUrl) + '" target="_blank" class="inf-handle">' + escHtml(c.handle||'') + '</a>' +
+        '<span class="inf-vibe" style="background:' + vibeColor + '">' + (c.vibe_score||'?') + '/10</span></div>' +
+      '<div class="inf-meta"><span>👥 ' + (c.followers||'?') + '</span><span>💬 ' + (c.engagement_rate||'?') + '%</span><span>📬 ' + (c.contact_method||'DM') + '</span></div>' +
+      (nicheTags ? '<div class="inf-tags">' + nicheTags + '</div>' : '') +
+      '<div class="inf-pricing">💰 ' + escHtml(c.pricing_estimate||'Standard offer') + '</div>' +
+      (c.notes ? '<div class="inf-notes">' + escHtml(c.notes) + '</div>' : '') +
+      '<div class="inf-footer">' +
+        '<span class="inf-status ' + statusClass + '">' + (c.status||'Identified') + '</span>' +
+        '<a href="' + escHtml(profileUrl) + '" target="_blank" style="font-size:11px;color:var(--accent2);text-decoration:none;">View ↗</a>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function refreshAll() {
+  const btn = document.querySelector('.refresh-btn');
+  const spinner = document.getElementById('spinner');
+  try {
+    if (btn) btn.classList.add('loading');
+    if (spinner) spinner.style.display = 'inline-block';
+    loadSeenTrends();
+
+    await Promise.all([loadSummary(), loadCatalog()]);
+    await Promise.all([loadTrends(), loadScripts()]);
+    loadInfluencerPipeline();
+  } catch (err) {
+    console.error('Vibrnt refresh failed', err, getVibrntData());
+  } finally {
+    if (btn) btn.classList.remove('loading');
+    if (spinner) spinner.style.display = 'none';
+  }
+}
+
+async function loadSummary() {
+  const d = await fetchJSON('/api/summary');
+  if (!d) return;
+  setText('stat-trends', d.trendCount || 0);
+  setText('stat-scripts', d.scriptCount || 0);
+  setText('stat-trends-sub', d.latestTrend ? \`Latest: \${d.latestTrend}\` : 'No trend data');
+  setText('stat-scripts-sub', d.latestScripts && d.latestScripts.length ? \`Recent: \${d.latestScripts.length} files\` : 'No scripts yet');
+  setText('stat-latest', d.latestTrend || '--');
+  setText('stat-latest-sub', d.latestScripts && d.latestScripts.length ? \`\${d.latestScripts.length} today\` : '--');
+}
+
+async function loadTrends() {
+  const d = await fetchJSON('/api/trends');
+  const container = document.getElementById('trends-container');
+  if (!container) return;
+  latestTrends = d && Array.isArray(d.trends) ? d.trends : [];
+  setText('trend-count', \`\${latestTrends.length} report\${latestTrends.length !== 1 ? 's' : ''}\`);
+
+  if (!latestTrends.length) {
+    container.innerHTML = \`<div class="empty-state"><div class="icon">&#128269;</div><p>No trends yet. Run <strong>vibrnt-trend-scout.js</strong> to pull signals.</p></div>\`;
+    return;
+  }
+
+  // Parse each trend report into per-trend entries with scores
+  const entries = [];
+  for (const report of latestTrends) {
+    const blocks = (report.body || '').split(/^## \d+\./m).slice(1);
+    const scripts = latestScripts || [];
+    for (const block of blocks) {
+      const lines = block.split('\n');
+      const trendName = lines[0].trim().replace(/^#+\s*/, '');
+      const volMatch = block.match(/\*\*Volume:\*\* (\d+)/);
+      const velMatch = block.match(/\*\*Velocity:\*\* (\d+)/);
+      const podMatch = block.match(/\*\*POD Fit:\*\* (\d+)/);
+      const compMatch = block.match(/\*\*Composite:\*\* ([\d.]+)/);
+      const vol = volMatch ? parseInt(volMatch[1]) : 0;
+      const vel = velMatch ? parseInt(velMatch[1]) : 0;
+      const pod = podMatch ? parseInt(podMatch[1]) : 0;
+      const comp = compMatch ? parseFloat(compMatch[1]) : 0;
+
+      // Match scripts to this trend by date
+      const matchedScripts = scripts.filter(s => s.date === report.date || s.date === report.date.split('-').slice(1).join('-'));
+
+      // Match catalog products to this trend
+      const trendText = trendName.toLowerCase();
+      const matchedProducts = catalogProducts
+        .map(p => {
+          const productText = [
+            (p.name || '').toLowerCase(),
+            (p.collection || '').toLowerCase(),
+            (p.style || '').toLowerCase(),
+            (Array.isArray(p.moods) ? p.moods.join(' ') : (p.moods || '')).toLowerCase(),
+            (p.audience || '').toLowerCase()
+          ].join(' ');
+          let score = 0;
+          const words = trendText.split(/\s+/).filter(w => w.length > 2);
+          for (const w of words) {
+            if (productText.includes(w)) score++;
+          }
+          const moodList = (Array.isArray(p.moods) ? p.moods : (p.moods || '').split(',')).map(m => m.trim().toLowerCase()).filter(Boolean);
+          for (const m of moodList) {
+            if (trendText.includes(m)) score += 3;
+          }
+          // Horror override
+          if (/horror|gothic|haunted|spooky|dark|fright/.test(trendText)) {
+            if (moodList.includes('dark')) score += 8;
+            if (moodList.includes('fierce')) score += 5;
+          }
+          return { ...p, matchScore: score };
+        })
+        .filter(p => p.matchScore > 0)
+        .sort((a, b) => b.matchScore - a.matchScore)
+        .slice(0, 2);
+
+      // Check if this trend has already been acted on
+      const trendNorm = trendName.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 80);
+      const actedOn = seenTrends.some(s => {
+        if (!s || typeof s !== 'string') return false;
+        return s.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 80) === trendNorm;
+      });
+
+      // Extract source URL from body or allTrends
+      let sourceUrl = '';
+      const sourceMatch = block.match(/\[View original\]\((https?:\/\/[^\)]+)\)/);
+      if (sourceMatch) sourceUrl = sourceMatch[1];
+      const allTrends = getVibrntData().allTrends;
+      if (!sourceUrl && allTrends.length) {
+        const at = allTrends.find(t => t.title && trendName && t.title.toLowerCase().trim() === trendName.toLowerCase().trim());
+        if (at && at.sourceUrl) sourceUrl = at.sourceUrl;
+      }
+
+      entries.push({ trendName, vol, vel, pod, comp, body: block, matchedScripts, matchedProducts, date: report.date, actedOn, sourceUrl });
+    }
+  }
+
+  // Build global set of matched product names for catalog attribution
+  todaysMatchedProductNames = new Set();
+  for (const e of entries) {
+    for (const p of (e.matchedProducts || [])) {
+      todaysMatchedProductNames.add(p.name);
+    }
+  }
+
+  container.innerHTML = \`<div class="trend-list">\${entries.map((e, i) => \`
+    <div class="trend-entry" id="trend-entry-\${i}" onclick="toggleTrend(\${i})">
+      <div class="trend-entry-header">
+        <div class="trend-entry-name">
+          \${escHtml(e.trendName)}
+          \${e.actedOn ? \`<span class="trend-acted-on-badge">acted on</span>\` : ''}
+        </div>
+        <div class="trend-composite-badge">\${e.comp}/10</div>
+      </div>
+      <div class="trend-score-row">
+        <div class="trend-score-item">
+          <div class="trend-score-label">Volume</div>
+          <div class="trend-score-bar-wrap">
+            <div class="trend-score-bar"><div class="trend-score-fill vol" style="width:\${e.vol * 10}%"></div></div>
+            <div class="trend-score-num">\${e.vol}/10</div>
+          </div>
+        </div>
+        <div class="trend-score-item">
+          <div class="trend-score-label">Velocity</div>
+          <div class="trend-score-bar-wrap">
+            <div class="trend-score-bar"><div class="trend-score-fill vel" style="width:\${e.vel * 10}%"></div></div>
+            <div class="trend-score-num">\${e.vel}/10</div>
+          </div>
+        </div>
+        <div class="trend-score-item">
+          <div class="trend-score-label">POD Fit</div>
+          <div class="trend-score-bar-wrap">
+            <div class="trend-score-bar"><div class="trend-score-fill pod" style="width:\${e.pod * 10}%"></div></div>
+            <div class="trend-score-num">\${e.pod}/10</div>
+          </div>
+        </div>
+      </div>
+      \${e.matchedProducts.length ? \`
+        <div class="trend-matched-products">
+          <div class="trend-matched-label">Products from this trend</div>
+          <div class="trend-matched-list">
+            \${e.matchedProducts.map(p => \`<div class="trend-matched-item">
+              <div class="product-name">\${escHtml(p.name)}</div>
+              <div class="product-collection">\${escHtml(p.collection)} collection  /  \${escHtml(p.type || '')}</div>
+              <div class="product-from-trend">&#9654; matched to: \${escHtml(e.trendName.slice(0, 50))}\${e.trendName.length > 50 ? '...' : ''}</div>
+            </div>\`).join('')}
+          </div>
+        </div>
+      \` : \`<div class="trend-fit-label">\${e.pod >= 6 ? 'POD Fit met - no catalog products matched yet' : 'Below POD Fit threshold'}</div>\`}
+      \${e.matchedScripts.length ? \`
+        <div class="trend-scripts-label">Scripts for this trend</div>
+        <ul class="trend-script-bullets">
+          \${e.matchedScripts.map(s => \`<li>
+            <span class="script-type-tag \${s.type}">\${s.type}</span>
+            \${escHtml(s.title || s.file.replace('.md',''))}
+          </li>\`).join('')}
+        </ul>
+      \` : ''}
+      \${e.sourceUrl ? \`<div style="margin:8px 0;"><a href="\${escHtml(e.sourceUrl)}" target="_blank" rel="noopener" style="color:#00e5ff;text-decoration:none;font-size:12px;font-family:var(--mono);" onclick="event.stopPropagation()">&#128279; View original source on Reddit</a></div>\` : ''}
+      <div class="trend-read-more" onclick="event.stopPropagation()">Read full analysis <span class="trend-arrow">&#9658;</span></div>
+      <div class="trend-detail">\${escHtml(e.body)}</div>
+    </div>
+  \`).join('')}</div>\`;
+}
+
+function toggleTrend(i) {
+  const el = document.getElementById('trend-entry-' + i);
+  if (el) el.classList.toggle('open');
+}
+
+async function loadScripts() {
+  const d = await fetchJSON('/api/scripts');
+  const container = document.getElementById('scripts-container');
+  if (!container) return;
+  latestScripts = d && Array.isArray(d.scripts) ? d.scripts : [];
+  setText('script-count', \`\${latestScripts.length} scripts\`);
+
+  if (!latestScripts.length) {
+    container.innerHTML = \`<div class="empty-state"><div class="icon">&#127909;</div><p>No scripts yet. Run <strong>vibrnt-script-writer.js</strong> to generate today's scripts.</p></div>\`;
+    return;
+  }
+
+  container.innerHTML = latestScripts.slice(0, 7).map(s => \`
+    <div class="script-item">
+      <div class="script-header">
+        <div class="script-date">\${s.date}</div>
+        <span class="script-type-badge \${s.type}">\${s.type}</span>
+      </div>
+      <div class="script-preview">\${escHtml(s.body || '')}</div>
+      <div class="script-actions">
+        <button class="btn btn-primary" onclick="event.stopPropagation(); viewScript('\${s.file}')">View</button>
+        <button class="btn btn-secondary" onclick="event.stopPropagation(); downloadScript('\${s.file}')">Download</button>
+        <button class="btn btn-secondary" onclick="event.stopPropagation(); copyScriptByFile('\${s.file}')">Copy</button>
+      </div>
+    </div>
+  \`).join('');
+}
+
+async function loadCatalog() {
+  const d = await fetchJSON('/api/catalog');
+  const container = document.getElementById('catalog-container');
+  if (!container) return;
+  let products = (d && Array.isArray(d.products)) ? d.products : [];
+  if (!products.length && d && d.body) {
+    const lines = d.body.split('\n');
+    let current = {};
+    for (const line of lines) {
+      if (line.startsWith('## Product ')) {
+        if (current.name) products.push(current);
+        current = { name: line.replace('## Product ', '').trim() };
+      } else if (line.includes('**Collection:**')) {
+        current.collection = line.match(/\*\*Collection:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Type:**')) {
+        current.type = line.match(/\*\*Type:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Style:**')) {
+        current.style = line.match(/\*\*Style:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Moods:**')) {
+        current.moods = (line.match(/\*\*Moods:\*\* (.*)/)?.[1] || '').split(',').map(t => t.trim()).filter(Boolean);
+      } else if (line.includes('**Target audience:**')) {
+        current.audience = line.match(/\*\*Target audience:\*\* (.*)/)?.[1] || '';
+      } else if (line.includes('**Colors:**')) {
+        current.colors = line.match(/\*\*Colors:\*\* (.*)/)?.[1] || '';
+      }
+    }
+    if (current.name) products.push(current);
+  }
+  setText('catalog-count', \`\${products.length} products\`);
+  if (!products.length) {
+    catalogProducts = [];
+    container.innerHTML = \`<div class="empty-state"><div class="icon">&#128230;</div><p>No products found.</p></div>\`;
+    return;
+  }
+  catalogProducts = products;
+  container.innerHTML = \`<div class="catalog-section">\${products.map(p => \`
+    <div class="catalog-item">
+      <div class="catalog-name">
+        \${escHtml(p.name || '')}
+        \${(p.relatedTrend || todaysMatchedProductNames.has(p.name)) ? \`<span class="catalog-from-trend">from trend</span>\` : ''}
+      </div>
+      \${p.collection || p.type ? \`<div class="catalog-meta">\${p.collection ? \`<span class="catalog-collection-tag">\${escHtml(p.collection)}</span>\` : ''}\${p.type ? escHtml(p.type) : ''}</div>\` : ''}
+      \${p.relatedTrend ? \`<div class="catalog-trend-link" style="font-size:11px;color:#00e5a0;margin:6px 0;padding:6px 10px;background:rgba(0,229,160,0.08);border-radius:6px;border-left:3px solid #00e5a0;">
+        <span style="opacity:0.7;">Trend:</span> \${escHtml(p.relatedTrend)}
+        \${p.relatedReason ? \`<br><span style="opacity:0.6;font-size:10px;">\${escHtml(p.relatedReason)}</span>\` : ''}
+        \${p.sourceUrl ? \`<br><a href="\${escHtml(p.sourceUrl)}" target="_blank" rel="noopener" style="color:#00e5ff;text-decoration:none;font-size:10px;">&#128279; View original source</a>\` : ''}
+      </div>\` : ''}
+      \${p.style ? \`<div class="catalog-style">\${escHtml(p.style)}</div>\` : ''}
+      \${p.moods && p.moods.length ? \`<div class="catalog-mood-tags">\${p.moods.map(m => \`<span class="catalog-mood-tag">\${escHtml(m)}</span>\`).join('')}</div>\` : ''}
+      <div class="catalog-bottom">
+        \${p.audience ? \`<div class="catalog-audience">\${escHtml(p.audience)}</div>\` : ''}
+        \${p.colors ? \`<div class="catalog-colors">\${escHtml(p.colors)}</div>\` : ''}
+      </div>
+    </div>
+  \`).join('')}</div>\`;
+}
+
+async function viewScript(file) {
+  const d = await fetchJSON(\`/api/scripts?file=\${encodeURIComponent(file)}\`);
+  const scripts = (d && d.scripts) || latestScripts;
+  const s = scripts.find(x => x.file === file);
+  if (!s) return;
+  const win = window.open('', '_blank', 'width=700,height=600,scrollbars=yes');
+  win.document.write(\`<html><head><title>\${s.file}</title><style>body{background:#0a0a0f;color:#e8e8f0;padding:24px;font-family:JetBrains Mono,monospace;font-size:13px;line-height:1.7;max-width:700px;margin:0 auto}pre{white-space:pre-wrap;word-break:break-word}</style></head><body><h2>\${s.file}</h2><p style="color:#888">Type: \${s.type} | Date: \${s.date}</p><hr style="border-color:rgba(255,255,255,0.1)"><pre>\${escHtml(s.body)}</pre></body></html>\`);
+  win.document.close();
+}
+
+async function downloadScript(file) {
+  const scripts = latestScripts;
+  const s = scripts.find(x => x.file === file);
+  if (!s) return;
+  download(\`\${s.file}.md\`, s.body, 'text/markdown');
+}
+
+async function downloadLatestTrends() {
+  if (!latestTrends.length) { alert('No trends to download'); return; }
+  const t = latestTrends[0];
+  download(\`\${t.date}-trends.md\`, t.body, 'text/markdown');
+}
+
+function downloadLatestScripts() {
+  if (!latestScripts.length) { alert('No scripts to download'); return; }
+  // Download all as a single zip-like combined file
+  const combined = latestScripts.map(s => \`## \${s.file}\n\n\${s.body}\`).join('\n\n---\n\n');
+  download(\`vibrnt-scripts-\${new Date().toISOString().slice(0,10)}.md\`, combined, 'text/markdown');
+}
+
+async function copyScript(type) {
+  const s = latestScripts.find(x => x.type === type);
+  if (!s) { alert(\`No \${type} script found\`); return; }
+  await navigator.clipboard.writeText(s.body);
+  showToast(\`Copied \${type} script!\`);
+}
+
+async function copyScriptByFile(file) {
+  const s = latestScripts.find(x => x.file === file);
+  if (!s) return;
+  await navigator.clipboard.writeText(s.body);
+  showToast('Copied!');
+}
+
+function download(filename, content, type) {
+  const blob = new Blob([content], { type });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function showToast(msg) {
+  const existing = document.getElementById('toast');
+  if (existing) existing.remove();
+  const t = document.createElement('div');
+  t.id = 'toast';
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-family:var(--font);z-index:9999;animation:fadeIn 0.2s';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+function showTrend(date) {
+  const t = latestTrends.find(x => x.date === date);
+  if (!t) return;
+  const win = window.open('', '_blank', 'width=700,height=600,scrollbars=yes');
+  win.document.write(\`<html><head><title>Trend Report \${date}</title><style>body{background:#0a0a0f;color:#e8e8f0;padding:24px;font-family:JetBrains Mono,monospace;font-size:13px;line-height:1.7;max-width:700px;margin:0 auto}pre{white-space:pre-wrap;word-break:break-word}</style></head><body><h2>Trend Report: \${date}</h2><hr style="border-color:rgba(255,255,255,0.1)"><pre>\${escHtml(t.body)}</pre></body></html>\`);
+  win.document.close();
+}
+
+// Auto-load
+document.addEventListener('DOMContentLoaded', () => {
+  refreshAll();
+});
+</script>
+</body>
+</html>
+`;
 
 function redirect(url) {
   return Response.redirect(url, 302);

@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.hero, .hero-stats-bar, .page-banner, .card, .item, .stat').forEach((el, index) => {
+  // Only reveal individual content elements — NOT .card containers which
+  // can be very tall (holding many items) and miss the threshold.
+  document.querySelectorAll('.hero, .hero-stats-bar, .page-banner, .item, .stat').forEach((el, index) => {
     el.classList.add('reveal-on-scroll');
-    el.style.transitionDelay = `${index * 80}ms`;
+    el.style.transitionDelay = `${Math.min(index, 10) * 80}ms`;
   });
 
   const observer = new IntersectionObserver((entries) => {
@@ -10,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       entry.target.classList.add('is-visible');
       observer.unobserve(entry.target);
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.05 });
 
   document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
 

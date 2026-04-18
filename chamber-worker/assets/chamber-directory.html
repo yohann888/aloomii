@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chamber Directory</title>
+  <link rel="stylesheet" href="/demo/chamber-ui.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="utility-bar">
+      <span>(905) 765-0330</span>
+      <div class="divider"></div>
+      <a href="mailto:hello@caledoniachamberdemo.ca">Contact</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/member-login">Member Login →</a>
+      <div class="divider"></div>
+      <a href="/chamber-demo/admin">Admin</a>
+    </div>
+    <header class="main-header">
+      <div class="header-inner">
+        <a class="brand-block" href="/chamber-demo">
+          <div class="logo-container">
+            <img src="/demo/assets/caledonia-chamber-logo-new.svg" alt="Caledonia Regional Chamber of Commerce logo" />
+          </div>
+          <div class="brand-info">
+            <h2 class="brand-name">Caledonia <span class="regional">Regional</span></h2>
+            <span class="brand-tagline">Chamber of Commerce</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a class="nav-link " href="/chamber-demo">Home</a>
+          <a class="nav-link active" href="/chamber-demo/directory">Directory</a>
+          <a class="nav-link " href="/chamber-demo/events">Events</a>
+          <a class="btn-join" href="/chamber-demo/join">Join the Chamber</a>
+        </nav>
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <div class="card">
+      <h1 style="margin:0">Member Directory</h1>
+      <p id="sub" class="sub">Browse active chamber organizations.</p>
+      <div class="list" id="directoryList"></div>
+    </div>
+  </div>
+  <script>
+    fetch('/api/chamber-demo/directory').then(r => r.json()).then(data => {
+      document.getElementById('sub').textContent = `${data.organizations.length} organizations in the current chamber directory.`;
+      document.getElementById('directoryList').innerHTML = data.organizations.map(org => `
+        <div class="item">
+          <div class="row">
+            <div class="logo">${(org.name || '?').charAt(0)}</div>
+            <div>
+              <div style="font-weight:700"><a href="/chamber-demo/directory/${org.slug}" style="text-decoration:none">${org.name}</a></div>
+              <p>${org.description || ''}</p>
+              <p>${org.city || ''} · ${org.category || ''}</p>
+            </div>
+          </div>
+          <div class="pill">${org.tier_name || 'Member'}</div>
+        </div>
+      `).join('');
+    }).catch(() => {
+      document.getElementById('sub').textContent = 'Unable to load the directory right now.';
+      document.getElementById('directoryList').innerHTML = '<div class="item"><p>We could not load chamber organizations at the moment. Please try again shortly.</p></div>';
+    });
+  </script>
+
+  <script>
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+      document.querySelector('.main-nav').classList.toggle('show');
+    });
+  </script>
+
+  <script src="/demo/chamber-ui.js"></script>
+</body>
+</html>
