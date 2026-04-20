@@ -1896,3 +1896,85 @@ function registerInfluencerRoutes(app) {
   });
 }
 module.exports.registerInfluencerRoutes = registerInfluencerRoutes;
+
+// ── Research Routes ───────────────────────────────────────────────────────────
+function registerResearchRoutes(app) {
+
+  // GET /api/research/pulse — daily briefs + live prospect signals
+  app.get('/api/research/pulse', async (req, res) => {
+    try {
+      const [briefsResult, signalsResult] = await Promise.all([
+        query(
+          `SELECT brand, brief_date, markdown_body, signal_count
+           FROM daily_briefs
+           ORDER BY brief_date DESC, brand
+           LIMIT 20`
+        ),
+        query(
+          `SELECT company, contact_name, signal_text, signal_type, source, score
+           FROM prospect_signals
+           WHERE acted_on = false
+           ORDER BY score DESC, created_at DESC
+           LIMIT 10`
+        ),
+      ]);
+      res.json({ briefs: briefsResult.rows, live_signals: signalsResult.rows });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // GET /api/research/radar — pain signals, mood signals, ICP definitions
+  app.get('/api/research/radar', async (req, res) => {
+    try {
+      const icpSlug = req.query.icp_slug || null;
+      const days = parseInt(req.query.days, 10) || 30;
+      const limit = parseInt(req.query.limit, 10) || 50;
+
+      const [painResult, moodResult, icpResult] = await Promise.all([
+        query(
+          `SELECT icp_slug, pain_category, severity, verbatim_quote, active_search, aloomii_addressable, context_snippet, created_at
+           FROM pain_signals
+           WHERE ($1::text IS NULL OR icp_slug = $1) AND created_at > NOW() - ($2 || ' days')::interval
+           ORDER BY severity DESC, created_at DESC
+           LIMIT $3`,
+          [icpSlug, String(days), limit]
+        ),
+        query(
+          `SELECT icp_slug, mood_primary, mood_secondary, verbatim_phrases, emotional_punch, shirt_potential, universality, trigger_context, created_at
+           FROM mood_signals
+           WHERE ($1::text IS NULL OR icp_slug = $1) AND created_at > NOW() - ($2 || ' days')::interval
+           ORDER BY emotional_punch DESC, created_at DESC
+           LIMIT $3`,
+          [icpSlug, String(days), limit]
+        ),
+        query(
+          `SELECT slug, label, brand, mode FROM icp_definitions WHERE active = true ORDER BY brand, slug`
+        ),
+      ]);
+      res.json({ pain: painResult.rows, mood: moodResult.rows, icps: icpResult.rows });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // GET /api/research/targets — top upcoming events + top influencers
+  app.get('/api/research/targets', async (req, res) => {
+    try {
+      const [eventsResult, infResult] = await Promise.all([
+        query(
+          `SELECT id, name, date, city, country, url, total_score, audience
+           FROM events
+           WHERE date >= CURRENT_DATE
+           ORDER BY total_score DESC NULLS LAST, date ASC
+           LIMIT 10`
+        ),
+        query(
+          `SELECT handle, platform_primary, icp_target, followers, lead_score, lead_tier, email, profile_url
+           FROM influencer_pipeline
+           WHERE lead_tier IN ('tier_1', 'tier_2')
+           ORDER BY lead_tier ASC, lead_score DESC
+           LIMIT 15`
+        ),
+      ]);
+      res.json({ events: eventsResult.rows, influencers: infResult.rows });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+}
+module.exports.registerResearchRoutes = registerResearchRoutes;

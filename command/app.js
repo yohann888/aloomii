@@ -154,6 +154,8 @@ function showSection(section) {
     // loadInfluencers does its own fetch — call unconditionally
     if (section === 'influencers') {
         loadInfluencers();
+    } else if (section === 'research') {
+        loadResearch();
     }
 }
 
@@ -3494,6 +3496,173 @@ async function exportInfluencers() {
 }
 window.loadInfluencers = loadInfluencers;
 window.exportInfluencers = exportInfluencers;
+
+// ── Research Section ──────────────────────────────────────────────────────────
+async function loadResearch() {
+  const icp = document.getElementById('research-icp-filter')?.value || '';
+  const days = document.getElementById('research-days-filter')?.value || '30';
+  document.getElementById('research-last-updated').textContent = 'Loading...';
+
+  try {
+    const [pulseRes, radarRes, targetsRes] = await Promise.all([
+      fetch('/api/research/pulse').then(r => r.json()),
+      fetch(`/api/research/radar?icp_slug=${encodeURIComponent(icp)}&days=${days}&limit=50`).then(r => r.json()),
+      fetch('/api/research/targets').then(r => r.json()),
+    ]);
+
+    renderResearchPulse(pulseRes);
+    renderResearchRadar(radarRes);
+    renderResearchTargets(targetsRes);
+
+    // Populate ICP filter dropdown from icps list
+    const sel = document.getElementById('research-icp-filter');
+    if (sel && radarRes.icps?.length) {
+      const current = sel.value;
+      sel.innerHTML = '<option value="">All ICPs</option>' +
+        radarRes.icps.map(i => `<option value="${safeHtml(i.slug)}" ${i.slug===current?'selected':''}>${safeHtml(i.label)} (${i.brand})</option>`).join('');
+    }
+
+    document.getElementById('research-last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+  } catch(e) {
+    document.getElementById('research-pulse-container').innerHTML = `<div class="empty-state">Error loading research data: ${safeHtml(e.message)}</div>`;
+  }
+}
+
+function renderResearchPulse(data) {
+  const el = document.getElementById('research-pulse-container');
+  if (!el) return;
+
+  const briefs = data.briefs || [];
+  const signals = data.live_signals || [];
+
+  let html = '';
+
+  // Live signals first (synthesis-first principle)
+  if (signals.length) {
+    html += `<div style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:#00c8be;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🔴 Live Signals (${signals.length})</div>`;
+    signals.forEach(s => {
+      html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${s.score>=7?'#e74c3c':s.score>=5?'#f39c12':'#555'};">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <div>
+            <span style="font-weight:600;font-size:13px;">${safeHtml(s.company||'Unknown')}</span>
+            ${s.contact_name?`<span style="color:#888;font-size:12px;"> · ${safeHtml(s.contact_name)}</span>`:''}
+            <span style="background:#1e293b;color:#94a3b8;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;">${safeHtml(s.signal_type||s.source||'')}</span>
+          </div>
+          <span style="font-size:18px;font-weight:700;color:${s.score>=7?'#e74c3c':s.score>=5?'#f39c12':'#aaa'};">${s.score||'-'}</span>
+        </div>
+        <div style="font-size:12px;color:#ccc;margin-top:4px;line-height:1.5;">${safeHtml(s.signal_text||'')}</div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  // Daily briefs
+  if (briefs.length) {
+    html += `<div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">📋 Daily Briefs</div>`;
+    briefs.forEach(b => {
+      html += `<div style="padding:12px;background:#0d1117;border-radius:6px;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-weight:600;font-size:13px;color:#00c8be;">${safeHtml(b.brand)}</span>
+          <span style="font-size:11px;color:#555;">${b.brief_date} · ${b.signal_count||0} signals</span>
+        </div>
+        <div style="font-size:12px;color:#bbb;line-height:1.6;white-space:pre-wrap;">${safeHtml((b.markdown_body||'').substring(0,600))}${(b.markdown_body||'').length>600?'…':''}</div>
+      </div>`;
+    });
+  }
+
+  if (!briefs.length && !signals.length) {
+    html = `<div class="empty-state">No briefings yet — daily brief cron runs each morning. Live signals will appear here when the pipeline detects buying intent.</div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+function renderResearchRadar(data) {
+  const painEl = document.getElementById('research-pain-container');
+  const moodEl = document.getElementById('research-mood-container');
+
+  const pain = data.pain || [];
+  const mood = data.mood || [];
+
+  if (painEl) {
+    if (!pain.length) {
+      painEl.innerHTML = '<div class="empty-state">No pain signals yet — Reddit pipeline running nightly.</div>';
+    } else {
+      painEl.innerHTML = pain.map(p => `
+        <div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${p.severity>=8?'#e74c3c':p.severity>=5?'#f39c12':'#555'};">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:11px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(p.pain_category)}</span>
+            <span style="font-size:11px;color:#888;">${safeHtml(p.icp_slug)} · sev ${p.severity}</span>
+          </div>
+          <div style="font-size:12px;color:#ddd;font-style:italic;line-height:1.5;">&quot;${safeHtml((p.verbatim_quote||'').substring(0,200))}&quot;</div>
+          ${p.active_search?'<span style="font-size:10px;color:#00c8be;">🔍 Actively searching</span>':''}
+        </div>`).join('');
+    }
+  }
+
+  if (moodEl) {
+    if (!mood.length) {
+      moodEl.innerHTML = '<div class="empty-state">No mood signals yet — Reddit pipeline running nightly.</div>';
+    } else {
+      moodEl.innerHTML = mood.map(m => {
+        const phrases = Array.isArray(m.verbatim_phrases) ? m.verbatim_phrases : [];
+        return `
+        <div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${m.emotional_punch>=8?'#9b59b6':m.emotional_punch>=5?'#3498db':'#555'};">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:11px;background:#1e293b;color:#c084fc;padding:2px 6px;border-radius:4px;">${safeHtml(m.mood_primary)}</span>
+            <span style="font-size:11px;color:#888;">${safeHtml(m.icp_slug)} · punch ${m.emotional_punch}</span>
+          </div>
+          ${phrases.slice(0,2).map(q=>`<div style="font-size:12px;color:#ddd;font-style:italic;">&quot;${safeHtml(String(q).substring(0,150))}&quot;</div>`).join('')}
+          ${m.shirt_potential==='high'?'<span style="font-size:10px;color:#f59e0b;">👕 High shirt potential</span>':''}
+        </div>`;
+      }).join('');
+    }
+  }
+}
+
+function renderResearchTargets(data) {
+  const eventsEl = document.getElementById('research-events-container');
+  const infEl = document.getElementById('research-influencers-container');
+
+  const events = data.events || [];
+  const influencers = data.influencers || [];
+
+  if (eventsEl) {
+    if (!events.length) {
+      eventsEl.innerHTML = '<div class="empty-state">No upcoming events found.</div>';
+    } else {
+      eventsEl.innerHTML = events.map(e => `
+        <div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;">
+          <div style="font-weight:600;font-size:13px;">${safeHtml(e.name)}</div>
+          <div style="font-size:11px;color:#888;margin-top:2px;">${e.date||''} · ${safeHtml([e.city,e.country].filter(Boolean).join(', '))} · Score: ${e.total_score||'—'}</div>
+          ${(e.audience||[]).length?`<div style="margin-top:4px;">${(e.audience||[]).slice(0,3).map(a=>`<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 5px;border-radius:4px;margin-right:4px;">${safeHtml(a)}</span>`).join('')}</div>`:''}
+          ${e.url?`<a href="${safeHtml(e.url)}" target="_blank" style="font-size:11px;color:#00c8be;">View ↗</a>`:''}
+        </div>`).join('');
+    }
+  }
+
+  if (infEl) {
+    if (!influencers.length) {
+      infEl.innerHTML = '<div class="empty-state">No top influencers found.</div>';
+    } else {
+      infEl.innerHTML = influencers.map(p => `
+        <div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-weight:600;font-size:13px;">${safeHtml(p.handle)}</div>
+            <div style="font-size:11px;color:#888;">${safeHtml(p.platform_primary)} · ${safeHtml(p.icp_target)} · ${(p.followers||0).toLocaleString()} followers</div>
+            ${p.email?`<div style="font-size:11px;color:#00c8be;">✉ ${safeHtml(p.email)}</div>`:''}
+          </div>
+          <div style="text-align:center;min-width:40px;">
+            <div style="font-size:16px;font-weight:700;color:${p.lead_tier==='tier_1'?'#00c8be':'#f5a623'};">${p.lead_score||'-'}</div>
+            <div style="font-size:9px;color:#555;">${safeHtml(p.lead_tier||'')}</div>
+          </div>
+        </div>`).join('');
+    }
+  }
+}
+
+window.loadResearch = loadResearch;
 // ─────────────────────────────────────────────────────────
 
 window.init = init;

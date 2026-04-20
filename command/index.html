@@ -65,6 +65,10 @@
                 <div onclick="showSection('influencers')" class="nav-item" id="nav-influencers">
                     👥 <span class="nav-text">Influencers</span>
                 </div>
+                <div onclick="showSection('research')" class="nav-item" id="nav-research">
+                    <span class="nav-icon">🔬</span>
+                    <span class="nav-label">Research</span>
+                </div>
             </div>
             
             <div class="sidebar-footer">
@@ -443,6 +447,56 @@
               <div id="influencers-list" style="padding:4px 0;">
                 <div class="empty-state">Select a filter or click Refresh.</div>
               </div>
+            </section>
+
+            <section id="section-research" class="content-section">
+                <!-- ICP filter bar -->
+                <div class="card" style="padding:12px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                    <span style="font-size:13px;font-weight:600;color:#aaa;">ICP Filter:</span>
+                    <select id="research-icp-filter" onchange="loadResearch()" style="background:#1a1a2e;color:#e0e0e0;border:1px solid #333;border-radius:6px;padding:4px 8px;font-size:13px;">
+                        <option value="">All ICPs</option>
+                        <!-- populated dynamically from /api/research/radar -->
+                    </select>
+                    <select id="research-days-filter" onchange="loadResearch()" style="background:#1a1a2e;color:#e0e0e0;border:1px solid #333;border-radius:6px;padding:4px 8px;font-size:13px;">
+                        <option value="7">Last 7 days</option>
+                        <option value="30" selected>Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                    </select>
+                    <button onclick="loadResearch()" class="btn-secondary" style="font-size:13px;">Refresh</button>
+                    <span id="research-last-updated" style="font-size:11px;color:#555;margin-left:auto;"></span>
+                </div>
+
+                <!-- Panel 1: Daily Pulse -->
+                <div class="card" style="margin-bottom:16px;padding:16px;">
+                    <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">📡 Daily Pulse</h3>
+                    <div id="research-pulse-container">
+                        <div class="empty-state">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Panel 2: Pain & Mood Radar -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                    <div class="card" style="padding:16px;">
+                        <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">🔥 Pain Signals</h3>
+                        <div id="research-pain-container"><div class="empty-state">No pain signals yet — Reddit pipeline running nightly.</div></div>
+                    </div>
+                    <div class="card" style="padding:16px;">
+                        <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">🌡️ Mood Signals</h3>
+                        <div id="research-mood-container"><div class="empty-state">No mood signals yet — Reddit pipeline running nightly.</div></div>
+                    </div>
+                </div>
+
+                <!-- Panel 3: Collision Targets -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div class="card" style="padding:16px;">
+                        <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">📅 Top Events</h3>
+                        <div id="research-events-container"><div class="empty-state">Loading...</div></div>
+                    </div>
+                    <div class="card" style="padding:16px;">
+                        <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">⭐ Top Influencers</h3>
+                        <div id="research-influencers-container"><div class="empty-state">Loading...</div></div>
+                    </div>
+                </div>
             </section>
 
         </div>
