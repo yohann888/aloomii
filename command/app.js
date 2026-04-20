@@ -143,8 +143,8 @@ function showSection(section) {
             renderAllContent(commandData.content_queue);
         } else if (section === 'signals') {
             if (commandData.signals) renderSignals(commandData.signals);
-        } else if (section === 'intel') {
-            if (commandData.pipeline) renderPipeline(commandData);
+        } else if (section === 'events') {
+            renderEventsSection();
         } else if (section === 'backlog') {
             renderBacklog();
         } else if (section === 'vibrnt') {
@@ -351,7 +351,7 @@ function renderEventsStrip(events) {
         const overlap = event.contact_overlap || 0;
         
         card.innerHTML = `
-            <div class="event-title">${event.title || event.name || 'Event'}</div>
+            <div class="event-title">${event.name || 'Event'}</div>
             <div class="event-meta">${date}, ${location} • ${overlap} contact${overlap !== 1 ? 's' : ''}</div>
             <span class="badge ${event.priority || 'monitor'}">${event.priority || 'monitor'}</span>
         `;
@@ -383,7 +383,7 @@ function renderIntelEvents(events) {
             <div class="intel-event-header">
                 <span class="intel-event-priority">${priorityEmoji}</span>
                 <div class="intel-event-info">
-                    <div class="intel-event-title">${event.title || event.name || 'Event'}</div>
+                    <div class="intel-event-title">${event.name || 'Event'}</div>
                     <div class="intel-event-meta">${date} · ${location}</div>
                 </div>
                 <span class="badge ${priority}">${priority}</span>
@@ -394,11 +394,43 @@ function renderIntelEvents(events) {
     }).join('');
 }
 
+function renderEventsSection() {
+    const container = document.getElementById('events-full-container');
+    if (!container) return;
+
+    const events = (commandData && commandData.events) || [];
+
+    if (!events.length) {
+        container.innerHTML = '<p class="empty-state">No upcoming events.</p>';
+        return;
+    }
+
+    container.innerHTML = events.map(event => {
+        const date = event.date ? new Date(event.date).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'}) : 'TBD';
+        const location = [event.city, event.country].filter(Boolean).join(', ') || 'Online';
+        const score = event.total_score != null ? event.total_score : '—';
+        const audience = Array.isArray(event.audience) ? event.audience : (event.audience ? [event.audience] : []);
+        const audienceTags = audience.map(a => `<span class="badge">${a}</span>`).join(' ');
+        return `
+            <div class="intel-event-card">
+                <div class="intel-event-header">
+                    <div class="intel-event-info">
+                        <div class="intel-event-title">${event.name || 'Event'}</div>
+                        <div class="intel-event-meta">${date} · ${location}</div>
+                    </div>
+                    <span class="badge">★ ${score}</span>
+                </div>
+                ${audienceTags ? `<div class="intel-event-overlap">${audienceTags}</div>` : ''}
+                ${event.notes ? `<div class="intel-event-overlap" style="color:#aaa">${event.notes}</div>` : ''}
+                ${event.url ? `<a href="${event.url}" target="_blank" class="intel-event-link">View event ↗</a>` : ''}
+            </div>`;
+    }).join('');
+}
+
 // === COMMAND PALETTE ===
 const commands = [
   { id: 'go-hq',     label: 'Go to HQ',            icon: '🏠', action: () => showSection('hq') },
   { id: 'go-crm',    label: 'Go to CRM',             icon: '📇', action: () => showSection('crm') },
-  { id: 'go-intel',  label: 'Go to Intel',           icon: '📊', action: () => showSection('intel') },
   { id: 'refresh',   label: 'Refresh Data',          icon: '🔄', action: () => refreshAll() },
   { id: 'export-csv',label: 'Export Contacts CSV',   icon: '📥', action: () => exportLeads() },
   { id: 'toggle-theme', label: 'Toggle Theme',       icon: '🌗', action: () => toggleTheme() },
@@ -577,12 +609,12 @@ function renderBriefing(briefing) {
     // Overnight signals
     if (briefing.overnight_signals && briefing.overnight_signals > 0) {
         const line = document.createElement('a');
-        line.href = '#section-intel';
+        line.href = '#section-signals';
         line.className = 'briefing-line briefing-line--green';
         line.innerHTML = `✅ Signal scout ran overnight — ${briefing.overnight_signals} new signals`;
         line.onclick = (e) => {
             e.preventDefault();
-            showSection('intel');
+            showSection('signals');
         };
         linesContainer.appendChild(line);
     }
@@ -776,7 +808,6 @@ async function fetchCommandData() {
         }
         if (commandData.outreach_queue) renderOutreachQueue(commandData.outreach_queue);
         if (commandData.signals) renderSignals(commandData.signals);
-        if (commandData.pipeline) renderPipeline(commandData);
         if (typeof renderBacklog === 'function') renderBacklog();
         if (commandData.tasks && typeof renderTasks === 'function') {
             renderTasks(commandData.tasks);
@@ -788,6 +819,11 @@ async function fetchCommandData() {
             renderContentQueue(commandData.content_queue);
         }
         
+        // Render Events section
+        if (typeof renderEventsSection === 'function') {
+            renderEventsSection();
+        }
+
         // PHASE 4: Update HQ from live data
         if (typeof updateHQFromData === 'function') {
             updateHQFromData(commandData);
@@ -2564,7 +2600,6 @@ window.refreshAll = async function() {
     }
     if (commandData.outreach_queue) renderOutreachQueue(commandData.outreach_queue);
     if (commandData.signals) renderSignals(commandData.signals);
-    if (commandData.pipeline) renderPipeline(commandData);
     if (commandData.tasks && typeof renderTasks === 'function') renderTasks(commandData.tasks);
     if (commandData.content_queue && typeof renderContentQueue === 'function') renderContentQueue(commandData.content_queue);
   }
@@ -2586,7 +2621,7 @@ globalThis.keyboardHandler = function(e) {
             showSection('crm');
             break;
         case '3':
-            showSection('intel');
+            showSection('signals');
             break;
         case '/':
             e.preventDefault();
@@ -3147,7 +3182,7 @@ async function refreshVillagePaths(contactId, company) {
 
 window.refreshVillagePaths = refreshVillagePaths;
 
-function showVibrntTab(tab = 'influencers') {
+function showVibrntTab(tab = 'trends') {
   document.querySelectorAll('.vibrnt-subtab').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.vibrnt-panel').forEach(el => el.classList.remove('active'));
   document.getElementById(`vibrnt-subtab-${tab}`)?.classList.add('active');
@@ -3155,11 +3190,10 @@ function showVibrntTab(tab = 'influencers') {
 }
 
 function renderVibrntSection() {
-  renderVibrntPipeline(commandData.influencer_pipeline || []);
   renderVibrntTrends(commandData.vibrnt?.trends || []);
   renderVibrntScripts(commandData.vibrnt?.scripts || []);
   renderVibrntCatalog(commandData.vibrnt?.catalog || {});
-  showVibrntTab('influencers');
+  showVibrntTab('trends');
 }
 
 function renderVibrntPipeline(candidates = []) {

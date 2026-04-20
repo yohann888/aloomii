@@ -52,11 +52,12 @@
                 <div onclick="showSection('content')" class="nav-item" id="nav-content">
                     ✍️ <span class="nav-text">Content</span>
                 </div>
-                <div onclick="showSection('intel')" class="nav-item" id="nav-intel">
-                    📊 <span class="nav-text">Intel</span>
-                </div>
                 <div onclick="showSection('backlog')" class="nav-item" id="nav-backlog">
                     📋 <span class="nav-text">Backlog</span>
+                </div>
+                <div onclick="showSection('events')" class="nav-item" id="nav-events">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-label">Events</span>
                 </div>
                 <div onclick="showSection('vibrnt')" class="nav-item" id="nav-vibrnt">
                     📱 <span class="nav-text">Vibrnt</span>
@@ -252,8 +253,6 @@
                     </div>
                 </div>
 
-                <!-- Events -->
-                <div class="events-strip" id="events-strip"></div>
             </section>
 
             <!-- CRM Section -->
@@ -368,38 +367,13 @@
                 <div id="signals-feed-main" class="signals-container"></div>
             </section>
 
-            <!-- Intel Section -->
-            <section id="section-intel" class="content-section">
-                <div class="intel-container">
-                    <h2>Content & Intelligence</h2>
-                    
-                    <!-- Live Score -->
-                    <div class="intel-row">
-                        <div class="intel-card">
-                            <h3>Live Score</h3>
-                            <div id="live-score-display" class="live-score">—</div>
-                        </div>
-                        <div class="intel-card">
-                            <h3>Pipeline Funnel</h3>
-                            <div id="pipeline-funnel" class="funnel"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Events & Content Queue -->
-                    <div class="intel-row">
-                        <div class="intel-card">
-                            <h3>Upcoming Events</h3>
-                            <div id="events-container" class="events-list">
-                                <p class="empty-state">No upcoming events</p>
-                            </div>
-                        </div>
-                        <div class="intel-card">
-                            <h3>Content Queue</h3>
-                            <div id="content-queue-container" class="content-list">
-                                <p class="empty-state">No content in queue</p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Events Section -->
+            <section id="section-events" class="content-section">
+                <div class="section-header">
+                    <h2>Upcoming Events</h2>
+                </div>
+                <div id="events-full-container" class="events-full-list">
+                    <p class="empty-state">Loading events...</p>
                 </div>
             </section>
 
@@ -407,16 +381,12 @@
             <section id="section-vibrnt" class="content-section">
                 <h2>Vibrnt</h2>
                 <div class="vibrnt-subtabs">
-                    <button class="vibrnt-subtab active" id="vibrnt-subtab-influencers" onclick="showVibrntTab('influencers')">Influencers</button>
-                    <button class="vibrnt-subtab" id="vibrnt-subtab-trends" onclick="showVibrntTab('trends')">Trends</button>
+                    <button class="vibrnt-subtab active" id="vibrnt-subtab-trends" onclick="showVibrntTab('trends')">Trends</button>
                     <button class="vibrnt-subtab" id="vibrnt-subtab-scripts" onclick="showVibrntTab('scripts')">Scripts</button>
                     <button class="vibrnt-subtab" id="vibrnt-subtab-catalog" onclick="showVibrntTab('catalog')">Catalog</button>
                 </div>
                 <div id="vibrnt-stats" class="vibrnt-stats-row"></div>
-                <div id="vibrnt-panel-influencers" class="vibrnt-panel active">
-                    <div id="vibrnt-pipeline-container" class="vibrnt-pipeline-grid"></div>
-                </div>
-                <div id="vibrnt-panel-trends" class="vibrnt-panel">
+                <div id="vibrnt-panel-trends" class="vibrnt-panel active">
                     <div id="vibrnt-trends-container"></div>
                 </div>
                 <div id="vibrnt-panel-scripts" class="vibrnt-panel">
