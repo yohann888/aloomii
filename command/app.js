@@ -1585,10 +1585,29 @@ function renderSignalCards(signals, container) {
   signals.slice(0, 30).forEach(signal => {
     const score = parseFloat(signal.score || signal.relevance_score || 3);
     const level = score >= 4 ? 'hot' : (score >= 3 ? 'warm' : 'cool');
-    const source = signal.signal_source || signal.source || 'other';
+    // Normalise source: bridge_ingest reddit signals should display as reddit
+    let source = signal.signal_source || signal.source || 'other';
+    if (source === 'bridge_ingest' && (signal.signal_type || '').includes('reddit')) source = 'reddit';
     const sourceIcon = getSignalSourceIcon(source);
     const quote = signal.signal_text || signal.body || 'No quote available';
     const truncated = quote.length > 200 ? quote.substring(0, 197) + '...' : quote;
+
+    // Pre-compute link URL and label to keep the template clean
+    const linkUrl = signal.signal_url || signal.source_url || signal.url || '';
+    const linkLabels = {
+      reddit: 'View on Reddit →',
+      x_search: 'View on X →',
+      linkedin: 'View on LinkedIn →',
+      indiehackers: 'View on IndieHackers →'
+    };
+    const linkLabel = linkLabels[source] || 'View original →';
+
+    // Pre-compute subreddit badge
+    let subredditBadge = '';
+    if (source === 'reddit' && linkUrl) {
+      const m = linkUrl.match(/\/r\/([^/]+)/);
+      if (m) subredditBadge = `<span>📌 r/${m[1]}</span>`;
+    }
 
     const card = document.createElement('div');
     card.className = `signal-card-v2 score-${level}`;
@@ -1605,12 +1624,12 @@ function renderSignalCards(signals, container) {
         <span>👤 ${signal.handle || signal.author || 'Unknown'}</span>
         <span>🏢 ${signal.company || 'N/A'}</span>
         <span>🎯 ICP: ${signal.icp_match || 'General'}</span>
-        ${source === 'reddit' && (signal.signal_url || signal.source_url) ? (() => { const m = (signal.signal_url || signal.source_url || '').match(/\/r\/([^/]+)/); return m ? `<span>📌 r/${m[1]}</span>` : ''; })() : ''}
+        ${subredditBadge}
       </div>
       <div class="signal-reasoning">
         💡 ${signal.scoring_reason || signal.reasoning || 'Strong buying signal detected from post content.'}
       </div>
-      ${(signal.signal_url || signal.source_url || signal.url) ? `<a href="${signal.signal_url || signal.source_url || signal.url}" target="_blank" rel="noopener" class="signal-link">🔗 ${source === 'reddit' ? 'View on Reddit →' : source === 'x_search' ? 'View on X →' : source === 'linkedin' ? 'View on LinkedIn →' : source === 'indiehackers' ? 'View on IndieHackers →' : 'View original →'}</a>` : ''}
+      ${linkUrl ? `<a href="${linkUrl}" target="_blank" rel="noopener" class="signal-link">🔗 ${linkLabel}</a>` : ''}
       <div class="signal-actions">
         <button onclick="draftFromSignal('${signal.id}')" class="btn-draft">Draft Outreach</button>
         <button onclick="dismissSignal('${signal.id}')" class="btn-dismiss">Dismiss</button>
