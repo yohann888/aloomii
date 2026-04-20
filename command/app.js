@@ -402,30 +402,71 @@ function renderEventsSection() {
 
     const events = (commandData && commandData.events) || [];
 
-    if (!events.length) {
-        container.innerHTML = '<p class="empty-state">No upcoming events.</p>';
+    // Populate tag filter dropdown from all unique audience tags
+    const tagSel = document.getElementById('events-tag-filter');
+    if (tagSel) {
+        const allTags = new Set();
+        events.forEach(e => (Array.isArray(e.audience) ? e.audience : []).forEach(t => allTags.add(t)));
+        const currentTag = tagSel.value;
+        tagSel.innerHTML = '<option value="">All Tags</option>' + 
+            [...allTags].sort().map(t => `<option value="${safeHtml(t)}" ${t===currentTag?'selected':''}>${safeHtml(t)}</option>`).join('');
+    }
+
+    filterEvents();
+}
+
+function filterEvents() {
+    const container = document.getElementById('events-full-container');
+    if (!container) return;
+
+    const events = (commandData && commandData.events) || [];
+    const tagFilter = document.getElementById('events-tag-filter')?.value || '';
+    const minScore = parseInt(document.getElementById('events-score-filter')?.value || '0') || 0;
+
+    const filtered = events.filter(e => {
+        const tags = Array.isArray(e.audience) ? e.audience : [];
+        const score = e.total_score || 0;
+        if (tagFilter && !tags.includes(tagFilter)) return false;
+        if (minScore && score < minScore) return false;
+        return true;
+    });
+
+    document.getElementById('events-count').textContent = `${filtered.length} event${filtered.length!==1?'s':''}`;
+
+    if (!filtered.length) {
+        container.innerHTML = '<p class="empty-state">No events match the current filters.</p>';
         return;
     }
 
-    container.innerHTML = events.map(event => {
-        const date = event.date ? new Date(event.date).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'}) : 'TBD';
+    container.innerHTML = filtered.map(event => {
+        const d = event.date ? new Date(event.date + 'T00:00:00') : null;
+        const month = d ? d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase() : '\u2014';
+        const day = d ? d.getDate() : '\u2014';
+        const year = d ? d.getFullYear() : '';
         const location = [event.city, event.country].filter(Boolean).join(', ') || 'Online';
-        const score = event.total_score != null ? event.total_score : '—';
-        const audience = Array.isArray(event.audience) ? event.audience : (event.audience ? [event.audience] : []);
-        const audienceTags = audience.map(a => `<span class="badge">${a}</span>`).join(' ');
-        return `
-            <div class="intel-event-card">
-                <div class="intel-event-header">
-                    <div class="intel-event-info">
-                        <div class="intel-event-title">${event.name || 'Event'}</div>
-                        <div class="intel-event-meta">${date} · ${location}</div>
-                    </div>
-                    <span class="badge">★ ${score}</span>
+        const score = event.total_score != null ? event.total_score : null;
+        const tags = Array.isArray(event.audience) ? event.audience : [];
+        const scoreColor = score >= 8 ? '#00c8be' : score >= 6 ? '#f5a623' : score >= 4 ? '#888' : '#444';
+
+        return `<div style="display:flex;gap:12px;padding:14px;background:#0d1117;border-radius:10px;margin-bottom:10px;align-items:flex-start;">
+            <!-- Date block -->
+            <div style="min-width:52px;text-align:center;background:#111827;border-radius:8px;padding:8px 6px;flex-shrink:0;">
+                <div style="font-size:11px;font-weight:700;color:#00c8be;letter-spacing:.08em;">${month}</div>
+                <div style="font-size:28px;font-weight:900;color:#fff;line-height:1;">${day}</div>
+                <div style="font-size:10px;color:#555;">${year}</div>
+            </div>
+            <!-- Content -->
+            <div style="flex:1;min-width:0;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                    <div style="font-weight:700;font-size:14px;color:#f0f0f0;line-height:1.3;">${safeHtml(event.name || 'Event')}</div>
+                    ${score !== null ? `<div style="font-size:20px;font-weight:800;color:${scoreColor};flex-shrink:0;">${score}</div>` : ''}
                 </div>
-                ${audienceTags ? `<div class="intel-event-overlap">${audienceTags}</div>` : ''}
-                ${event.notes ? `<div class="intel-event-overlap" style="color:#aaa">${event.notes}</div>` : ''}
-                ${event.url ? `<a href="${event.url}" target="_blank" class="intel-event-link">View event ↗</a>` : ''}
-            </div>`;
+                <div style="font-size:12px;color:#888;margin-top:3px;">\ud83d\udccd ${safeHtml(location)}</div>
+                ${tags.length ? `<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">${tags.map(t=>`<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 7px;border-radius:12px;cursor:pointer;" onclick="document.getElementById('events-tag-filter').value='${safeHtml(t)}';filterEvents();">${safeHtml(t)}</span>`).join('')}</div>` : ''}
+                ${event.notes ? `<div style="font-size:11px;color:#666;margin-top:5px;">${safeHtml(event.notes)}</div>` : ''}
+                ${event.url ? `<a href="${safeHtml(event.url)}" target="_blank" style="font-size:12px;color:#00c8be;margin-top:5px;display:inline-block;">View event \u2197</a>` : ''}
+            </div>
+        </div>`;
     }).join('');
 }
 
@@ -3622,25 +3663,9 @@ function renderResearchRadar(data) {
 }
 
 function renderResearchTargets(data) {
-  const eventsEl = document.getElementById('research-events-container');
   const infEl = document.getElementById('research-influencers-container');
 
-  const events = data.events || [];
   const influencers = data.influencers || [];
-
-  if (eventsEl) {
-    if (!events.length) {
-      eventsEl.innerHTML = '<div class="empty-state">No upcoming events found.</div>';
-    } else {
-      eventsEl.innerHTML = events.map(e => `
-        <div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;">
-          <div style="font-weight:600;font-size:13px;">${safeHtml(e.name)}</div>
-          <div style="font-size:11px;color:#888;margin-top:2px;">${e.date||''} · ${safeHtml([e.city,e.country].filter(Boolean).join(', '))} · Score: ${e.total_score||'—'}</div>
-          ${(e.audience||[]).length?`<div style="margin-top:4px;">${(e.audience||[]).slice(0,3).map(a=>`<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 5px;border-radius:4px;margin-right:4px;">${safeHtml(a)}</span>`).join('')}</div>`:''}
-          ${e.url?`<a href="${safeHtml(e.url)}" target="_blank" style="font-size:11px;color:#00c8be;">View ↗</a>`:''}
-        </div>`).join('');
-    }
-  }
 
   if (infEl) {
     if (!influencers.length) {

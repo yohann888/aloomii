@@ -373,13 +373,23 @@
 
             <!-- Events Section -->
             <section id="section-events" class="content-section">
-                <div class="section-header">
-                    <h2>Upcoming Events</h2>
-                </div>
-                <div id="events-full-container" class="events-full-list">
-                    <p class="empty-state">Loading events...</p>
-                </div>
-            </section>
+    <div style="padding:12px 16px 0;">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+            <h2 style="margin:0;font-size:18px;">📅 Events</h2>
+            <select id="events-tag-filter" onchange="filterEvents()" style="background:#1a1a2e;color:#e0e0e0;border:1px solid #333;border-radius:6px;padding:4px 10px;font-size:13px;">
+                <option value="">All Tags</option>
+            </select>
+            <select id="events-score-filter" onchange="filterEvents()" style="background:#1a1a2e;color:#e0e0e0;border:1px solid #333;border-radius:6px;padding:4px 10px;font-size:13px;">
+                <option value="">All Scores</option>
+                <option value="8">Score ≥ 8</option>
+                <option value="6">Score ≥ 6</option>
+                <option value="4">Score ≥ 4</option>
+            </select>
+            <span id="events-count" style="font-size:12px;color:#666;margin-left:auto;"></span>
+        </div>
+        <div id="events-full-container" class="events-full-list"></div>
+    </div>
+</section>
 
             <!-- Vibrnt Section -->
             <section id="section-vibrnt" class="content-section">
@@ -486,16 +496,10 @@
                     </div>
                 </div>
 
-                <!-- Panel 3: Collision Targets -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-                    <div class="card" style="padding:16px;">
-                        <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">📅 Top Events</h3>
-                        <div id="research-events-container"><div class="empty-state">Loading...</div></div>
-                    </div>
-                    <div class="card" style="padding:16px;">
-                        <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">⭐ Top Influencers</h3>
-                        <div id="research-influencers-container"><div class="empty-state">Loading...</div></div>
-                    </div>
+                <!-- Panel 3: Top Influencers -->
+                <div class="card" style="padding:16px;margin-bottom:16px;">
+                    <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">⭐ Top Influencers</h3>
+                    <div id="research-influencers-container"><div class="empty-state">Loading...</div></div>
                 </div>
             </section>
 
