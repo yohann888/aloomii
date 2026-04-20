@@ -61,6 +61,9 @@
                 <div onclick="showSection('vibrnt')" class="nav-item" id="nav-vibrnt">
                     📱 <span class="nav-text">Vibrnt</span>
                 </div>
+                <div onclick="showSection('influencers')" class="nav-item" id="nav-influencers">
+                    👥 <span class="nav-text">Influencers</span>
+                </div>
             </div>
             
             <div class="sidebar-footer">
@@ -429,6 +432,49 @@
                 <h2>Strategic Backlog</h2>
                 <div id="backlog-container" class="backlog-container"></div>
             </section>
+
+            <section id="section-influencers" class="content-section" style="display:none;">
+              <h2>Influencer Pipeline</h2>
+              <div class="card" style="padding:16px;margin-bottom:16px;">
+                <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+                  <label style="font-size:13px;">ICP
+                    <select id="inf-icp" onchange="loadInfluencers()" style="margin-left:6px;">
+                      <option value="">All</option>
+                      <option value="vibrnt">Vibrnt</option>
+                      <option value="ebook_founder">Ebook Founder</option>
+                      <option value="ebook_solo">Ebook Solo</option>
+                      <option value="ebook_operator">Ebook Operator</option>
+                      <option value="aloomii">Aloomii</option>
+                    </select>
+                  </label>
+                  <label style="font-size:13px;">Platform
+                    <select id="inf-platform" onchange="loadInfluencers()" style="margin-left:6px;">
+                      <option value="">All</option>
+                      <option value="tiktok">TikTok</option>
+                      <option value="instagram">Instagram</option>
+                      <option value="youtube">YouTube</option>
+                      <option value="twitter">X/Twitter</option>
+                    </select>
+                  </label>
+                  <label style="font-size:13px;">Tier
+                    <select id="inf-tier" onchange="loadInfluencers()" style="margin-left:6px;">
+                      <option value="">All</option>
+                      <option value="tier_1">Tier 1</option>
+                      <option value="tier_2">Tier 2</option>
+                    </select>
+                  </label>
+                  <label style="font-size:13px;"><input type="checkbox" id="inf-email-only" onchange="loadInfluencers()"> Email only</label>
+                  <button onclick="exportInfluencers()" class="btn-primary" style="font-size:13px;">&#11015; Export CSV</button>
+                  <button onclick="loadInfluencers()" class="btn-secondary" style="font-size:13px;">Refresh</button>
+                </div>
+                <div id="inf-count" style="padding:6px 0 0;font-size:12px;color:#888;"></div>
+                <div id="inf-budget" style="font-size:11px;color:#666;"></div>
+              </div>
+              <div id="influencers-list" style="padding:4px 0;">
+                <div class="empty-state">Select a filter or click Refresh.</div>
+              </div>
+            </section>
+
         </div>
     </div>
 

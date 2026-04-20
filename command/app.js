@@ -3402,6 +3402,58 @@ async function removeBacklogItem(id) {
   }
 }
 
+// ── Influencer Pipeline ──────────────────────────────────
+async function loadInfluencers() {
+  const icp = document.getElementById('inf-icp')?.value || '';
+  const platform = document.getElementById('inf-platform')?.value || '';
+  const tier = document.getElementById('inf-tier')?.value || '';
+  const emailOnly = document.getElementById('inf-email-only')?.checked;
+  const listEl = document.getElementById('influencers-list');
+  const countEl = document.getElementById('inf-count');
+  const budgetEl = document.getElementById('inf-budget');
+  if (!listEl) return;
+  listEl.innerHTML = '<div class="empty-state">Loading...</div>';
+  try {
+    let url = `/api/command/influencers?limit=100`;
+    if (icp) url += `&icp_target=${encodeURIComponent(icp)}`;
+    if (platform) url += `&platform=${encodeURIComponent(platform)}`;
+    if (tier) url += `&tier=${encodeURIComponent(tier)}`;
+    if (emailOnly) url += `&has_email=true`;
+    const [resp, budgetResp] = await Promise.all([fetch(url), fetch('/api/command/influencers/budget')]);
+    const influencers = await resp.json();
+    const budget = await budgetResp.json().catch(() => null);
+    if (countEl) countEl.textContent = `${influencers.length} influencer${influencers.length !== 1 ? 's' : ''}`;
+    if (budgetEl && budget) budgetEl.textContent = `EnsembleData today: ${budget.units_used}/${budget.total_daily} units used`;
+    if (!influencers.length) { listEl.innerHTML = '<div class="empty-state">No influencers found.</div>'; return; }
+    listEl.innerHTML = influencers.map(p => `
+      <div style="background:#1a1a2e;border:1px solid #2a2a4e;border-radius:8px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:14px;">${escapeHtml(p.handle||'')} <span style="color:#888;font-size:12px;">@${escapeHtml(p.platform_primary||'')}</span></div>
+          <div style="font-size:12px;color:#888;margin-top:2px;">ICP: ${p.icp_target||'?'} &middot; ${(p.followers||0).toLocaleString()} followers</div>
+          ${p.email ? `<div style="font-size:12px;color:#00c8be;margin-top:2px;">&#9993; ${escapeHtml(p.email)} (${p.email_source||'?'})</div>` : '<div style="font-size:12px;color:#555;margin-top:2px;">No email</div>'}
+        </div>
+        <div style="text-align:center;min-width:48px;">
+          <div style="font-size:20px;font-weight:700;color:${p.lead_tier==='tier_1'?'#00c8be':p.lead_tier==='tier_2'?'#f5a623':'#555'}">${p.lead_score||'-'}</div>
+          <div style="font-size:10px;color:#666;">${p.lead_tier||'unscored'}</div>
+        </div>
+        ${p.profile_url ? `<a href="${escapeHtml(p.profile_url||'')}" target="_blank" style="color:#888;font-size:12px;">&#8599;</a>` : ''}
+      </div>`).join('');
+  } catch(e) { listEl.innerHTML = `<div class="empty-state">Error: ${escapeHtml(e.message)}</div>`; }
+}
+async function exportInfluencers() {
+  const icp = document.getElementById('inf-icp')?.value || '';
+  const tier = document.getElementById('inf-tier')?.value || '';
+  const emailOnly = document.getElementById('inf-email-only')?.checked;
+  let url = `/api/command/influencers/export?`;
+  if (icp) url += `&icp_target=${encodeURIComponent(icp)}`;
+  if (tier) url += `&tier=${encodeURIComponent(tier)}`;
+  if (emailOnly) url += `&has_email=true`;
+  window.open(url, '_blank');
+}
+window.loadInfluencers = loadInfluencers;
+window.exportInfluencers = exportInfluencers;
+// ─────────────────────────────────────────────────────────
+
 window.init = init;
 window.checkAuth = checkAuth;
 window.attemptLogin = attemptLogin;
