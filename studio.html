@@ -101,6 +101,14 @@ nav {
   position: relative;
   padding: 100px 0 80px;
 }
+.hero .container { align-items: flex-start !important; text-align: left !important; }
+.hero-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; width: 100%; }
+@media (max-width: 820px) { .hero-layout { grid-template-columns: 1fr; } .hero .container { align-items: center !important; text-align: center !important; } }
+.hero-video-wrap { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,200,190,0.15); aspect-ratio: 16/9; }
+.hero-video-wrap iframe { width: 100%; height: 100%; display: block; border: 0; }
+.hero-video-cap { margin-top: 12px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.hero-video-cap a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.pbn-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,200,190,0.1); border: 1px solid rgba(0,200,190,0.25); border-radius: 20px; padding: 4px 12px; font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 0.05em; margin-bottom: 20px; text-decoration: none; }
 .hero::before {
   content: '';
   position: absolute;
@@ -669,25 +677,45 @@ nav {
 <!-- HERO -->
 <section class="hero">
   <div class="container">
-    <div class="hero-label">The Studio · Aloomii</div>
-    <h1 class="hero-title">You don't need more content.<br>You need more <em>conversations that matter.</em></h1>
-    <p class="hero-sub">Aloomii has been producing podcasts, live panels, and founder media since 2017. We don't pitch media strategy. We ship episodes. Now we build it for you.</p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">5</div>
-        <div class="hero-stat-label">Shows produced</div>
+    <div class="hero-layout">
+      <div>
+        <div class="hero-label">The Studio · Aloomii</div>
+        <h1 class="hero-title">You don't need more content.<br>You need more <em>conversations that matter.</em></h1>
+        <p class="hero-sub">Aloomii has been producing podcasts, live panels, and founder media since 2017. We don't pitch media strategy. We ship episodes. Now we build it for you.</p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num">~5K</div>
+            <div class="hero-stat-label">Subscribers in 30 days</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">20K+</div>
+            <div class="hero-stat-label">Views — first month</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">9</div>
+            <div class="hero-stat-label">Years producing media</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">5</div>
+            <div class="hero-stat-label">Shows produced</div>
+          </div>
+        </div>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">5M+</div>
-        <div class="hero-stat-label">Views across all shows</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">9</div>
-        <div class="hero-stat-label">Years producing media</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">3,000</div>
-        <div class="hero-stat-label">Hours listened on PBN</div>
+      <div>
+        <a href="https://palebluenexus.com" target="_blank" class="pbn-badge">&#127758; Pale Blue Nexus</a>
+        <div class="hero-video-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/t3dDHRRZyHk?rel=0&modestbranding=1"
+            title="Pale Blue Nexus — Jim Rogers, Episode 1"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="hero-video-cap">
+          <span>Episode 1 &middot; <strong>Jim Rogers</strong> &mdash; Co-founder, Quantum Fund (4,200% returns)</span>
+          <a href="https://palebluenexus.com" target="_blank">Watch all episodes &#8594;</a>
+        </div>
       </div>
     </div>
   </div>
@@ -708,7 +736,10 @@ nav {
         <h2 class="story-heading">A cold email in 2009.<br>A podcast guest in 2026.</h2>
         <p class="story-text">In 2009, Yohann sent a cold email to <strong>Jim Rogers</strong> — co-founder of the Quantum Fund with George Soros. 4,200% returns in a single decade. One of the most sought-after investors alive.</p>
         <p class="story-text">Rogers replied. Most people would have asked for something immediately. Yohann didn't. He kept the conversation going. Year after year. <strong>No pitch. No ask.</strong> Just genuine connection maintained over time.</p>
-        <p class="story-text">Seventeen years later, Jim sat down as the first guest on Pale Blue Nexus. That episode is <a href="https://youtu.be/t3dDHRRZyHk" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:500;">live right now</a>.</p>
+        <p class="story-text">Seventeen years later, Jim sat down as the first guest on Pale Blue Nexus. The episode is live.</p>
+        <div style="margin: 24px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.4); aspect-ratio: 16/9;">
+          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/t3dDHRRZyHk?rel=0&modestbranding=1" title="Jim Rogers — Pale Blue Nexus Episode 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
         <p class="story-text">No agency would have kept that thread alive for 17 years. Most wouldn't last 17 weeks. This is the difference between transactional media and <strong>relationship-driven media</strong>. We build the second kind.</p>
       </div>
       <div class="story-aside reveal">
@@ -751,7 +782,7 @@ nav {
         <div class="tl-title">Pale Blue Nexus</div>
         <div class="tl-format">Flagship Podcast</div>
         <div class="tl-desc">The culmination. Jim Rogers as first guest. Austin Armstrong (4M+ followers). Technologies reshaping the world — AI, space, physics, human implications. Distributed across YouTube, Apple Podcasts, Spotify, and iHeart. Listeners in NYC, London, Seattle, and Denver.</div>
-        <div class="tl-stat">33.5K plays · 7.2K listeners · 953 followers · 3,000 hours listened</div>
+        <div class="tl-stat">~5K subscribers · 20K+ views · first 30 days</div>
       </div>
     </div>
   </div>
