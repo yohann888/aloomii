@@ -149,9 +149,11 @@ function showSection(section) {
             renderBacklog();
         } else if (section === 'vibrnt') {
             renderVibrntSection();
-        } else if (section === 'influencers') {
-            loadInfluencers();
         }
+    }
+    // loadInfluencers does its own fetch — call unconditionally
+    if (section === 'influencers') {
+        loadInfluencers();
     }
 }
 
