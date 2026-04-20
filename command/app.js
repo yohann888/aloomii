@@ -1605,11 +1605,12 @@ function renderSignalCards(signals, container) {
         <span>👤 ${signal.handle || signal.author || 'Unknown'}</span>
         <span>🏢 ${signal.company || 'N/A'}</span>
         <span>🎯 ICP: ${signal.icp_match || 'General'}</span>
+        ${source === 'reddit' && (signal.signal_url || signal.source_url) ? (() => { const m = (signal.signal_url || signal.source_url || '').match(/\/r\/([^/]+)/); return m ? `<span>📌 r/${m[1]}</span>` : ''; })() : ''}
       </div>
       <div class="signal-reasoning">
         💡 ${signal.scoring_reason || signal.reasoning || 'Strong buying signal detected from post content.'}
       </div>
-      <a href="${signal.source_url || signal.url || '#'}" target="_blank" class="signal-link">🔗 View original →</a>
+      ${(signal.signal_url || signal.source_url || signal.url) ? `<a href="${signal.signal_url || signal.source_url || signal.url}" target="_blank" rel="noopener" class="signal-link">🔗 ${source === 'reddit' ? 'View on Reddit →' : source === 'x_search' ? 'View on X →' : source === 'linkedin' ? 'View on LinkedIn →' : source === 'indiehackers' ? 'View on IndieHackers →' : 'View original →'}</a>` : ''}
       <div class="signal-actions">
         <button onclick="draftFromSignal('${signal.id}')" class="btn-draft">Draft Outreach</button>
         <button onclick="dismissSignal('${signal.id}')" class="btn-dismiss">Dismiss</button>
@@ -1622,7 +1623,7 @@ function renderSignalCards(signals, container) {
 
 function getSignalSourceIcon(source) {
   const map = {
-    'reddit': '🔗',
+    'reddit': '🟠',
     'x_search': '𝕏',
     'linkedin': '💼',
     'indiehackers': '🧑‍💻',
@@ -3583,14 +3584,14 @@ function renderResearchPulse(data) {
     html += `<div style="margin-bottom:16px;">
       <div style="font-size:12px;font-weight:700;color:#00c8be;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🔴 Live Signals (${signals.length})</div>`;
     signals.forEach(s => {
-      html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${s.score>=7?'#e74c3c':s.score>=5?'#f39c12':'#555'};">
+      const _sc = parseFloat(s.relevance_score||s.score||0);
+      html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${_sc>=0.7?'#e74c3c':_sc>=0.5?'#f39c12':'#555'};">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
           <div>
             <span style="font-weight:600;font-size:13px;">${safeHtml(s.company||'Unknown')}</span>
-            ${s.contact_name?`<span style="color:#888;font-size:12px;"> · ${safeHtml(s.contact_name)}</span>`:''}
-            <span style="background:#1e293b;color:#94a3b8;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;">${safeHtml(s.signal_type||s.source||'')}</span>
+            <span style="background:#1e293b;color:#94a3b8;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;">${safeHtml(s.signal_type||s.signal_source||'')}</span>
           </div>
-          <span style="font-size:18px;font-weight:700;color:${s.score>=7?'#e74c3c':s.score>=5?'#f39c12':'#aaa'};">${s.score||'-'}</span>
+          <span style="font-size:18px;font-weight:700;color:${_sc>=0.7?'#e74c3c':_sc>=0.5?'#f39c12':'#aaa'};">${(_sc*100).toFixed(0)}%</span>
         </div>
         <div style="font-size:12px;color:#ccc;margin-top:4px;line-height:1.5;">${safeHtml(s.signal_text||'')}</div>
       </div>`;
