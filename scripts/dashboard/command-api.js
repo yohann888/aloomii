@@ -1943,10 +1943,12 @@ function registerResearchRoutes(app) {
           [icpSlug, String(days), limit]
         ),
         query(
-          `SELECT icp_slug, mood_primary, mood_secondary, verbatim_phrases, emotional_punch, shirt_potential, universality, trigger_context, created_at
-           FROM mood_signals
-           WHERE ($1::text IS NULL OR icp_slug = $1) AND created_at > NOW() - ($2 || ' days')::interval
-           ORDER BY emotional_punch DESC, created_at DESC
+          `SELECT ms.icp_slug, ms.mood_primary, ms.mood_secondary, ms.verbatim_phrases, ms.emotional_punch, ms.shirt_potential, ms.universality, ms.trigger_context, ms.created_at,
+                  COALESCE(rp.url, 'https://reddit.com' || rp.permalink) as source_url
+           FROM mood_signals ms
+           LEFT JOIN reddit_posts rp ON rp.id = ms.source_id
+           WHERE ($1::text IS NULL OR ms.icp_slug = $1) AND ms.created_at > NOW() - ($2 || ' days')::interval
+           ORDER BY ms.emotional_punch DESC, ms.created_at DESC
            LIMIT $3`,
           [icpSlug, String(days), limit]
         ),

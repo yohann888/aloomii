@@ -3613,6 +3613,7 @@ function renderResearchPulse(data) {
           <span style="font-size:18px;font-weight:700;color:${_sc>=0.7?'#e74c3c':_sc>=0.5?'#f39c12':'#aaa'};">${(_sc*100).toFixed(0)}%</span>
         </div>
         <div style="font-size:12px;color:#ccc;margin-top:4px;line-height:1.5;">${safeHtml(s.signal_text||'')}</div>
+        ${s.signal_url?`<a href="${safeHtml(s.signal_url)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:4px;font-size:10px;color:#00c8be;text-decoration:none;">🔗 View post →</a>`:''}
       </div>`;
     });
     html += '</div>';
@@ -3678,7 +3679,10 @@ function renderResearchRadar(data) {
             <span style="font-size:11px;color:#888;">${safeHtml(m.icp_slug)} · punch ${m.emotional_punch}</span>
           </div>
           ${phrases.slice(0,2).map(q=>`<div style="font-size:12px;color:#ddd;font-style:italic;">&quot;${safeHtml(String(q).substring(0,150))}&quot;</div>`).join('')}
-          ${m.shirt_potential==='high'?'<span style="font-size:10px;color:#f59e0b;">👕 High shirt potential</span>':''}
+          <div style="margin-top:4px;display:flex;align-items:center;gap:8px;">
+            ${m.shirt_potential==='high'?'<span style="font-size:10px;color:#f59e0b;">👕 High shirt potential</span>':''}
+            ${m.source_url?`<a href="${safeHtml(m.source_url)}" target="_blank" rel="noopener" style="font-size:10px;color:#00c8be;text-decoration:none;">🔗 View post →</a>`:''}
+          </div>
         </div>`;
       }).join('');
     }
