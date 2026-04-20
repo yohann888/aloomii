@@ -1885,9 +1885,14 @@ function registerInfluencerRoutes(app) {
   // GET /api/command/influencers/budget — EnsembleData daily budget
   app.get('/api/command/influencers/budget', async (req, res) => {
     try {
-      const bt = require(nodePath.join(__dirname, '../../scripts/ensembledata/budget-tracker.js'));
-      res.json(bt.getDailyReport());
-    } catch(e) { res.status(500).json({ error: e.message, units_used: 0, total_daily: 1500 }); }
+      const btPath = nodePath.join(__dirname, '../../scripts/ensembledata/budget-tracker.js');
+      const bt = require(btPath);
+      const report = typeof bt.getDailyReport === 'function' ? bt.getDailyReport() : { units_used: 0, total_daily: 1500, by_pipeline: {} };
+      res.json(report);
+    } catch(e) {
+      // Budget tracker missing or erroring — return safe default
+      res.json({ units_used: 0, total_daily: 1500, by_pipeline: {}, error: e.message });
+    }
   });
 }
 module.exports.registerInfluencerRoutes = registerInfluencerRoutes;
