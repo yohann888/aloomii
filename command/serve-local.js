@@ -49,6 +49,8 @@ const app = {
 };
 
 registerCommandAPI(app);
+const { registerInfluencerRoutes } = require('../scripts/dashboard/command-api');
+registerInfluencerRoutes(app);
 
 // ─── Route matcher ─────────────────────────────────────────────────────────────
 function matchRoute(method, urlPath) {

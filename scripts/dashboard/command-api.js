@@ -1824,3 +1824,70 @@ process.on('SIGTERM', () => {
 
 module.exports.query = query;
 module.exports.getPool = getPool;
+
+// ── Influencer Pipeline routes (registered standalone for serve-local) ──────
+const path = require('path');
+function registerInfluencerRoutes(app) {
+  // GET /api/command/influencers — list with filters
+  app.get('/api/command/influencers', async (req, res) => {
+    try {
+      const { icp_target, platform, tier, has_email, limit } = req.query;
+      const lim = Math.min(parseInt(limit) || 100, 500);
+      const conditions = [];
+      const params = [];
+      let idx = 1;
+      if (icp_target) { conditions.push(`icp_target = $${idx}`); params.push(icp_target); idx++; }
+      if (platform)   { conditions.push(`platform_primary = $${idx}`); params.push(platform); idx++; }
+      if (tier)       { conditions.push(`lead_tier = $${idx}`); params.push(tier); idx++; }
+      if (has_email === 'true') { conditions.push(`email IS NOT NULL`); }
+      const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
+      const result = await query(
+        `SELECT id, handle, platform_primary, icp_target, followers, engagement_rate,
+                lead_score, lead_tier, email, email_source, profile_url, status, created_at
+         FROM influencer_pipeline ${where}
+         ORDER BY lead_score DESC NULLS LAST, followers DESC NULLS LAST
+         LIMIT $${idx}`,
+        [...params, lim]
+      );
+      res.json(result.rows);
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // GET /api/command/influencers/export — CSV download
+  app.get('/api/command/influencers/export', async (req, res) => {
+    try {
+      const { icp_target, tier, has_email } = req.query;
+      const conditions = [];
+      const params = [];
+      let idx = 1;
+      if (icp_target) { conditions.push(`icp_target = $${idx}`); params.push(icp_target); idx++; }
+      if (tier)       { conditions.push(`lead_tier = $${idx}`); params.push(tier); idx++; }
+      if (has_email === 'true') { conditions.push(`email IS NOT NULL`); }
+      const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
+      const result = await query(
+        `SELECT handle, platform_primary, icp_target, followers, engagement_rate,
+                lead_score, lead_tier, email, email_source, profile_url, status
+         FROM influencer_pipeline ${where}
+         ORDER BY lead_score DESC NULLS LAST`,
+        params
+      );
+      const headers = ['handle','platform_primary','icp_target','followers','engagement_rate','lead_score','lead_tier','email','email_source','profile_url','status'];
+      const csv = [
+        headers.join(','),
+        ...result.rows.map(r => headers.map(h => JSON.stringify(r[h] ?? '')).join(','))
+      ].join('\n');
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="influencers.csv"');
+      res.send(csv);
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // GET /api/command/influencers/budget — EnsembleData daily budget
+  app.get('/api/command/influencers/budget', async (req, res) => {
+    try {
+      const bt = require(path.join(__dirname, '../../scripts/ensembledata/budget-tracker.js'));
+      res.json(bt.getDailyReport());
+    } catch(e) { res.status(500).json({ error: e.message, units_used: 0, total_daily: 1500 }); }
+  });
+}
+module.exports.registerInfluencerRoutes = registerInfluencerRoutes;
