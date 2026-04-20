@@ -3657,7 +3657,10 @@ function renderResearchRadar(data) {
             <span style="font-size:11px;color:#888;">${safeHtml(p.icp_slug)} · sev ${p.severity}</span>
           </div>
           <div style="font-size:12px;color:#ddd;font-style:italic;line-height:1.5;">&quot;${safeHtml((p.verbatim_quote||'').substring(0,200))}&quot;</div>
-          ${p.active_search?'<span style="font-size:10px;color:#00c8be;">🔍 Actively searching</span>':''}
+          <div style="margin-top:4px;display:flex;align-items:center;gap:8px;">
+            ${p.active_search?'<span style="font-size:10px;color:#00c8be;">🔍 Actively searching</span>':''}
+            ${p.source_url?`<a href="${safeHtml(p.source_url)}" target="_blank" rel="noopener" style="font-size:10px;color:#00c8be;text-decoration:none;">🔗 View post →</a>`:''}
+          </div>
         </div>`).join('');
     }
   }

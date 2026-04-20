@@ -1933,10 +1933,12 @@ function registerResearchRoutes(app) {
 
       const [painResult, moodResult, icpResult] = await Promise.all([
         query(
-          `SELECT icp_slug, pain_category, severity, verbatim_quote, active_search, aloomii_addressable, context_snippet, created_at
-           FROM pain_signals
-           WHERE ($1::text IS NULL OR icp_slug = $1) AND created_at > NOW() - ($2 || ' days')::interval
-           ORDER BY severity DESC, created_at DESC
+          `SELECT ps.icp_slug, ps.pain_category, ps.severity, ps.verbatim_quote, ps.active_search, ps.aloomii_addressable, ps.context_snippet, ps.created_at,
+                  COALESCE(rp.url, 'https://reddit.com' || rp.permalink) as source_url
+           FROM pain_signals ps
+           LEFT JOIN reddit_posts rp ON rp.id = ps.source_id
+           WHERE ($1::text IS NULL OR ps.icp_slug = $1) AND ps.created_at > NOW() - ($2 || ' days')::interval
+           ORDER BY ps.severity DESC, ps.created_at DESC
            LIMIT $3`,
           [icpSlug, String(days), limit]
         ),
