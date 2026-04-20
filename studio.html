@@ -616,6 +616,37 @@ nav {
   border-radius: 14px;
   padding: 36px;
 }
+.team-card-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.team-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+.team-card-header-text { flex: 1; }
+.team-card-header-text .team-name { margin-bottom: 2px; }
+.team-card-header-text .team-role { margin-bottom: 0; }
+.team-linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.team-linkedin:hover { opacity: 1; }
 .team-name {
   font-size: 22px;
   font-weight: 700;
@@ -1033,9 +1064,15 @@ nav {
         <div class="team-bio">Books the guests, runs the strategy, and hosts. JP Morgan, IBM, Ontario Government — then CryptoSlam, where he closed $2M in deals and helped raise a $9M seed round backed by Mark Cuban. Yohann's edge isn't a playbook. It's the ability to sit in a conversation and feel when something is about to shift. He cold-emailed Jim Rogers in 2009. The relationship took 17 years. That's the kind of patience no agency has.</div>
       </div>
       <div class="team-card reveal">
-        <div class="team-name">Jenny Calpu</div>
-        <div class="team-role">Creative Director · Production · Design</div>
-        <div class="team-bio">Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking — years of building trust face to face. Self-taught design, video editing, web development, and AI creative tools from the ground up. Every visual, every soundscape, every cut goes through her. Built aloomii.com, vibrnt.ai, and palebluenexus.com from scratch. Yohann books the guests. Jenny makes it look and sound like it belongs on a real network.</div>
+        <div class="team-card-header">
+          <img src="/images/jenny-calpu.jpg" alt="Jenny Calpu" class="team-photo">
+          <div class="team-card-header-text">
+            <div class="team-name">Jenny Calpu</div>
+            <div class="team-role">Creative Director · Producer · Taste</div>
+          </div>
+        </div>
+        <div class="team-bio">Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking, years of building trust face to face. Self-taught design, video editing, web development, and AI creative tools from the ground up. Every visual, every soundscape, every cut goes through her. Built aloomii.com, vibrnt.ai, and palebluenexus.com from scratch. Yohann books the guests. Jenny makes it look and sound like it belongs on a real network.</div>
+        <a href="https://www.linkedin.com/in/jenny-calpu/" target="_blank" class="team-linkedin">&#128279; LinkedIn</a>
       </div>
     </div>
   </div>
