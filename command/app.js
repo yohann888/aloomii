@@ -149,6 +149,8 @@ function showSection(section) {
             renderBacklog();
         } else if (section === 'vibrnt') {
             renderVibrntSection();
+        } else if (section === 'influencers') {
+            loadInfluencers();
         }
     }
 }
