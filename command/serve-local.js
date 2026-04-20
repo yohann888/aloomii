@@ -135,7 +135,8 @@ function maybeCompress(data, acceptEncoding) {
 }
 
 // ─── Static file cache config ──────────────────────────────────────────────────
-const STATIC_EXTENSIONS = ['.css', '.js', '.png', '.svg', '.ico', '.woff2', '.woff'];
+const STATIC_EXTENSIONS = ['.css', '.png', '.svg', '.ico', '.woff2', '.woff'];
+// NOTE: .js and .html are intentionally excluded — serve with no-cache so updates take effect immediately
 function isStaticAsset(urlPath) {
   return STATIC_EXTENSIONS.includes(path.extname(urlPath));
 }
