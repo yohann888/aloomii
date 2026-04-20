@@ -3701,7 +3701,7 @@ function renderResearchTargets(data) {
       infEl.innerHTML = influencers.map(p => `
         <div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
           <div>
-            <div style="font-weight:600;font-size:13px;">${safeHtml(p.handle)}</div>
+            <div style="font-weight:600;font-size:13px;">${p.profile_url?`<a href="${safeHtml(p.profile_url)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">${safeHtml(p.handle)}</a>`:safeHtml(p.handle)}</div>
             <div style="font-size:11px;color:#888;">${safeHtml(p.platform_primary)} · ${safeHtml(p.icp_target)} · ${(p.followers||0).toLocaleString()} followers</div>
             ${p.email?`<div style="font-size:11px;color:#00c8be;">✉ ${safeHtml(p.email)}</div>`:''}
           </div>
