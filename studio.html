@@ -610,30 +610,61 @@ nav {
   gap: 24px;
   margin-top: 48px;
 }
+/* Jenny featured card */
+.team-featured {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 44px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+@media (max-width: 700px) { .team-featured { grid-template-columns: 1fr; text-align: center; } .team-featured-photo { margin: 0 auto; } }
+.team-featured-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 14px;
+  object-fit: cover;
+  object-position: top center;
+  border: 1px solid rgba(0,200,190,0.2);
+  display: block;
+}
+.team-featured-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.team-featured-label::before { content: ''; display: block; width: 18px; height: 2px; background: var(--accent); }
+/* Standard card */
 .team-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 36px;
-}
-.team-card-header {
   display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: 24px;
+  align-items: flex-start;
 }
-.team-photo {
-  width: 72px;
-  height: 72px;
+@media (max-width: 700px) { .team-card { flex-direction: column; } }
+.team-card-photo {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
   object-position: top;
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
   flex-shrink: 0;
 }
-.team-card-header-text { flex: 1; }
-.team-card-header-text .team-name { margin-bottom: 2px; }
-.team-card-header-text .team-role { margin-bottom: 0; }
+.team-card-body { flex: 1; }
 .team-linkedin {
   display: inline-flex;
   align-items: center;
@@ -1057,24 +1088,29 @@ nav {
   <div class="container">
     <div class="section-label reveal">Who runs this</div>
     <h2 class="section-heading reveal">Operators, not consultants.</h2>
-    <div class="team-grid">
-      <div class="team-card reveal">
-        <div class="team-name">Yohann Calpu</div>
-        <div class="team-role">Host · Strategy · Guest Relations</div>
-        <div class="team-bio">Books the guests, runs the strategy, and hosts. JP Morgan, IBM, Ontario Government — then CryptoSlam, where he closed $2M in deals and helped raise a $9M seed round backed by Mark Cuban. Yohann's edge isn't a playbook. It's the ability to sit in a conversation and feel when something is about to shift. He cold-emailed Jim Rogers in 2009. The relationship took 17 years. That's the kind of patience no agency has.</div>
-      </div>
-      <div class="team-card reveal">
-        <div class="team-card-header">
-          <img src="/images/jenny-calpu.jpg" alt="Jenny Calpu" class="team-photo">
-          <div class="team-card-header-text">
-            <div class="team-name">Jenny Calpu</div>
-            <div class="team-role">Creative Director · Producer · Taste</div>
-          </div>
-        </div>
-        <div class="team-bio">Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking, years of building trust face to face. Self-taught design, video editing, web development, and AI creative tools from the ground up. Every visual, every soundscape, every cut goes through her. Built aloomii.com, vibrnt.ai, and palebluenexus.com from scratch. Yohann books the guests. Jenny makes it look and sound like it belongs on a real network.</div>
-        <a href="https://www.linkedin.com/in/jenny-calpu/" target="_blank" class="team-linkedin">&#128279; LinkedIn</a>
+
+    <!-- Jenny — featured -->
+    <div class="team-featured reveal">
+      <img src="/images/jenny-calpu.jpg" alt="Jenny Calpu" class="team-featured-photo">
+      <div>
+        <div class="team-featured-label">The Studio Producer</div>
+        <div class="team-name">Jenny Calpu</div>
+        <div class="team-role" style="margin-bottom:18px;">Creative Director · Producer · Taste</div>
+        <div class="team-bio">Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking, years of building trust face to face. Self-taught design, video editing, web development, and AI creative tools from the ground up. Every visual, every soundscape, every cut goes through her. Built aloomii.com, vibrnt.ai, and palebluenexus.com from scratch. Yohann books the guests. Jenny makes it look and sound like it belongs on a real network. She is the last set of eyes before anything ships.</div>
+        <a href="https://www.linkedin.com/in/jenny-calpu/" target="_blank" class="team-linkedin">&#128279; Connect on LinkedIn</a>
       </div>
     </div>
+
+    <!-- Yohann — standard -->
+    <div class="team-card reveal">
+      <img src="/images/yohann-calpu.jpg" alt="Yohann Calpu" class="team-card-photo">
+      <div class="team-card-body">
+        <div class="team-name">Yohann Calpu</div>
+        <div class="team-role">Host · Strategy · Guest Relations</div>
+        <div class="team-bio">Books the guests, runs the strategy, and hosts. JP Morgan, IBM, Ontario Government, then CryptoSlam, where he closed $2M in deals and helped raise a $9M seed round backed by Mark Cuban. Yohann's edge isn't a playbook. It's the ability to sit in a conversation and feel when something is about to shift. He cold-emailed Jim Rogers in 2009. The relationship took 17 years. That's the kind of patience no agency has.</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
