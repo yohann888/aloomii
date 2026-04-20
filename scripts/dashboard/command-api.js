@@ -1911,10 +1911,12 @@ function registerResearchRoutes(app) {
            LIMIT 20`
         ),
         query(
-          `SELECT company, contact_name, signal_text, signal_type, source, score
-           FROM prospect_signals
-           WHERE acted_on = false
-           ORDER BY score DESC, created_at DESC
+          `SELECT ps.company, ps.handle, ps.signal_text, ps.signal_type, ps.signal_source, ps.relevance_score,
+                  c.name as contact_name
+           FROM prospect_signals ps
+           LEFT JOIN contacts c ON ps.contact_id = c.id
+           WHERE ps.acted_on = false
+           ORDER BY ps.relevance_score DESC, ps.captured_at DESC
            LIMIT 10`
         ),
       ]);
