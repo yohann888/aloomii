@@ -1912,7 +1912,7 @@ function registerResearchRoutes(app) {
         ),
         query(
           `SELECT ps.company, ps.handle, ps.signal_text, ps.signal_type, ps.signal_source, ps.relevance_score,
-                  c.name as contact_name
+                  ps.signal_url, c.name as contact_name
            FROM prospect_signals ps
            LEFT JOIN contacts c ON ps.contact_id = c.id
            WHERE ps.acted_on = false
