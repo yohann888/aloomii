@@ -1826,8 +1826,8 @@ module.exports.query = query;
 module.exports.getPool = getPool;
 
 // ── Influencer Pipeline routes (registered standalone for serve-local) ──────
-const path = require('path');
 function registerInfluencerRoutes(app) {
+  const nodePath = require('path');
   // GET /api/command/influencers — list with filters
   app.get('/api/command/influencers', async (req, res) => {
     try {
@@ -1885,7 +1885,7 @@ function registerInfluencerRoutes(app) {
   // GET /api/command/influencers/budget — EnsembleData daily budget
   app.get('/api/command/influencers/budget', async (req, res) => {
     try {
-      const bt = require(path.join(__dirname, '../../scripts/ensembledata/budget-tracker.js'));
+      const bt = require(nodePath.join(__dirname, '../../scripts/ensembledata/budget-tracker.js'));
       res.json(bt.getDailyReport());
     } catch(e) { res.status(500).json({ error: e.message, units_used: 0, total_daily: 1500 }); }
   });
