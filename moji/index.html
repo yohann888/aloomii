@@ -1632,6 +1632,137 @@
 
   .asset-comp-body strong { color: var(--fg); font-weight: 500; }
 
+  /* Target Accelerators section */
+  .targets {
+    margin-top: 24px;
+    padding: 32px 40px;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .targets::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--bitcoin), transparent);
+  }
+
+  .targets-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 24px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .targets-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--bitcoin);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .targets-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .targets-title em { font-style: italic; color: var(--bitcoin); }
+
+  .targets-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+
+  .targets-meta strong { color: var(--jade); font-weight: 500; }
+
+  .targets-tiers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .tier-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tier-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tier-title {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--bitcoin);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .tier-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tier-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: baseline;
+    padding: 6px 0;
+  }
+
+  .tier-name {
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .tier-name-note {
+    font-family: 'Geist', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--fg-dim);
+    margin-left: 6px;
+  }
+
+  .tier-terms {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    text-align: right;
+    white-space: nowrap;
+  }
+
   .contact-cta {
     font-family: 'Instrument Serif', serif;
     font-style: italic;
@@ -1960,6 +2091,11 @@
     .asset-component:last-child { border-bottom: none; }
     .asset-header { grid-template-columns: 1fr; }
     .asset-structure { text-align: left; white-space: normal; }
+    .targets-header { grid-template-columns: 1fr; }
+    .targets-meta { text-align: left; white-space: normal; }
+    .targets-tiers { grid-template-columns: 1fr; gap: 24px; }
+    .tier-item { grid-template-columns: 1fr; gap: 4px; }
+    .tier-terms { text-align: left; }
     .interstitial-header, .ticker-caption, .grid-legend { padding-left: 32px; padding-right: 32px; }
     .emoji-grid { grid-template-columns: repeat(5, 1fr); padding: 0 32px; max-width: 100%; }
     .interstitial-title { font-size: 40px; }
@@ -2669,7 +2805,7 @@
       <div class="advantage-icon">🎯</div>
       <h3 class="advantage-title">Pre-existing <em>ticker positions</em></h3>
       <p class="advantage-body">
-        Founder holds <strong>2–100% of 20 popular emoji tickers</strong> under BRC-20. Launch day already has rare inventory to seed into game pools, and <strong>backs the 5–10% investor Token Warrant allocation</strong>. Competitors would need to acquire from scratch.
+        Founder holds <strong>2–100% of 20 popular emoji tickers</strong> under BRC-20. Launch day already has rare inventory to seed into game pools, and <strong>backs the 5–10% founder pledge to investors</strong>. Competitors would need to acquire from scratch.
       </p>
     </div>
 
@@ -3008,7 +3144,7 @@
   <div class="ticker-caption">
     <div>25 Featured Tickers · Spot + Perp Rails · Live on Moji.gg at Launch</div>
     <div class="ticker-caption-note">
-      Illustrative only. Prices and movements shown are projected — actual market opens Q2 2026.
+      Illustrative only. Prices and movements shown are projected — actual market opens late 2026.
     </div>
   </div>
 </section>
@@ -3033,7 +3169,7 @@
   <div class="roadmap">
 
     <div class="milestone">
-      <div class="milestone-quarter">Q2 2026</div>
+      <div class="milestone-quarter">Q4 2026</div>
       <h3 class="milestone-title">MVP <em>Launch</em></h3>
       <p class="milestone-body">
         Core games live on BRC-2.0: Token Factory, Liquidity Wars, Red Envelope Lotteries, Flash Heists. First emoji pools seeded from founder inventory. Whale LP partnership live.
@@ -3045,7 +3181,7 @@
     </div>
 
     <div class="milestone">
-      <div class="milestone-quarter">Q3 2026</div>
+      <div class="milestone-quarter">Q1 2027</div>
       <h3 class="milestone-title">China <em>GTM</em></h3>
       <p class="milestone-body">
         WeChat/TikTok distribution launch. Creator program live with 20% fee share. First influencer raid campaigns via BRC-20 operator network.
@@ -3057,7 +3193,7 @@
     </div>
 
     <div class="milestone">
-      <div class="milestone-quarter">Q4 2026</div>
+      <div class="milestone-quarter">Q2 2027</div>
       <h3 class="milestone-title">Second <em>Orbit</em></h3>
       <p class="milestone-body">
         Expand to Stacks, Rootstock, or Arch Network, whichever ships strongest programmability. RWA treasury integration for yield diversification.
@@ -3069,7 +3205,7 @@
     </div>
 
     <div class="milestone">
-      <div class="milestone-quarter">Q1 2027</div>
+      <div class="milestone-quarter">Q3 2027</div>
       <h3 class="milestone-title">Agent <em>Readiness</em></h3>
       <p class="milestone-body">
         Expose agent-readable APIs, explore gaming bridges (Roblox/UEFN). Seed materials for Series A. Agent economy is the direction we're aimed at, not the milestone we must hit.
@@ -3262,7 +3398,7 @@
 
   <div class="kicker">Let's Build The Emoji Economy Together</div>
   <h1 class="headline">
-    $800K. <em>18 months.</em> Four milestones. Seed-ready exit.
+    $800K. <em>Accelerator-led.</em> Seed-ready in 18 months.
   </h1>
 
   <div class="ask-main">
@@ -3270,15 +3406,17 @@
     <div class="ask-terms">
       <div class="ask-label">Raising · Pre-Seed</div>
       <div class="ask-amount">$800<em>K</em></div>
-      <div class="ask-round">SAFE · Target Close Q2 2026</div>
+      <div class="ask-round">Accelerator + Strategic Angels</div>
 
       <dl class="ask-details">
-        <dt>Post-Money</dt>
-        <dd>$3.5M</dd>
+        <dt>Accelerator Lead</dt>
+        <dd>$500K</dd>
+        <dt>Strategic Angels</dt>
+        <dd>$300K</dd>
         <dt>Runway</dt>
         <dd>18 months</dd>
         <dt>Next Round</dt>
-        <dd>Seed · Q4 2027</dd>
+        <dd>Seed · late 2027</dd>
         <dt>Target Seed Metrics</dt>
         <dd>5K DAU · $10M TVL</dd>
       </dl>
@@ -3318,11 +3456,11 @@
     <div class="asset-header">
       <div>
         <div class="asset-label">Investor Asset Package</div>
-        <div class="asset-title">Equity <em>plus</em> on-chain assets you can hold or trade.</div>
+        <div class="asset-title">Equity <em>plus</em> a founder's pledge of on-chain assets.</div>
       </div>
       <div class="asset-structure">
-        SAFE <strong>+</strong> Token Warrant<br>
-        Industry-Standard Structure
+        Accelerator-Compatible<br>
+        Standard Equity + Founder Pledge
       </div>
     </div>
 
@@ -3330,17 +3468,17 @@
 
       <div class="asset-component">
         <div class="asset-comp-num">I.</div>
-        <h4 class="asset-comp-title"><em>SAFE</em> equity</h4>
+        <h4 class="asset-comp-title"><em>Equity</em> on standard terms</h4>
         <p class="asset-comp-body">
-          Standard <strong>Simple Agreement for Future Equity</strong> at a $3.5M post-money cap. Converts to preferred shares at the next qualified financing on market terms.
+          Standard equity on the accelerator's template (SAFE or equity at their stated terms). We align with the program's conventions — no custom structures, no friction on close.
         </p>
       </div>
 
       <div class="asset-component">
         <div class="asset-comp-num">II.</div>
-        <h4 class="asset-comp-title">Token <em>Warrant</em></h4>
+        <h4 class="asset-comp-title">Founder <em>Pledge</em></h4>
         <p class="asset-comp-body">
-          Pro-rata right to <strong>5–10% of founder's existing BRC-20 emoji ticker inventory</strong>. Assets are already minted, already on-chain. Warrant exercises at conversion of the SAFE. Swappable to <strong>USDC on-platform</strong> at any time for a regulated exit path.
+          Founders personally gift investors <strong>5–10% pro-rata allocation of their existing BRC-20 emoji ticker inventory</strong> on close. Gratis. Separate from equity. Already-minted assets on-chain. A founder-to-investor commitment, not a corporate security.
         </p>
       </div>
 
@@ -3350,6 +3488,70 @@
         <p class="asset-comp-body">
           BRC-20 category has done <strong>$50B+ lifetime volume</strong>, with $ORDI alone processing <strong>$6.8B in the last 30 days</strong>. This is not speculative paper. Investors can hold, stake on Moji.gg, or exit via tier-1 exchange markets.
         </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="targets">
+    <div class="targets-header">
+      <div>
+        <div class="targets-label">Target Accelerators · 2026 Cohorts</div>
+        <div class="targets-title">In active conversation with the <em>top crypto + AI</em> programs.</div>
+      </div>
+      <div class="targets-meta">
+        Applications <strong>open</strong><br>
+        Rolling + Sept 2026 cohorts
+      </div>
+    </div>
+
+    <div class="targets-tiers">
+
+      <div class="tier-block">
+        <div class="tier-label">Tier 1</div>
+        <div class="tier-title">Primary targets · lead-check range</div>
+        <div class="tier-list">
+          <div class="tier-item">
+            <div><span class="tier-name">Alliance DAO</span><span class="tier-name-note">founder-friendly terms, Sept cohort</span></div>
+            <div class="tier-terms">$500K</div>
+          </div>
+          <div class="tier-item">
+            <div><span class="tier-name">a16z CSX</span><span class="tier-name-note">gold-standard crypto program</span></div>
+            <div class="tier-terms">$500K · 7%</div>
+          </div>
+          <div class="tier-item">
+            <div><span class="tier-name">Nitro</span><span class="tier-name-note">Electric Capital-backed, NYC</span></div>
+            <div class="tier-terms">$500K</div>
+          </div>
+          <div class="tier-item">
+            <div><span class="tier-name">Boost VC</span><span class="tier-name-note">Draper family, AI + crypto thesis</span></div>
+            <div class="tier-terms">$500K · 15%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tier-block">
+        <div class="tier-label">Tier 2</div>
+        <div class="tier-title">Strategic partners · follow-on + ecosystem</div>
+        <div class="tier-list">
+          <div class="tier-item">
+            <div><span class="tier-name">Outlier Ventures</span><span class="tier-name-note">DeAI + DeFi cohorts, remote</span></div>
+            <div class="tier-terms">up to $200K</div>
+          </div>
+          <div class="tier-item">
+            <div><span class="tier-name">YZi Labs</span><span class="tier-name-note">Binance-backed, exchange pathway</span></div>
+            <div class="tier-terms">$500K+</div>
+          </div>
+          <div class="tier-item">
+            <div><span class="tier-name">Coinbase Base Camp</span><span class="tier-name-note">Base L2 integration</span></div>
+            <div class="tier-terms">varies</div>
+          </div>
+          <div class="tier-item">
+            <div><span class="tier-name">Blockchain Capital</span><span class="tier-name-note">est. 2013, regulatory depth</span></div>
+            <div class="tier-terms">varies</div>
+          </div>
+        </div>
       </div>
 
     </div>
