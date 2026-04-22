@@ -4,27 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Aloomii Playbook — AI Operations for Relationship-Driven Businesses</title>
-  <meta name="description" content="The operating system your AI has been missing. A complete system of prompts, tools, workflows, and a curated library of proven examples — with a custom portal that remembers everything you do. Three editions: Founder, Solo, Operating Leader. $149 one-time.">
+  <title>The Aloomii Playbook — AI Operations That Compound Into Revenue</title>
+  <meta name="description" content="The AI portal where every prompt, every workflow, and every result makes the next one better, across three role-specific playbooks.">
   <meta name="keywords" content="AI operations, AI playbook, founder AI, solopreneur AI, AI for professionals, AI prompts, AI workflows, Aloomii">
-  <meta name="author" content="Jenny Kalpu and Yohann Calpu">
+  <meta name="author" content="Jenny Calpu and Yohann Calpu">
   
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://aloomii.com/playbook">
-  <meta property="og:title" content="The Aloomii Playbook — AI Operations for Relationship-Driven Businesses">
-  <meta property="og:description" content="The operating system your AI has been missing. Three editions. One complete system.">
+  <meta property="og:title" content="The Aloomii Playbook — AI Operations That Compound Into Revenue">
+  <meta property="og:description" content="Where your AI work finally compounds into revenue, not just saved time.">
   <meta property="og:site_name" content="Aloomii">
   
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://aloomii.com/playbook">
   <meta property="twitter:title" content="The Aloomii Playbook">
-  <meta property="twitter:description" content="The operating system your AI has been missing. Three editions. One complete system.">
+  <meta property="twitter:description" content="Where your AI work finally compounds into revenue, not just saved time.">
   
   <link rel="canonical" href="https://aloomii.com/playbook">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@1,14..144,500;1,14..144,600;1,14..144,700&display=swap" rel="stylesheet">
   
   <style>
     /* ============================================
@@ -71,11 +71,13 @@
     a { color: inherit; text-decoration: none; }
     button { font-family: inherit; cursor: pointer; background: none; border: none; }
     
-    .font-serif { 
-      font-family: 'Instrument Serif', Georgia, serif; 
+    /* Emphasis font: Fraunces italic (thick editorial serif) */
+    .font-emphasis { 
+      font-family: 'Fraunces', Georgia, serif; 
       font-style: italic; 
+      font-weight: 600;
       letter-spacing: -0.02em;
-      font-weight: 400;
+      font-variation-settings: "opsz" 72, "SOFT" 50;
     }
     
     .font-mono {
@@ -104,16 +106,22 @@
     }
     
     /* ============================================
-       NAV
+       NAV (with flicker fix)
        ============================================ */
     .nav {
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--neutral-200);
+      /* Flicker fix: force GPU compositing */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
     
     .nav-inner {
@@ -240,12 +248,15 @@
     }
     
     .hero-headline {
-      font-size: 3rem;
+      font-size: 2.5rem;
       margin-bottom: 2rem;
-      line-height: 0.98;
+      line-height: 1;
+    }
+    @media (min-width: 768px) {
+      .hero-headline { font-size: 3.25rem; }
     }
     @media (min-width: 1024px) {
-      .hero-headline { font-size: 4.5rem; }
+      .hero-headline { font-size: 4rem; line-height: 0.98; }
     }
     
     .section-headline {
@@ -294,7 +305,7 @@
     }
     
     /* ============================================
-       GRID PATTERNS
+       PATTERNS & EFFECTS
        ============================================ */
     .grid-pattern {
       position: absolute;
@@ -391,6 +402,9 @@
       .hero-cta-row { flex-direction: row; align-items: center; }
     }
     
+    /* ============================================
+       BUTTONS
+       ============================================ */
     .btn-primary {
       display: inline-flex;
       align-items: center;
@@ -404,9 +418,7 @@
       text-transform: uppercase;
       transition: all 0.3s;
     }
-    .btn-primary:hover {
-      background: var(--teal);
-    }
+    .btn-primary:hover { background: var(--teal); }
     .btn-primary:hover svg { transform: translateX(4px); }
     .btn-primary svg { transition: transform 0.2s; }
     
@@ -652,6 +664,81 @@
     }
     
     /* ============================================
+       DASHBOARD SCREENSHOT PLACEHOLDER
+       ============================================ */
+    .screenshot-placeholder {
+      position: relative;
+      background: var(--neutral-50);
+      border: 1px solid var(--neutral-200);
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .screenshot-placeholder-inner {
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .screenshot-browser-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2rem;
+      background: var(--neutral-100);
+      border-bottom: 1px solid var(--neutral-200);
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      gap: 0.5rem;
+    }
+    
+    .browser-dot {
+      width: 0.625rem;
+      height: 0.625rem;
+      border-radius: 50%;
+      background: var(--neutral-300);
+    }
+    
+    .screenshot-label {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      margin-bottom: 0.75rem;
+    }
+    
+    .screenshot-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--neutral-700);
+      margin-bottom: 0.5rem;
+    }
+    
+    .screenshot-caption {
+      font-size: 0.8125rem;
+      color: var(--neutral-500);
+      max-width: 22rem;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+    
+    .screenshot-grid-bg {
+      position: absolute;
+      inset: 2rem 0 0 0;
+      background-image: 
+        linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    
+    /* ============================================
        EDITIONS SECTION
        ============================================ */
     .editions-intro {
@@ -805,7 +892,7 @@
     }
     
     /* ============================================
-       EDITION CARD (dark pricing card)
+       EDITION CARD
        ============================================ */
     .edition-card {
       position: relative;
@@ -934,68 +1021,6 @@
       line-height: 1.6;
       margin-bottom: 2rem;
     }
-    
-    .inside-visual {
-      position: relative;
-      height: 16rem;
-      background: var(--white);
-      border: 1px solid var(--neutral-200);
-      overflow: hidden;
-    }
-    
-    .orbiting-viz {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .orbiting-circle {
-      position: relative;
-      width: 10rem;
-      height: 10rem;
-    }
-    
-    .orbit-ring {
-      position: absolute;
-      inset: 0;
-      border: 1px solid var(--neutral-400);
-      border-radius: 50%;
-    }
-    .orbit-ring-2 {
-      inset: 1rem;
-      border: 1px solid var(--neutral-300);
-      transform: rotate(30deg);
-    }
-    .orbit-ring-3 {
-      inset: 2rem;
-      border: 1px solid var(--teal);
-      transform: rotate(60deg);
-    }
-    
-    .orbit-center {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0.75rem;
-      height: 0.75rem;
-      background: var(--teal);
-      transform: translate(-50%, -50%);
-      animation: shimmer 3s ease-in-out infinite;
-    }
-    
-    .orbit-dot {
-      position: absolute;
-      width: 0.5rem;
-      height: 0.5rem;
-      background: var(--neutral-900);
-      animation: slowFloat 8s ease-in-out infinite;
-    }
-    .orbit-dot-top { top: 0; left: 50%; transform: translateX(-50%); }
-    .orbit-dot-bottom { bottom: 0; left: 50%; transform: translateX(-50%); animation-delay: 2s; }
-    .orbit-dot-left { top: 50%; left: 0; transform: translateY(-50%); animation-delay: 3s; }
-    .orbit-dot-right { top: 50%; right: 0; transform: translateY(-50%); animation-delay: 4s; }
     
     .inside-items {
       display: grid;
@@ -1227,7 +1252,27 @@
     }
     
     /* ============================================
-       ABOUT (dark section)
+       PORTAL SHOWCASE SECTION
+       ============================================ */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .showcase-grid { grid-template-columns: 5fr 7fr; }
+    }
+    
+    .showcase-copy p {
+      font-size: 1.125rem;
+      color: var(--neutral-600);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    /* ============================================
+       ABOUT
        ============================================ */
     .about-grid {
       position: relative;
@@ -1295,13 +1340,6 @@
       font-size: 0.875rem;
       color: rgba(255, 255, 255, 0.7);
       line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-    
-    .founder-note {
-      font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.5);
-      line-height: 1.6;
     }
     
     /* ============================================
@@ -1364,6 +1402,13 @@
       color: var(--neutral-600);
       line-height: 1.6;
     }
+    
+    .faq-answer a {
+      color: var(--teal);
+      font-weight: 500;
+      border-bottom: 1px solid var(--teal);
+    }
+    .faq-answer a:hover { border-bottom-width: 2px; }
     
     /* ============================================
        FINAL CTA
@@ -1525,11 +1570,6 @@
       50% { transform: translateY(-20px) rotate(1deg); }
     }
     
-    @keyframes shimmer {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 0.8; }
-    }
-    
     .animate-fade-up {
       animation: fadeInUp 0.8s ease-out forwards;
       opacity: 0;
@@ -1562,7 +1602,8 @@
         <a href="#inside" class="nav-link">What's Inside</a>
         <a href="#about" class="nav-link">About</a>
         <a href="#faq" class="nav-link">FAQ</a>
-        <a href="#editions" class="nav-cta">Get the Playbook</a>
+        <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
+        <a href="#buy" class="nav-cta">Get the Playbook</a>
       </div>
 
       <button id="mobile-menu-toggle" class="mobile-toggle" aria-label="Toggle menu">
@@ -1581,7 +1622,8 @@
         <a href="#inside">What's Inside</a>
         <a href="#about">About</a>
         <a href="#faq">FAQ</a>
-        <a href="#editions" class="mobile-cta">Get the Playbook</a>
+        <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
+        <a href="#buy" class="mobile-cta">Get the Playbook</a>
       </div>
     </div>
   </nav>
@@ -1601,13 +1643,12 @@
           </div>
 
           <h1 class="hero-headline animate-fade-up delay-100">
-            The operating system<br>
-            <span class="font-serif text-teal">your AI</span> has been missing.
+            Where your AI work finally compounds <span class="font-emphasis text-teal">into revenue</span>,<br>
+            not just saved time.
           </h1>
 
           <p class="hero-subhead animate-fade-up delay-200">
-            A complete system of prompts, tools, workflows, and a curated library of proven 
-            examples — with a custom portal that remembers everything you do.
+            The AI portal where every prompt, every workflow, and every result makes the next one better, across three role-specific playbooks.
           </p>
 
           <div class="hero-cta-row animate-fade-up delay-300">
@@ -1665,7 +1706,7 @@
             </div>
             <div class="floating-badge badge-bottom-right animate-fade-up delay-400">
               <p>Prompts</p>
-              <p>20 curated</p>
+              <p>20+ curated</p>
             </div>
             <div class="badge-teal animate-fade-up delay-200">
               <p>Editions</p>
@@ -1690,8 +1731,50 @@
     </div>
   </section>
 
+  <!-- PORTAL SHOWCASE (dashboard screenshot placeholder #1) -->
+  <section class="section">
+    <div class="container">
+      <div class="showcase-grid">
+        <div class="showcase-copy">
+          <div class="eyebrow">
+            <div class="eyebrow-line"></div>
+            <span class="eyebrow-text">Inside the Portal</span>
+          </div>
+          <h2 class="section-headline">
+            Your AI workspace,<br>
+            <span class="font-emphasis text-teal">finally organized.</span>
+          </h2>
+          <p>
+            Every prompt, every tool, every workflow lives in one place at <a href="https://app.aloomii.com" style="color:var(--teal);font-weight:500;border-bottom:1px solid var(--teal);">app.aloomii.com</a>. Favorite what works. Note what you've customized. Track what you've tested. The portal remembers so you don't have to.
+          </p>
+          <p style="font-size:1rem;color:var(--neutral-500);">
+            Accessible on any device, updated continuously, built on infrastructure we operate.
+          </p>
+        </div>
+
+        <!-- DASHBOARD SCREENSHOT PLACEHOLDER #1 — REPLACE WITH REAL SCREENSHOT -->
+        <div class="screenshot-placeholder">
+          <div class="screenshot-browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">app.aloomii.com</div>
+          </div>
+          <div class="screenshot-grid-bg"></div>
+          <div class="screenshot-placeholder-inner">
+            <p class="screenshot-label">Portal Screenshot</p>
+            <p class="screenshot-title">app.aloomii.com dashboard</p>
+            <p class="screenshot-caption">
+              Prompts, tools, workflows, and the Library, with your personal state across every item.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- EDITIONS -->
-  <section id="editions" class="section">
+  <section id="editions" class="section section-bg-gray">
     <div class="container">
       
       <div class="editions-intro">
@@ -1700,11 +1783,10 @@
           <span class="eyebrow-text">Three Editions · One Playbook</span>
         </div>
         <h2 class="section-headline-lg">
-          Built for three specific <span class="font-serif text-teal">operators</span>.
+          Built for three specific <span class="font-emphasis text-teal">operators</span>.
         </h2>
         <p>
-          Each edition shares a common foundation — the core Playbook — 
-          with content specifically tuned for how each operator actually works.
+          Each edition shares a common foundation, the core Playbook, with content specifically tuned for how each operator actually works.
         </p>
       </div>
 
@@ -1718,9 +1800,9 @@
       <div class="edition-content active" data-edition="founder">
         <div class="edition-grid">
           <div>
-            <p class="edition-tagline">For founders of 2-25 person companies</p>
+            <p class="edition-tagline">For founders of 2-50 person companies</p>
             <h3 class="edition-hook">Your prompts are scattered across 14 tools.</h3>
-            <p class="edition-subhook font-serif">Your AI has no memory of what works.</p>
+            <p class="edition-subhook font-emphasis">Your AI has no memory of what works.</p>
             <p class="edition-promise">The Aloomii Playbook gives founders the operating system their AI has been missing.</p>
 
             <div class="edition-lists">
@@ -1743,7 +1825,8 @@
             </div>
 
             <div class="edition-cta-row">
-              <a href="/playbook/founder" class="btn-teal">
+              <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
+              <a href="#buy" class="btn-teal">
                 Get the Founder Edition · $149
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
@@ -1761,13 +1844,14 @@
                   <div class="edition-card-badge">Founder</div>
                 </div>
                 <h4 class="edition-card-title">Founder<br>Edition</h4>
-                <p class="edition-card-subtitle font-serif">For founders running 2-25 person companies.</p>
+                <p class="edition-card-subtitle font-emphasis">For founders of 2-50 person companies.</p>
                 <div class="edition-card-features">
                   <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>20 curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>20+ curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Custom web portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>6 complete workflows</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Lifetime updates</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                 </div>
                 <div class="edition-card-price">
@@ -1786,7 +1870,7 @@
           <div>
             <p class="edition-tagline">For solopreneurs running the whole show</p>
             <h3 class="edition-hook">AI content that sounds like everyone else's AI content.</h3>
-            <p class="edition-subhook font-serif">Which defeats the whole point of being solo.</p>
+            <p class="edition-subhook font-emphasis">Which defeats the whole point of being solo.</p>
             <p class="edition-promise">The Aloomii Playbook is the solo operator's system for AI that sounds like you at your most focused.</p>
 
             <div class="edition-lists">
@@ -1809,7 +1893,8 @@
             </div>
 
             <div class="edition-cta-row">
-              <a href="/playbook/solo" class="btn-teal">
+              <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
+              <a href="#buy" class="btn-teal">
                 Get the Solo Edition · $149
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
@@ -1827,13 +1912,14 @@
                   <div class="edition-card-badge">Solo</div>
                 </div>
                 <h4 class="edition-card-title">Solo<br>Edition</h4>
-                <p class="edition-card-subtitle font-serif">For solopreneurs running the whole show.</p>
+                <p class="edition-card-subtitle font-emphasis">For solopreneurs running the whole show.</p>
                 <div class="edition-card-features">
                   <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>20 curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>20+ curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Custom web portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>6 complete workflows</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Lifetime updates</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                 </div>
                 <div class="edition-card-price">
@@ -1852,7 +1938,7 @@
           <div>
             <p class="edition-tagline">For department heads in regulated industries</p>
             <h3 class="edition-hook">Leadership says "get moving on AI."</h3>
-            <p class="edition-subhook font-serif">They haven't told you how.</p>
+            <p class="edition-subhook font-emphasis">They haven't told you how.</p>
             <p class="edition-promise">The Aloomii Playbook is the credible, industry-aware framework for running a professional team in an AI-shaped world.</p>
 
             <div class="edition-lists">
@@ -1875,7 +1961,8 @@
             </div>
 
             <div class="edition-cta-row">
-              <a href="/playbook/operator" class="btn-teal">
+              <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
+              <a href="#buy" class="btn-teal">
                 Get the Operator Edition · $149
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
@@ -1893,14 +1980,15 @@
                   <div class="edition-card-badge">Operator</div>
                 </div>
                 <h4 class="edition-card-title">Operator<br>Edition</h4>
-                <p class="edition-card-subtitle font-serif">For department heads in regulated industries.</p>
+                <p class="edition-card-subtitle font-emphasis">For department heads in regulated industries.</p>
                 <div class="edition-card-features">
                   <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>20 curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>20+ curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Custom web portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>6 complete workflows</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Compliance frameworks</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>Lifetime updates</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                 </div>
                 <div class="edition-card-price">
                   <span class="price-big">$149</span>
@@ -1915,7 +2003,7 @@
   </section>
 
   <!-- WHAT'S INSIDE -->
-  <section id="inside" class="section section-bg-gray">
+  <section id="inside" class="section">
     <div class="container">
       <div class="inside-grid">
         <div>
@@ -1925,27 +2013,27 @@
           </div>
           <h2 class="section-headline">
             Not a PDF.<br>
-            <span class="font-serif text-teal">A system.</span>
+            <span class="font-emphasis text-teal">A system.</span>
           </h2>
           <p class="inside-intro-text">
-            Every element designed to compound. The ebook teaches the thinking. 
-            The prompts apply it. The Library provides proven patterns to inject. 
-            The portal remembers what works for you.
+            Every element designed to compound. The ebook teaches the thinking. The prompts apply it. The Library provides proven patterns to inject. The portal remembers what works for you.
           </p>
           
-          <div class="inside-visual">
-            <div class="grid-pattern" style="opacity:0.6;"></div>
-            <div class="orbiting-viz">
-              <div class="orbiting-circle">
-                <div class="orbit-ring"></div>
-                <div class="orbit-ring orbit-ring-2"></div>
-                <div class="orbit-ring orbit-ring-3"></div>
-                <div class="orbit-center"></div>
-                <div class="orbit-dot orbit-dot-top"></div>
-                <div class="orbit-dot orbit-dot-bottom"></div>
-                <div class="orbit-dot orbit-dot-left"></div>
-                <div class="orbit-dot orbit-dot-right"></div>
-              </div>
+          <!-- DASHBOARD SCREENSHOT PLACEHOLDER #2 — REPLACE WITH REAL SCREENSHOT -->
+          <div class="screenshot-placeholder" style="aspect-ratio: 4/3;">
+            <div class="screenshot-browser-bar">
+              <div class="browser-dot"></div>
+              <div class="browser-dot"></div>
+              <div class="browser-dot"></div>
+              <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">OpenClaw · Agent Fleet</div>
+            </div>
+            <div class="screenshot-grid-bg"></div>
+            <div class="screenshot-placeholder-inner">
+              <p class="screenshot-label">Internal Tools</p>
+              <p class="screenshot-title">The engine behind the Playbook</p>
+              <p class="screenshot-caption">
+                OpenClaw, our 7-agent system for client operations, powers the workflows you'll learn.
+              </p>
             </div>
           </div>
         </div>
@@ -1984,7 +2072,7 @@
               <span class="inside-item-num">03</span>
             </div>
             <h4>7 custom infographics</h4>
-            <p>Visual frameworks for the core concepts — shareable, printable, actually useful.</p>
+            <p>Visual frameworks for the core concepts, shareable, printable, actually useful.</p>
           </div>
 
           <div class="inside-item">
@@ -1995,7 +2083,7 @@
               <div class="inside-item-line"></div>
               <span class="inside-item-num">04</span>
             </div>
-            <h4>20 curated prompts</h4>
+            <h4>20+ curated prompts</h4>
             <p>Production-grade prompts across Research, Sales, Content, Strategy, and Operations categories.</p>
           </div>
 
@@ -2008,7 +2096,20 @@
               <span class="inside-item-num">05</span>
             </div>
             <h4>The AI tool stack</h4>
-            <p>What Aloomii actually uses — with honest assessment of each, including where to skip and where to invest.</p>
+            <p>What Aloomii actually uses, with honest assessment of each, including where to skip and where to invest.</p>
+          </div>
+
+          <!-- Custom web portal moved up -->
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">06</span>
+            </div>
+            <h4>Custom web portal</h4>
+            <p>Your content at app.aloomii.com with favorites, notes, status tracking, and continuous updates.</p>
           </div>
 
           <div class="inside-item">
@@ -2017,7 +2118,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
               </div>
               <div class="inside-item-line"></div>
-              <span class="inside-item-num">06</span>
+              <span class="inside-item-num">07</span>
             </div>
             <h4>6 complete workflows</h4>
             <p>Multi-step procedures that chain prompts and tools into repeatable outcomes.</p>
@@ -2029,22 +2130,10 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 5L19 8l-4 4 1.5 5L12 14l-4.5 3L9 12l-4-4 5.5 0z"/></svg>
               </div>
               <div class="inside-item-line"></div>
-              <span class="inside-item-num">07</span>
+              <span class="inside-item-num">08</span>
             </div>
             <h4>The Library (150 examples)</h4>
             <p>A curated swipe file of high-performing content with commentary. Inject into prompts for output that matches proven patterns.</p>
-          </div>
-
-          <div class="inside-item">
-            <div class="inside-item-header">
-              <div class="inside-item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              </div>
-              <div class="inside-item-line"></div>
-              <span class="inside-item-num">08</span>
-            </div>
-            <h4>Custom web portal</h4>
-            <p>Your content at app.aloomii.com with favorites, notes, status tracking, and continuous updates.</p>
           </div>
         </div>
       </div>
@@ -2052,7 +2141,7 @@
   </section>
 
   <!-- LIBRARY -->
-  <section class="section">
+  <section class="section section-bg-gray">
     <div class="container">
       <div class="library-grid">
         <div class="library-copy">
@@ -2062,9 +2151,9 @@
           </div>
           <h2 class="section-headline">
             Stop writing from scratch.<br>
-            <span class="font-serif text-teal">Steal from what works.</span>
+            <span class="font-emphasis text-teal">Borrow and improve from what works.</span>
           </h2>
-          <p>150 high-performing LinkedIn posts, landing pages, email subjects, cold outreach templates, and visual references — each with commentary explaining why it works.</p>
+          <p>150 high-performing LinkedIn posts, landing pages, email subjects, cold outreach templates, and visual references, each with commentary explaining why it works.</p>
           <p>Inject them into your AI prompts. Output that matches proven patterns beats generic AI output every time.</p>
           <div class="library-stats">
             <div>
@@ -2099,8 +2188,7 @@
             <div class="preview-footer">
               <p class="preview-footer-label">Why this works</p>
               <p class="preview-footer-text">
-                The specific number (1,247) creates authority and investigation impulse. 
-                The three "it wasn't" lines create tension by eliminating expected answers before revealing the insight.
+                The specific number (1,247) creates authority and investigation impulse. The three "it wasn't" lines create tension by eliminating expected answers before revealing the insight.
               </p>
             </div>
           </div>
@@ -2131,41 +2219,29 @@
           </div>
           <h2 class="section-headline">
             Built by operators<br>
-            <span class="font-serif text-teal">who've shipped it.</span>
+            <span class="font-emphasis text-teal">who've shipped it.</span>
           </h2>
           <p>
-            The Aloomii Playbook wasn't written by consultants theorizing about AI. 
-            It was extracted from the actual systems we run — for ourselves, for our clients, 
-            and for the agent fleet that powers our operations.
+            The Aloomii Playbook wasn't written by consultants theorizing about AI. It was extracted from the actual systems we run, for ourselves, for our clients, and for the agent fleet that powers our operations.
           </p>
         </div>
 
         <div class="founder-cards">
           <div class="founder-card">
-            <div class="founder-initial">J</div>
-            <p class="founder-role">Co-founder</p>
-            <h3 class="founder-name">Jenny Kalpu</h3>
+            <div class="founder-initial">Y</div>
+            <p class="founder-role">Co-Founder · Strategy & Judgment</p>
+            <h3 class="founder-name">Yohann Calpu</h3>
             <p class="founder-bio">
-              Operations, systems, and infrastructure. Prior enterprise consulting at IBM 
-              and financial infrastructure work at JP Morgan.
-            </p>
-            <p class="founder-note">
-              Builds and operates the OpenClaw agent fleet — 
-              Aloomii's 7-agent system for client operations.
+              Enterprise operator turned startup builder. JP Morgan, IBM, Ontario Government, then CryptoSlam, where he closed $2M in deals and helped raise a $9M seed round backed by Mark Cuban. He runs every strategy call. He reviews every deliverable.
             </p>
           </div>
 
           <div class="founder-card">
-            <div class="founder-initial">Y</div>
-            <p class="founder-role">Co-founder</p>
-            <h3 class="founder-name">Yohann Calpu</h3>
+            <div class="founder-initial">J</div>
+            <p class="founder-role">Co-Founder · Creative Director</p>
+            <h3 class="founder-name">Jenny Calpu</h3>
             <p class="founder-bio">
-              Strategy, client relationships, and media. Host of Pale Blue Nexus, 
-              Aloomii's podcast on AI, physics, and the operating models of the future.
-            </p>
-            <p class="founder-note">
-              Leads The Table — Aloomii's quarterly advisory gathering 
-              for founders and operating leaders.
+              Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking, taught herself design, video editing, web development, and AI creative tools. She owns brand voice, visual identity, and the emotional intelligence that makes the work land.
             </p>
           </div>
         </div>
@@ -2183,7 +2259,7 @@
         </div>
         <h2 class="section-headline">
           Everything you<br>
-          <span class="font-serif text-teal">might be wondering.</span>
+          <span class="font-emphasis text-teal">might be wondering.</span>
         </h2>
       </div>
 
@@ -2194,7 +2270,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>Both, but differently. If you're newer to AI, the Playbook gives you a structured entry point instead of the chaotic "try everything" approach. If you're already using AI heavily, the Playbook gives you a system for what you're doing ad-hoc. Most buyers fall somewhere in the middle — using AI inconsistently and wanting structure.</p></div>
+          <div class="faq-answer"><p>Both, but differently. If you're newer to AI, the Playbook gives you a structured entry point instead of the chaotic "try everything" approach. If you're already using AI heavily, the Playbook gives you a system for what you're doing ad-hoc. Most buyers fall somewhere in the middle, using AI inconsistently and wanting structure.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2203,7 +2279,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>The Founder Edition is for people running companies (2-25 employees). The Solo Edition is for independent operators with no employees. The Operating Leader Edition is for department heads inside larger companies (50+ employees). If you're genuinely between two editions, we recommend the one that matches your day-to-day reality, not your aspiration.</p></div>
+          <div class="faq-answer"><p>The Founder Edition is for people running companies (2-50 employees). The Solo Edition is for independent operators with no employees. The Operating Leader Edition is for department heads inside larger companies (50+ employees). If you're genuinely between two editions, we recommend the one that matches your day-to-day reality, not your aspiration.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2212,7 +2288,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>Yes. The prompts work with any of the major models (Claude, ChatGPT, Gemini) and we recommend Claude Pro at minimum. The Playbook includes guidance on which tool to use for which task. The portal itself is included with your purchase; AI tool subscriptions are separate.</p></div>
+          <div class="faq-answer"><p>Yes. The prompts work with any of the major models (Claude, ChatGPT, Gemini) and we recommend Claude Pro at minimum. The Playbook includes guidance on which tool to use for which task. The portal itself is included with your purchase. AI tool subscriptions are separate.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2221,7 +2297,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>The Library and prompts receive ongoing updates as models evolve. You keep access to updates indefinitely with your one-time purchase. The ebook and audio are versioned — if we publish a meaningful v2, you get it.</p></div>
+          <div class="faq-answer"><p>No. The Library and prompts in the portal at <a href="https://app.aloomii.com">app.aloomii.com</a> receive ongoing updates as models evolve. You keep access to updates indefinitely with your one-time purchase. The ebook and audio are versioned. If we publish a meaningful v2, you get it.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2239,7 +2315,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>14-day money-back guarantee. If the Playbook isn't worth $149 to you in the first two weeks, reach out via our <a href="https://www.aloomii.com/#contact" style="color:var(--teal);">contact form</a> and we'll refund you in full. No friction, no interrogation.</p></div>
+          <div class="faq-answer"><p>14-day money-back guarantee. If the Playbook isn't worth $149 to you in the first two weeks, reach out via our <a href="https://www.aloomii.com/#contact">contact form</a> and we'll refund you in full. No friction, no interrogation.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2257,14 +2333,14 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>Your license is for you specifically. If you want to bring your team on board, we offer team licenses at 40% off per additional seat. <a href="https://www.aloomii.com/#contact" style="color:var(--teal);">Contact us</a> for team pricing.</p></div>
+          <div class="faq-answer"><p>Your license is for you specifically. If you want to bring your team on board, we offer team licenses at 40% off per additional seat. <a href="https://www.aloomii.com/#contact">Contact us</a> for team pricing.</p></div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- FINAL CTA -->
-  <section class="section section-bg-teal" style="border-bottom:none;">
+  <section id="buy" class="section section-bg-teal" style="border-bottom:none;">
     <div class="grid-pattern grid-pattern-white"></div>
     <div class="final-cta-glow"></div>
     
@@ -2273,14 +2349,14 @@
         <p class="final-cta-eyebrow">The Aloomii Playbook · Launch Edition</p>
         <h2 class="final-cta-headline">
           Stop reinventing<br>
-          <span class="font-serif">what already works.</span>
+          <span class="font-emphasis">what already works.</span>
         </h2>
         <p class="final-cta-sub">
-          Three editions. One system. Instant access to every prompt, every workflow, 
-          the full Library, and the custom portal.
+          Three editions. One system. Instant access to every prompt, every workflow, the full Library, and the custom portal.
         </p>
         
         <div class="final-cta-row">
+          <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
           <a href="#editions" class="btn-dark">
             Choose your edition
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -2310,9 +2386,9 @@
         <div>
           <p class="footer-heading">The Playbook</p>
           <ul class="footer-links">
-            <li><a href="/playbook/founder">Founder Edition</a></li>
-            <li><a href="/playbook/solo">Solo Edition</a></li>
-            <li><a href="/playbook/operator">Operating Leader Edition</a></li>
+            <li><a href="#editions">Founder Edition</a></li>
+            <li><a href="#editions">Solo Edition</a></li>
+            <li><a href="#editions">Operating Leader Edition</a></li>
           </ul>
         </div>
 
