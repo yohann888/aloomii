@@ -27,12 +27,39 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  /* Prevent grid/flex children from overflowing their containers */
+  .solution-grid > *, .problems > *, .proof-grid > *,
+  .advantages > *, .risks > *, .journey > *, .roadmap > *,
+  .audience-grid > *, .revenue-grid > *, .team-grid > *,
+  .ask-main > *, .stats > *, .onramp > *, .whynow-content > *,
+  .asset-components > *, .member-top > * {
+    min-width: 0;
+  }
+
   html, body {
     background: var(--bg);
     color: var(--fg);
     font-family: 'Geist', sans-serif;
     -webkit-font-smoothing: antialiased;
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+  }
+
+  /* Prevent any element from causing horizontal overflow */
+  img, svg, video, canvas, iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Allow SVGs with explicit heights to keep them (charts, icons) */
+  .member-linkedin svg,
+  .onramp-visual svg,
+  .chart-wrapper svg {
+    height: auto;
+    max-width: 100%;
   }
 
   body {
@@ -503,7 +530,8 @@
   .chart-wrapper {
     position: relative;
     height: 220px;
-    margin: 0 -8px;
+    margin: 0;
+    overflow: hidden;
   }
 
   .chart-wrapper svg {
@@ -1621,6 +1649,8 @@
     text-align: right;
     font-family: 'Geist Mono', monospace;
     font-size: 11px;
+    overflow-wrap: anywhere;
+    min-width: 0;
     letter-spacing: 0.1em;
     color: var(--fg-dim);
   }
@@ -1650,6 +1680,270 @@
 
   .chart-wrapper rect { transform-origin: bottom; }
 
+  /* ==================== INTERSTITIALS ==================== */
+
+  /* Ticker Tape Interstitial */
+  .interstitial {
+    min-height: 100vh;
+    padding: 56px 0;
+    max-width: 100vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid var(--rule-soft);
+    overflow: hidden;
+  }
+
+  .interstitial-header {
+    padding: 0 72px;
+    max-width: 1440px;
+    margin: 0 auto 48px;
+    width: 100%;
+  }
+
+  .interstitial-kicker {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--bitcoin);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .interstitial-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 56px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    max-width: 900px;
+  }
+
+  .interstitial-title em { font-style: italic; color: var(--bitcoin); }
+
+  .interstitial-sub {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+    font-weight: 300;
+    max-width: 640px;
+  }
+
+  /* Ticker row scrolling animation */
+  .ticker-rail {
+    display: flex;
+    overflow: hidden;
+    padding: 16px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg-raised);
+    position: relative;
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+
+  .ticker-rail.reverse {
+    background: transparent;
+    border-top: none;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 48px;
+    animation: ticker-scroll 150s linear infinite;
+    flex-shrink: 0;
+    padding-right: 48px;
+  }
+
+  .ticker-rail.reverse .ticker-track {
+    animation: ticker-scroll-reverse 180s linear infinite;
+  }
+
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes ticker-scroll-reverse {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    font-family: 'Geist Mono', monospace;
+  }
+
+  .ticker-emoji {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .ticker-symbol {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--fg);
+    font-weight: 500;
+  }
+
+  .ticker-price {
+    font-size: 13px;
+    color: var(--fg-dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ticker-change {
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  .ticker-change.up {
+    color: var(--jade);
+    background: rgba(85, 150, 110, 0.08);
+  }
+
+  .ticker-change.down {
+    color: var(--crimson);
+    background: rgba(178, 67, 67, 0.08);
+  }
+
+  .ticker-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--rule);
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .ticker-caption {
+    padding: 32px 72px 0;
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ticker-caption-note {
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0;
+    color: var(--fg-dim);
+    text-transform: none;
+    font-style: italic;
+    max-width: 500px;
+    text-align: right;
+  }
+
+  /* Emoji Asset Grid Interstitial */
+  .emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    padding: 0 72px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .emoji-cell {
+    aspect-ratio: 1;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 12px;
+    position: relative;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+    overflow: hidden;
+  }
+
+  .emoji-cell:hover {
+    border-color: var(--bitcoin);
+    transform: translateY(-2px);
+  }
+
+  .emoji-cell.featured {
+    background: linear-gradient(145deg, rgba(247, 147, 26, 0.06), var(--bg-raised));
+    border-color: rgba(247, 147, 26, 0.25);
+  }
+
+  .emoji-cell-emoji {
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .emoji-cell-symbol {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+  }
+
+  .emoji-cell-rarity {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .emoji-cell-rarity.legendary { background: var(--bitcoin); }
+  .emoji-cell-rarity.rare { background: var(--jade); }
+  .emoji-cell-rarity.uncommon { background: rgba(245, 243, 238, 0.3); }
+
+  .grid-legend {
+    padding: 32px 72px 0;
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+  }
+
+  .legend-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .legend-dot::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .legend-dot.legendary::before { background: var(--bitcoin); }
+  .legend-dot.rare::before { background: var(--jade); }
+  .legend-dot.uncommon::before { background: rgba(245, 243, 238, 0.3); }
+
   /* Responsive */
   @media (max-width: 1024px) {
     .slide { padding: 40px 32px; }
@@ -1666,15 +1960,33 @@
     .asset-component:last-child { border-bottom: none; }
     .asset-header { grid-template-columns: 1fr; }
     .asset-structure { text-align: left; white-space: normal; }
+    .interstitial-header, .ticker-caption, .grid-legend { padding-left: 32px; padding-right: 32px; }
+    .emoji-grid { grid-template-columns: repeat(5, 1fr); padding: 0 32px; max-width: 100%; }
+    .interstitial-title { font-size: 40px; }
   }
 
   @media (max-width: 640px) {
     .nav { display: none; }
+    .slide { padding: 32px 20px; }
     .slide-header { grid-template-columns: 1fr; gap: 8px; }
     .slide-meta, .slide-num { text-align: left; }
     .wordmark { font-size: 72px; }
     .headline { font-size: 32px; }
     .ask-amount { font-size: 60px; }
+    .interstitial-title { font-size: 28px; }
+    .interstitial-header, .ticker-caption, .grid-legend { padding-left: 20px; padding-right: 20px; }
+    .emoji-grid { grid-template-columns: repeat(2, 1fr); padding: 0 20px; gap: 10px; }
+    .emoji-cell-emoji { font-size: 36px; }
+    .ticker-caption { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .ticker-caption-note { text-align: left; }
+    .contact-links a,
+    .credential,
+    .asset-comp-body,
+    .advantage-body,
+    .member-bio {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
   }
 
   @media print {
@@ -1822,7 +2134,7 @@
       </div>
       <h3 class="solution-title">Emoji <em>Token Factory</em></h3>
       <p class="solution-body">
-        Permissionless minting of BRC-20 emoji tokens with bonded liquidity pools. Creators earn 0.3% of pool fees forever. Rare unicode characters become scarce, ownable, tradeable primitives.
+        Permissionless minting of BRC-20 emoji tokens with bonded liquidity pools. <strong>BRC-20 is the only major token standard with native unicode support</strong> — which means emoji tickers exist on Bitcoin and nowhere else. Creators earn 0.3% of pool fees forever. Rare unicode characters become scarce, tradeable primitives.
       </p>
     </div>
 
@@ -1833,7 +2145,7 @@
       </div>
       <h3 class="solution-title">Liquidity <em>Wars</em></h3>
       <p class="solution-body">
-        Teams compete to dominate LP positions on leaderboards. Weekly payouts, emoji-faction allegiances, cross-platform raid tools. Turns passive liquidity provision into a PvP sport.
+        Teams compete to dominate LP positions on emoji-stablecoin pools. Weekly payouts, emoji-faction allegiances, cross-platform raid tools. Yields are <strong>USD-denominated</strong>, not BTC-volatile. Turns passive liquidity provision into a PvP sport.
       </p>
     </div>
 
@@ -2109,6 +2421,63 @@
 </section>
 
 
+<!-- =================== INTERSTITIAL: EMOJI ASSET GRID =================== -->
+<section class="interstitial" id="int-grid">
+  <div class="interstitial-header">
+    <div class="interstitial-kicker">The Moji.gg Asset Universe</div>
+    <h2 class="interstitial-title">
+      Every emoji is a <em>tradeable primitive</em>.
+    </h2>
+    <p class="interstitial-sub">
+      <strong>BRC-20 is the only major token standard with native unicode support</strong> — which is why emoji assets exist on Bitcoin and nowhere else. 3,782+ possible tickers. 20 already inscribed. Thousands more to mint. The rarest become the blue chips.
+    </p>
+  </div>
+
+  <div class="emoji-grid">
+    <!-- Row 1 -->
+    <div class="emoji-cell featured"><div class="emoji-cell-rarity legendary"></div><div class="emoji-cell-emoji">💰</div><div class="emoji-cell-symbol">$💰</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">🌈</div><div class="emoji-cell-symbol">$🌈</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🍌</div><div class="emoji-cell-symbol">$🍌</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">🥩</div><div class="emoji-cell-symbol">$🥩</div></div>
+    <div class="emoji-cell featured"><div class="emoji-cell-rarity legendary"></div><div class="emoji-cell-emoji">🧡</div><div class="emoji-cell-symbol">$🧡</div></div>
+
+    <!-- Row 2 -->
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">🥭</div><div class="emoji-cell-symbol">$🥭</div></div>
+    <div class="emoji-cell featured"><div class="emoji-cell-rarity legendary"></div><div class="emoji-cell-emoji">🪙</div><div class="emoji-cell-symbol">$🪙</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">🌮</div><div class="emoji-cell-symbol">$🌮</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🌭</div><div class="emoji-cell-symbol">$🌭</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🍊</div><div class="emoji-cell-symbol">$🍊</div></div>
+
+    <!-- Row 3 -->
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">🍹</div><div class="emoji-cell-symbol">$🍹</div></div>
+    <div class="emoji-cell featured"><div class="emoji-cell-rarity legendary"></div><div class="emoji-cell-emoji">🌹</div><div class="emoji-cell-symbol">$🌹</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🍺</div><div class="emoji-cell-symbol">$🍺</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🥞</div><div class="emoji-cell-symbol">$🥞</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🥕</div><div class="emoji-cell-symbol">$🥕</div></div>
+
+    <!-- Row 4 -->
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">🌷</div><div class="emoji-cell-symbol">$🌷</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">🔫</div><div class="emoji-cell-symbol">$🔫</div></div>
+    <div class="emoji-cell featured"><div class="emoji-cell-rarity legendary"></div><div class="emoji-cell-emoji">🗽</div><div class="emoji-cell-symbol">$🗽</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🧀</div><div class="emoji-cell-symbol">$🧀</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🍣</div><div class="emoji-cell-symbol">$🍣</div></div>
+
+    <!-- Row 5 -->
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🌽</div><div class="emoji-cell-symbol">$🌽</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🍉</div><div class="emoji-cell-symbol">$🍉</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">🛸</div><div class="emoji-cell-symbol">$🛸</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity rare"></div><div class="emoji-cell-emoji">👽</div><div class="emoji-cell-symbol">$👽</div></div>
+    <div class="emoji-cell"><div class="emoji-cell-rarity uncommon"></div><div class="emoji-cell-emoji">🍎</div><div class="emoji-cell-symbol">$🍎</div></div>
+  </div>
+
+  <div class="grid-legend">
+    <span class="legend-dot legendary">Legendary · Top 20 by holder count</span>
+    <span class="legend-dot rare">Rare · Emerging community tickers</span>
+    <span class="legend-dot uncommon">Uncommon · Open for minting</span>
+  </div>
+</section>
+
+
 <!-- =================== SLIDE 07 — AUDIENCE =================== -->
 <section class="slide" id="s7">
   <header class="slide-header">
@@ -2133,7 +2502,7 @@
         <div>
           <div class="phase-label">Beachhead · Months 1–6</div>
           <div class="phase-title">Chinese-native BRC-20 retail</div>
-          <div class="phase-desc">WeChat-fluent, meme-obsessed, CEX-accessible Ordinals/Runes/BRC-20 traders. The ORDI pump revealed this audience publicly.</div>
+          <div class="phase-desc">WeChat-fluent, meme-obsessed, CEX-accessible Ordinals/Runes/BRC-20 traders. The ORDI pump revealed this audience publicly. <strong>USDT rails</strong> for onramp — the stablecoin this market already uses.</div>
         </div>
         <div class="phase-timing">Q2 ·<br>Q3 2026</div>
       </div>
@@ -2143,7 +2512,7 @@
         <div>
           <div class="phase-label">Expansion · Months 6–12</div>
           <div class="phase-title">Global crypto degens</div>
-          <div class="phase-desc">English-speaking BRC-20 holders, Runes speculators, memecoin rotators looking for on-chain games with real stakes.</div>
+          <div class="phase-desc">English-speaking BRC-20 holders, Runes speculators, memecoin rotators looking for on-chain games with real stakes. <strong>USDC rails</strong> activate — regulated, GENIUS Act-aligned, institutional-ready.</div>
         </div>
         <div class="phase-timing">Q3 ·<br>Q4 2026</div>
       </div>
@@ -2290,9 +2659,9 @@
     <div class="advantage">
       <div class="advantage-tier">In Discussions</div>
       <div class="advantage-icon">🛡️</div>
-      <h3 class="advantage-title">BlockSkunk <em>compliance hedge</em></h3>
+      <h3 class="advantage-title">Regulatory <em>architecture</em></h3>
       <p class="advantage-body">
-        In discussions with <strong>BlockSkunk</strong> (crypto-native compliance advisory) for regulatory strategy. Addresses jurisdictional complexity before it becomes a problem, rare for a seed-stage crypto project.
+        In discussions with <strong>BlockSkunk</strong> (crypto-native compliance advisory) for regulatory strategy. Settlement rails route through <strong>GENIUS Act-aligned USDC</strong> for Western/institutional flow. Addresses jurisdictional complexity before it becomes a problem.
       </p>
     </div>
 
@@ -2408,6 +2777,239 @@
   <div class="slide-footer">
     <div>Revenue · Base case, not hockey stick</div>
     <div>10 of 14</div>
+  </div>
+</section>
+
+
+<!-- =================== INTERSTITIAL: TICKER TAPE =================== -->
+<section class="interstitial" id="int-ticker">
+  <div class="interstitial-header">
+    <div class="interstitial-kicker">Projected Launch Market · Illustrative</div>
+    <h2 class="interstitial-title">
+      The emoji <em>asset class</em>, priced by attention.
+    </h2>
+    <p class="interstitial-sub">
+      Every emoji becomes a ticker. Every ticker has a price, a community, a volatility profile. This is what Moji.gg's market surface looks like on day one.
+    </p>
+  </div>
+
+  <div class="ticker-rail">
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="ticker-emoji">🍌</span><span class="ticker-symbol">$🍌</span><span class="ticker-price">0.0847</span><span class="ticker-change up">+12.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌈</span><span class="ticker-symbol">$🌈</span><span class="ticker-price">1.2340</span><span class="ticker-change up">+34.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">💰</span><span class="ticker-symbol">$💰</span><span class="ticker-price">4.1203</span><span class="ticker-change up">+1.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥭</span><span class="ticker-symbol">$🥭</span><span class="ticker-price">0.1820</span><span class="ticker-change up">+21.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🧡</span><span class="ticker-symbol">$🧡</span><span class="ticker-price">0.4118</span><span class="ticker-change down">-8.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥩</span><span class="ticker-symbol">$🥩</span><span class="ticker-price">0.9420</span><span class="ticker-change up">+47.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌭</span><span class="ticker-symbol">$🌭</span><span class="ticker-price">0.0231</span><span class="ticker-change up">+5.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌮</span><span class="ticker-symbol">$🌮</span><span class="ticker-price">0.0089</span><span class="ticker-change down">-14.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍊</span><span class="ticker-symbol">$🍊</span><span class="ticker-price">2.8710</span><span class="ticker-change up">+22.6%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍹</span><span class="ticker-symbol">$🍹</span><span class="ticker-price">0.3892</span><span class="ticker-change down">-22.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍺</span><span class="ticker-symbol">$🍺</span><span class="ticker-price">1.7845</span><span class="ticker-change up">+67.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥞</span><span class="ticker-symbol">$🥞</span><span class="ticker-price">0.1245</span><span class="ticker-change up">+15.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌽</span><span class="ticker-symbol">$🌽</span><span class="ticker-price">3.2410</span><span class="ticker-change up">+5.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥕</span><span class="ticker-symbol">$🥕</span><span class="ticker-price">0.0712</span><span class="ticker-change up">+9.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🧀</span><span class="ticker-symbol">$🧀</span><span class="ticker-price">0.2340</span><span class="ticker-change down">-4.5%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍣</span><span class="ticker-symbol">$🍣</span><span class="ticker-price">1.4560</span><span class="ticker-change up">+9.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🔫</span><span class="ticker-symbol">$🔫</span><span class="ticker-price">0.0034</span><span class="ticker-change up">+142.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌹</span><span class="ticker-symbol">$🌹</span><span class="ticker-price">0.5612</span><span class="ticker-change up">+11.9%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌷</span><span class="ticker-symbol">$🌷</span><span class="ticker-price">0.6712</span><span class="ticker-change up">+8.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍉</span><span class="ticker-symbol">$🍉</span><span class="ticker-price">0.0458</span><span class="ticker-change up">+8.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🛸</span><span class="ticker-symbol">$🛸</span><span class="ticker-price">0.0234</span><span class="ticker-change up">+87.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">👽</span><span class="ticker-symbol">$👽</span><span class="ticker-price">0.0198</span><span class="ticker-change up">+112.9%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🗽</span><span class="ticker-symbol">$🗽</span><span class="ticker-price">2.3400</span><span class="ticker-change up">+3.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍎</span><span class="ticker-symbol">$🍎</span><span class="ticker-price">1.8900</span><span class="ticker-change up">+7.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🪙</span><span class="ticker-symbol">$🪙</span><span class="ticker-price">1.0000</span><span class="ticker-change up">+0.1%</span></div>
+      <div class="ticker-divider"></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="ticker-item"><span class="ticker-emoji">🍌</span><span class="ticker-symbol">$🍌</span><span class="ticker-price">0.0847</span><span class="ticker-change up">+12.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌈</span><span class="ticker-symbol">$🌈</span><span class="ticker-price">1.2340</span><span class="ticker-change up">+34.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">💰</span><span class="ticker-symbol">$💰</span><span class="ticker-price">4.1203</span><span class="ticker-change up">+1.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥭</span><span class="ticker-symbol">$🥭</span><span class="ticker-price">0.1820</span><span class="ticker-change up">+21.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🧡</span><span class="ticker-symbol">$🧡</span><span class="ticker-price">0.4118</span><span class="ticker-change down">-8.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥩</span><span class="ticker-symbol">$🥩</span><span class="ticker-price">0.9420</span><span class="ticker-change up">+47.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌭</span><span class="ticker-symbol">$🌭</span><span class="ticker-price">0.0231</span><span class="ticker-change up">+5.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌮</span><span class="ticker-symbol">$🌮</span><span class="ticker-price">0.0089</span><span class="ticker-change down">-14.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍊</span><span class="ticker-symbol">$🍊</span><span class="ticker-price">2.8710</span><span class="ticker-change up">+22.6%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍹</span><span class="ticker-symbol">$🍹</span><span class="ticker-price">0.3892</span><span class="ticker-change down">-22.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍺</span><span class="ticker-symbol">$🍺</span><span class="ticker-price">1.7845</span><span class="ticker-change up">+67.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥞</span><span class="ticker-symbol">$🥞</span><span class="ticker-price">0.1245</span><span class="ticker-change up">+15.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌽</span><span class="ticker-symbol">$🌽</span><span class="ticker-price">3.2410</span><span class="ticker-change up">+5.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥕</span><span class="ticker-symbol">$🥕</span><span class="ticker-price">0.0712</span><span class="ticker-change up">+9.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🧀</span><span class="ticker-symbol">$🧀</span><span class="ticker-price">0.2340</span><span class="ticker-change down">-4.5%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍣</span><span class="ticker-symbol">$🍣</span><span class="ticker-price">1.4560</span><span class="ticker-change up">+9.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🔫</span><span class="ticker-symbol">$🔫</span><span class="ticker-price">0.0034</span><span class="ticker-change up">+142.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌹</span><span class="ticker-symbol">$🌹</span><span class="ticker-price">0.5612</span><span class="ticker-change up">+11.9%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌷</span><span class="ticker-symbol">$🌷</span><span class="ticker-price">0.6712</span><span class="ticker-change up">+8.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍉</span><span class="ticker-symbol">$🍉</span><span class="ticker-price">0.0458</span><span class="ticker-change up">+8.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🛸</span><span class="ticker-symbol">$🛸</span><span class="ticker-price">0.0234</span><span class="ticker-change up">+87.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">👽</span><span class="ticker-symbol">$👽</span><span class="ticker-price">0.0198</span><span class="ticker-change up">+112.9%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🗽</span><span class="ticker-symbol">$🗽</span><span class="ticker-price">2.3400</span><span class="ticker-change up">+3.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍎</span><span class="ticker-symbol">$🍎</span><span class="ticker-price">1.8900</span><span class="ticker-change up">+7.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🪙</span><span class="ticker-symbol">$🪙</span><span class="ticker-price">1.0000</span><span class="ticker-change up">+0.1%</span></div>
+      <div class="ticker-divider"></div>
+    </div>
+  </div>
+
+  <div class="ticker-rail reverse">
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="ticker-emoji">🍎</span><span class="ticker-symbol">$🍎</span><span class="ticker-price">1.8945</span><span class="ticker-change up">+7.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🗽</span><span class="ticker-symbol">$🗽</span><span class="ticker-price">2.3445</span><span class="ticker-change up">+3.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">👽</span><span class="ticker-symbol">$👽</span><span class="ticker-price">0.0201</span><span class="ticker-change up">+114.5%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🛸</span><span class="ticker-symbol">$🛸</span><span class="ticker-price">0.0236</span><span class="ticker-change up">+88.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍉</span><span class="ticker-symbol">$🍉</span><span class="ticker-price">0.0462</span><span class="ticker-change up">+9.0%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌷</span><span class="ticker-symbol">$🌷</span><span class="ticker-price">0.6745</span><span class="ticker-change up">+9.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌹</span><span class="ticker-symbol">$🌹</span><span class="ticker-price">0.5589</span><span class="ticker-change up">+11.5%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🔫</span><span class="ticker-symbol">$🔫</span><span class="ticker-price">0.0035</span><span class="ticker-change up">+145.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍣</span><span class="ticker-symbol">$🍣</span><span class="ticker-price">1.4590</span><span class="ticker-change up">+9.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🧀</span><span class="ticker-symbol">$🧀</span><span class="ticker-price">0.2312</span><span class="ticker-change down">-5.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥕</span><span class="ticker-symbol">$🥕</span><span class="ticker-price">0.0728</span><span class="ticker-change up">+11.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌽</span><span class="ticker-symbol">$🌽</span><span class="ticker-price">3.2480</span><span class="ticker-change up">+5.9%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥞</span><span class="ticker-symbol">$🥞</span><span class="ticker-price">0.1252</span><span class="ticker-change up">+16.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍺</span><span class="ticker-symbol">$🍺</span><span class="ticker-price">1.8012</span><span class="ticker-change up">+69.0%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍹</span><span class="ticker-symbol">$🍹</span><span class="ticker-price">0.3845</span><span class="ticker-change down">-23.0%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍊</span><span class="ticker-symbol">$🍊</span><span class="ticker-price">2.8845</span><span class="ticker-change up">+23.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌮</span><span class="ticker-symbol">$🌮</span><span class="ticker-price">0.0091</span><span class="ticker-change down">-13.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌭</span><span class="ticker-symbol">$🌭</span><span class="ticker-price">0.0235</span><span class="ticker-change up">+6.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥩</span><span class="ticker-symbol">$🥩</span><span class="ticker-price">0.9378</span><span class="ticker-change up">+46.6%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🧡</span><span class="ticker-symbol">$🧡</span><span class="ticker-price">0.4087</span><span class="ticker-change down">-9.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥭</span><span class="ticker-symbol">$🥭</span><span class="ticker-price">0.1835</span><span class="ticker-change up">+21.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">💰</span><span class="ticker-symbol">$💰</span><span class="ticker-price">4.1178</span><span class="ticker-change up">+1.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌈</span><span class="ticker-symbol">$🌈</span><span class="ticker-price">1.2456</span><span class="ticker-change up">+35.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍌</span><span class="ticker-symbol">$🍌</span><span class="ticker-price">0.0853</span><span class="ticker-change up">+13.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🪙</span><span class="ticker-symbol">$🪙</span><span class="ticker-price">1.0001</span><span class="ticker-change up">+0.1%</span></div>
+      <div class="ticker-divider"></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="ticker-item"><span class="ticker-emoji">🍎</span><span class="ticker-symbol">$🍎</span><span class="ticker-price">1.8945</span><span class="ticker-change up">+7.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🗽</span><span class="ticker-symbol">$🗽</span><span class="ticker-price">2.3445</span><span class="ticker-change up">+3.3%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">👽</span><span class="ticker-symbol">$👽</span><span class="ticker-price">0.0201</span><span class="ticker-change up">+114.5%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🛸</span><span class="ticker-symbol">$🛸</span><span class="ticker-price">0.0236</span><span class="ticker-change up">+88.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍉</span><span class="ticker-symbol">$🍉</span><span class="ticker-price">0.0462</span><span class="ticker-change up">+9.0%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌷</span><span class="ticker-symbol">$🌷</span><span class="ticker-price">0.6745</span><span class="ticker-change up">+9.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌹</span><span class="ticker-symbol">$🌹</span><span class="ticker-price">0.5589</span><span class="ticker-change up">+11.5%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🔫</span><span class="ticker-symbol">$🔫</span><span class="ticker-price">0.0035</span><span class="ticker-change up">+145.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍣</span><span class="ticker-symbol">$🍣</span><span class="ticker-price">1.4590</span><span class="ticker-change up">+9.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🧀</span><span class="ticker-symbol">$🧀</span><span class="ticker-price">0.2312</span><span class="ticker-change down">-5.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥕</span><span class="ticker-symbol">$🥕</span><span class="ticker-price">0.0728</span><span class="ticker-change up">+11.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌽</span><span class="ticker-symbol">$🌽</span><span class="ticker-price">3.2480</span><span class="ticker-change up">+5.9%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥞</span><span class="ticker-symbol">$🥞</span><span class="ticker-price">0.1252</span><span class="ticker-change up">+16.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍺</span><span class="ticker-symbol">$🍺</span><span class="ticker-price">1.8012</span><span class="ticker-change up">+69.0%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍹</span><span class="ticker-symbol">$🍹</span><span class="ticker-price">0.3845</span><span class="ticker-change down">-23.0%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍊</span><span class="ticker-symbol">$🍊</span><span class="ticker-price">2.8845</span><span class="ticker-change up">+23.2%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌮</span><span class="ticker-symbol">$🌮</span><span class="ticker-price">0.0091</span><span class="ticker-change down">-13.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌭</span><span class="ticker-symbol">$🌭</span><span class="ticker-price">0.0235</span><span class="ticker-change up">+6.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥩</span><span class="ticker-symbol">$🥩</span><span class="ticker-price">0.9378</span><span class="ticker-change up">+46.6%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🧡</span><span class="ticker-symbol">$🧡</span><span class="ticker-price">0.4087</span><span class="ticker-change down">-9.4%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🥭</span><span class="ticker-symbol">$🥭</span><span class="ticker-price">0.1835</span><span class="ticker-change up">+21.8%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">💰</span><span class="ticker-symbol">$💰</span><span class="ticker-price">4.1178</span><span class="ticker-change up">+1.7%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🌈</span><span class="ticker-symbol">$🌈</span><span class="ticker-price">1.2456</span><span class="ticker-change up">+35.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🍌</span><span class="ticker-symbol">$🍌</span><span class="ticker-price">0.0853</span><span class="ticker-change up">+13.1%</span></div>
+      <div class="ticker-divider"></div>
+      <div class="ticker-item"><span class="ticker-emoji">🪙</span><span class="ticker-symbol">$🪙</span><span class="ticker-price">1.0001</span><span class="ticker-change up">+0.1%</span></div>
+      <div class="ticker-divider"></div>
+    </div>
+  </div>
+
+  <div class="ticker-caption">
+    <div>25 Featured Tickers · Spot + Perp Rails · Live on Moji.gg at Launch</div>
+    <div class="ticker-caption-note">
+      Illustrative only. Prices and movements shown are projected — actual market opens Q2 2026.
+    </div>
   </div>
 </section>
 
@@ -2558,7 +3160,7 @@
           Moji.gg ships first as a gamified DeFi product for <strong>humans</strong>: emoji tokens, Liquidity Wars, red envelope lotteries, Flash Heists. That is the entire Seed-round ambition.
         </p>
         <p>
-          But the same protocol surface (permissionless token factories, on-chain game state, programmable payouts) is exactly what AI agents need to <strong>autonomously transact on Bitcoin</strong> as BRC-2.0 matures and agent-payment standards stabilize.
+          But the same protocol surface (permissionless token factories, on-chain game state, programmable payouts, <strong>USDC-denominated pools</strong>) is exactly what AI agents need to <strong>autonomously transact on Bitcoin</strong> as BRC-2.0 matures and agent-payment standards stabilize. Agents settle in stablecoins, not BTC. We are building the rails they will use.
         </p>
         <p>
           When the agent economy arrives, <strong>we do not build a second product</strong>. We expose APIs. The liquidity, the users, the cultural footprint are already in place. The human game economy becomes the agent rail.
@@ -2738,7 +3340,7 @@
         <div class="asset-comp-num">II.</div>
         <h4 class="asset-comp-title">Token <em>Warrant</em></h4>
         <p class="asset-comp-body">
-          Pro-rata right to <strong>5–10% of founder's existing BRC-20 emoji ticker inventory</strong>. Assets are already minted, already on-chain. Warrant exercises at conversion of the SAFE.
+          Pro-rata right to <strong>5–10% of founder's existing BRC-20 emoji ticker inventory</strong>. Assets are already minted, already on-chain. Warrant exercises at conversion of the SAFE. Swappable to <strong>USDC on-platform</strong> at any time for a regulated exit path.
         </p>
       </div>
 
