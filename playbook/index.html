@@ -1,0 +1,2399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Aloomii Playbook — AI Operations for Relationship-Driven Businesses</title>
+  <meta name="description" content="The operating system your AI has been missing. A complete system of prompts, tools, workflows, and a curated library of proven examples — with a custom portal that remembers everything you do. Three editions: Founder, Solo, Operating Leader. $149 one-time.">
+  <meta name="keywords" content="AI operations, AI playbook, founder AI, solopreneur AI, AI for professionals, AI prompts, AI workflows, Aloomii">
+  <meta name="author" content="Jenny Kalpu and Yohann Calpu">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aloomii.com/playbook">
+  <meta property="og:title" content="The Aloomii Playbook — AI Operations for Relationship-Driven Businesses">
+  <meta property="og:description" content="The operating system your AI has been missing. Three editions. One complete system.">
+  <meta property="og:site_name" content="Aloomii">
+  
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://aloomii.com/playbook">
+  <meta property="twitter:title" content="The Aloomii Playbook">
+  <meta property="twitter:description" content="The operating system your AI has been missing. Three editions. One complete system.">
+  
+  <link rel="canonical" href="https://aloomii.com/playbook">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --teal: #00C8BE;
+      --teal-dark: #00B5AC;
+      --black: #000;
+      --neutral-900: #171717;
+      --neutral-800: #262626;
+      --neutral-700: #404040;
+      --neutral-600: #525252;
+      --neutral-500: #737373;
+      --neutral-400: #a3a3a3;
+      --neutral-300: #d4d4d4;
+      --neutral-200: #e5e5e5;
+      --neutral-100: #f5f5f5;
+      --neutral-50: #fafafa;
+      --white: #fff;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 5rem;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--neutral-900);
+      background: var(--white);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; background: none; border: none; }
+    
+    .font-serif { 
+      font-family: 'Instrument Serif', Georgia, serif; 
+      font-style: italic; 
+      letter-spacing: -0.02em;
+      font-weight: 400;
+    }
+    
+    .font-mono {
+      font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+    }
+    
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    @media (min-width: 1024px) {
+      .container { padding: 0 3rem; }
+    }
+    
+    .container-narrow {
+      max-width: 896px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    @media (min-width: 1024px) {
+      .container-narrow { padding: 0 3rem; }
+    }
+    
+    /* ============================================
+       NAV
+       ============================================ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+    
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .nav-logo-img {
+      height: 32px;
+      width: auto;
+    }
+    
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    @media (min-width: 1024px) {
+      .nav-links { display: flex; }
+    }
+    
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--neutral-600);
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--neutral-900); }
+    
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.625rem 1.25rem;
+      background: var(--neutral-900);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--teal); }
+    
+    .mobile-toggle {
+      display: flex;
+      padding: 0.5rem;
+      color: var(--neutral-900);
+    }
+    @media (min-width: 1024px) {
+      .mobile-toggle { display: none; }
+    }
+    
+    .mobile-menu {
+      display: none;
+      border-top: 1px solid var(--neutral-200);
+      background: var(--white);
+    }
+    .mobile-menu.open { display: block; }
+    @media (min-width: 1024px) {
+      .mobile-menu, .mobile-menu.open { display: none; }
+    }
+    
+    .mobile-menu-inner {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .mobile-menu a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--neutral-600);
+    }
+    
+    .mobile-cta {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem 1.25rem;
+      background: var(--neutral-900);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    
+    /* ============================================
+       TYPOGRAPHY UTILITIES
+       ============================================ */
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .eyebrow-line {
+      width: 2rem;
+      height: 1px;
+      background: var(--teal);
+    }
+    .eyebrow-text {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--neutral-500);
+    }
+    .eyebrow-text.teal { color: var(--teal); }
+    
+    h1, h2, h3, h4 {
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      line-height: 1.05;
+    }
+    
+    .hero-headline {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      line-height: 0.98;
+    }
+    @media (min-width: 1024px) {
+      .hero-headline { font-size: 4.5rem; }
+    }
+    
+    .section-headline {
+      font-size: 2.25rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 1024px) {
+      .section-headline { font-size: 3rem; }
+    }
+    
+    .section-headline-lg {
+      font-size: 2.25rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 1024px) {
+      .section-headline-lg { font-size: 3.75rem; }
+    }
+    
+    /* ============================================
+       SECTIONS
+       ============================================ */
+    .section {
+      padding: 6rem 0;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    @media (min-width: 1024px) {
+      .section { padding: 8rem 0; }
+    }
+    
+    .section-bg-gray {
+      background: var(--neutral-50);
+    }
+    
+    .section-bg-dark {
+      background: var(--neutral-900);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .section-bg-teal {
+      background: var(--teal);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* ============================================
+       GRID PATTERNS
+       ============================================ */
+    .grid-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    
+    .grid-pattern-white {
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+      opacity: 0.2;
+    }
+    
+    .dotted-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(0,200,190,0.15) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    
+    .glow-teal {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 600px;
+      height: 600px;
+      background: var(--teal);
+      opacity: 0.08;
+      border-radius: 50%;
+      filter: blur(80px);
+      transform: translate(33%, -33%);
+      pointer-events: none;
+    }
+    
+    /* ============================================
+       HERO
+       ============================================ */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    
+    .hero-inner {
+      position: relative;
+      padding: 4rem 0 5rem;
+    }
+    @media (min-width: 1024px) {
+      .hero-inner { padding: 6rem 0 8rem; }
+    }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (min-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 7fr 5fr;
+        gap: 4rem;
+      }
+    }
+    
+    .hero-copy { max-width: none; }
+    
+    .hero-subhead {
+      font-size: 1.125rem;
+      color: var(--neutral-600);
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      max-width: 36rem;
+    }
+    @media (min-width: 1024px) {
+      .hero-subhead { font-size: 1.25rem; }
+    }
+    
+    .hero-cta-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    @media (min-width: 640px) {
+      .hero-cta-row { flex-direction: row; align-items: center; }
+    }
+    
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: var(--neutral-900);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .btn-primary:hover {
+      background: var(--teal);
+    }
+    .btn-primary:hover svg { transform: translateX(4px); }
+    .btn-primary svg { transition: transform 0.2s; }
+    
+    .btn-teal {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: var(--teal);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .btn-teal:hover { background: var(--teal-dark); }
+    .btn-teal:hover svg { transform: translateX(4px); }
+    .btn-teal svg { transition: transform 0.2s; }
+    
+    .btn-dark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.25rem 2.5rem;
+      background: var(--neutral-900);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .btn-dark:hover { background: var(--black); }
+    .btn-dark:hover svg { transform: translateX(4px); }
+    .btn-dark svg { transition: transform 0.2s; }
+    
+    .hero-price {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .micro-text {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--neutral-500);
+    }
+    
+    .price-tag {
+      font-weight: 700;
+      font-size: 1.125rem;
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--neutral-200);
+      flex-wrap: wrap;
+    }
+    
+    .hero-meta-item p:first-child {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      margin-bottom: 0.25rem;
+    }
+    
+    .hero-meta-item p:last-child {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .hero-meta-divider {
+      width: 1px;
+      height: 2.5rem;
+      background: var(--neutral-200);
+    }
+    
+    /* ============================================
+       HERO VISUAL
+       ============================================ */
+    .hero-visual {
+      position: relative;
+      height: 400px;
+    }
+    @media (min-width: 1024px) {
+      .hero-visual { height: 560px; }
+    }
+    
+    .hero-visual-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .hero-shape-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .hero-shape-group {
+      position: relative;
+      width: 320px;
+      height: 320px;
+    }
+    @media (min-width: 1024px) {
+      .hero-shape-group { width: 384px; height: 384px; }
+    }
+    
+    .hero-shape {
+      position: absolute;
+      animation: slowFloat 8s ease-in-out infinite;
+    }
+    .hero-shape-1 {
+      inset: 0;
+      border: 2px solid var(--neutral-900);
+    }
+    .hero-shape-2 {
+      inset: 1.5rem;
+      border: 1px solid var(--neutral-300);
+      animation-delay: 1s;
+    }
+    .hero-shape-3 {
+      inset: 3rem;
+      border: 1px solid var(--teal);
+      animation-delay: 3s;
+    }
+    .hero-shape-4 {
+      inset: 5rem;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation-delay: 4s;
+    }
+    .hero-shape-4-letter {
+      color: var(--white);
+      font-weight: 900;
+      font-size: 3rem;
+      letter-spacing: -0.05em;
+    }
+    
+    .corner-mark {
+      position: absolute;
+      width: 2rem;
+      height: 2rem;
+      border-color: var(--neutral-900);
+    }
+    .corner-tl { top: -1rem; left: -1rem; border-top: 2px solid; border-left: 2px solid; }
+    .corner-tr { top: -1rem; right: -1rem; border-top: 2px solid; border-right: 2px solid; }
+    .corner-bl { bottom: -1rem; left: -1rem; border-bottom: 2px solid; border-left: 2px solid; }
+    .corner-br { bottom: -1rem; right: -1rem; border-bottom: 2px solid; border-right: 2px solid; }
+    
+    .floating-badge {
+      position: absolute;
+      background: var(--white);
+      border: 1px solid var(--neutral-200);
+      padding: 0.5rem 1rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .floating-badge p:first-child {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      margin-bottom: 0.125rem;
+    }
+    .floating-badge p:last-child {
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .badge-top-left { top: 2rem; left: 2rem; }
+    .badge-bottom-right { bottom: 3rem; right: 1rem; }
+    
+    .badge-teal {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      background: var(--teal);
+      color: var(--white);
+      padding: 0.5rem 1rem;
+    }
+    @media (min-width: 1024px) {
+      .badge-teal { right: 3rem; }
+    }
+    .badge-teal p:first-child {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 0.125rem;
+    }
+    .badge-teal p:last-child {
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+    
+    /* ============================================
+       CREDIBILITY STRIP
+       ============================================ */
+    .cred-strip {
+      background: var(--neutral-50);
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    
+    .cred-strip-inner {
+      padding: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .cred-strip-inner { flex-direction: row; align-items: center; }
+    }
+    
+    .cred-items {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .cred-item {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--neutral-700);
+    }
+    
+    /* ============================================
+       EDITIONS SECTION
+       ============================================ */
+    .editions-intro {
+      max-width: 48rem;
+      margin-bottom: 4rem;
+    }
+    
+    .editions-intro p {
+      font-size: 1.125rem;
+      color: var(--neutral-600);
+      line-height: 1.6;
+    }
+    
+    .edition-tabs {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      background: var(--neutral-100);
+      width: fit-content;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    
+    .edition-tab {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--neutral-500);
+      transition: all 0.2s;
+    }
+    .edition-tab:hover { color: var(--neutral-900); }
+    .edition-tab.active {
+      background: var(--white);
+      color: var(--neutral-900);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    
+    .edition-content {
+      display: none;
+    }
+    .edition-content.active { display: block; }
+    
+    .edition-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    @media (min-width: 1024px) {
+      .edition-grid { grid-template-columns: 7fr 5fr; }
+    }
+    
+    .edition-tagline {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    
+    .edition-hook {
+      font-size: 1.875rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 1024px) {
+      .edition-hook { font-size: 3rem; }
+    }
+    
+    .edition-subhook {
+      font-size: 1.5rem;
+      color: var(--neutral-500);
+      margin-bottom: 2rem;
+      line-height: 1.2;
+    }
+    @media (min-width: 1024px) {
+      .edition-subhook { font-size: 1.875rem; }
+    }
+    
+    .edition-promise {
+      font-size: 1.125rem;
+      color: var(--neutral-700);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      max-width: 36rem;
+    }
+    
+    .edition-lists {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    @media (min-width: 768px) {
+      .edition-lists { grid-template-columns: 1fr 1fr; }
+    }
+    
+    .list-heading {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--neutral-500);
+      margin-bottom: 1rem;
+    }
+    
+    .list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--neutral-700);
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+    
+    .list-bullet {
+      width: 0.375rem;
+      height: 0.375rem;
+      background: var(--neutral-900);
+      margin-top: 0.5rem;
+      flex-shrink: 0;
+    }
+    
+    .list-check {
+      width: 0.875rem;
+      height: 0.875rem;
+      color: var(--teal);
+      margin-top: 0.125rem;
+      flex-shrink: 0;
+    }
+    
+    .edition-cta-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) {
+      .edition-cta-row { flex-direction: row; align-items: center; }
+    }
+    
+    .edition-guarantee {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--neutral-500);
+    }
+    
+    /* ============================================
+       EDITION CARD (dark pricing card)
+       ============================================ */
+    .edition-card {
+      position: relative;
+      background: var(--neutral-900);
+      color: var(--white);
+      padding: 2.5rem;
+      overflow: hidden;
+      min-height: 500px;
+      height: 100%;
+    }
+    
+    .edition-card-glow {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 384px;
+      height: 384px;
+      background: var(--teal);
+      opacity: 0.2;
+      border-radius: 50%;
+      filter: blur(64px);
+      transform: translate(50%, -50%);
+      pointer-events: none;
+    }
+    
+    .edition-card-inner {
+      position: relative;
+    }
+    
+    .edition-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    
+    .edition-card-label {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    
+    .edition-card-badge {
+      padding: 0.375rem 0.625rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    
+    .edition-card-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    
+    .edition-card-subtitle {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 3rem;
+      line-height: 1.3;
+    }
+    
+    .edition-card-features {
+      margin-bottom: 3rem;
+    }
+    
+    .edition-card-feature {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .edition-card-feature:last-child { border-bottom: none; }
+    .edition-card-feature span { font-size: 0.875rem; }
+    .edition-card-feature svg {
+      width: 1rem;
+      height: 1rem;
+      color: var(--teal);
+    }
+    
+    .edition-card-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    
+    .price-big {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .price-note {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+    }
+    
+    /* ============================================
+       WHAT'S INSIDE
+       ============================================ */
+    .inside-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-bottom: 5rem;
+    }
+    @media (min-width: 1024px) {
+      .inside-grid { grid-template-columns: 5fr 7fr; }
+    }
+    
+    .inside-intro-text {
+      font-size: 1.125rem;
+      color: var(--neutral-600);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    
+    .inside-visual {
+      position: relative;
+      height: 16rem;
+      background: var(--white);
+      border: 1px solid var(--neutral-200);
+      overflow: hidden;
+    }
+    
+    .orbiting-viz {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .orbiting-circle {
+      position: relative;
+      width: 10rem;
+      height: 10rem;
+    }
+    
+    .orbit-ring {
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--neutral-400);
+      border-radius: 50%;
+    }
+    .orbit-ring-2 {
+      inset: 1rem;
+      border: 1px solid var(--neutral-300);
+      transform: rotate(30deg);
+    }
+    .orbit-ring-3 {
+      inset: 2rem;
+      border: 1px solid var(--teal);
+      transform: rotate(60deg);
+    }
+    
+    .orbit-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.75rem;
+      height: 0.75rem;
+      background: var(--teal);
+      transform: translate(-50%, -50%);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    
+    .orbit-dot {
+      position: absolute;
+      width: 0.5rem;
+      height: 0.5rem;
+      background: var(--neutral-900);
+      animation: slowFloat 8s ease-in-out infinite;
+    }
+    .orbit-dot-top { top: 0; left: 50%; transform: translateX(-50%); }
+    .orbit-dot-bottom { bottom: 0; left: 50%; transform: translateX(-50%); animation-delay: 2s; }
+    .orbit-dot-left { top: 50%; left: 0; transform: translateY(-50%); animation-delay: 3s; }
+    .orbit-dot-right { top: 50%; right: 0; transform: translateY(-50%); animation-delay: 4s; }
+    
+    .inside-items {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem 2rem;
+    }
+    @media (min-width: 640px) {
+      .inside-items { grid-template-columns: 1fr 1fr; }
+    }
+    
+    .inside-item-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .inside-item-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--white);
+      border: 1px solid var(--neutral-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .inside-item:hover .inside-item-icon {
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+    .inside-item:hover .inside-item-icon svg {
+      color: var(--white);
+    }
+    .inside-item-icon svg {
+      width: 1rem;
+      height: 1rem;
+      color: var(--neutral-700);
+      transition: color 0.2s;
+    }
+    
+    .inside-item-line {
+      flex: 1;
+      height: 1px;
+      background: var(--neutral-200);
+    }
+    
+    .inside-item-num {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .inside-item h4 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .inside-item p {
+      font-size: 0.875rem;
+      color: var(--neutral-600);
+      line-height: 1.6;
+    }
+    
+    /* ============================================
+       LIBRARY FEATURE
+       ============================================ */
+    .library-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .library-grid { grid-template-columns: 5fr 7fr; }
+    }
+    
+    .library-copy p {
+      font-size: 1.125rem;
+      color: var(--neutral-600);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .library-stats {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .library-stat-label {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      margin-bottom: 0.25rem;
+    }
+    
+    .library-stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .library-divider {
+      width: 1px;
+      height: 2.5rem;
+      background: var(--neutral-200);
+    }
+    
+    .library-preview {
+      position: relative;
+    }
+    
+    .preview-card {
+      background: var(--white);
+      border: 1px solid var(--neutral-200);
+      overflow: hidden;
+    }
+    
+    .preview-header {
+      border-bottom: 1px solid var(--neutral-200);
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .preview-header-label {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      margin-bottom: 0.25rem;
+    }
+    
+    .preview-header-title {
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+    
+    .preview-stat {
+      font-size: 0.75rem;
+      color: var(--teal);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .preview-body {
+      padding: 1.5rem;
+      background: var(--neutral-50);
+      border-bottom: 1px solid var(--neutral-200);
+      font-family: 'SF Mono', 'Monaco', monospace;
+      font-size: 0.75rem;
+      line-height: 1.7;
+      color: var(--neutral-700);
+    }
+    
+    .preview-footer {
+      padding: 1.25rem;
+    }
+    
+    .preview-footer-label {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      margin-bottom: 0.5rem;
+    }
+    
+    .preview-footer-text {
+      font-size: 0.875rem;
+      color: var(--neutral-700);
+      line-height: 1.6;
+    }
+    
+    .floating-info {
+      position: absolute;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+      display: none;
+    }
+    @media (min-width: 1024px) {
+      .floating-info { display: block; }
+    }
+    
+    .floating-info-top {
+      top: -1rem;
+      right: -1rem;
+      background: var(--teal);
+      color: var(--white);
+    }
+    .floating-info-top p:first-child {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 0.125rem;
+    }
+    .floating-info-top p:last-child {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    
+    .floating-info-bottom {
+      bottom: -1rem;
+      left: -1rem;
+      background: var(--white);
+      border: 1px solid var(--neutral-200);
+    }
+    .floating-info-bottom p:first-child {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      margin-bottom: 0.125rem;
+    }
+    .floating-info-bottom p:last-child {
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+    
+    /* ============================================
+       ABOUT (dark section)
+       ============================================ */
+    .about-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    @media (min-width: 1024px) {
+      .about-grid { grid-template-columns: 5fr 7fr; }
+    }
+    
+    .about-intro p {
+      font-size: 1.125rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+    }
+    
+    .founder-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 640px) {
+      .founder-cards { grid-template-columns: 1fr 1fr; }
+    }
+    
+    .founder-card {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .founder-card:hover { border-color: var(--teal); }
+    
+    .founder-initial {
+      width: 3.5rem;
+      height: 3.5rem;
+      background: var(--teal);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 900;
+      font-size: 1.25rem;
+      letter-spacing: -0.05em;
+    }
+    
+    .founder-role {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.5rem;
+    }
+    
+    .founder-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    
+    .founder-bio {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .founder-note {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.6;
+    }
+    
+    /* ============================================
+       FAQ
+       ============================================ */
+    .faq-container {
+      border-top: 1px solid var(--neutral-200);
+    }
+    
+    .faq-item {
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    
+    .faq-question {
+      width: 100%;
+      padding: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      text-align: left;
+      color: var(--neutral-900);
+    }
+    
+    .faq-question-text {
+      font-size: 1rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    @media (min-width: 1024px) {
+      .faq-question-text { font-size: 1.125rem; }
+    }
+    
+    .faq-question:hover .faq-question-text { color: var(--teal); }
+    
+    .faq-icon {
+      flex-shrink: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--neutral-400);
+      transition: color 0.2s;
+    }
+    .faq-question:hover .faq-icon { color: var(--teal); }
+    .faq-item.open .faq-icon-plus { display: none; }
+    .faq-item:not(.open) .faq-icon-minus { display: none; }
+    .faq-item.open .faq-icon-minus { color: var(--teal); }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 500px;
+      padding-bottom: 1.5rem;
+      padding-right: 3rem;
+    }
+    
+    .faq-answer p {
+      color: var(--neutral-600);
+      line-height: 1.6;
+    }
+    
+    /* ============================================
+       FINAL CTA
+       ============================================ */
+    .final-cta-glow {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 500px;
+      height: 500px;
+      background: var(--white);
+      opacity: 0.05;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    
+    .final-cta-inner {
+      position: relative;
+      text-align: center;
+    }
+    
+    .final-cta-eyebrow {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 1.5rem;
+    }
+    
+    .final-cta-headline {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 1024px) {
+      .final-cta-headline { font-size: 4.5rem; }
+    }
+    
+    .final-cta-sub {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      max-width: 36rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .final-cta-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 640px) {
+      .final-cta-row { flex-direction: row; }
+    }
+    
+    .final-cta-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      flex-wrap: wrap;
+    }
+    
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      background: var(--neutral-900);
+      color: var(--white);
+      padding: 4rem 0;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    
+    .footer-brand-logo {
+      height: 32px;
+      width: auto;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-tagline {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+    }
+    
+    .footer-heading {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-links a {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--teal); }
+    
+    .footer-bottom {
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    @media (min-width: 768px) {
+      .footer-bottom { flex-direction: row; align-items: center; }
+    }
+    
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    
+    /* ============================================
+       ANIMATIONS
+       ============================================ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slowFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(1deg); }
+    }
+    
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    
+    .animate-fade-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
+    .delay-400 { animation-delay: 400ms; }
+    
+    /* ============================================
+       UTILITIES
+       ============================================ */
+    .text-teal { color: var(--teal); }
+    .hidden-mobile { display: none; }
+    @media (min-width: 768px) { .hidden-mobile { display: block; } }
+    @media (min-width: 1024px) { .hidden-lg { display: none !important; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/assets/aloomii-logo.png" alt="Aloomii" class="nav-logo-img">
+      </a>
+      
+      <div class="nav-links">
+        <a href="#editions" class="nav-link">Editions</a>
+        <a href="#inside" class="nav-link">What's Inside</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#editions" class="nav-cta">Get the Playbook</a>
+      </div>
+
+      <button id="mobile-menu-toggle" class="mobile-toggle" aria-label="Toggle menu">
+        <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <svg id="close-icon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="mobile-menu">
+      <div class="mobile-menu-inner">
+        <a href="#editions">Editions</a>
+        <a href="#inside">What's Inside</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="#editions" class="mobile-cta">Get the Playbook</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="grid-pattern"></div>
+    <div class="glow-teal"></div>
+    
+    <div class="container hero-inner">
+      <div class="hero-grid">
+        
+        <div class="hero-copy">
+          <div class="eyebrow animate-fade-up">
+            <div class="eyebrow-line"></div>
+            <span class="eyebrow-text">The Aloomii Playbook · V1</span>
+          </div>
+
+          <h1 class="hero-headline animate-fade-up delay-100">
+            The operating system<br>
+            <span class="font-serif text-teal">your AI</span> has been missing.
+          </h1>
+
+          <p class="hero-subhead animate-fade-up delay-200">
+            A complete system of prompts, tools, workflows, and a curated library of proven 
+            examples — with a custom portal that remembers everything you do.
+          </p>
+
+          <div class="hero-cta-row animate-fade-up delay-300">
+            <a href="#editions" class="btn-primary">
+              Choose your edition
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+            <div class="hero-price">
+              <span class="micro-text">One-time purchase</span>
+              <span style="color: var(--neutral-300);">·</span>
+              <span class="price-tag">$149</span>
+            </div>
+          </div>
+
+          <div class="hero-meta animate-fade-up delay-400">
+            <div class="hero-meta-item">
+              <p>Three editions</p>
+              <p>Founder · Solo · Operator</p>
+            </div>
+            <div class="hero-meta-divider hidden-mobile"></div>
+            <div class="hero-meta-item">
+              <p>Includes</p>
+              <p>Ebook · Audio · Portal</p>
+            </div>
+            <div class="hero-meta-divider hidden-mobile"></div>
+            <div class="hero-meta-item hidden-mobile">
+              <p>Guarantee</p>
+              <p>14-day refund</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-visual-inner">
+            <div class="hero-shape-center">
+              <div class="hero-shape-group">
+                <div class="hero-shape hero-shape-1"></div>
+                <div class="hero-shape hero-shape-2"></div>
+                <div class="hero-shape hero-shape-3"></div>
+                <div class="hero-shape hero-shape-4">
+                  <span class="hero-shape-4-letter">A</span>
+                </div>
+                <div class="corner-mark corner-tl"></div>
+                <div class="corner-mark corner-tr"></div>
+                <div class="corner-mark corner-bl"></div>
+                <div class="corner-mark corner-br"></div>
+              </div>
+            </div>
+
+            <div class="floating-badge badge-top-left animate-fade-up delay-300">
+              <p>Library</p>
+              <p>150 examples</p>
+            </div>
+            <div class="floating-badge badge-bottom-right animate-fade-up delay-400">
+              <p>Prompts</p>
+              <p>20 curated</p>
+            </div>
+            <div class="badge-teal animate-fade-up delay-200">
+              <p>Editions</p>
+              <p>Founder · Solo · Operator</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREDIBILITY STRIP -->
+  <section class="cred-strip">
+    <div class="container cred-strip-inner">
+      <p class="eyebrow-text">Built by operators who've shipped AI at scale</p>
+      <div class="cred-items">
+        <p class="cred-item">Enterprise AI · IBM</p>
+        <p class="cred-item">Financial Infra · JP Morgan</p>
+        <p class="cred-item">Agent Fleets · Aloomii</p>
+        <p class="cred-item">Podcasts · Pale Blue Nexus</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDITIONS -->
+  <section id="editions" class="section">
+    <div class="container">
+      
+      <div class="editions-intro">
+        <div class="eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">Three Editions · One Playbook</span>
+        </div>
+        <h2 class="section-headline-lg">
+          Built for three specific <span class="font-serif text-teal">operators</span>.
+        </h2>
+        <p>
+          Each edition shares a common foundation — the core Playbook — 
+          with content specifically tuned for how each operator actually works.
+        </p>
+      </div>
+
+      <div class="edition-tabs">
+        <button class="edition-tab active" data-edition="founder">Founder</button>
+        <button class="edition-tab" data-edition="solo">Solo</button>
+        <button class="edition-tab" data-edition="operator">Operating Leader</button>
+      </div>
+
+      <!-- FOUNDER -->
+      <div class="edition-content active" data-edition="founder">
+        <div class="edition-grid">
+          <div>
+            <p class="edition-tagline">For founders of 2-25 person companies</p>
+            <h3 class="edition-hook">Your prompts are scattered across 14 tools.</h3>
+            <p class="edition-subhook font-serif">Your AI has no memory of what works.</p>
+            <p class="edition-promise">The Aloomii Playbook gives founders the operating system their AI has been missing.</p>
+
+            <div class="edition-lists">
+              <div>
+                <p class="list-heading">Pain Points We Solve</p>
+                <div class="list-item"><div class="list-bullet"></div><span>Prompts scattered across ChatGPT, Claude, Notion, Google Docs</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Re-explaining your business context ten times a day</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>AI outputs that sound like everyone else's AI</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Spending hundreds monthly on tools with unclear ROI</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Team using AI inconsistently, no shared standards</span></div>
+              </div>
+              <div>
+                <p class="list-heading">What You'll Achieve</p>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>One organized system for every prompt that works</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>AI that remembers your business context and compounds</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Outputs distinct enough your audience notices the difference</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Clear sense of which AI tool for which job</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Team operating with shared AI standards and language</span></div>
+              </div>
+            </div>
+
+            <div class="edition-cta-row">
+              <a href="/playbook/founder" class="btn-teal">
+                Get the Founder Edition · $149
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <span class="edition-guarantee">One-time · 14-day refund · Instant access</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="edition-card">
+              <div class="edition-card-glow"></div>
+              <div class="dotted-pattern"></div>
+              <div class="edition-card-inner">
+                <div class="edition-card-header">
+                  <p class="edition-card-label">Aloomii Playbook</p>
+                  <div class="edition-card-badge">Founder</div>
+                </div>
+                <h4 class="edition-card-title">Founder<br>Edition</h4>
+                <p class="edition-card-subtitle font-serif">For founders running 2-25 person companies.</p>
+                <div class="edition-card-features">
+                  <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>20 curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Custom web portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Lifetime updates</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                </div>
+                <div class="edition-card-price">
+                  <span class="price-big">$149</span>
+                  <span class="price-note">one-time</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOLO -->
+      <div class="edition-content" data-edition="solo">
+        <div class="edition-grid">
+          <div>
+            <p class="edition-tagline">For solopreneurs running the whole show</p>
+            <h3 class="edition-hook">AI content that sounds like everyone else's AI content.</h3>
+            <p class="edition-subhook font-serif">Which defeats the whole point of being solo.</p>
+            <p class="edition-promise">The Aloomii Playbook is the solo operator's system for AI that sounds like you at your most focused.</p>
+
+            <div class="edition-lists">
+              <div>
+                <p class="list-heading">Pain Points We Solve</p>
+                <div class="list-item"><div class="list-bullet"></div><span>Generic AI output that dilutes your voice</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>At capacity with no way to scale without hiring</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Most AI advice aimed at founders running teams</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Time cost of AI exceeds the time savings</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Admin work consuming 40% of your week</span></div>
+              </div>
+              <div>
+                <p class="list-heading">What You'll Achieve</p>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>AI that multiplies your voice instead of flattening it</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Scale output 30% without adding a single person</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Frameworks specifically for solo operators</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Workflows where AI genuinely saves more time than it costs</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Admin handled so you can focus on craft</span></div>
+              </div>
+            </div>
+
+            <div class="edition-cta-row">
+              <a href="/playbook/solo" class="btn-teal">
+                Get the Solo Edition · $149
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <span class="edition-guarantee">One-time · 14-day refund · Instant access</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="edition-card">
+              <div class="edition-card-glow"></div>
+              <div class="dotted-pattern"></div>
+              <div class="edition-card-inner">
+                <div class="edition-card-header">
+                  <p class="edition-card-label">Aloomii Playbook</p>
+                  <div class="edition-card-badge">Solo</div>
+                </div>
+                <h4 class="edition-card-title">Solo<br>Edition</h4>
+                <p class="edition-card-subtitle font-serif">For solopreneurs running the whole show.</p>
+                <div class="edition-card-features">
+                  <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>20 curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Custom web portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Lifetime updates</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                </div>
+                <div class="edition-card-price">
+                  <span class="price-big">$149</span>
+                  <span class="price-note">one-time</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPERATOR -->
+      <div class="edition-content" data-edition="operator">
+        <div class="edition-grid">
+          <div>
+            <p class="edition-tagline">For department heads in regulated industries</p>
+            <h3 class="edition-hook">Leadership says "get moving on AI."</h3>
+            <p class="edition-subhook font-serif">They haven't told you how.</p>
+            <p class="edition-promise">The Aloomii Playbook is the credible, industry-aware framework for running a professional team in an AI-shaped world.</p>
+
+            <div class="edition-lists">
+              <div>
+                <p class="list-heading">Pain Points We Solve</p>
+                <div class="list-item"><div class="list-bullet"></div><span>Pressure to "adopt AI" without a company framework</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Most AI advice built for founders or creators</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Compliance and data privacy concerns blocking real use</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Team at wildly different AI skill levels</span></div>
+                <div class="list-item"><div class="list-bullet"></div><span>Executive discussions requiring you to speak with authority</span></div>
+              </div>
+              <div>
+                <p class="list-heading">What You'll Achieve</p>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>A defensible rollout framework for your department</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>AI guidance specifically for regulated-industry professionals</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Workflows that work within your compliance constraints</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Team brought up the curve together, not one-at-a-time</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Credible authority in leadership conversations about AI</span></div>
+              </div>
+            </div>
+
+            <div class="edition-cta-row">
+              <a href="/playbook/operator" class="btn-teal">
+                Get the Operator Edition · $149
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <span class="edition-guarantee">One-time · 14-day refund · Instant access</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="edition-card">
+              <div class="edition-card-glow"></div>
+              <div class="dotted-pattern"></div>
+              <div class="edition-card-inner">
+                <div class="edition-card-header">
+                  <p class="edition-card-label">Aloomii Playbook</p>
+                  <div class="edition-card-badge">Operator</div>
+                </div>
+                <h4 class="edition-card-title">Operator<br>Edition</h4>
+                <p class="edition-card-subtitle font-serif">For department heads in regulated industries.</p>
+                <div class="edition-card-features">
+                  <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>20 curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Compliance frameworks</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>Lifetime updates</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                </div>
+                <div class="edition-card-price">
+                  <span class="price-big">$149</span>
+                  <span class="price-note">one-time</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT'S INSIDE -->
+  <section id="inside" class="section section-bg-gray">
+    <div class="container">
+      <div class="inside-grid">
+        <div>
+          <div class="eyebrow">
+            <div class="eyebrow-line"></div>
+            <span class="eyebrow-text">What's Inside</span>
+          </div>
+          <h2 class="section-headline">
+            Not a PDF.<br>
+            <span class="font-serif text-teal">A system.</span>
+          </h2>
+          <p class="inside-intro-text">
+            Every element designed to compound. The ebook teaches the thinking. 
+            The prompts apply it. The Library provides proven patterns to inject. 
+            The portal remembers what works for you.
+          </p>
+          
+          <div class="inside-visual">
+            <div class="grid-pattern" style="opacity:0.6;"></div>
+            <div class="orbiting-viz">
+              <div class="orbiting-circle">
+                <div class="orbit-ring"></div>
+                <div class="orbit-ring orbit-ring-2"></div>
+                <div class="orbit-ring orbit-ring-3"></div>
+                <div class="orbit-center"></div>
+                <div class="orbit-dot orbit-dot-top"></div>
+                <div class="orbit-dot orbit-dot-bottom"></div>
+                <div class="orbit-dot orbit-dot-left"></div>
+                <div class="orbit-dot orbit-dot-right"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="inside-items">
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">01</span>
+            </div>
+            <h4>The Playbook (70-page ebook)</h4>
+            <p>The thinking behind Aloomii's approach to AI operations, written in essay form with generous illustrations.</p>
+          </div>
+
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">02</span>
+            </div>
+            <h4>Audio narration</h4>
+            <p>Full ElevenLabs-produced audio version for deep listening or background reference.</p>
+          </div>
+
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">03</span>
+            </div>
+            <h4>7 custom infographics</h4>
+            <p>Visual frameworks for the core concepts — shareable, printable, actually useful.</p>
+          </div>
+
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">04</span>
+            </div>
+            <h4>20 curated prompts</h4>
+            <p>Production-grade prompts across Research, Sales, Content, Strategy, and Operations categories.</p>
+          </div>
+
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">05</span>
+            </div>
+            <h4>The AI tool stack</h4>
+            <p>What Aloomii actually uses — with honest assessment of each, including where to skip and where to invest.</p>
+          </div>
+
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">06</span>
+            </div>
+            <h4>6 complete workflows</h4>
+            <p>Multi-step procedures that chain prompts and tools into repeatable outcomes.</p>
+          </div>
+
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 5L19 8l-4 4 1.5 5L12 14l-4.5 3L9 12l-4-4 5.5 0z"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">07</span>
+            </div>
+            <h4>The Library (150 examples)</h4>
+            <p>A curated swipe file of high-performing content with commentary. Inject into prompts for output that matches proven patterns.</p>
+          </div>
+
+          <div class="inside-item">
+            <div class="inside-item-header">
+              <div class="inside-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="inside-item-line"></div>
+              <span class="inside-item-num">08</span>
+            </div>
+            <h4>Custom web portal</h4>
+            <p>Your content at app.aloomii.com with favorites, notes, status tracking, and continuous updates.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIBRARY -->
+  <section class="section">
+    <div class="container">
+      <div class="library-grid">
+        <div class="library-copy">
+          <div class="eyebrow">
+            <div class="eyebrow-line"></div>
+            <span class="eyebrow-text">The Library</span>
+          </div>
+          <h2 class="section-headline">
+            Stop writing from scratch.<br>
+            <span class="font-serif text-teal">Steal from what works.</span>
+          </h2>
+          <p>150 high-performing LinkedIn posts, landing pages, email subjects, cold outreach templates, and visual references — each with commentary explaining why it works.</p>
+          <p>Inject them into your AI prompts. Output that matches proven patterns beats generic AI output every time.</p>
+          <div class="library-stats">
+            <div>
+              <p class="library-stat-label">Launch size</p>
+              <p class="library-stat-value">150 examples</p>
+            </div>
+            <div class="library-divider"></div>
+            <div>
+              <p class="library-stat-label">Growing to</p>
+              <p class="library-stat-value">300+ in 6mo</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="library-preview">
+          <div class="preview-card">
+            <div class="preview-header">
+              <div>
+                <p class="preview-header-label">LinkedIn · Hook Pattern</p>
+                <p class="preview-header-title">The specific-number opener</p>
+              </div>
+              <span class="preview-stat">12.4K reactions</span>
+            </div>
+            <div class="preview-body">
+              I analyzed 1,247 LinkedIn posts from seed-stage founders.<br><br>
+              The best ones had one thing in common.<br><br>
+              It wasn't the hook.<br>
+              It wasn't the formatting.<br>
+              It wasn't even the topic.<br><br>
+              It was the rhythm...
+            </div>
+            <div class="preview-footer">
+              <p class="preview-footer-label">Why this works</p>
+              <p class="preview-footer-text">
+                The specific number (1,247) creates authority and investigation impulse. 
+                The three "it wasn't" lines create tension by eliminating expected answers before revealing the insight.
+              </p>
+            </div>
+          </div>
+          <div class="floating-info floating-info-top">
+            <p>Platforms</p>
+            <p>LinkedIn · X · Email · Web · YouTube</p>
+          </div>
+          <div class="floating-info floating-info-bottom">
+            <p>Every example includes</p>
+            <p>Commentary · Context · When to use</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section section-bg-dark">
+    <div style="position:absolute;top:0;right:0;width:500px;height:500px;background:var(--teal);opacity:0.1;border-radius:50%;filter:blur(80px);transform:translate(33%,-33%);pointer-events:none;"></div>
+    <div class="dotted-pattern" style="opacity:0.2;"></div>
+    
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-intro">
+          <div class="eyebrow">
+            <div class="eyebrow-line"></div>
+            <span class="eyebrow-text teal">Who Created This</span>
+          </div>
+          <h2 class="section-headline">
+            Built by operators<br>
+            <span class="font-serif text-teal">who've shipped it.</span>
+          </h2>
+          <p>
+            The Aloomii Playbook wasn't written by consultants theorizing about AI. 
+            It was extracted from the actual systems we run — for ourselves, for our clients, 
+            and for the agent fleet that powers our operations.
+          </p>
+        </div>
+
+        <div class="founder-cards">
+          <div class="founder-card">
+            <div class="founder-initial">J</div>
+            <p class="founder-role">Co-founder</p>
+            <h3 class="founder-name">Jenny Kalpu</h3>
+            <p class="founder-bio">
+              Operations, systems, and infrastructure. Prior enterprise consulting at IBM 
+              and financial infrastructure work at JP Morgan.
+            </p>
+            <p class="founder-note">
+              Builds and operates the OpenClaw agent fleet — 
+              Aloomii's 7-agent system for client operations.
+            </p>
+          </div>
+
+          <div class="founder-card">
+            <div class="founder-initial">Y</div>
+            <p class="founder-role">Co-founder</p>
+            <h3 class="founder-name">Yohann Calpu</h3>
+            <p class="founder-bio">
+              Strategy, client relationships, and media. Host of Pale Blue Nexus, 
+              Aloomii's podcast on AI, physics, and the operating models of the future.
+            </p>
+            <p class="founder-note">
+              Leads The Table — Aloomii's quarterly advisory gathering 
+              for founders and operating leaders.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container-narrow">
+      <div style="margin-bottom:4rem;">
+        <div class="eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">Questions</span>
+        </div>
+        <h2 class="section-headline">
+          Everything you<br>
+          <span class="font-serif text-teal">might be wondering.</span>
+        </h2>
+      </div>
+
+      <div class="faq-container">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span class="faq-question-text">Is this for beginners or people already using AI?</span>
+            <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-answer"><p>Both, but differently. If you're newer to AI, the Playbook gives you a structured entry point instead of the chaotic "try everything" approach. If you're already using AI heavily, the Playbook gives you a system for what you're doing ad-hoc. Most buyers fall somewhere in the middle — using AI inconsistently and wanting structure.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span class="faq-question-text">Which edition should I buy?</span>
+            <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-answer"><p>The Founder Edition is for people running companies (2-25 employees). The Solo Edition is for independent operators with no employees. The Operating Leader Edition is for department heads inside larger companies (50+ employees). If you're genuinely between two editions, we recommend the one that matches your day-to-day reality, not your aspiration.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span class="faq-question-text">Do I need a Claude or ChatGPT subscription?</span>
+            <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-answer"><p>Yes. The prompts work with any of the major models (Claude, ChatGPT, Gemini) and we recommend Claude Pro at minimum. The Playbook includes guidance on which tool to use for which task. The portal itself is included with your purchase; AI tool subscriptions are separate.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span class="faq-question-text">Will this become outdated quickly?</span>
+            <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-answer"><p>The Library and prompts receive ongoing updates as models evolve. You keep access to updates indefinitely with your one-time purchase. The ebook and audio are versioned — if we publish a meaningful v2, you get it.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span class="faq-question-text">What if I buy the wrong edition?</span>
+            <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-answer"><p>Contact us within 14 days and we'll swap you to the correct edition at no charge. We'd rather have you in the right edition than collect a refund. After 14 days, you can upgrade by paying the difference.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span class="faq-question-text">Is there a refund policy?</span>
+            <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-answer"><p>14-day money-back guarantee. If the Playbook isn't worth $149 to you in the first two weeks, reach out via our <a href="https://www.aloomii.com/#contact" style="color:var(--teal);">contact form</a> and we'll refund you in full. No friction, no interrogation.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span class="faq-question-text">Will you launch more playbooks?</span>
+            <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-answer"><p>Yes. The AI Playbook is the first. We're planning Sales, Operations, and Marketing playbooks over the coming year. Existing buyers will get early access and a loyalty discount on future playbooks.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span class="faq-question-text">Can my team use my license?</span>
+            <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-answer"><p>Your license is for you specifically. If you want to bring your team on board, we offer team licenses at 40% off per additional seat. <a href="https://www.aloomii.com/#contact" style="color:var(--teal);">Contact us</a> for team pricing.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="section section-bg-teal" style="border-bottom:none;">
+    <div class="grid-pattern grid-pattern-white"></div>
+    <div class="final-cta-glow"></div>
+    
+    <div class="container-narrow">
+      <div class="final-cta-inner">
+        <p class="final-cta-eyebrow">The Aloomii Playbook · Launch Edition</p>
+        <h2 class="final-cta-headline">
+          Stop reinventing<br>
+          <span class="font-serif">what already works.</span>
+        </h2>
+        <p class="final-cta-sub">
+          Three editions. One system. Instant access to every prompt, every workflow, 
+          the full Library, and the custom portal.
+        </p>
+        
+        <div class="final-cta-row">
+          <a href="#editions" class="btn-dark">
+            Choose your edition
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+
+        <div class="final-cta-meta">
+          <span>$149 one-time</span>
+          <span>·</span>
+          <span>Instant access</span>
+          <span>·</span>
+          <span>14-day refund</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img src="/assets/aloomii-logo.png" alt="Aloomii" class="footer-brand-logo">
+          <p class="footer-tagline">AI operations for relationship-driven businesses.</p>
+        </div>
+
+        <div>
+          <p class="footer-heading">The Playbook</p>
+          <ul class="footer-links">
+            <li><a href="/playbook/founder">Founder Edition</a></li>
+            <li><a href="/playbook/solo">Solo Edition</a></li>
+            <li><a href="/playbook/operator">Operating Leader Edition</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="footer-heading">Aloomii</p>
+          <ul class="footer-links">
+            <li><a href="/">About</a></li>
+            <li><a href="/the-table">The Table</a></li>
+            <li><a href="/pale-blue-nexus">Pale Blue Nexus</a></li>
+            <li><a href="https://www.aloomii.com/#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="footer-heading">Legal</p>
+          <ul class="footer-links">
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/privacy">Privacy</a></li>
+            <li><a href="/refunds">Refunds</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Aloomii · Caledonia, Ontario</p>
+        <p>Built on infrastructure we operate · Cloudflare · Neon · Clerk</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+    
+    toggle.addEventListener('click', () => {
+      menu.classList.toggle('open');
+      if (menu.classList.contains('open')) {
+        menuIcon.style.display = 'none';
+        closeIcon.style.display = 'block';
+      } else {
+        menuIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+      }
+    });
+    
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+        menuIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+      });
+    });
+
+    // Edition tabs
+    const tabs = document.querySelectorAll('.edition-tab');
+    const contents = document.querySelectorAll('.edition-content');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const edition = tab.dataset.edition;
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        contents.forEach(c => {
+          c.classList.remove('active');
+          if (c.dataset.edition === edition) c.classList.add('active');
+        });
+      });
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const question = item.querySelector('.faq-question');
+      question.addEventListener('click', () => {
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!wasOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>
