@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Privacy Policy — Aloomii</title>
+  <meta name="description" content="Aloomii's Privacy Policy. How we collect, use, and protect your personal information.">
+  <meta name="robots" content="index, follow">
+  
+  <link rel="canonical" href="https://aloomii.com/legal/privacy">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Italiana&display=swap" rel="stylesheet">
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --teal: #00C8BE;
+      --neutral-900: #171717;
+      --neutral-700: #404040;
+      --neutral-600: #525252;
+      --neutral-500: #737373;
+      --neutral-300: #d4d4d4;
+      --neutral-200: #e5e5e5;
+      --neutral-100: #f5f5f5;
+      --neutral-50: #fafafa;
+      --white: #fff;
+    }
+    
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--neutral-900);
+      background: var(--white);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    a { color: var(--teal); text-decoration: none; border-bottom: 1px solid var(--teal); }
+    a:hover { border-bottom-width: 2px; }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    
+    /* Nav */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--neutral-200);
+      transform: translateZ(0);
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; border: none; }
+    .nav-logo img { height: 32px; }
+    .nav-back {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--neutral-600);
+      border: none;
+    }
+    .nav-back:hover { color: var(--neutral-900); }
+    
+    /* Header */
+    .header {
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .eyebrow-line {
+      width: 2rem;
+      height: 1px;
+      background: var(--teal);
+    }
+    .eyebrow-text {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--neutral-500);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) {
+      h1 { font-size: 3.25rem; }
+    }
+    
+    .font-emphasis {
+      font-family: 'Italiana', serif;
+      font-weight: 400;
+      font-style: normal;
+      color: var(--teal);
+      font-size: 1.15em;
+    }
+    
+    .header-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--neutral-100);
+      font-size: 0.875rem;
+      color: var(--neutral-500);
+    }
+    .header-meta strong {
+      color: var(--neutral-900);
+      font-weight: 600;
+    }
+    
+    /* Content */
+    .content {
+      padding: 3rem 0 5rem;
+    }
+    
+    h2 {
+      font-size: 1.625rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--neutral-100);
+    }
+    h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+    
+    h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    p {
+      margin-bottom: 1.25rem;
+      color: var(--neutral-700);
+    }
+    
+    ul, ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: var(--neutral-700);
+    }
+    
+    li { margin-bottom: 0.5rem; }
+    
+    strong { color: var(--neutral-900); font-weight: 600; }
+    
+    .callout {
+      background: var(--neutral-50);
+      border-left: 3px solid var(--teal);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      font-size: 0.9375rem;
+    }
+    
+    .callout strong { color: var(--neutral-900); }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.9375rem;
+    }
+    
+    th {
+      background: var(--neutral-50);
+      padding: 0.875rem 1rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--neutral-600);
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    
+    td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid var(--neutral-100);
+      vertical-align: top;
+      color: var(--neutral-700);
+    }
+    
+    td strong { color: var(--neutral-900); }
+    
+    /* TOC */
+    .toc {
+      background: var(--neutral-50);
+      padding: 2rem;
+      margin: 2rem 0 3rem;
+      border: 1px solid var(--neutral-200);
+    }
+    .toc-title {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--neutral-500);
+      margin-bottom: 1rem;
+    }
+    .toc ul {
+      padding-left: 0;
+      margin-bottom: 0;
+      list-style: none;
+    }
+    .toc li {
+      margin-bottom: 0.5rem;
+      font-size: 0.9375rem;
+    }
+    .toc a {
+      color: var(--neutral-700);
+      border: none;
+      font-weight: 500;
+    }
+    .toc a:hover { color: var(--teal); }
+    
+    /* Footer */
+    .footer {
+      padding: 3rem 0;
+      border-top: 1px solid var(--neutral-200);
+      text-align: center;
+      background: var(--neutral-50);
+    }
+    .footer p {
+      font-size: 0.8125rem;
+      color: var(--neutral-500);
+      margin-bottom: 0;
+    }
+    .footer a {
+      color: var(--neutral-600);
+      border: none;
+      margin: 0 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/assets/aloomii-logo.png" alt="Aloomii">
+      </a>
+      <a href="/" class="nav-back">← Back to Aloomii</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    
+    <header class="header">
+      <div class="eyebrow">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">Legal</span>
+      </div>
+      <h1>Privacy <span class="font-emphasis">Policy</span></h1>
+      <div class="header-meta">
+        <div>
+          <strong>Last updated</strong><br>
+          April 23, 2026
+        </div>
+        <div>
+          <strong>Effective</strong><br>
+          April 23, 2026
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      
+      <div class="toc">
+        <p class="toc-title">Contents</p>
+        <ul>
+          <li><a href="#overview">1. Overview</a></li>
+          <li><a href="#who-we-are">2. Who we are</a></li>
+          <li><a href="#what-we-collect">3. Information we collect</a></li>
+          <li><a href="#how-we-use">4. How we use your information</a></li>
+          <li><a href="#sharing">5. Who we share it with</a></li>
+          <li><a href="#retention">6. How long we keep it</a></li>
+          <li><a href="#rights">7. Your rights</a></li>
+          <li><a href="#cookies">8. Cookies and similar technologies</a></li>
+          <li><a href="#security">9. Security</a></li>
+          <li><a href="#international">10. International transfers</a></li>
+          <li><a href="#children">11. Children's privacy</a></li>
+          <li><a href="#changes">12. Changes to this policy</a></li>
+          <li><a href="#contact">13. Contact us</a></li>
+        </ul>
+      </div>
+
+      <h2 id="overview">1. Overview</h2>
+      <p>
+        This Privacy Policy explains how Aloomii collects, uses, shares, and protects personal information when you use our website at aloomii.com, our customer portal at app.aloomii.com, or any of our products and services (together, the "Services").
+      </p>
+      <p>
+        We wrote this policy to be readable. If anything is unclear, please <a href="https://www.aloomii.com/#contact">contact us</a> and we'll explain.
+      </p>
+
+      <div class="callout">
+        <strong>The short version:</strong> We collect what we need to deliver the product and run the business. We don't sell your data. We use reputable service providers (Clerk, Gumroad, Neon, Cloudflare) to run our infrastructure. You can ask us to delete your data at any time.
+      </div>
+
+      <h2 id="who-we-are">2. Who we are</h2>
+      <p>
+        Aloomii is an AI operations company based in Caledonia, Ontario, Canada. For the purposes of privacy law, we are the "controller" of the personal information you share with us.
+      </p>
+      <p>
+        Our legal entity, contact information, and privacy officer can be reached through the contact details at the bottom of this policy.
+      </p>
+
+      <h2 id="what-we-collect">3. Information we collect</h2>
+      
+      <h3>3.1 Information you provide directly</h3>
+      <p>When you use our Services, you may provide:</p>
+      <ul>
+        <li><strong>Account information:</strong> Your name, email address, and password when you create an account</li>
+        <li><strong>Purchase information:</strong> Payment details and billing information when you buy a product (processed by Gumroad, not stored by us)</li>
+        <li><strong>Profile information:</strong> Optional information you add to your profile in the portal</li>
+        <li><strong>Content you create:</strong> Notes, favorites, customizations, and other data you create within the portal</li>
+        <li><strong>Communications:</strong> Messages you send us through our contact form, email, or support channels</li>
+      </ul>
+
+      <h3>3.2 Information collected automatically</h3>
+      <p>When you use the Services, we automatically collect:</p>
+      <ul>
+        <li><strong>Usage data:</strong> Pages you view, features you use, prompts you interact with, favorites, status changes, and search queries</li>
+        <li><strong>Device information:</strong> IP address, browser type, operating system, device identifiers, and screen resolution</li>
+        <li><strong>Session data:</strong> Login times, session duration, and authentication events</li>
+        <li><strong>Performance data:</strong> Error logs, page load times, and technical diagnostics</li>
+      </ul>
+
+      <h3>3.3 Information from third parties</h3>
+      <p>We receive information from:</p>
+      <ul>
+        <li><strong>Gumroad:</strong> Purchase confirmations, buyer email addresses, product purchased, and transaction metadata</li>
+        <li><strong>Clerk:</strong> Authentication events, account creation timestamps, and session management data</li>
+        <li><strong>Analytics providers:</strong> Aggregated usage patterns and visitor behavior</li>
+      </ul>
+
+      <h2 id="how-we-use">4. How we use your information</h2>
+      <p>We use personal information to:</p>
+      <ul>
+        <li><strong>Deliver the Services</strong> you purchased, including granting access to your edition and content</li>
+        <li><strong>Authenticate your account</strong> and protect against unauthorized access</li>
+        <li><strong>Process transactions</strong> and send you purchase confirmations and receipts</li>
+        <li><strong>Provide customer support</strong> and respond to your inquiries</li>
+        <li><strong>Improve our products</strong> by analyzing usage patterns and fixing issues</li>
+        <li><strong>Send you service communications</strong> about your account, purchases, and product updates</li>
+        <li><strong>Send you marketing communications</strong> (only with your consent and with the ability to unsubscribe)</li>
+        <li><strong>Comply with legal obligations</strong> and protect against fraud or misuse</li>
+      </ul>
+
+      <h2 id="sharing">5. Who we share it with</h2>
+      <p>
+        We don't sell your personal information. We share it only with the following service providers, each of whom has agreed to handle your data in accordance with privacy laws and our instructions.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Service Provider</th>
+            <th>Purpose</th>
+            <th>Data Shared</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Clerk</strong></td>
+            <td>Authentication and account management</td>
+            <td>Email, name, password (hashed), session data</td>
+          </tr>
+          <tr>
+            <td><strong>Gumroad</strong></td>
+            <td>Payment processing and purchase fulfillment</td>
+            <td>Email, billing information, transaction details</td>
+          </tr>
+          <tr>
+            <td><strong>Neon</strong></td>
+            <td>Database hosting (your account data and portal content)</td>
+            <td>Account data, usage events, portal content</td>
+          </tr>
+          <tr>
+            <td><strong>Cloudflare</strong></td>
+            <td>Website hosting, CDN, security</td>
+            <td>IP address, request logs, security events</td>
+          </tr>
+          <tr>
+            <td><strong>Kit</strong></td>
+            <td>Email newsletter and transactional email</td>
+            <td>Email, name, subscription preferences</td>
+          </tr>
+          <tr>
+            <td><strong>Analytics provider</strong></td>
+            <td>Usage analytics (privacy-respecting, no cross-site tracking)</td>
+            <td>Anonymized page views and events</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        We may also share information when required by law, to protect our rights or safety, in connection with a business transfer (merger, acquisition, or sale of assets), or with your explicit consent.
+      </p>
+
+      <h2 id="retention">6. How long we keep it</h2>
+      <p>We keep personal information for as long as needed to provide the Services and comply with legal obligations. Specifically:</p>
+      <ul>
+        <li><strong>Account data:</strong> While your account is active, plus 12 months after closure</li>
+        <li><strong>Purchase records:</strong> 7 years, as required by Canadian tax law</li>
+        <li><strong>Usage events:</strong> 24 months, then anonymized for analytics</li>
+        <li><strong>Support communications:</strong> 3 years from your last contact</li>
+        <li><strong>Marketing data:</strong> Until you unsubscribe or request deletion</li>
+      </ul>
+      <p>
+        You can request deletion of your account at any time, though some information (like purchase records) may be retained to comply with legal requirements.
+      </p>
+
+      <h2 id="rights">7. Your rights</h2>
+      <p>
+        Depending on where you live, you may have the following rights regarding your personal information:
+      </p>
+      <ul>
+        <li><strong>Access:</strong> Request a copy of the personal information we have about you</li>
+        <li><strong>Correction:</strong> Ask us to correct inaccurate or incomplete information</li>
+        <li><strong>Deletion:</strong> Request that we delete your personal information</li>
+        <li><strong>Portability:</strong> Receive your data in a structured, machine-readable format</li>
+        <li><strong>Objection:</strong> Object to certain processing, including direct marketing</li>
+        <li><strong>Restriction:</strong> Ask us to limit how we process your information</li>
+        <li><strong>Withdraw consent:</strong> Withdraw any consent you previously gave</li>
+      </ul>
+
+      <h3>Specific rights by jurisdiction</h3>
+      <p>
+        <strong>European Economic Area, UK, and Switzerland:</strong> Rights under GDPR and UK GDPR, including the right to lodge a complaint with your local data protection authority.
+      </p>
+      <p>
+        <strong>California:</strong> Rights under the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA), including the right to know, delete, correct, opt-out of sale or sharing, and non-discrimination for exercising your rights. We do not sell personal information.
+      </p>
+      <p>
+        <strong>Canada:</strong> Rights under the Personal Information Protection and Electronic Documents Act (PIPEDA) and applicable provincial privacy laws.
+      </p>
+      <p>
+        To exercise any of these rights, <a href="https://www.aloomii.com/#contact">contact us</a>. We will respond within 30 days (or the timeframe required by applicable law). We will not discriminate against you for exercising your rights.
+      </p>
+
+      <h2 id="cookies">8. Cookies and similar technologies</h2>
+      <p>
+        We use cookies and similar technologies to operate and improve the Services.
+      </p>
+
+      <h3>Types of cookies we use</h3>
+      <ul>
+        <li><strong>Essential cookies:</strong> Required for the Services to function, including authentication (Clerk) and security (Cloudflare). These cannot be disabled.</li>
+        <li><strong>Performance cookies:</strong> Help us understand how visitors use the Services (analytics).</li>
+        <li><strong>Preference cookies:</strong> Remember your choices and settings.</li>
+      </ul>
+
+      <p>
+        We do not use advertising cookies or cross-site tracking. You can control cookies through your browser settings. Disabling essential cookies will prevent the Services from working properly.
+      </p>
+
+      <h2 id="security">9. Security</h2>
+      <p>
+        We take reasonable steps to protect your personal information, including:
+      </p>
+      <ul>
+        <li>Encryption in transit (TLS) and at rest where supported by our service providers</li>
+        <li>Access controls limiting who at Aloomii can access user data</li>
+        <li>Using reputable service providers with strong security practices (Clerk, Neon, Cloudflare, Gumroad)</li>
+        <li>Regular review of our security practices</li>
+      </ul>
+      <p>
+        However, no system is 100% secure. If we become aware of a breach affecting your personal information, we will notify you as required by applicable law.
+      </p>
+
+      <h2 id="international">10. International transfers</h2>
+      <p>
+        We are based in Canada. Some of our service providers are located in the United States and other countries. When we transfer your personal information outside your home jurisdiction, we rely on appropriate legal mechanisms such as standard contractual clauses or equivalent safeguards.
+      </p>
+
+      <h2 id="children">11. Children's privacy</h2>
+      <p>
+        Our Services are not directed to children under 16, and we do not knowingly collect personal information from children. If you believe a child has provided us with personal information, <a href="https://www.aloomii.com/#contact">contact us</a> and we will delete it.
+      </p>
+
+      <h2 id="changes">12. Changes to this policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time. When we make material changes, we will notify you by email or through a notice on our website at least 30 days before the changes take effect. Your continued use of the Services after the effective date constitutes acceptance of the updated policy.
+      </p>
+
+      <h2 id="contact">13. Contact us</h2>
+      <p>
+        If you have questions about this Privacy Policy or want to exercise any of your rights, please reach us through our <a href="https://www.aloomii.com/#contact">contact form</a>.
+      </p>
+      <p>
+        <strong>Aloomii</strong><br>
+        Caledonia, Ontario, Canada<br>
+        Privacy inquiries: via <a href="https://www.aloomii.com/#contact">aloomii.com/#contact</a>
+      </p>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <a href="/legal/terms">Terms of Service</a>
+        <a href="/legal/privacy">Privacy Policy</a>
+        <a href="/legal/refunds">Refund Policy</a>
+      </p>
+      <p style="margin-top: 1rem;">© 2026 Aloomii · Caledonia, Ontario</p>
+    </div>
+  </footer>
+
+</body>
+</html>

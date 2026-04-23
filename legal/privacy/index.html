@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Terms of Service — Aloomii</title>
+  <meta name="description" content="Aloomii's Terms of Service. The agreement between Aloomii and users of the Playbook, portal, and related services.">
+  <meta name="robots" content="index, follow">
+  
+  <link rel="canonical" href="https://aloomii.com/legal/terms">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Italiana&display=swap" rel="stylesheet">
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --teal: #00C8BE;
+      --neutral-900: #171717;
+      --neutral-700: #404040;
+      --neutral-600: #525252;
+      --neutral-500: #737373;
+      --neutral-300: #d4d4d4;
+      --neutral-200: #e5e5e5;
+      --neutral-100: #f5f5f5;
+      --neutral-50: #fafafa;
+      --white: #fff;
+    }
+    
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--neutral-900);
+      background: var(--white);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    a { color: var(--teal); text-decoration: none; border-bottom: 1px solid var(--teal); }
+    a:hover { border-bottom-width: 2px; }
+    
+    .container { max-width: 800px; margin: 0 auto; padding: 0 1.5rem; }
+    
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--neutral-200);
+      transform: translateZ(0);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; border: none; }
+    .nav-logo img { height: 32px; }
+    .nav-back { font-size: 0.875rem; font-weight: 500; color: var(--neutral-600); border: none; }
+    .nav-back:hover { color: var(--neutral-900); }
+    
+    .header { padding: 4rem 0 3rem; border-bottom: 1px solid var(--neutral-200); }
+    
+    .eyebrow { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .eyebrow-line { width: 2rem; height: 1px; background: var(--teal); }
+    .eyebrow-text {
+      font-size: 0.625rem; font-weight: 700; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--neutral-500);
+    }
+    
+    h1 {
+      font-size: 2.5rem; font-weight: 700; letter-spacing: -0.02em;
+      line-height: 1.1; margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { h1 { font-size: 3.25rem; } }
+    
+    .font-emphasis {
+      font-family: 'Italiana', serif; font-weight: 400; font-style: normal;
+      color: var(--teal); font-size: 1.15em;
+    }
+    
+    .header-meta {
+      display: flex; gap: 2rem; margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--neutral-100);
+      font-size: 0.875rem; color: var(--neutral-500);
+    }
+    .header-meta strong { color: var(--neutral-900); font-weight: 600; }
+    
+    .content { padding: 3rem 0 5rem; }
+    
+    h2 {
+      font-size: 1.625rem; font-weight: 700; letter-spacing: -0.01em;
+      margin-top: 3rem; margin-bottom: 1rem;
+      padding-top: 2rem; border-top: 1px solid var(--neutral-100);
+    }
+    h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+    
+    h3 {
+      font-size: 1.125rem; font-weight: 600;
+      margin-top: 2rem; margin-bottom: 0.75rem;
+    }
+    
+    p { margin-bottom: 1.25rem; color: var(--neutral-700); }
+    
+    ul, ol {
+      margin-bottom: 1.25rem; padding-left: 1.5rem;
+      color: var(--neutral-700);
+    }
+    li { margin-bottom: 0.5rem; }
+    
+    strong { color: var(--neutral-900); font-weight: 600; }
+    
+    .callout {
+      background: var(--neutral-50);
+      border-left: 3px solid var(--teal);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      font-size: 0.9375rem;
+    }
+    
+    .warning-callout {
+      background: #fff9f0;
+      border-left: 3px solid #f59e0b;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      font-size: 0.9375rem;
+    }
+    
+    .toc {
+      background: var(--neutral-50);
+      padding: 2rem;
+      margin: 2rem 0 3rem;
+      border: 1px solid var(--neutral-200);
+    }
+    .toc-title {
+      font-size: 0.625rem; font-weight: 700; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--neutral-500);
+      margin-bottom: 1rem;
+    }
+    .toc ul { padding-left: 0; margin-bottom: 0; list-style: none; }
+    .toc li { margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .toc a { color: var(--neutral-700); border: none; font-weight: 500; }
+    .toc a:hover { color: var(--teal); }
+    
+    .footer {
+      padding: 3rem 0; border-top: 1px solid var(--neutral-200);
+      text-align: center; background: var(--neutral-50);
+    }
+    .footer p { font-size: 0.8125rem; color: var(--neutral-500); margin-bottom: 0; }
+    .footer a { color: var(--neutral-600); border: none; margin: 0 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/assets/aloomii-logo.png" alt="Aloomii">
+      </a>
+      <a href="/" class="nav-back">← Back to Aloomii</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    
+    <header class="header">
+      <div class="eyebrow">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">Legal</span>
+      </div>
+      <h1>Terms of <span class="font-emphasis">Service</span></h1>
+      <div class="header-meta">
+        <div><strong>Last updated</strong><br>April 23, 2026</div>
+        <div><strong>Effective</strong><br>April 23, 2026</div>
+      </div>
+    </header>
+
+    <main class="content">
+      
+      <div class="toc">
+        <p class="toc-title">Contents</p>
+        <ul>
+          <li><a href="#agreement">1. Agreement</a></li>
+          <li><a href="#services">2. The Services</a></li>
+          <li><a href="#account">3. Your account</a></li>
+          <li><a href="#purchases">4. Purchases and payment</a></li>
+          <li><a href="#license">5. License and intellectual property</a></li>
+          <li><a href="#acceptable-use">6. Acceptable use</a></li>
+          <li><a href="#refunds">7. Refunds</a></li>
+          <li><a href="#termination">8. Termination</a></li>
+          <li><a href="#disclaimers">9. Disclaimers</a></li>
+          <li><a href="#liability">10. Limitation of liability</a></li>
+          <li><a href="#indemnification">11. Indemnification</a></li>
+          <li><a href="#disputes">12. Governing law and disputes</a></li>
+          <li><a href="#changes">13. Changes to these terms</a></li>
+          <li><a href="#misc">14. Miscellaneous</a></li>
+          <li><a href="#contact">15. Contact</a></li>
+        </ul>
+      </div>
+
+      <h2 id="agreement">1. Agreement</h2>
+      <p>
+        These Terms of Service ("Terms") are a legal agreement between you and Aloomii (referred to as "Aloomii," "we," "us," or "our"), based in Caledonia, Ontario, Canada. By accessing or using our website at aloomii.com, our portal at app.aloomii.com, or any of our products and services (together, the "Services"), you agree to these Terms.
+      </p>
+      <p>
+        If you don't agree, don't use the Services.
+      </p>
+
+      <div class="callout">
+        <strong>The short version:</strong> You buy access to the Aloomii Playbook. We give you the content and the portal. You don't share your login, resell the content, or try to break the service. If you're not happy, we'll refund you within 14 days. No one sues anyone first without talking it out.
+      </div>
+
+      <h2 id="services">2. The Services</h2>
+      <p>
+        Aloomii provides:
+      </p>
+      <ul>
+        <li><strong>The Aloomii Playbook</strong> and its editions (Founder, Solopreneur, Operator Leader), including ebooks, audio narration, video files, infographics, curated prompts, workflows, and the Library</li>
+        <li><strong>The customer portal</strong> at app.aloomii.com, which hosts your purchased content and enables features like favorites, notes, status tracking, and customizations</li>
+        <li><strong>Supporting services</strong> including email communications, customer support, and updates</li>
+      </ul>
+      <p>
+        We may add, modify, or remove features of the Services at any time. If a change materially reduces the value of what you purchased, we will notify you.
+      </p>
+
+      <h2 id="account">3. Your account</h2>
+      <p>
+        To access the portal, you must create an account through our authentication provider (Clerk). You agree to:
+      </p>
+      <ul>
+        <li>Provide accurate information when creating your account</li>
+        <li>Keep your login credentials secure</li>
+        <li>Not share your account with anyone else</li>
+        <li>Notify us immediately if you suspect unauthorized access</li>
+        <li>Be at least 18 years old, or the age of majority in your jurisdiction</li>
+      </ul>
+      <p>
+        You are responsible for all activity that occurs under your account.
+      </p>
+
+      <h2 id="purchases">4. Purchases and payment</h2>
+      <p>
+        Purchases are processed by our payment processor, Gumroad. When you buy a product:
+      </p>
+      <ul>
+        <li>The price displayed is the price you pay (plus any applicable taxes)</li>
+        <li>Payment is due at the time of purchase</li>
+        <li>All prices are in US dollars unless otherwise specified</li>
+        <li>You receive access to the specific edition you purchased, not other editions</li>
+        <li>Your license is for a single user (you)</li>
+      </ul>
+
+      <h3>Team purchases</h3>
+      <p>
+        If you purchase team licenses, each team member must have their own account and login. Each additional seat is offered at 40% off the regular price.
+      </p>
+
+      <h3>Taxes</h3>
+      <p>
+        You are responsible for any taxes applicable to your purchase, including VAT, GST, sales tax, or equivalent taxes in your jurisdiction. Gumroad collects and remits taxes where required.
+      </p>
+
+      <h2 id="license">5. License and intellectual property</h2>
+      <p>
+        <strong>Aloomii's content is our intellectual property.</strong> This includes the ebooks, audio, video, infographics, prompts, workflows, Library examples, portal interface, and all associated materials.
+      </p>
+
+      <h3>What you can do</h3>
+      <p>
+        When you purchase the Playbook, we grant you a <strong>personal, non-exclusive, non-transferable, non-sublicensable license</strong> to:
+      </p>
+      <ul>
+        <li>Access and use the content for your personal business or professional purposes</li>
+        <li>Customize prompts and workflows for your own use</li>
+        <li>Apply what you learn in your own work</li>
+        <li>Download included files (ebook, audio, video, infographics) for personal use</li>
+      </ul>
+
+      <h3>What you can't do</h3>
+      <p>
+        You may NOT:
+      </p>
+      <ul>
+        <li>Share, redistribute, or resell any Aloomii content</li>
+        <li>Publish prompts, workflows, or Library examples as your own</li>
+        <li>Grant access to your account to people who haven't purchased the Playbook</li>
+        <li>Use Aloomii content to create competing products or services</li>
+        <li>Reverse engineer, decompile, or attempt to extract source code from the portal</li>
+        <li>Use automated tools to scrape or bulk-download content</li>
+        <li>Remove or modify copyright notices or branding</li>
+        <li>Use Aloomii content for training commercial AI models</li>
+      </ul>
+
+      <h3>Your customizations</h3>
+      <p>
+        When you customize prompts, write notes, or create other content in the portal, you retain ownership of your modifications. We store this content to provide the Services to you. We do not use your customizations or notes to train AI models or to create new Aloomii products.
+      </p>
+
+      <h3>Feedback</h3>
+      <p>
+        If you provide us with feedback, suggestions, or ideas about the Services, you grant us the right to use that feedback without compensation or attribution.
+      </p>
+
+      <h2 id="acceptable-use">6. Acceptable use</h2>
+      <p>
+        You agree not to:
+      </p>
+      <ul>
+        <li>Use the Services for any unlawful purpose</li>
+        <li>Attempt to gain unauthorized access to the Services or other users' accounts</li>
+        <li>Interfere with the operation of the Services or other users' use</li>
+        <li>Transmit malware, viruses, or harmful code</li>
+        <li>Harass, threaten, or harm others</li>
+        <li>Misrepresent your identity or affiliation with Aloomii</li>
+        <li>Use the Services to violate any third party's intellectual property or privacy rights</li>
+        <li>Use the Services to compete directly with Aloomii's business</li>
+      </ul>
+
+      <h2 id="refunds">7. Refunds</h2>
+      <p>
+        We offer a <strong>14-day money-back guarantee</strong> on all Aloomii Playbook purchases made through aloomii.com. If you're not satisfied within 14 days of purchase, contact us for a full refund. No questions asked.
+      </p>
+      <p>
+        For full details, see our <a href="/legal/refunds">Refund Policy</a>.
+      </p>
+      <p>
+        Purchases made through Amazon or other third-party platforms are subject to those platforms' refund policies, not ours.
+      </p>
+
+      <h2 id="termination">8. Termination</h2>
+      
+      <h3>Termination by you</h3>
+      <p>
+        You can close your account at any time by <a href="https://www.aloomii.com/#contact">contacting us</a>. Upon termination, your access to the portal ends. If you've downloaded files (ebook, audio, video, infographics), those remain yours to keep, subject to the license terms.
+      </p>
+
+      <h3>Termination by us</h3>
+      <p>
+        We may suspend or terminate your access to the Services if:
+      </p>
+      <ul>
+        <li>You violate these Terms, including the acceptable use provisions</li>
+        <li>You engage in fraud, chargeback abuse, or misrepresentation</li>
+        <li>Required by law</li>
+      </ul>
+      <p>
+        If we terminate your account for violations, we may not provide a refund. We will provide notice of termination except in cases of serious violations.
+      </p>
+
+      <h2 id="disclaimers">9. Disclaimers</h2>
+      
+      <div class="warning-callout">
+        <strong>Important:</strong> The Aloomii Playbook is educational and informational. It is not professional advice. Use your judgment when applying what you learn.
+      </div>
+
+      <p>
+        <strong>The Services are provided "as is" and "as available" without warranties of any kind</strong>, either express or implied, including (without limitation) implied warranties of merchantability, fitness for a particular purpose, or non-infringement.
+      </p>
+      <p>
+        We do not warrant that:
+      </p>
+      <ul>
+        <li>The Services will meet your specific requirements</li>
+        <li>The Services will be uninterrupted, timely, secure, or error-free</li>
+        <li>The results obtained from using the Services will be accurate or reliable</li>
+        <li>Any errors in the Services will be corrected</li>
+      </ul>
+
+      <p>
+        <strong>Not professional advice.</strong> The content in the Playbook (including prompts, workflows, tool recommendations, and Library examples) is for informational purposes. It does not constitute legal, financial, tax, business, medical, or regulatory advice. You should consult appropriate professionals for advice specific to your situation.
+      </p>
+
+      <p>
+        <strong>AI outputs.</strong> When you use the prompts and workflows with AI tools (like Claude, ChatGPT, or others), the outputs of those AI tools are provided by the respective AI vendors, not by Aloomii. We are not responsible for the accuracy, appropriateness, or consequences of AI-generated content.
+      </p>
+
+      <h2 id="liability">10. Limitation of liability</h2>
+      <p>
+        To the maximum extent permitted by law:
+      </p>
+      <ul>
+        <li>Aloomii's total liability to you for any claim arising from these Terms or the Services is limited to the amount you paid to Aloomii in the 12 months preceding the claim</li>
+        <li>We are not liable for any indirect, incidental, consequential, special, or punitive damages, including lost profits, lost data, or business interruption</li>
+        <li>This limitation applies whether the claim is based on contract, tort, negligence, strict liability, or any other legal theory</li>
+      </ul>
+      <p>
+        Some jurisdictions don't allow limitations on implied warranties or exclusion of certain damages. In those jurisdictions, these limitations apply to the fullest extent permitted by law.
+      </p>
+
+      <h2 id="indemnification">11. Indemnification</h2>
+      <p>
+        You agree to indemnify and hold harmless Aloomii, its founders, employees, contractors, and agents from any claims, damages, losses, liabilities, and expenses (including reasonable legal fees) arising from:
+      </p>
+      <ul>
+        <li>Your use or misuse of the Services</li>
+        <li>Your violation of these Terms</li>
+        <li>Your violation of any third-party rights, including intellectual property or privacy rights</li>
+        <li>Content you create, share, or publish using the Services</li>
+      </ul>
+
+      <h2 id="disputes">12. Governing law and disputes</h2>
+      <p>
+        These Terms are governed by the laws of the Province of Ontario and the federal laws of Canada applicable therein, without regard to conflict of laws principles.
+      </p>
+
+      <h3>Dispute resolution</h3>
+      <p>
+        Before filing any lawsuit, you agree to attempt to resolve the dispute informally by <a href="https://www.aloomii.com/#contact">contacting us</a>. If we can't resolve the issue within 30 days, either party may proceed with formal dispute resolution.
+      </p>
+
+      <h3>Jurisdiction</h3>
+      <p>
+        Any legal action or proceeding arising from these Terms will be brought exclusively in the courts of the Province of Ontario, Canada. You consent to the personal jurisdiction of those courts.
+      </p>
+
+      <h2 id="changes">13. Changes to these terms</h2>
+      <p>
+        We may update these Terms from time to time. When we make material changes, we will notify you by email (if you have an account) or through a notice on our website. The updated Terms will be effective when posted, unless we specify a later effective date.
+      </p>
+      <p>
+        Your continued use of the Services after changes take effect means you accept the updated Terms. If you don't accept the changes, you can close your account and request a refund of any unused portion of prepaid fees.
+      </p>
+
+      <h2 id="misc">14. Miscellaneous</h2>
+      
+      <h3>Entire agreement</h3>
+      <p>
+        These Terms, together with our <a href="/legal/privacy">Privacy Policy</a> and <a href="/legal/refunds">Refund Policy</a>, constitute the entire agreement between you and Aloomii regarding the Services.
+      </p>
+
+      <h3>Severability</h3>
+      <p>
+        If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect.
+      </p>
+
+      <h3>No waiver</h3>
+      <p>
+        Our failure to enforce any right or provision of these Terms is not a waiver of that right or provision.
+      </p>
+
+      <h3>Assignment</h3>
+      <p>
+        You may not assign or transfer these Terms without our written consent. We may assign these Terms in connection with a merger, acquisition, or sale of assets.
+      </p>
+
+      <h3>No agency</h3>
+      <p>
+        Nothing in these Terms creates an agency, partnership, joint venture, or employment relationship between you and Aloomii.
+      </p>
+
+      <h2 id="contact">15. Contact</h2>
+      <p>
+        For questions about these Terms, <a href="https://www.aloomii.com/#contact">contact us</a>.
+      </p>
+      <p>
+        <strong>Aloomii</strong><br>
+        Caledonia, Ontario, Canada
+      </p>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <a href="/legal/terms">Terms of Service</a>
+        <a href="/legal/privacy">Privacy Policy</a>
+        <a href="/legal/refunds">Refund Policy</a>
+      </p>
+      <p style="margin-top: 1rem;">© 2026 Aloomii · Caledonia, Ontario</p>
+    </div>
+  </footer>
+
+</body>
+</html>
