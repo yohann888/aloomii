@@ -89,6 +89,9 @@
                 </div>
                 
                 <div class="header-right">
+                    <button id="notif-btn" class="header-btn" onclick="toggleNotifications()">
+                        🔔<span id="notif-badge" class="badge">3</span>
+                    </button>
                     <div class="header-time" id="header-timestamp"></div>
                     <button class="header-btn" onclick="openPalette()">⌘K</button>
                     <button onclick="toggleTheme()" class="header-btn">⚙</button>
@@ -316,16 +319,102 @@
                         <div id="pipeline-funnel-crm" class="funnel"></div>
                     </div>
                     
+                    <!-- Win/Loss Panel -->
+                    <div id="win-loss-container" class="crm-panel mt-4">
+                        <div class="win-loss-header flex justify-between items-center mb-3">
+                            <h3>Win/Loss (This Quarter)</h3>
+                            <button class="btn-secondary" onclick="openOutcomeModal()">Log Outcome</button>
+                        </div>
+                        <div class="win-loss-stats" id="win-loss-stats">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
                     <!-- Draft Edit Panel (slide-in) -->
-                    <div id="draft-edit-panel" class="draft-panel hidden">
-                        <div class="draft-panel-header">
+                    <div id="draft-edit-panel" class="detail-panel hidden">
+                        <div class="detail-panel-header">
                             <h3>Edit Draft</h3>
                             <button onclick="closeDraftPanel()" class="close-btn">×</button>
                         </div>
-                        <textarea id="draft-textarea" class="draft-textarea" placeholder="Draft message..."></textarea>
-                        <div class="draft-panel-actions">
+                        <div class="draft-editor-body detail-panel-body">
+                            <div class="editor-meta mb-2" style="display:flex;gap:10px;">
+                                <select id="draft-channel" class="draft-select">
+                                    <option value="email">Email</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                    <option value="twitter">Twitter/X</option>
+                                </select>
+                                <input type="datetime-local" id="draft-schedule" class="draft-input">
+                            </div>
+                            <input type="text" id="draft-subject" class="draft-input mb-2" placeholder="Subject line (for email)">
+                            
+                            <div class="editor-chips mb-2" style="display:flex;gap:5px;flex-wrap:wrap;">
+                                <button class="chip" onclick="applyTone('Shorter')">Shorter</button>
+                                <button class="chip" onclick="applyTone('Focus on podcast')">Focus on podcast</button>
+                                <button class="chip" onclick="applyTone('Personalize')">Personalize</button>
+                            </div>
+
+                            <textarea id="draft-textarea" class="draft-textarea editor-textarea" placeholder="Draft message..." oninput="updateDraftScore()" style="height:150px;"></textarea>
+                            
+                            <div class="editor-footer" style="display:flex;justify-content:space-between;margin-top:10px;font-size:0.9em;color:var(--text-dim);">
+                                <div class="word-count"><span id="draft-word-count">0</span> words</div>
+                                <div class="live-score">
+                                    <span class="score-value" title="Hook, CTA, Personalization">Score: <span id="draft-score-val" style="color:var(--accent);">--</span>/100</span>
+                                    <div id="score-flags" class="score-flags" style="display:inline-block;margin-left:10px;"></div>
+                                </div>
+                            </div>
+                            <div class="score-suggestion mb-2" id="draft-suggestion" style="color:var(--accent-hover);font-size:0.85em;margin-top:5px;"></div>
+                            <div class="version-history mb-3">
+                                <details>
+                                    <summary style="cursor:pointer;font-size:0.85em;color:var(--text-dim);">View Original</summary>
+                                    <div id="draft-original-text" class="delta-text" style="font-size:0.85em;margin-top:5px;opacity:0.7;"></div>
+                                </details>
+                            </div>
+                        </div>
+                        <div class="draft-panel-actions" style="padding:15px;border-top:1px solid var(--border-light);display:flex;gap:10px;flex-wrap:wrap;">
+                            <button onclick="saveDraftTemplate()" class="btn-secondary">Save as Template</button>
                             <button onclick="saveDraft()" class="btn-secondary">Save</button>
-                            <button onclick="approveDraft()" class="btn-primary">Approve</button>
+                            <button onclick="rejectDraft()" class="btn-secondary danger">Reject</button>
+                            <button onclick="approveDraft()" class="btn-primary">Approve & Queue</button>
+                        </div>
+                    </div>
+
+                    <!-- Notification Drawer (slide-in) -->
+                    <div id="notification-drawer" class="detail-panel hidden">
+                        <div class="detail-panel-header">
+                            <h3>Notifications</h3>
+                            <button onclick="closeNotifications()" class="close-btn">×</button>
+                        </div>
+                        <div id="notification-list" class="detail-panel-body" style="display:flex;flex-direction:column;gap:10px;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Log Outcome Modal -->
+                    <div id="outcome-modal" class="detail-panel hidden" style="width: 400px;">
+                        <div class="detail-panel-header">
+                            <h3>Log Outcome</h3>
+                            <button onclick="closeOutcomeModal()" class="close-btn">×</button>
+                        </div>
+                        <div class="detail-panel-body" style="display:flex;flex-direction:column;gap:10px;">
+                            <label>Contact</label>
+                            <select id="outcome-contact" class="draft-select"></select>
+                            
+                            <label>Outcome</label>
+                            <select id="outcome-type" class="draft-select">
+                                <option value="won">Won</option>
+                                <option value="lost">Lost</option>
+                                <option value="stalled">Stalled</option>
+                            </select>
+                            
+                            <label>Revenue ($)</label>
+                            <input type="number" id="outcome-revenue" class="draft-input" placeholder="Amount">
+                            
+                            <label>Notes</label>
+                            <textarea id="outcome-notes" class="draft-textarea" placeholder="Notes..."></textarea>
+                        </div>
+                        <div class="draft-panel-actions" style="padding:15px;border-top:1px solid var(--border-light);display:flex;gap:10px;justify-content:flex-end;">
+                            <button onclick="closeOutcomeModal()" class="btn-secondary">Cancel</button>
+                            <button onclick="submitOutcome()" class="btn-primary">Submit</button>
                         </div>
                     </div>
 
