@@ -147,3 +147,26 @@ Some GTM teams are reporting th...
 Most founders don't have a qualification...
 [2026-04-15T02:59:20.914Z] [DB] LinkedIn drafts and Hook Lab candidates written to Command Center
 [2026-04-15T02:59:20.942Z] === weekly-linkedin-drafts COMPLETE — 6 posts generated (3 Yohann, 3 Jenny) ===
+[2026-04-22T15:00:58.719Z] === weekly-linkedin-drafts START [DRY RUN] ===
+[2026-04-22T15:00:58.761Z] Signal Scout context: 0 score-4+ signals loaded
+[2026-04-22T15:00:58.762Z] Pulling trending GTM/founder topic via Gemini 3.1 Pro...
+[2026-04-22T15:02:26.776Z] Trending topic retrieved via gemini-3.1-pro-preview.
+[2026-04-22T15:02:26.776Z] Yohann Post 1: Contrarian Teardown | anecdote: aloo-and-mittens
+[2026-04-22T15:02:26.776Z] Yohann Post 2: Saveable List | anecdote: engineer-to-founder
+[2026-04-22T15:02:26.776Z] Yohann Post 3: Founder Confession | anecdote: aloo-and-mittens
+[2026-04-22T15:02:26.776Z] Jenny Post 1:  Curious Creator | anecdote: slug-journey-florida
+[2026-04-22T15:02:26.777Z] Jenny Post 2:  Before/After Craft | anecdote: sandhill-cranes-always-driving
+[2026-04-22T15:02:26.777Z] Jenny Post 3:  Behind the Work | anecdote: slug-journey-florida
+[2026-04-22T15:02:26.777Z] Generating Yohann Calpu post: Contrarian Teardown
+[2026-04-22T15:03:58.835Z] Post generated for Yohann Calpu (gemini-3.1-pro-preview).
+[2026-04-22T15:03:58.836Z] Generating Yohann Calpu post: Saveable List
+[2026-04-22T15:06:27.930Z] Post generated for Yohann Calpu (gemini-3.1-pro-preview).
+[2026-04-22T15:06:27.931Z] Generating Yohann Calpu post: Founder Confession
+[2026-04-22T15:06:44.416Z] Post generated for Yohann Calpu (gemini-3.1-pro-preview).
+[2026-04-22T15:06:44.417Z] Generating Jenny Calpu post: Curious Creator
+[2026-04-22T15:08:02.355Z] Post generated for Jenny Calpu (gemini-3.1-pro-preview).
+[2026-04-22T15:08:02.356Z] Generating Jenny Calpu post: Before/After Craft
+[2026-04-22T15:09:29.588Z] Post generated for Jenny Calpu (gemini-3.1-pro-preview).
+[2026-04-22T15:09:29.590Z] Generating Jenny Calpu post: Behind the Work
+[2026-04-22T15:12:30.427Z] Post generated for Jenny Calpu (gemini-3.1-pro-preview).
+[2026-04-22T15:12:30.429Z] [DRY RUN] Skipping Buffer push and state update.

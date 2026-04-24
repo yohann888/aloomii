@@ -224,6 +224,36 @@ function registerCommandAPI(app, pool = null) {
               data.briefing.overdue_outreach === 0 &&
               data.briefing.dms_alert_count === 0;
 
+            // Prompt Lab insights (last 7 days)
+            try {
+              const periodEnd = new Date().toISOString().split('T')[0];
+              const periodStart = new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0];
+              const plRes = await query(`
+                SELECT
+                  content_slug,
+                  title,
+                  priority,
+                  signal,
+                  total_edits,
+                  avg_edit_distance,
+                  reversion_rate
+                FROM prompt_lab_insights
+                WHERE period_start = $1 AND period_end = $2
+                ORDER BY
+                  CASE priority WHEN 'high' THEN 1 WHEN 'medium' THEN 2 ELSE 3 END,
+                  total_edits DESC
+                LIMIT 3
+              `, [periodStart, periodEnd]);
+              data.briefing.prompt_lab_high_priority = plRes.rows.length;
+              data.briefing.prompt_lab_insights = plRes.rows;
+              if (plRes.rows.length > 0) {
+                data.briefing.all_clear = false;
+              }
+            } catch(e) {
+              data.briefing.prompt_lab_high_priority = 0;
+              data.briefing.prompt_lab_insights = [];
+            }
+
           } catch (e) {
             console.warn('Briefing query failed:', e.message);
             data.briefing = { all_clear: true, error: 'Briefing unavailable' };
@@ -1824,6 +1854,53 @@ process.on('SIGTERM', () => {
 
 module.exports.query = query;
 module.exports.getPool = getPool;
+
+// POST /api/command/prompt-lab/bridge — bridge portal data to CC
+function registerPromptLabRoutes(app) {
+  app.post('/api/command/prompt-lab/bridge', async (req, res) => {
+    try {
+      const { main } = require('../../scripts/bridge/prompt-lab-to-cc');
+      const result = await main();
+      res.json(result);
+    } catch (e) {
+      console.error('Prompt Lab bridge failed:', e.message);
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.get('/api/command/prompt-lab/insights', async (req, res) => {
+    try {
+      const days = parseInt(req.query.days || '7', 10);
+      const periodEnd = new Date().toISOString().split('T')[0];
+      const periodStart = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+
+      const result = await query(`
+        SELECT
+          content_slug, title, content_type,
+          total_edits, active_edits, reverted_edits,
+          avg_edit_distance, reversion_rate,
+          priority, signal
+        FROM prompt_lab_insights
+        WHERE period_start = $1 AND period_end = $2
+        ORDER BY
+          CASE priority
+            WHEN 'high' THEN 1
+            WHEN 'medium' THEN 2
+            WHEN 'watch' THEN 3
+            ELSE 4
+          END,
+          total_edits DESC
+        LIMIT 20
+      `, [periodStart, periodEnd]);
+
+      res.json({ insights: result.rows, period: `${periodStart} → ${periodEnd}` });
+    } catch (e) {
+      console.error('Prompt Lab insights query failed:', e.message);
+      res.status(500).json({ error: e.message });
+    }
+  });
+}
+module.exports.registerPromptLabRoutes = registerPromptLabRoutes;
 
 // ── Influencer Pipeline routes (registered standalone for serve-local) ──────
 function registerInfluencerRoutes(app) {

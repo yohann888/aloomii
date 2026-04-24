@@ -245,6 +245,34 @@ function getAnthropicApiKey() {
   return config?.models?.providers?.anthropic?.apiKey;
 }
 
+async function generateWithGemini(prompt, apiKey, maxTokens = 2000) {
+  const body = {
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: {
+      maxOutputTokens: maxTokens,
+      temperature: 0.8,
+    }
+  };
+
+  const res = await httpPost(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=' + apiKey,
+    { 'Content-Type': 'application/json' },
+    body
+  );
+
+  const text = res?.candidates?.[0]?.content?.parts
+    ?.filter(part => part?.text)
+    ?.map(part => part.text)
+    ?.join('\n')
+    ?.trim();
+
+  if (!text) {
+    throw new Error('Gemini returned no content: ' + JSON.stringify(res).slice(0, 300));
+  }
+
+  return { model: 'gemini-3.1-pro-preview', text, res };
+}
+
 async function generateWithSonnet(prompt, apiKey, maxTokens = 1200) {
   const body = {
     model: 'claude-sonnet-4-6',
@@ -342,8 +370,11 @@ function pickAnecdote(anecdotesData, excludeId) {
 
 // ── Trending topic via Sonnet 4.6 ────────────────────────────────────────────
 
-async function getTrendingTopic(apiKey) {
-  log('Pulling trending GTM/founder topic via Sonnet 4.6...');
+async function getTrendingTopic() {
+  const googleApiKey = getGoogleApiKey();
+  if (!googleApiKey) throw new Error('Google API key not found');
+
+  log('Pulling trending GTM/founder topic via Gemini 3.1 Pro...');
   const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const prompt = `Today is ${today}.
 
@@ -363,7 +394,7 @@ Give me exactly this structure:
 
 Be specific. No hashtags. No fluff.`;
 
-  const { model, text } = await generateWithSonnet(prompt, apiKey, 500);
+  const { model, text } = await generateWithGemini(prompt, googleApiKey, 1000);
   log(`Trending topic retrieved via ${model}.`);
   return text.trim();
 }
@@ -372,6 +403,9 @@ Be specific. No hashtags. No fluff.`;
 
 async function generatePost({ author, voiceProfileText, anecdote, trendingTopic, template, signals, hooks = [] }) {
   log(`Generating ${author.name} post: ${template.name}`);
+
+  const googleApiKey = getGoogleApiKey();
+  if (!googleApiKey) throw new Error('Google API key not found');
 
   const signalContext = signals?.length
     ? `\nREAL FOUNDER PAIN SIGNALS (from Signal Scout — what founders are saying RIGHT NOW):\n` +
@@ -386,18 +420,27 @@ Story: ${anecdote.story}
 Best angles: ${anecdote.hook_angles?.join(' | ') || 'n/a'}`
     : `PERSONAL ANECDOTE: Use a general Aloomii story — named after two cats (Aloo and Mittens), AI fleet of 15 agents, built by operators for operators.`;
 
-  const prompt = `You are writing a LinkedIn post for ${author.name}, ${author.role} of Aloomii.
+  const prompt = `SYSTEM Directives: LinkedIn High-Signal Operator Persona
+
+Role: You are a veteran operator and business strategist writing for an audience of your peers. You prioritize "distribution-first" thinking and deep, practical insights. Your tone is sharp, contrarian but grounded, and intensely practical. You do not write for engagement bait; you write to establish undeniable authority.
+
+Negative Constraints (Strictly Forbidden):
+- Do not use typical LinkedIn hooks: "I am thrilled to announce," "I never thought I'd say this, but...", "Here's the truth about..."
+- Do not use emoji spam (keep it to a maximum of 1 or 2, or none at all).
+- Do not end the post with an engagement-bait question like "What are your thoughts?" or "Do you agree?"
+- Avoid the typical "broetry" formatting of single-sentence paragraphs for 20 lines straight. Group thoughts logically.
+- Ban the words: "Delve," "crucial," "unlock," "synergy," "navigating," "realm," "supercharge."
+- Never use em dashes (—). Use periods, commas, or colons instead.
+
+Stylistic Execution:
+- The Hook: Start with a counter-intuitive statement, a hard truth, or a specific, vivid observation about the market.
+- The Meat: Back up the hook immediately with concrete mechanics. Use sharp contrasts (e.g., "Amateurs do X. Professionals do Y.") to illustrate the point.
+- The Sign-off: End abruptly and confidently. State your final thesis and walk away. Leave the reader thinking, rather than begging them to comment.
+
+You are writing a LinkedIn post for ${author.name}, ${author.role} of Aloomii.
 
 VOICE PROFILE:
 ${voiceProfileText}
-
-CRITICAL RULES:
-- Never use em dashes (—). Use periods, commas, or colons instead.
-- Never use: leverage, synergy, disrupt, game-changer, revolutionize, cutting-edge, unlock, seamlessly
-- No hashtags anywhere in the post
-- No hollow openers ("Great news!", "I'm excited to share...", "In today's landscape...")
-- Contractions are natural and encouraged
-- Specific details over vague claims
 
 TODAY'S TRENDING TOPIC:
 ${trendingTopic}
@@ -412,14 +455,11 @@ ${template.instructions}
 
 TASK:
 Write a LinkedIn post for ${author.name} that connects today's trending topic to the personal anecdote using the ${template.name} formula.
-Write in ${author.name}'s authentic voice as described in the voice profile above.
+Write in ${author.name}'s authentic voice as described in the voice profile above, while STRICTLY following the SYSTEM Directives.
 The trend should feel timely. The anecdote should feel earned, not forced.
 Output ONLY the post text. No title, no labels, no markdown. Just the post.`;
 
-  const anthropicApiKey = getAnthropicApiKey();
-  if (!anthropicApiKey) throw new Error('Anthropic API key not found');
-
-  const { model, text } = await generateWithSonnet(prompt, anthropicApiKey, 1400);
+  const { model, text } = await generateWithGemini(prompt, googleApiKey, 2000);
   log(`Post generated for ${author.name} (${model}).`);
   return text.trim();
 }
@@ -490,7 +530,6 @@ async function alertDiscord(results, dryRun) {
 async function main() {
   log(`=== weekly-linkedin-drafts START${DRY_RUN ? ' [DRY RUN]' : ''} ===`);
 
-  const anthropicApiKey = getAnthropicApiKey();
   const state = loadState();
 
   // Load anecdotes
@@ -508,7 +547,7 @@ async function main() {
   log(`Signal Scout context: ${signals.length} score-4+ signals loaded`);
 
   // Get trending topic (shared across all 3 posts)
-  const trendingTopic = await getTrendingTopic(anthropicApiKey);
+  const trendingTopic = await getTrendingTopic();
 
   // Pick 3 templates each, all different
   const yT1 = YOHANN_TEMPLATES[ state.yohannTemplateIndex      % YOHANN_TEMPLATES.length];

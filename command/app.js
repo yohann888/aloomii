@@ -696,6 +696,21 @@ function renderBriefing(briefing) {
         line.innerHTML = `❌ ${briefing.fleet_failures_count} cron failure${briefing.fleet_failures_count > 1 ? 's' : ''} last night${failNames ? ': ' + failNames : ''}`;
         linesContainer.appendChild(line);
     }
+
+    // Prompt Lab insights
+    if (briefing.prompt_lab_high_priority && briefing.prompt_lab_high_priority > 0) {
+        const line = document.createElement('a');
+        line.href = '#';
+        line.className = 'briefing-line briefing-line--orange';
+        const top = (briefing.prompt_lab_insights || [])[0];
+        line.innerHTML = `🧪 ${briefing.prompt_lab_high_priority} prompt${briefing.prompt_lab_high_priority > 1 ? 's' : ''} need attention — ${top ? top.title : ''}`;
+        line.onclick = (e) => {
+            e.preventDefault();
+            // Future: show Prompt Lab panel or navigate to content queue
+            window.open('https://app.aloomii.com', '_blank');
+        };
+        linesContainer.appendChild(line);
+    }
 }
 
 // === PHASE 4: HQ Live Data Renderer ===
