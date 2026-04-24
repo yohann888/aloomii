@@ -30,7 +30,18 @@ async function edFetch(url) {
     const req = https.request(options, (res) => {
       let body = '';
       res.on('data', chunk => body += chunk);
-      res.on('end', () => { try { resolve(JSON.parse(body)); } catch(e) { reject(e); } });
+      res.on('end', () => {
+        try {
+          const data = JSON.parse(body);
+          // EnsembleData rate-limit response
+          if (data.detail && typeof data.detail === 'string' && data.detail.includes('Maximum requests limit')) {
+            return reject(new Error(`ENSEMBLEDATA_RATE_LIMIT: ${data.detail}`));
+          }
+          resolve(data);
+        } catch(e) {
+          reject(e);
+        }
+      });
     });
     req.on('error', reject);
     req.end();
@@ -587,9 +598,13 @@ async function main() {
       }
 
       let totalPosts = 0;
+      let rateLimited = false;
+      let subsAttempted = 0;
 
       // Fetch subreddit posts
       for (const sub of subsToProcess) {
+        if (rateLimited) break;
+        subsAttempted++;
         try {
           console.log(`[ED] Fetching r/${sub}...`);
           const posts = await edFetchSubredditPosts(sub);
@@ -597,27 +612,43 @@ async function main() {
           totalPosts += postCount;
           await new Promise(r => setTimeout(r, 300));
         } catch (e) {
+          if (e.message.includes('ENSEMBLEDATA_RATE_LIMIT')) {
+            console.error(`[ED] RATE LIMIT HIT: ${e.message}. Stopping chunk.`);
+            rateLimited = true;
+            break;
+          }
           console.error(`[ED] Error fetching r/${sub}: ${e.message}`);
         }
       }
 
       // Fetch keyword search posts
-      for (const kw of keywordSearches) {
-        try {
-          console.log(`[ED] Searching keyword: ${kw}`);
-          const posts = await edSearchKeywordPosts(kw);
-          const postCount = await upsertPosts(posts);
-          totalPosts += postCount;
-          await new Promise(r => setTimeout(r, 300));
-        } catch (e) {
-          console.error(`[ED] Error searching '${kw}': ${e.message}`);
+      if (!rateLimited) {
+        for (const kw of keywordSearches) {
+          try {
+            console.log(`[ED] Searching keyword: ${kw}`);
+            const posts = await edSearchKeywordPosts(kw);
+            const postCount = await upsertPosts(posts);
+            totalPosts += postCount;
+            await new Promise(r => setTimeout(r, 300));
+          } catch (e) {
+            if (e.message.includes('ENSEMBLEDATA_RATE_LIMIT')) {
+              console.error(`[ED] RATE LIMIT HIT: ${e.message}. Stopping keyword search.`);
+              rateLimited = true;
+              break;
+            }
+            console.error(`[ED] Error searching '${kw}': ${e.message}`);
+          }
         }
       }
 
       // Record usage based on subreddits actually processed in this chunk
-      const actualUnits = subsToProcess.length * 2 + keywordSearches.length * 1;
-      await budgetTracker.recordUsage('reddit', actualUnits);
-      console.log(`[ED] Chunk ${CHUNK_ARG !== null ? CHUNK_ARG : 0}: Used ${actualUnits} budget units. Upserted ${totalPosts} posts.`);
+      const actualUnits = (rateLimited ? subsAttempted : subsToProcess.length) * 2 + keywordSearches.length * 1;
+      if (rateLimited) {
+        console.log(`[ED] Partial chunk due to rate limit. Used ~${actualUnits} budget units. Upserted ${totalPosts} posts.`);
+      } else {
+        await budgetTracker.recordUsage('reddit', actualUnits);
+        console.log(`[ED] Chunk ${CHUNK_ARG !== null ? CHUNK_ARG : 0}: Used ${actualUnits} budget units. Upserted ${totalPosts} posts.`);
+      }
 
       // NOTE: Embeddings handled by embed-sync cron (1am daily) to avoid OOM during fetch.
       // if (allPostIds.length > 0) {
