@@ -26,3 +26,38 @@ GET     /api/command                             200  6ms
 GET     /api/command                             200  11ms
 GET     /api/command                             200  9ms
 GET     /api/command                             200  7ms
+GET     /api/command                             200  7ms
+GET     /api/command                             200  77ms
+GET     /                                        404  2ms
+GET     /styles.css                              404  3ms
+GET     /aloomii-logo.png                        404  0ms
+GET     /app.js                                  404  4ms
+GET     /api/command                             200  76ms
+GET     /api/command/outreach/recent             200  1ms
+GET     /api/command                             200  54ms
+GET     /api/research/pulse                      200  1ms
+GET     /api/research/radar                      200  1ms
+GET     /api/research/targets                    200  2ms
+GET     /api/command                             200  76ms
+GET     /api/command/influencers                 200  1ms
+GET     /api/command/influencers/budget          200  1ms
+GET     /api/command/influencers/config          200  1ms
+GET     /api/command/influencers/budget          200  1ms
+GET     /api/command/influencers                 200  0ms
+GET     /api/research/pulse                      200  0ms
+GET     /api/research/radar                      200  0ms
+GET     /api/research/targets                    200  0ms
+GET     /api/command                             200  8ms
+GET     /api/command                             200  11ms
+GET     /api/command                             200  81ms
+GET     /api/command                             200  9ms
+GET     /api/command                             200  10ms
+GET     /api/command                             200  78ms
+GET     /api/command                             200  9ms
+GET     /api/command                             200  9ms
+GET     /api/command                             200  80ms
+
+  SIGTERM received — shutting down gracefully...
+  HTTP server closed.
+  Goodbye.
+

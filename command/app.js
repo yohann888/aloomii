@@ -2459,10 +2459,13 @@ globalThis.keyboardHandler = function(e) {
             showSection('hq');
             break;
         case '2':
-            showSection('crm');
+            showSection('research');
             break;
         case '3':
-            showSection('research');
+            showSection('influencers');
+            break;
+        case '4':
+            showSection('crm');
             break;
         case '/':
             e.preventDefault();
@@ -3494,12 +3497,27 @@ function renderResearchPulse(data) {
   if (briefs.length) {
     html += `<div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">📋 Daily Briefs</div>`;
     briefs.forEach(b => {
-      html += `<div style="padding:12px;background:#0d1117;border-radius:6px;margin-bottom:8px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="font-weight:600;font-size:13px;color:#00c8be;">${safeHtml(b.brand)}</span>
-          <span style="font-size:11px;color:#555;">${b.brief_date} · ${b.signal_count||0} signals</span>
+      // Strip YAML frontmatter (---...---) and parse
+      const stripped = (b.markdown_body||'').replace(/^---[\s\S]*?---\s*/,'').trim();
+      // Extract first meaningful line (skip ## headers)
+      const firstPara = stripped.replace(/^#{1,3}\s+.+$/gm,'').replace(/^\[\[.+?\]\]$/gm,'').trim();
+      const preview = firstPara.substring(0, 280) + (firstPara.length > 280 ? '…' : '');
+      // Format date
+      const d = new Date(b.brief_date + 'T00:00:00');
+      const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      // Brand color
+      const brandColor = b.brand === 'aloomii' ? '#00c8be' : b.brand === 'vibrnt' ? '#f59e0b' : '#94a3b8';
+      html += `<div style="padding:14px;background:#0d1117;border-radius:8px;margin-bottom:10px;border:1px solid #1e293b;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:11px;font-weight:700;background:${brandColor}22;color:${brandColor};padding:3px 8px;border-radius:12px;border:1px solid ${brandColor}44;letter-spacing:.05em;">${safeHtml(b.brand.toUpperCase())}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+            <span style="font-size:11px;color:#555;white-space:nowrap;">${dateStr}</span>
+            <span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 7px;border-radius:10px;">${b.signal_count||0} signals</span>
+          </div>
         </div>
-        <div style="font-size:12px;color:#bbb;line-height:1.6;white-space:pre-wrap;">${safeHtml((b.markdown_body||'').substring(0,600))}${(b.markdown_body||'').length>600?'…':''}</div>
+        <div style="font-size:13px;color:#ccc;line-height:1.6;">${safeHtml(preview)}</div>
       </div>`;
     });
   }

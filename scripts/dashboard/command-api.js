@@ -1860,7 +1860,7 @@ function registerResearchRoutes(app) {
   // GET /api/research/pulse — daily briefs + live prospect signals + enriched Reddit signals
   app.get('/api/research/pulse', async (req, res) => {
     try {
-      const [briefsResult, signalsResult, painInsightsResult, moodInsightsResult] = await Promise.all([
+      const [briefsResult, signalsResult, cachedPainResult, cachedMoodResult] = await Promise.all([
         query(
           `SELECT brand, brief_date, markdown_body, signal_count
            FROM daily_briefs
@@ -1886,7 +1886,7 @@ function registerResearchRoutes(app) {
            LIMIT 5`
         ),
         query(
-          `SELECT ms.icp_slug, ms.mood_primary, ms.mood_secondary, ms.verbatim_phrases, ms.emotional_punch, ms.insight, ms.tags, ms.action_suggestion, ms.created_at,
+          `SELECT ms.icp_slug, ms.mood_primary, ms.mood_secondary, ms.verbatim_phrases, ms.emotional_punch, ms.shirt_potential, ms.insight, ms.tags, ms.action_suggestion, ms.created_at,
                   COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
            FROM mood_signals ms
            LEFT JOIN reddit_posts rp ON rp.id = ms.source_id
@@ -1895,11 +1895,72 @@ function registerResearchRoutes(app) {
            LIMIT 5`
         ),
       ]);
+
+      // Kick off background enrichment for signals missing it (fire-and-forget, 5s timeout each)
+      const bgEnrich = async () => {
+        try {
+          const [unrichedPain, unenrichedMood] = await Promise.all([
+            query(
+              `SELECT ps.id, ps.verbatim_quote
+               FROM pain_signals ps WHERE ps.insight IS NULL AND ps.severity >= 5
+               ORDER BY ps.severity DESC LIMIT 5`
+            ),
+            query(
+              `SELECT ms.id, ms.verbatim_phrases
+               FROM mood_signals ms WHERE ms.insight IS NULL AND ms.emotional_punch >= 6
+               ORDER BY ms.emotional_punch DESC LIMIT 5`
+            ),
+          ]);
+
+          const doEnrich = async (row, table, type) => {
+            const verbatim = row.verbatim_quote || (Array.isArray(row.verbatim_phrases) ? row.verbatim_phrases.join(' | ') : '');
+            if (!verbatim) return;
+            try {
+              const ac = new AbortController();
+              const to = setTimeout(() => ac.abort(), 5000);
+              const response = await fetch(LMSTUDIO_URL, {
+                method: 'POST',
+                signal: ac.signal,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  model: LMSTUDIO_MODEL,
+                  messages: [
+                    { role: 'system', content: type === 'pain'
+                      ? `Extract from this verbatim quote: {\"insight\":\"...\", \"tags\":[\"tag1\"], \"action_suggestion\":\"...\"}`
+                      : `Extract from this verbatim quote: {\"insight\":\"...\", \"tags\":[\"tag1\"], \"action_suggestion\":\"...\"}` },
+                    { role: 'user', content: verbatim.substring(0, 800) }
+                  ],
+                  temperature: 0.3,
+                  max_tokens: 200,
+                }),
+              });
+              clearTimeout(to);
+              if (!response.ok) return;
+              const data = await response.json();
+              const raw = data.choices?.[0]?.message?.content?.trim() || '';
+              const json = JSON.parse(raw.match(/\{[\s\S]*\}/)?.[0] || '{}');
+              await query(
+                `UPDATE ${table} SET insight = $1, tags = $2, action_suggestion = $3, updated_at = NOW() WHERE id = $4`,
+                [json.insight || null, json.tags || [], json.action_suggestion || null, row.id]
+              );
+            } catch { /* fire-and-forget */ }
+          };
+
+          await Promise.all([
+            ...unrichedPain.rows.map(r => doEnrich(r, 'pain_signals', 'pain')),
+            ...unenrichedMood.rows.map(r => doEnrich(r, 'mood_signals', 'mood')),
+          ]);
+        } catch { /* bg enrichment failed silently */ }
+      };
+
+      // Non-blocking — respond immediately, enrich in background
+      setImmediate(() => bgEnrich());
+
       res.json({
         briefs: briefsResult.rows,
         live_signals: signalsResult.rows,
-        enriched_pain: painInsightsResult.rows,
-        enriched_mood: moodInsightsResult.rows
+        enriched_pain: cachedPainResult.rows,
+        enriched_mood: cachedMoodResult.rows,
       });
     } catch(e) { res.status(500).json({ error: e.message }); }
   });
