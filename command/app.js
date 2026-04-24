@@ -3502,9 +3502,9 @@ function renderResearchPulse(data) {
       // Extract first meaningful line (skip ## headers)
       const firstPara = stripped.replace(/^#{1,3}\s+.+$/gm,'').replace(/^\[\[.+?\]\]$/gm,'').trim();
       const preview = firstPara.substring(0, 280) + (firstPara.length > 280 ? '…' : '');
-      // Format date
-      const d = new Date(b.brief_date + 'T00:00:00');
-      const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      // Format date — brief_date is already an ISO string from the DB
+      const d = b.brief_date ? new Date(b.brief_date) : null;
+      const dateStr = d && !isNaN(d) ? d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : b.brief_date || '';
       // Brand color
       const brandColor = b.brand === 'aloomii' ? '#00c8be' : b.brand === 'vibrnt' ? '#f59e0b' : '#94a3b8';
       html += `<div style="padding:14px;background:#0d1117;border-radius:8px;margin-bottom:10px;border:1px solid #1e293b;">

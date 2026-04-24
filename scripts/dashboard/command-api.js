@@ -1978,7 +1978,7 @@ function registerResearchRoutes(app) {
                   COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
            FROM pain_signals ps
            LEFT JOIN reddit_posts rp ON rp.id = ps.source_id
-           WHERE ($1::text IS NULL OR ps.icp_slug = $1) AND ps.created_at > NOW() - ($2 || ' days')::interval
+           WHERE (($1::text IS NULL) OR (COALESCE($1::text, '') = '') OR (ps.icp_slug = $1)) AND ps.created_at > NOW() - ($2 || ' days')::interval
            ORDER BY ps.severity DESC, ps.created_at DESC
            LIMIT $3`,
           [icpSlug, String(days), limit]
@@ -1988,7 +1988,7 @@ function registerResearchRoutes(app) {
                   COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
            FROM mood_signals ms
            LEFT JOIN reddit_posts rp ON rp.id = ms.source_id
-           WHERE ($1::text IS NULL OR ms.icp_slug = $1) AND ms.created_at > NOW() - ($2 || ' days')::interval
+           WHERE (($1::text IS NULL) OR (COALESCE($1::text, '') = '') OR (ms.icp_slug = $1)) AND ms.created_at > NOW() - ($2 || ' days')::interval
            ORDER BY ms.emotional_punch DESC, ms.created_at DESC
            LIMIT $3`,
           [icpSlug, String(days), limit]
