@@ -539,7 +539,7 @@ async function main() {
     try { fs.unlinkSync(LOCKFILE); } catch (e) {}
     process.exit(code);
   };
-  setTimeout(() => { console.log('Hard timeout reached (50m). Exiting.'); exitNow(0); }, 50 * 60 * 1000);
+  setTimeout(() => { console.log('Hard timeout reached (50m). Exiting.'); exitNow(0); }, 50 * 60 * 1000).unref();
   ['SIGINT','SIGTERM','SIGUSR2'].forEach(sig => process.on(sig, () => exitNow(0)));
 
   const config = loadConfig();
@@ -632,7 +632,7 @@ async function main() {
 
       await updateLastRunAt(client, totalPosts, 0);
       console.log(`Ingestion state updated. Next run will pull content after ${new Date().toISOString()}.`);
-      return;
+      process.exit(0);
     }
 
     // --- Original OAuth mode ---
@@ -715,7 +715,8 @@ async function main() {
     console.log(`Ingestion state updated. Next run will pull content after ${new Date().toISOString()}.`);
   } finally {
     client.release();
-    await pool.end();
+    // Don't await pool.end() — it hangs. Fire-and-forget or let OS clean up.
+    pool.end().catch(() => {});
   }
 }
 
