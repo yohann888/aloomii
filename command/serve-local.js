@@ -317,7 +317,7 @@ const server = http.createServer(async (req, res) => {
 
 const PORT = config.port;
 server.listen(PORT, () => {
-  console.log(`\n  🦁 Aloomii Command Center`);
+  console.log(`\n  🦁 Aloomii Company Brain`);
   console.log(`  Local: http://localhost:${PORT}`);
   console.log(`  API:   http://localhost:${PORT}/api/command`);
   console.log(`  Health: http://localhost:${PORT}/health`);

@@ -23,7 +23,7 @@ function init() {
     const cmdBtn = document.querySelector('.header-btn');
     if (cmdBtn) cmdBtn.style.cssText += ';cursor:pointer;';
     
-    console.log('%cAloomii Command Center initialized 🦁', 'color:#00e5a0; font-family:monospace');
+    console.log('%cAloomii Company Brain initialized 🦁', 'color:#00e5a0; font-family:monospace');
 }
 
 function checkAuth() {
