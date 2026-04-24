@@ -986,169 +986,6 @@ function registerCommandAPI(app, pool = null) {
     }
   });
 
-  // POST /api/command/signals/:id/act — marks acted_on, creates outreach_queue entry
-  app.post('/api/command/signals/:id/act', async (req, res) => {
-    const { id } = req.params;
-    const { contactId, type = 'follow_up', channel = 'email' } = req.body;
-    const warmReplyChannels = new Set(['whatsapp', 'imessage', 'telegram']);
-    const queueType = channel === 'email' ? 'outbound_email' : (warmReplyChannels.has(channel) ? 'warm_reply' : 'outbound_email');
-    
-    try {
-      // Mark signal as acted on
-      await query(`
-        UPDATE prospect_signals 
-        SET acted_on = true, action_id = gen_random_uuid(), outcome = 'acted'
-        WHERE id = $1
-      `, [id]);
-      
-      // Create queue item
-      if (contactId) {
-        await query(`
-          INSERT INTO outreach_queue (contact_id, type, channel, queue_type, status, fire_date)
-          VALUES ($1, $2, $3, $4, 'pending', CURRENT_DATE)
-        `, [contactId, type, channel, queueType]);
-      }
-      
-      res.json({ success: true, message: 'Signal marked as acted on and queued' });
-    } catch (error) {
-      console.error('Signal act failed:', error);
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  // PATCH /api/command/signals/:id/dismiss — marks prospect_signals.acted_on = true, outcome = 'not_relevant'
-  app.patch('/api/command/signals/:id/dismiss', async (req, res) => {
-    const { id } = req.params;
-    try {
-      const result = await query(`
-        UPDATE prospect_signals
-        SET acted_on = true, outcome = 'not_relevant', updated_at = NOW()
-        WHERE id = $1
-        RETURNING *
-      `, [id]);
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'prospect_signal not found' });
-      }
-      res.json({ success: true, updated: result.rows[0] });
-    } catch (error) {
-      console.error('Signal dismiss failed:', error);
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  // PATCH /api/command/signals/:id/snooze — marks prospect_signals.acted_on = true, outcome = 'snoozed'
-  app.patch('/api/command/signals/:id/snooze', async (req, res) => {
-    const { id } = req.params;
-    const { days = 7 } = req.body;
-    try {
-      const snoozedUntil = new Date();
-      snoozedUntil.setDate(snoozedUntil.getDate() + parseInt(days));
-      const result = await query(`
-        UPDATE prospect_signals
-        SET acted_on = true, outcome = 'snoozed',
-            updated_at = NOW(),
-            raw_data = COALESCE(raw_data, '{}') || jsonb_build_object('snoozed_until', $2::text)
-        WHERE id = $1
-        RETURNING *
-      `, [id, snoozedUntil.toISOString()]);
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'prospect_signal not found' });
-      }
-      res.json({ success: true, updated: result.rows[0], snoozed_until: snoozedUntil.toISOString() });
-    } catch (error) {
-      console.error('Signal snooze failed:', error);
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  // POST /api/command/signals/:id/draft — one-click outreach draft generation
-  app.post('/api/command/signals/:id/draft', async (req, res) => {
-    const { id } = req.params;
-    let client;
-    try {
-      client = await getPool().connect();
-
-      // 1. Get signal from prospect_signals
-      const sigRes = await client.query(`
-        SELECT * FROM prospect_signals WHERE id = $1
-      `, [id]);
-      if (sigRes.rows.length === 0) {
-        return res.status(404).json({ error: 'prospect_signal not found' });
-      }
-      const signal = sigRes.rows[0];
-
-      // 2. Find contact by handle (don't create if not found)
-      let contactId = signal.contact_id;
-      if (!contactId && signal.handle) {
-        const contactRes = await client.query(
-          'SELECT id FROM contacts WHERE handle = $1 LIMIT 1',
-          [signal.handle]
-        );
-        if (contactRes.rows.length > 0) {
-          contactId = contactRes.rows[0].id;
-        }
-      }
-
-      // 3. Determine channel from signal_source
-      const channelMap = { reddit: 'reddit_dm', x_search: 'email', linkedin: 'email', indiehackers: 'email', other: 'email' };
-      const channel = channelMap[signal.signal_source] || 'email';
-
-      // 4. Create outreach_queue entry
-      const warmReplyChannels = new Set(['whatsapp', 'imessage', 'telegram']);
-      const queueType = channel === 'email' ? 'outbound_email' : (warmReplyChannels.has(channel) ? 'warm_reply' : 'outbound_email');
-      const queueRes = await client.query(`
-        INSERT INTO outreach_queue (contact_id, type, channel, queue_type, status, fire_date)
-        VALUES ($1, 'signal_outreach', $2, $3, 'pending', CURRENT_DATE)
-        RETURNING id
-      `, [contactId, channel, queueType]);
-      const queueId = queueRes.rows[0].id;
-
-      // 5. Generate draft from template engine (no LLM — static hydration)
-      const { generateDraft } = require('../bridge/draft-templates');
-      const draftText = generateDraft({
-        handle: signal.handle,
-        company: signal.company,
-        signal_text: signal.signal_text,
-        signal_source: signal.signal_source,
-        icp_match: signal.raw_data?.icp_match || null,
-      });
-
-      // 6. Create outreach_drafts entry
-      const draftRes = await client.query(`
-        INSERT INTO outreach_drafts (contact_id, queue_id, channel, draft_text, status, source_type)
-        VALUES ($1, $2, $3, $4, 'draft', 'signal')
-        RETURNING id
-      `, [contactId, queueId, channel, draftText]);
-
-      res.json({
-        queue_id: queueId,
-        draft_id: draftRes.rows[0].id,
-        draft_text: draftText,
-        channel,
-        contact_id: contactId,
-      });
-    } catch (error) {
-      console.error('Signal draft generation failed:', error);
-      res.status(500).json({ error: error.message });
-    } finally {
-      if (client) client.release();
-    }
-  });
-
-  // POST /api/command/drafts/:id/approve — with learn-loop edit tracking (Phase B)
-  app.post('/api/command/drafts/:id/approve', async (req, res) => {
-    const { id } = req.params;
-    const { edited_text } = req.body;
-    let client;
-    try {
-      client = await getPool().connect();
-
-      // Fetch current draft to get draft_text (baseline)
-      const draftRes = await client.query(
-        'SELECT * FROM outreach_drafts WHERE id = $1',
-        [id]
-      );
-      if (draftRes.rows.length === 0) {
         return res.status(404).json({ error: 'Draft not found' });
       }
       const draft = draftRes.rows[0];
@@ -1908,8 +1745,8 @@ function registerInfluencerRoutes(app) {
   // GET /api/command/influencers — list with filters
   app.get('/api/command/influencers', async (req, res) => {
     try {
-      const { icp_target, platform, tier, has_email, limit } = req.query;
-      const lim = Math.min(parseInt(limit) || 100, 500);
+      const { icp_target, platform, tier, has_email, limit, active_only } = req.query;
+      const lim = Math.min(parseInt(limit) || 500, 1000);
       const conditions = [];
       const params = [];
       let idx = 1;
@@ -1917,6 +1754,12 @@ function registerInfluencerRoutes(app) {
       if (platform)   { conditions.push(`platform_primary = $${idx}`); params.push(platform); idx++; }
       if (tier)       { conditions.push(`lead_tier = $${idx}`); params.push(tier); idx++; }
       if (has_email === 'true') { conditions.push(`email IS NOT NULL`); }
+      
+      // If active_only=true and no specific ICP selected, exclude inactive ICPs
+      if (active_only === 'true' && !icp_target) {
+        conditions.push(`icp_target NOT IN (SELECT slug FROM icp_brands WHERE active = false)`);
+      }
+      
       const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
       const result = await query(
         `SELECT id, handle, platform_primary, icp_target, followers, engagement_rate,
@@ -1971,16 +1814,39 @@ function registerInfluencerRoutes(app) {
       res.json({ units_used: 0, total_daily: 1500, by_pipeline: {}, error: e.message });
     }
   });
+
+  // GET /api/command/influencers/config — active ICPs + platforms from DB (icp_brands is SSoT)
+  app.get('/api/command/influencers/config', async (req, res) => {
+    try {
+      // icp_brands is the single source of truth for brand-level ICP status
+      const result = await query(`
+        SELECT slug, label, active
+        FROM icp_brands
+        ORDER BY label
+      `);
+      
+      const active_icps = [];
+      const inactive_icps = [];
+      
+      result.rows.forEach(r => {
+        const entry = { slug: r.slug, label: r.label };
+        if (r.active) active_icps.push(entry);
+        else inactive_icps.push(entry);
+      });
+      
+      res.json({ active_icps, inactive_icps, platforms: ['tiktok','instagram','youtube','twitter','linkedin'] });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
 }
 module.exports.registerInfluencerRoutes = registerInfluencerRoutes;
 
 // ── Research Routes ───────────────────────────────────────────────────────────
 function registerResearchRoutes(app) {
 
-  // GET /api/research/pulse — daily briefs + live prospect signals
+  // GET /api/research/pulse — daily briefs + live prospect signals + enriched Reddit signals
   app.get('/api/research/pulse', async (req, res) => {
     try {
-      const [briefsResult, signalsResult] = await Promise.all([
+      const [briefsResult, signalsResult, painInsightsResult, moodInsightsResult] = await Promise.all([
         query(
           `SELECT brand, brief_date, markdown_body, signal_count
            FROM daily_briefs
@@ -1996,8 +1862,31 @@ function registerResearchRoutes(app) {
            ORDER BY ps.relevance_score DESC, ps.captured_at DESC
            LIMIT 10`
         ),
+        query(
+          `SELECT ps.icp_slug, ps.pain_category, ps.severity, ps.verbatim_quote, ps.insight, ps.tags, ps.action_suggestion, ps.created_at,
+                  COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
+           FROM pain_signals ps
+           LEFT JOIN reddit_posts rp ON rp.id = ps.source_id
+           WHERE ps.insight IS NOT NULL
+           ORDER BY ps.severity DESC, ps.created_at DESC
+           LIMIT 5`
+        ),
+        query(
+          `SELECT ms.icp_slug, ms.mood_primary, ms.mood_secondary, ms.verbatim_phrases, ms.emotional_punch, ms.insight, ms.tags, ms.action_suggestion, ms.created_at,
+                  COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
+           FROM mood_signals ms
+           LEFT JOIN reddit_posts rp ON rp.id = ms.source_id
+           WHERE ms.insight IS NOT NULL
+           ORDER BY ms.emotional_punch DESC, ms.created_at DESC
+           LIMIT 5`
+        ),
       ]);
-      res.json({ briefs: briefsResult.rows, live_signals: signalsResult.rows });
+      res.json({
+        briefs: briefsResult.rows,
+        live_signals: signalsResult.rows,
+        enriched_pain: painInsightsResult.rows,
+        enriched_mood: moodInsightsResult.rows
+      });
     } catch(e) { res.status(500).json({ error: e.message }); }
   });
 
@@ -2010,8 +1899,8 @@ function registerResearchRoutes(app) {
 
       const [painResult, moodResult, icpResult] = await Promise.all([
         query(
-          `SELECT ps.icp_slug, ps.pain_category, ps.severity, ps.verbatim_quote, ps.active_search, ps.aloomii_addressable, ps.context_snippet, ps.created_at,
-                  COALESCE(rp.url, 'https://reddit.com' || rp.permalink) as source_url
+          `SELECT ps.icp_slug, ps.pain_category, ps.severity, ps.verbatim_quote, ps.active_search, ps.aloomii_addressable, ps.context_snippet, ps.insight, ps.tags, ps.action_suggestion, ps.created_at,
+                  COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
            FROM pain_signals ps
            LEFT JOIN reddit_posts rp ON rp.id = ps.source_id
            WHERE ($1::text IS NULL OR ps.icp_slug = $1) AND ps.created_at > NOW() - ($2 || ' days')::interval
@@ -2020,8 +1909,8 @@ function registerResearchRoutes(app) {
           [icpSlug, String(days), limit]
         ),
         query(
-          `SELECT ms.icp_slug, ms.mood_primary, ms.mood_secondary, ms.verbatim_phrases, ms.emotional_punch, ms.shirt_potential, ms.universality, ms.trigger_context, ms.created_at,
-                  COALESCE(rp.url, 'https://reddit.com' || rp.permalink) as source_url
+          `SELECT ms.icp_slug, ms.mood_primary, ms.mood_secondary, ms.verbatim_phrases, ms.emotional_punch, ms.shirt_potential, ms.universality, ms.trigger_context, ms.insight, ms.tags, ms.action_suggestion, ms.created_at,
+                  COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
            FROM mood_signals ms
            LEFT JOIN reddit_posts rp ON rp.id = ms.source_id
            WHERE ($1::text IS NULL OR ms.icp_slug = $1) AND ms.created_at > NOW() - ($2 || ' days')::interval

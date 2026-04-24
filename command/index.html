@@ -46,9 +46,6 @@
                 <div onclick="showSection('crm')" class="nav-item" id="nav-crm">
                     📇 <span class="nav-text">CRM</span>
                 </div>
-                <div onclick="showSection('signals')" class="nav-item" id="nav-signals">
-                    🚨 <span class="nav-text">Signals</span>
-                </div>
                 <div onclick="showSection('content')" class="nav-item" id="nav-content">
                     ✍️ <span class="nav-text">Content</span>
                 </div>
@@ -455,12 +452,6 @@
             </section>
 
             <!-- Signals Section (top-level) -->
-            <section id="section-signals" class="content-section">
-                <h2>Signals Intelligence</h2>
-                <div id="signals-feed-main" class="signals-container"></div>
-            </section>
-
-            <!-- Events Section -->
             <section id="section-events" class="content-section">
     <div style="padding:12px 16px 0;">
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
@@ -512,13 +503,12 @@
                 <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
                   <label style="font-size:13px;">ICP
                     <select id="inf-icp" onchange="loadInfluencers()" style="margin-left:6px;">
-                      <option value="">All</option>
-                      <option value="vibrnt">Vibrnt</option>
-                      <option value="ebook_founder">Ebook Founder</option>
-                      <option value="ebook_solo">Ebook Solo</option>
-                      <option value="ebook_operator">Ebook Operator</option>
-                      <option value="aloomii">Aloomii</option>
+                      <option value="">All ICPs</option>
+                      <!-- populated dynamically from /api/command/influencers/config -->
                     </select>
+                  </label>
+                  <label style="font-size:13px;">
+                    <input type="checkbox" id="inf-include-inactive" onchange="toggleInactiveIcps()"> Include inactive ICPs
                   </label>
                   <label style="font-size:13px;">Platform
                     <select id="inf-platform" onchange="loadInfluencers()" style="margin-left:6px;">
@@ -527,6 +517,7 @@
                       <option value="instagram">Instagram</option>
                       <option value="youtube">YouTube</option>
                       <option value="twitter">X/Twitter</option>
+                      <option value="linkedin">LinkedIn</option>
                     </select>
                   </label>
                   <label style="font-size:13px;">Tier

@@ -141,8 +141,6 @@ function showSection(section) {
             renderSnipeDrafts(commandData.snipe_drafts);
             renderPBNBriefs(commandData.content_queue);
             renderAllContent(commandData.content_queue);
-        } else if (section === 'signals') {
-            if (commandData.signals) renderSignals(commandData.signals);
         } else if (section === 'events') {
             renderEventsSection();
         } else if (section === 'backlog') {
@@ -348,7 +346,11 @@ function renderEventsStrip(events) {
         const card = document.createElement('div');
         card.className = 'event-card';
         
-        const date = event.date ? new Date(event.date).toLocaleDateString('en-US', {month:'short', day:'numeric'}) : 'TBD';
+        let date = 'TBD';
+        if (event.date) {
+          const d = event.date instanceof Date ? event.date : new Date(event.date);
+          if (!isNaN(d.getTime())) date = d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+        }
         const location = event.location || 'Online';
         const overlap = event.contact_overlap || 0;
         
@@ -374,7 +376,11 @@ function renderIntelEvents(events) {
     }
 
     container.innerHTML = events.map(event => {
-        const date = event.date ? new Date(event.date).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'}) : 'TBD';
+        let date = 'TBD';
+        if (event.date) {
+          const d = event.date instanceof Date ? event.date : new Date(event.date);
+          if (!isNaN(d.getTime())) date = d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+        }
         const location = event.location || 'Online';
         const overlap = event.contact_overlap || 0;
         const priority = event.priority || 'monitor';
@@ -439,7 +445,12 @@ function filterEvents() {
     }
 
     container.innerHTML = filtered.map(event => {
-        const d = event.date ? new Date(event.date + 'T00:00:00') : null;
+        let d = null;
+        if (event.date) {
+          const dateStr = String(event.date);
+          d = new Date(dateStr.includes('T') ? dateStr : dateStr + 'T00:00:00');
+          if (isNaN(d.getTime())) d = null;
+        }
         const month = d ? d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase() : '\u2014';
         const day = d ? d.getDate() : '\u2014';
         const year = d ? d.getFullYear() : '';
@@ -652,12 +663,12 @@ function renderBriefing(briefing) {
     // Overnight signals
     if (briefing.overnight_signals && briefing.overnight_signals > 0) {
         const line = document.createElement('a');
-        line.href = '#section-signals';
+        line.href = '#section-research';
         line.className = 'briefing-line briefing-line--green';
         line.innerHTML = `✅ Signal scout ran overnight — ${briefing.overnight_signals} new signals`;
         line.onclick = (e) => {
             e.preventDefault();
-            showSection('signals');
+            showSection('research');
         };
         linesContainer.appendChild(line);
     }
@@ -865,7 +876,6 @@ async function fetchCommandData() {
             renderHeatmap(filtered);
         }
         if (commandData.outreach_queue) renderOutreachQueue(commandData.outreach_queue);
-        if (commandData.signals) renderSignals(commandData.signals);
         if (typeof renderBacklog === 'function') renderBacklog();
         if (commandData.tasks && typeof renderTasks === 'function') {
             renderTasks(commandData.tasks);
@@ -990,14 +1000,6 @@ function showToast(message, type = 'info') {
 function startAutoRefresh() {
     // Clear any existing timers
     Object.values(refreshTimers).forEach(timer => clearInterval(timer));
-    
-    // Signals refresh - every 60s
-    refreshTimers.signals = setInterval(() => {
-        if (commandData && commandData.signals) {
-            // Only refresh signals in future
-            console.log('🔄 Refreshing signals...');
-        }
-    }, 60000);
     
     // Outreach / fleet refresh - every 5min
     refreshTimers.outreach = setInterval(() => {
@@ -1543,236 +1545,6 @@ function closeEditPanel() {
   if (panel) panel.style.display = 'none';
 }
 
-// Task 2.11: Signal Feed Logic
-function renderSignals(signals = []) {
-  // Render to top-level signals section if it exists, fallback to CRM tab
-  const container = document.getElementById('signals-feed-main') || document.getElementById('signals-feed');
-  if (!container) return;
-  
-  container.innerHTML = '';
-
-  // Add filter bar (Phase A)
-  const filterHTML = `
-    <div class="signal-filters">
-      <select id="signal-source-filter" onchange="applySignalFilters()">
-        <option value="">All Sources</option>
-        <option value="reddit">🔗 Reddit</option>
-        <option value="x_search">𝕏 Twitter</option>
-        <option value="linkedin">💼 LinkedIn</option>
-        <option value="indiehackers">🧑‍💻 IndieHackers</option>
-      </select>
-      <select id="signal-score-filter" onchange="applySignalFilters()">
-        <option value="3">Score 3+</option>
-        <option value="4">Score 4+</option>
-        <option value="5">Score 5 only</option>
-      </select>
-      <select id="signal-icp-filter" onchange="applySignalFilters()">
-        <option value="">All ICPs</option>
-        <option value="sprint">The Table (Sprint)</option>
-        <option value="ai_workforce">AI Workforce</option>
-        <option value="deal_flow">Deal Flow</option>
-      </select>
-    </div>
-  `;
-  container.innerHTML = filterHTML;
-
-  const feed = document.createElement('div');
-  feed.id = 'signals-feed-content';
-  feed.className = 'signals-feed-content';
-  container.appendChild(feed);
-
-  renderSignalCards(signals, feed);
-
-  // Auto-refresh every 60s
-  setTimeout(() => {
-    if (commandData && commandData.signals) renderSignals(commandData.signals);
-  }, 60000);
-}
-
-function renderSignalCards(signals, container) {
-  container.innerHTML = '';
-
-  if (signals.length === 0) {
-    container.innerHTML = `<div class="empty-state">No signals match your filters.</div>`;
-    return;
-  }
-
-  signals.slice(0, 30).forEach(signal => {
-    const score = parseFloat(signal.score || signal.relevance_score || 3);
-    const level = score >= 4 ? 'hot' : (score >= 3 ? 'warm' : 'cool');
-    // Normalise source: bridge_ingest reddit signals should display as reddit
-    let source = signal.signal_source || signal.source || 'other';
-    if (source === 'bridge_ingest' && (signal.signal_type || '').includes('reddit')) source = 'reddit';
-    const sourceIcon = getSignalSourceIcon(source);
-    const quote = signal.signal_text || signal.body || 'No quote available';
-    const truncated = quote.length > 200 ? quote.substring(0, 197) + '...' : quote;
-
-    // Pre-compute link URL and label to keep the template clean
-    const linkUrl = signal.signal_url || signal.source_url || signal.url || '';
-    const linkLabels = {
-      reddit: 'View on Reddit →',
-      x_search: 'View on X →',
-      linkedin: 'View on LinkedIn →',
-      indiehackers: 'View on IndieHackers →'
-    };
-    const linkLabel = linkLabels[source] || 'View original →';
-
-    // Pre-compute subreddit badge
-    let subredditBadge = '';
-    if (source === 'reddit' && linkUrl) {
-      const m = linkUrl.match(/\/r\/([^/]+)/);
-      if (m) subredditBadge = `<span>📌 r/${m[1]}</span>`;
-    }
-
-    const card = document.createElement('div');
-    card.className = `signal-card-v2 score-${level}`;
-    card.dataset.signalId = signal.id;
-    card.innerHTML = `
-      <div class="signal-score">
-        <span class="score-badge score-${level}">●</span>
-        <span class="score-value">${score}/5</span>
-      </div>
-      <div class="signal-source-badge">${sourceIcon} ${source.toUpperCase()}</div>
-      <div class="signal-quote">"${truncated}"</div>
-      <button class="signal-expand-btn" onclick="toggleSignalExpand(this)">Show more</button>
-      <div class="signal-meta">
-        <span>👤 ${signal.handle || signal.author || 'Unknown'}</span>
-        <span>🏢 ${signal.company || 'N/A'}</span>
-        <span>🎯 ICP: ${signal.icp_match || 'General'}</span>
-        ${subredditBadge}
-      </div>
-      <div class="signal-reasoning">
-        💡 ${signal.scoring_reason || signal.reasoning || 'Strong buying signal detected from post content.'}
-      </div>
-      ${linkUrl ? `<a href="${linkUrl}" target="_blank" rel="noopener" class="signal-link">🔗 ${linkLabel}</a>` : ''}
-      <div class="signal-actions">
-        <button onclick="draftFromSignal('${signal.id}')" class="btn-draft">Draft Outreach</button>
-        <button onclick="dismissSignal('${signal.id}')" class="btn-dismiss">Dismiss</button>
-        <button onclick="snoozeSignal('${signal.id}')" class="btn-snooze">Snooze 7d</button>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function getSignalSourceIcon(source) {
-  const map = {
-    'reddit': '🟠',
-    'x_search': '𝕏',
-    'linkedin': '💼',
-    'indiehackers': '🧑‍💻',
-    'other': '🌐'
-  };
-  return map[source] || '🌐';
-}
-
-function toggleSignalExpand(btn) {
-  const quoteEl = btn.parentElement.querySelector('.signal-quote');
-  if (!quoteEl) return;
-  
-  const isExpanded = quoteEl.classList.toggle('expanded');
-  btn.textContent = isExpanded ? 'Show less' : 'Show more';
-}
-
-function applySignalFilters() {
-  if (!commandData || !commandData.signals) return;
-  
-  const sourceFilter = document.getElementById('signal-source-filter').value;
-  const scoreFilter = parseInt(document.getElementById('signal-score-filter').value) || 3;
-  const icpFilter = document.getElementById('signal-icp-filter').value;
-  
-  let filtered = commandData.signals.filter(s => {
-    const score = parseFloat(s.score || s.relevance_score || 0);
-    const source = (s.signal_source || s.source || '').toLowerCase();
-    const icp = (s.icp_match || '').toLowerCase();
-    
-    if (sourceFilter && source !== sourceFilter) return false;
-    if (score < scoreFilter) return false;
-    if (icpFilter && !icp.includes(icpFilter)) return false;
-    
-    return true;
-  });
-  
-  const contentContainer = document.getElementById('signals-feed-content');
-  if (contentContainer) {
-    renderSignalCards(filtered, contentContainer);
-  }
-}
-
-function draftFromSignal(signalId) {
-  fetch(`/api/command/signals/${signalId}/draft`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' }
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.draft_text) {
-      quickOutreachFromSignal(data);
-      showToast('Draft ready for review', 'success');
-    }
-  })
-  .catch(err => {
-    console.error('Draft from signal failed', err);
-    showToast('Could not generate draft', 'error');
-  });
-}
-
-function quickOutreachFromSignal(draftData) {
-  const panel = document.getElementById('outreach-panel');
-  if (!panel) return;
-  
-  document.getElementById('outreach-contact-name').textContent = `Outreach from Signal`;
-  
-  const body = document.getElementById('outreach-panel-body');
-  body.innerHTML = `
-    <div class="signal-context-preview">
-      <div class="signal-quote-preview">"${draftData.signal_quote || ''}"</div>
-      <a href="${draftData.signal_url || '#'}" target="_blank">View source</a>
-    </div>
-    <textarea id="outreach-message" class="outreach-textarea">${draftData.draft_text || ''}</textarea>
-    <div class="outreach-actions">
-      <button onclick="scoreOutreachDraft()" class="btn-score">🔍 Score</button>
-      <button onclick="queueOutreachFromSignal()" class="btn-primary">✅ Approve & Queue</button>
-    </div>
-  `;
-  showOutreachPanel();
-}
-
-function queueOutreachFromSignal() {
-  const text = document.getElementById('outreach-message').value.trim();
-  if (!text) return;
-  showToast('Draft queued. Learn Loop engaged.', 'success');
-  closeOutreachPanel();
-  refreshAll();
-}
-
-function dismissSignal(id) {
-  fetch(`/api/command/signals/${id}/dismiss`, { method: 'PATCH' })
-    .then(() => {
-      const card = document.querySelector(`.signal-card-v2[data-signal-id="${id}"]`);
-      if (card) {
-        card.classList.add('dismissed');
-        setTimeout(() => card.remove(), 600);
-      }
-      showToast('Signal dismissed', 'info');
-    });
-}
-
-function snoozeSignal(id) {
-  fetch(`/api/command/signals/${id}/snooze`, { 
-    method: 'PATCH', 
-    body: JSON.stringify({ days: 7 }) 
-  })
-    .then(() => {
-      const card = document.querySelector(`.signal-card-v2[data-signal-id="${id}"]`);
-      if (card) {
-        card.classList.add('dismissed');
-        setTimeout(() => card.remove(), 600);
-      }
-      showToast('Signal snoozed for 7 days', 'info');
-    });
-}
-
 // Task 2.13: Pipeline Renderer
 function renderPipeline(data) {
   const container = document.getElementById('pipeline-funnel');
@@ -2198,7 +1970,6 @@ function createCrmContent() {
       <button onclick="switchCrmTab(0)" class="tab-btn active">Heatmap</button>
       <button onclick="switchCrmTab(1)" class="tab-btn">Queue</button>
       <button onclick="switchCrmTab(2)" class="tab-btn">Drafts</button>
-      <button onclick="switchCrmTab(3)" class="tab-btn">Signals</button>
     </div>
     <div id="crm-heatmap" class="crm-panel active">
       <table class="crm-table">
@@ -2209,8 +1980,6 @@ function createCrmContent() {
             <th>Company</th>
             <th>Tier</th>
             <th>Last Touch</th>
-            <th>Signals</th>
-            <th>Follow-up</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -2218,7 +1987,6 @@ function createCrmContent() {
       </table>
     </div>
     <div id="outreach-queue-container" class="crm-panel"></div>
-    <div id="signals-feed" class="crm-panel"></div>
   `;
 }
 
@@ -2654,10 +2422,6 @@ function executeQueueItem(id) {
       showToast('Execution failed', 'error');
     });
 }
-function actOnSignal(id) {
-  fetch(`/api/command/signals/${id}/act`, { method: 'POST' }).then(() => refreshAll());
-}
-function dismissSignal(id) { console.log('Dismiss signal:', id); }
 function switchCrmTab(tabIndex) {
   document.querySelectorAll('.crm-panel').forEach(p => p.classList.remove('active'));
   const panels = document.querySelectorAll('.crm-panel');
@@ -2677,7 +2441,6 @@ window.refreshAll = async function() {
       renderHeatmap(filtered);
     }
     if (commandData.outreach_queue) renderOutreachQueue(commandData.outreach_queue);
-    if (commandData.signals) renderSignals(commandData.signals);
     if (commandData.tasks && typeof renderTasks === 'function') renderTasks(commandData.tasks);
     if (commandData.content_queue && typeof renderContentQueue === 'function') renderContentQueue(commandData.content_queue);
   }
@@ -2699,7 +2462,7 @@ globalThis.keyboardHandler = function(e) {
             showSection('crm');
             break;
         case '3':
-            showSection('signals');
+            showSection('research');
             break;
         case '/':
             e.preventDefault();
@@ -3528,13 +3291,16 @@ async function loadInfluencers() {
   const platform = document.getElementById('inf-platform')?.value || '';
   const tier = document.getElementById('inf-tier')?.value || '';
   const emailOnly = document.getElementById('inf-email-only')?.checked;
+  const includeInactive = document.getElementById('inf-include-inactive')?.checked;
   const listEl = document.getElementById('influencers-list');
   const countEl = document.getElementById('inf-count');
   const budgetEl = document.getElementById('inf-budget');
   if (!listEl) return;
   listEl.innerHTML = '<div class="empty-state">Loading...</div>';
   try {
-    let url = `/api/command/influencers?limit=100`;
+    let url = `/api/command/influencers?limit=500`;
+    const includeInactive = document.getElementById('inf-include-inactive')?.checked;
+    if (!icp && !includeInactive) url += `&active_only=true`;
     if (icp) url += `&icp_target=${encodeURIComponent(icp)}`;
     if (platform) url += `&platform=${encodeURIComponent(platform)}`;
     if (tier) url += `&tier=${encodeURIComponent(tier)}`;
@@ -3560,17 +3326,64 @@ async function loadInfluencers() {
       </div>`).join('');
   } catch(e) { listEl.innerHTML = `<div class="empty-state">Error: ${safeHtml(e.message)}</div>`; }
 }
+
+async function loadInfluencerConfig() {
+  try {
+    const res = await fetch('/api/command/influencers/config');
+    const config = await res.json();
+    window.influencerConfig = config;
+    const sel = document.getElementById('inf-icp');
+    if (!sel) return;
+    const current = sel.value;
+    sel.innerHTML = '<option value="">All ICPs</option>';
+    config.active_icps?.forEach(i => {
+      sel.innerHTML += `<option value="${safeHtml(i.slug)}" ${i.slug===current?'selected':''}>${safeHtml(i.label)}</option>`;
+    });
+  } catch(e) { console.warn('Failed to load influencer config:', e); }
+}
+
+function toggleInactiveIcps() {
+  const checkbox = document.getElementById('inf-include-inactive');
+  const includeInactive = checkbox?.checked;
+  const sel = document.getElementById('inf-icp');
+  if (!sel || !window.influencerConfig) return;
+  const current = sel.value;
+  sel.innerHTML = '<option value="">All ICPs</option>';
+  window.influencerConfig.active_icps?.forEach(i => {
+    sel.innerHTML += `<option value="${safeHtml(i.slug)}" ${i.slug===current?'selected':''}>${safeHtml(i.label)}</option>`;
+  });
+  if (includeInactive && window.influencerConfig.inactive_icps?.length) {
+    sel.innerHTML += '<option disabled>— Inactive —</option>';
+    window.influencerConfig.inactive_icps.forEach(i => {
+      sel.innerHTML += `<option value="${safeHtml(i.slug)}" ${i.slug===current?'selected':''}>${safeHtml(i.label)}</option>`;
+    });
+  }
+  loadInfluencers();
+}
+
+// Auto-load config when influencers section is shown
+const _origShowSection = showSection;
+showSection = function(section) {
+  _origShowSection(section);
+  if (section === 'influencers') {
+    loadInfluencerConfig().then(() => loadInfluencers());
+  }
+};
 async function exportInfluencers() {
   const icp = document.getElementById('inf-icp')?.value || '';
   const tier = document.getElementById('inf-tier')?.value || '';
   const emailOnly = document.getElementById('inf-email-only')?.checked;
+  const includeInactive = document.getElementById('inf-include-inactive')?.checked;
   let url = `/api/command/influencers/export?`;
-  if (icp) url += `&icp_target=${encodeURIComponent(icp)}`;
-  if (tier) url += `&tier=${encodeURIComponent(tier)}`;
-  if (emailOnly) url += `&has_email=true`;
+  if (!icp && !includeInactive) url += `active_only=true&`;
+  if (icp) url += `icp_target=${encodeURIComponent(icp)}&`;
+  if (tier) url += `tier=${encodeURIComponent(tier)}&`;
+  if (emailOnly) url += `has_email=true&`;
   window.open(url, '_blank');
 }
 window.loadInfluencers = loadInfluencers;
+window.loadInfluencerConfig = loadInfluencerConfig;
+window.toggleInactiveIcps = toggleInactiveIcps;
 window.exportInfluencers = exportInfluencers;
 
 // ── Research Section ──────────────────────────────────────────────────────────
@@ -3610,13 +3423,56 @@ function renderResearchPulse(data) {
 
   const briefs = data.briefs || [];
   const signals = data.live_signals || [];
+  const enrichedPain = data.enriched_pain || [];
+  const enrichedMood = data.enriched_mood || [];
 
   let html = '';
 
-  // Live signals first (synthesis-first principle)
+  // Enriched pain signals (top priority — actionable)
+  if (enrichedPain.length) {
+    html += `<div style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:#e74c3c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🔴 Pain Signals — Actionable (${enrichedPain.length})</div>`;
+    enrichedPain.forEach(p => {
+      html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${p.severity>=8?'#e74c3c':p.severity>=5?'#f39c12':'#555'};">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:11px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(p.pain_category)}</span>
+          <span style="font-size:11px;color:#888;">${safeHtml(p.icp_slug)} · sev ${p.severity}</span>
+        </div>
+        <div style="font-size:12px;color:#ddd;font-style:italic;line-height:1.5;">&quot;${safeHtml((p.verbatim_quote||'').substring(0,200))}&quot;</div>
+        <div style="font-size:11px;color:#00c8be;margin-top:6px;padding:6px;background:#0a1f1a;border-radius:4px;">💡 ${safeHtml(p.insight)}</div>
+        ${p.tags?.length ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">${p.tags.map(t=>`<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(t)}</span>`).join('')}</div>` : ''}
+        <div style="font-size:11px;color:#f59e0b;margin-top:4px;">⚡ ${safeHtml(p.action_suggestion)}</div>
+        ${p.source_url?`<a href="${safeHtml(p.source_url)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:4px;font-size:10px;color:#00c8be;text-decoration:none;">🔗 View post →</a>`:''}
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  // Enriched mood signals
+  if (enrichedMood.length) {
+    html += `<div style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:#9b59b6;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🌡️ Mood Signals — Actionable (${enrichedMood.length})</div>`;
+    enrichedMood.forEach(m => {
+      const phrases = Array.isArray(m.verbatim_phrases) ? m.verbatim_phrases : [];
+      html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${m.emotional_punch>=8?'#9b59b6':m.emotional_punch>=5?'#3498db':'#555'};">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:11px;background:#1e293b;color:#c084fc;padding:2px 6px;border-radius:4px;">${safeHtml(m.mood_primary)}</span>
+          <span style="font-size:11px;color:#888;">${safeHtml(m.icp_slug)} · punch ${m.emotional_punch}</span>
+        </div>
+        ${phrases.slice(0,2).map(q=>`<div style="font-size:12px;color:#ddd;font-style:italic;">&quot;${safeHtml(String(q).substring(0,150))}&quot;</div>`).join('')}
+        <div style="font-size:11px;color:#00c8be;margin-top:6px;padding:6px;background:#0a1f1a;border-radius:4px;">💡 ${safeHtml(m.insight)}</div>
+        ${m.tags?.length ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">${m.tags.map(t=>`<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(t)}</span>`).join('')}</div>` : ''}
+        <div style="font-size:11px;color:#f59e0b;margin-top:4px;">⚡ ${safeHtml(m.action_suggestion)}</div>
+        ${m.source_url?`<a href="${safeHtml(m.source_url)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:4px;font-size:10px;color:#00c8be;text-decoration:none;">🔗 View post →</a>`:''}
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  // Live prospect signals
   if (signals.length) {
     html += `<div style="margin-bottom:16px;">
-      <div style="font-size:12px;font-weight:700;color:#00c8be;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🔴 Live Signals (${signals.length})</div>`;
+      <div style="font-size:12px;font-weight:700;color:#00c8be;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">📡 Live Signals (${signals.length})</div>`;
     signals.forEach(s => {
       const _sc = parseFloat(s.relevance_score||s.score||0);
       html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${_sc>=0.7?'#e74c3c':_sc>=0.5?'#f39c12':'#555'};">
@@ -3673,6 +3529,9 @@ function renderResearchRadar(data) {
             <span style="font-size:11px;color:#888;">${safeHtml(p.icp_slug)} · sev ${p.severity}</span>
           </div>
           <div style="font-size:12px;color:#ddd;font-style:italic;line-height:1.5;">&quot;${safeHtml((p.verbatim_quote||'').substring(0,200))}&quot;</div>
+          ${p.insight ? `<div style="font-size:11px;color:#00c8be;margin-top:6px;padding:6px;background:#0a1f1a;border-radius:4px;">💡 ${safeHtml(p.insight)}</div>` : ''}
+          ${p.tags?.length ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">${p.tags.map(t=>`<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(t)}</span>`).join('')}</div>` : ''}
+          ${p.action_suggestion ? `<div style="font-size:11px;color:#f59e0b;margin-top:4px;">⚡ ${safeHtml(p.action_suggestion)}</div>` : ''}
           <div style="margin-top:4px;display:flex;align-items:center;gap:8px;">
             ${p.active_search?'<span style="font-size:10px;color:#00c8be;">🔍 Actively searching</span>':''}
             ${p.source_url?`<a href="${safeHtml(p.source_url)}" target="_blank" rel="noopener" style="font-size:10px;color:#00c8be;text-decoration:none;">🔗 View post →</a>`:''}
@@ -3694,6 +3553,9 @@ function renderResearchRadar(data) {
             <span style="font-size:11px;color:#888;">${safeHtml(m.icp_slug)} · punch ${m.emotional_punch}</span>
           </div>
           ${phrases.slice(0,2).map(q=>`<div style="font-size:12px;color:#ddd;font-style:italic;">&quot;${safeHtml(String(q).substring(0,150))}&quot;</div>`).join('')}
+          ${m.insight ? `<div style="font-size:11px;color:#00c8be;margin-top:6px;padding:6px;background:#0a1f1a;border-radius:4px;">💡 ${safeHtml(m.insight)}</div>` : ''}
+          ${m.tags?.length ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">${m.tags.map(t=>`<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(t)}</span>`).join('')}</div>` : ''}
+          ${m.action_suggestion ? `<div style="font-size:11px;color:#f59e0b;margin-top:4px;">⚡ ${safeHtml(m.action_suggestion)}</div>` : ''}
           <div style="margin-top:4px;display:flex;align-items:center;gap:8px;">
             ${m.shirt_potential==='high'?'<span style="font-size:10px;color:#f59e0b;">👕 High shirt potential</span>':''}
             ${m.source_url?`<a href="${safeHtml(m.source_url)}" target="_blank" rel="noopener" style="font-size:10px;color:#00c8be;text-decoration:none;">🔗 View post →</a>`:''}
