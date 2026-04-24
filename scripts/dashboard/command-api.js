@@ -986,6 +986,20 @@ function registerCommandAPI(app, pool = null) {
     }
   });
 
+  // POST /api/command/drafts/:id/approve — with learn-loop edit tracking (Phase B)
+  app.post('/api/command/drafts/:id/approve', async (req, res) => {
+    const { id } = req.params;
+    const { edited_text } = req.body;
+    let client;
+    try {
+      client = await getPool().connect();
+
+      // Fetch current draft to get draft_text (baseline)
+      const draftRes = await client.query(
+        'SELECT * FROM outreach_drafts WHERE id = $1',
+        [id]
+      );
+      if (draftRes.rows.length === 0) {
         return res.status(404).json({ error: 'Draft not found' });
       }
       const draft = draftRes.rows[0];

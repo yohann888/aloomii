@@ -25,3 +25,4 @@ GET     /api/command                             200  6ms
 GET     /api/command                             200  6ms
 GET     /api/command                             200  11ms
 GET     /api/command                             200  9ms
+GET     /api/command                             200  7ms
