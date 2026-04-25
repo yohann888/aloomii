@@ -11,8 +11,8 @@
  *
  * Flow:
  *   1. Load signal scout data (score 4-5, last 5 signals)
- *   2. Pull trending GTM/founder topic via Sonnet 4.6 with web grounding prompt
- *   3. For each of 6 posts: pick author, pick template, pick anecdote, generate with Sonnet 4.6
+ *   2. Pull trending GTM/founder topic via Gemini 3 Pro
+ *   3. For each of 3 posts: pick author, pick template, pick anecdote, generate with Gemini 3 Pro
  *   4. Push all 3 to Buffer as drafts
  *   5. Alert Discord with previews
  *   6. Update rotation state
@@ -235,15 +235,6 @@ async function getRelevantHooks(owner) {
   }
 }
 
-function getAnthropicApiKey() {
-  try {
-    const profiles = loadJSON(path.join(process.env.HOME, '.openclaw/agents/main/agent/auth-profiles.json'));
-    const key = profiles?.profiles?.['anthropic:default']?.key;
-    if (key) return key;
-  } catch {}
-  const config = loadJSON(path.join(process.env.HOME, '.openclaw/openclaw.json'));
-  return config?.models?.providers?.anthropic?.apiKey;
-}
 
 async function generateWithGemini(prompt, apiKey, maxTokens = 2000) {
   const body = {
@@ -273,35 +264,6 @@ async function generateWithGemini(prompt, apiKey, maxTokens = 2000) {
   return { model: 'gemini-3.1-pro-preview', text, res };
 }
 
-async function generateWithSonnet(prompt, apiKey, maxTokens = 1200) {
-  const body = {
-    model: 'claude-sonnet-4-6',
-    max_tokens: maxTokens,
-    temperature: 0.8,
-    messages: [{ role: 'user', content: prompt }]
-  };
-
-  const res = await httpPost(
-    'https://api.anthropic.com/v1/messages',
-    {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01'
-    },
-    body
-  );
-
-  const text = (res?.content || [])
-    .filter(part => part?.type === 'text' && part?.text)
-    .map(part => part.text)
-    .join('\n')
-    .trim();
-
-  if (!text) {
-    throw new Error('Sonnet returned no content: ' + JSON.stringify(res).slice(0, 200));
-  }
-
-  return { model: 'claude-sonnet-4-6', text, res };
-}
 
 function httpPost(url, headers, body) {
   return new Promise((resolve, reject) => {
@@ -368,7 +330,7 @@ function pickAnecdote(anecdotesData, excludeId) {
   return sorted[0] || anecdotesData.anecdotes[0];
 }
 
-// ── Trending topic via Sonnet 4.6 ────────────────────────────────────────────
+// ── Trending topic via Gemini 3 Pro ──────────────────────────────────────────
 
 async function getTrendingTopic() {
   const googleApiKey = getGoogleApiKey();
@@ -399,7 +361,7 @@ Be specific. No hashtags. No fluff.`;
   return text.trim();
 }
 
-// ── Post generator via Sonnet 4.6 ─────────────────────────────────────────────
+// ── Post generator via Gemini 3 Pro ─────────────────────────────────────────────
 
 async function generatePost({ author, voiceProfileText, anecdote, trendingTopic, template, signals, hooks = [] }) {
   log(`Generating ${author.name} post: ${template.name}`);
