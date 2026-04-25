@@ -5,3 +5,4 @@
   Health: http://localhost:3200/health
   CORS:   all origins (dev)
 
+POST    /api/command/outreach/prep-contact-list  200  7ms

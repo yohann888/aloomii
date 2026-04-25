@@ -276,6 +276,12 @@ function registerCommandAPI(app, pool = null) {
                 END as temperature
               FROM contacts c
               LEFT JOIN accounts a ON c.account_id = a.id
+              WHERE (
+                c.handle IS NULL
+                OR c.handle = ''
+                OR c.handle NOT LIKE 'u/%'
+                OR c.handle NOT LIKE 'r/%'
+              )
               ORDER BY c.tier ASC NULLS LAST, COALESCE(c.last_outreach_date, c.created_at) DESC
               LIMIT 500
             `);
@@ -312,11 +318,13 @@ function registerCommandAPI(app, pool = null) {
               FROM prospect_signals ps
               LEFT JOIN contacts c ON ps.contact_id = c.id
               WHERE ps.acted_on = false
+                AND ps.signal_source != 'reddit'
+                AND ps.signal_source != 'reddit_signal'
               ORDER BY ps.captured_at DESC
               LIMIT 50
             `);
 
-            // General signals feed — score >= 3
+            // General signals feed — score >= 3, exclude Reddit
             const sigRes = await query(`
               SELECT
                 s.id,
@@ -339,6 +347,7 @@ function registerCommandAPI(app, pool = null) {
                 'signals'::text as signal_table
               FROM signals s
               WHERE s.score >= 3
+                AND s.collection_method NOT IN ('reddit', 'reddit_search', 'reddit_signal')
               ORDER BY s.created_at DESC
               LIMIT 50
             `);
@@ -1662,6 +1671,7 @@ function registerCommandAPI(app, pool = null) {
     const { limit = 10, min_score = 0, channel = 'linkedin_dm' } = req.body;
     try {
       // Pull contacts with signals, ordered by recency + tier
+      // Filter: must have a real handle (not u/...) OR email for outreach
       const contactsRes = await query(`
         SELECT c.id, c.name, c.handle, 
           COALESCE(a.name, c.metadata->>'company', c.metadata->>'org') as company,
@@ -1673,6 +1683,19 @@ function registerCommandAPI(app, pool = null) {
         LEFT JOIN signals s ON s.id = es.signal_id
         WHERE c.tier IN (1, 2)
           AND (c.last_outreach_date IS NULL OR c.last_outreach_date < NOW() - INTERVAL '7 days')
+          -- Exclude anonymous Reddit contacts (no real social handle)
+          AND NOT (
+            c.metadata->>'added_from' = 'signal-scout' 
+            AND c.metadata->>'subreddit' IS NOT NULL
+            AND (c.handle IS NULL OR c.handle LIKE 'u/%')
+          )
+          -- Must have a real handle (LinkedIn, X, etc.) or email
+          AND (
+            c.handle IS NOT NULL 
+            AND c.handle <> ''
+            AND c.handle NOT LIKE 'u/%'
+            AND c.handle NOT LIKE 'r/%'
+          )
         GROUP BY c.id, c.name, c.handle, a.name, c.metadata, c.tier, c.last_outreach_date
         ORDER BY c.tier ASC, COALESCE(MAX(s.score), 0) DESC NULLS LAST, c.last_outreach_date ASC NULLS FIRST
         LIMIT $1
