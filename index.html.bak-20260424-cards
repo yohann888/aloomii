@@ -649,7 +649,7 @@
 <!-- HERO -->
 <section class="hero" style="animation: heroFadeIn 1s ease forwards;">
   <h1>Become an Agentic Micro Company.</h1>
-  <p class="sub"><p class="sub">Aloomii helps relationship-driven businesses operate with tiny teams, a company brain, agents doing the work, and humans farming the last 20% — context, judgment, taste — that AI can’t.</p>
+  <p class="sub">Aloomii helps relationship-driven businesses operate with tiny teams, a company brain, agents doing the work, and humans farming the last 20% — context, judgment, taste — that AI can’t.</p>
   <div class="hero-ctas">
     <a href="#contact" class="btn-primary">Start a Conversation</a>
     <a href="https://aloomii.com/gtm-audit/" class="btn-secondary">Take the 2-minute GTM Audit</a>
@@ -670,13 +670,13 @@
 <section class="problem reveal">
   <div class="problem-inner glass" style="padding: 56px 48px; max-width: 900px;">
     <h2>The 2,000-year-old company is ending.</h2>
-    <p>The hierarchy you inherited was designed for a world constrained by human memory. Digital minds removed that constraint. The companies winning right now run with tiny teams, shared context, and agent fleets doing the operational work. They're called Agentic Micro Companies. Most of the tooling being built for them assumes your business runs on transactions, not relationships. Yours doesn't. That's what we build for.</p>
+    <p>The hierarchy you inherited was designed for a world constrained by human memory. Digital minds removed that constraint. The companies winning right now run with tiny teams, shared context, and agent fleets doing the operational work. They&#8217;re called Agentic Micro Companies. Most of the tooling being built for them assumes your business runs on transactions, not relationships. Yours doesn&#8217;t. That&#8217;s what we build for.</p>
     <div class="stat-row reveal-stagger">
       <div class="stat-card glass reveal-child"><div class="num">32%</div><div class="desc">annual client churn at small service businesses</div></div>
       <div class="stat-card glass reveal-child"><div class="num">20x</div><div class="desc">more expensive to acquire a new client than to keep one</div></div>
       <div class="stat-card glass reveal-child"><div class="num">10-15%</div><div class="desc">of client relationships are at elevated risk at any given time</div></div>
-    </div>
-    <p style="margin-top:32px;font-size:15px;color:rgba(255,255,255,0.75);text-align:center;max-width:700px;margin-left:auto;margin-right:auto;">When relationships are your business, every missed signal is revenue walking out the door. AMCs solve this — if they're built for how you actually operate.</p>
+
+    <p style="margin-top:32px;font-size:15px;color:rgba(255,255,255,0.75);text-align:center;max-width:700px;margin-left:auto;margin-right:auto;">When relationships are your business, every missed signal is revenue walking out the door. AMCs solve this &#8212; if they&#8217;re built for how you actually operate.</p>
   </div>
 </section>
 
@@ -694,7 +694,7 @@
       <div class="offering-card founders glass reveal-scale" style="padding:32px;">
         <div style="font-size:28px;margin-bottom:12px;">&#129504;</div>
         <h3 style="font-size:20px;margin-bottom:10px;">Company Brain.</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">One source of context — clients, conversations, history, commitments — that every agent and every human draws from.</p>
+        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">One source of context &#8212; clients, conversations, history, commitments &#8212; that every agent and every human draws from.</p>
       </div>
       <div class="offering-card founders glass reveal-scale" style="padding:32px;">
         <div style="font-size:28px;margin-bottom:12px;">&#9881;</div>
@@ -717,11 +717,11 @@
     <h2 class="section-heading reveal">From diagnosis to distribution.</h2>
     <p class="section-sub reveal">Start with The Audit. Most clients add Studio next, then graduate to The Table or Relationship Intelligence depending on whether they're building pipeline or protecting it.</p>
     <div class="offering-grid">
-<div class="offering-card founders glass reveal-scale">
-        <div class="card-tag">Stage 1 — Diagnose</div>
+
+        <div class="card-tag">Stage 1 &#8212; Diagnose</div>
         <h3>See what your AMC could look like.</h3>
         <div class="price">$2,500 one-time</div>
-        <p>A 60-minute process mapping call where Yohann walks through your daily operations and identifies the 3-5 workflows burning the most time. Then a written report within 5 business days: what to automate, what model routing to use, what it will cost to run monthly, and what order to build it in. Specific to your stack, your team size, your budget.</p>
+        <p>A 60-minute process mapping call where Yohann walks through your daily operations and identifies the 3-5 workflows burning the most time. Then a written report within 5 business days: what to automate, what model routing to use, what it will cost to run monthly, and what order to build it in. Not generic recommendations, specific to your stack, your team size, your budget.</p>
         <ul class="features">
           <li>60-minute process mapping call with Yohann</li>
           <li>Identify the 3-5 workflows burning the most time</li>
@@ -734,10 +734,9 @@
         <div class="card-cta-row">
           <a href="#contact" class="card-cta">Start a Conversation</a>
           <a href="#contact" class="card-cta card-cta-outline">Book an Audit</a>
-        </div>
-      </div>
-<div class="offering-card founders glass reveal-scale">
-        <div class="card-tag">Stage 2 — Voice</div>
+        
+
+        <div class="card-tag">Stage 2 &#8212; Voice</div>
         <h3>Your voice, amplified.</h3>
         <div class="price">Starts at $399/mo</div>
         <p>Show up. We do the rest. Studio comes in two tiers depending on how much show you want to build.</p>
@@ -753,16 +752,15 @@
         <div class="card-cta-row">
           <a href="#contact" class="card-cta">Start a Conversation</a>
           <a href="/studio/" class="card-cta card-cta-outline">Learn More</a>
-        </div>
-      </div>
-<div class="offering-card founders glass reveal-scale">
-        <div class="card-tag">Stage 3 — Distribution</div>
+        
+
+        <div class="card-tag">Stage 3 &#8212; Distribution</div>
         <h3>Get your AMC into the market.</h3>
         <div class="price">Two pricing models</div>
         <p>Founder-led GTM that runs while you build. We keep your voice in market, build your podcast strategy, and deliver 12 qualified conversations in 90 days. You spend 1 hour a week. We handle the rest.
 
-        <strong style="color:var(--accent)">Model A — Fixed:</strong> $3,300/mo, 90-day engagement. Standard deliverables with a fixed end date.
-        <br><strong style="color:var(--accent)">Model B — Partnership:</strong> $1,800/mo + 12.5% of pipeline revenue, ongoing. Same deliverables, aligned incentives. Revenue share applies only to deals sourced from our pipeline. Best fit for founders closing 25%+ of qualified opportunities.</p>
+        <strong style="color:var(--accent)">Model A &#8212; Fixed:</strong> $3,300/mo, 90-day engagement. Standard deliverables with a fixed end date.
+        <br><strong style="color:var(--accent)">Model B &#8212; Partnership:</strong> $1,800/mo + 12.5% of pipeline revenue, ongoing. Same deliverables, aligned incentives. Revenue share applies only to deals sourced from our pipeline. Best fit for founders closing 25%+ of qualified opportunities.</p>
         <ul class="features">
           <li>2 LinkedIn posts per week in your voice</li>
           <li>Podcast-powered GTM: guest strategy, booking, and every episode repurposed into 8-10 content pieces</li>
@@ -775,13 +773,12 @@
         <div class="card-cta-row">
           <a href="#contact" class="card-cta">Start a Conversation</a>
           <a href="https://aloomii.com/table" class="card-cta card-cta-outline">More Information</a>
-        </div>
-      </div>
-<div class="offering-card businesses glass reveal-scale">
-        <div class="card-tag">Stage 4 — The Brain</div>
+        
+
+        <div class="card-tag">Stage 4 &#8212; The Brain</div>
         <h3>Install your Company Brain.</h3>
         <div class="price">$2,000-8,000/month &middot; Based on CRM contact size</div>
-        <p>The Company Brain is the foundation every AMC runs on — a single source of context for clients, conversations, history, and commitments that every agent and every human can draw from. We install it on top of your existing CRM (Salesforce, Attio, HubSpot, Wealthbox, Bullhorn) and run it for you. Your team stops chasing signals. The brain catches them.</p>
+        <p>The Company Brain is the foundation every AMC runs on &#8212; a single source of context for clients, conversations, history, and commitments that every agent and every human can draw from. We install it on top of your existing CRM (Salesforce, Attio, HubSpot, Wealthbox, Bullhorn) and run it for you. Your team stops chasing signals. The brain catches them.</p>
         <ul class="features">
           <li>Weekly Relationship Health Brief</li>
           <li>Reconnection prompts: who to call and what to say</li>
@@ -792,25 +789,21 @@
           <li>Works on top of your existing CRM</li>
         </ul>
         <a href="#contact" class="card-cta">Start a Conversation</a>
-      </div>
+      
     </div>
+
+<!-- PROOF POINT -->
+<section class="proof-point reveal">
+  <div class="proof-point-inner">
+    <div class="proof-story glass reveal-scale" style="max-width: 750px; margin: 0 auto;">
+      <div class="eyebrow">Real Story</div>
+      <h3>17 years from 5 emails.</h3>
+      <p>Jim Rogers wasn't a lead. He was a name in a CRM that hadn't been touched in months. Our system flagged a signal, drafted the outreach, and our team refined the timing. Five emails later, he became a 17-year client relationship.</p>
+      <span class="proof-highlight">That's what context farming looks like when you play the long game.</span>
+    </div>
+  </div>
 </section>
 
-<!-- STUDIO PROMO BANNER -->
-<section class="studio-promo reveal" style="padding: 0 24px 64px;">
-  <a href="/studio/" style="text-decoration:none;display:block;">
-    <div class="studio-promo-inner glass" style="max-width:900px;margin:0 auto;padding:40px 48px;display:flex;align-items:center;gap:40px;border:1px solid rgba(0,200,190,0.25);border-radius:16px;transition:border-color 0.2s;position:relative;overflow:hidden;">
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,158,150,0.07) 0%,transparent 60%);pointer-events:none;"></div>
-      <div style="flex-shrink:0;width:64px;height:64px;background:rgba(0,158,150,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;">🎙</div>
-      <div style="flex:1;">
-        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px;">Podcast + Video Production</div>
-        <h3 style="font-size:22px;font-weight:700;color:#fff;margin:0 0 8px;line-height:1.3;">Pale Blue Nexus is the proof. Studio is how you get there.</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.6);margin:0;">Production, branding, guest strategy, and content systems for founders who want a show that builds pipeline. See what we built for ourselves first.</p>
-      </div>
-      <div style="flex-shrink:0;display:flex;align-items:center;gap:6px;color:var(--accent);font-weight:600;font-size:14px;white-space:nowrap;">See Studio <span style="font-size:18px;">&#8594;</span></div>
-    </div>
-  </a>
-</section>
 
 <!-- HOW IT WORKS -->
 <section class="how-it-works reveal" id="how">
@@ -826,18 +819,6 @@
   </div>
 </section>
 
-<!-- PROOF POINT -->
-<section class="proof-point reveal">
-  <div class="proof-point-inner">
-    <div class="proof-story glass reveal-scale" style="max-width: 750px; margin: 0 auto;">
-      <div class="eyebrow">Real Story</div>
-      <h3>17 years from 5 emails.</h3>
-      <p>Jim Rogers wasn't a lead. He was a name in a CRM that hadn't been touched in months. Our system flagged a signal, drafted the outreach, and our team refined the timing. Five emails later, he became a 17-year client relationship.</p>
-      <span class="proof-highlight">That's what context farming looks like when you play the long game.</span>
-    </div>
-  </div>
-</section>
-
 <!-- DIFFERENTIATOR -->
 <section class="differentiator reveal">
   <div class="differentiator-inner">
@@ -845,8 +826,10 @@
     <div class="diff-grid reveal-stagger">
       <div class="diff-card glass reveal-child"><h3>Not a traditional agency</h3><p>We don't spend three months onboarding. We don't send reports full of impressions. We track pipeline, relationships, and conversations that matter.</p></div>
       <div class="diff-card glass reveal-child"><h3>Not an AI tool you manage</h3><p>We don't hand you a login and wish you luck. Most AI tools get abandoned in 60 days. We handle the review, the tone, the decisions.</p></div>
-      <div class="diff-card glass reveal-child"><h3>Not a CRM</h3><p>We work with your existing CRM, Salesforce, HubSpot, Wealthbox, Bullhorn, whatever you use. We add the intelligence layer they're missing.</p></div></div>
-      <div class="diff-card glass reveal-child"><h3>Not a generic AMC playbook.</h3><p>Most AI tooling is built for speed at the cost of nuance — fine for transactional work, disastrous when every client is a long arc of context and trust. Your AMC has to remember more, not just move faster.</p></div>
+      <div class="diff-card glass reveal-child"><h3>Not a CRM</h3><p>We work with your existing CRM, Salesforce, HubSpot, Wealthbox, Bullhorn, whatever you use. We add the intelligence layer they're missing.</p></div>
+    <div class="diff-card glass reveal-child">
+      <h3>Not a generic AMC playbook.</h3>
+      <p>Most AI tooling is built for speed at the cost of nuance. Fine for transactional work, disastrous when every client is a long arc of context and trust. Your AMC has to remember more, not just move faster.</p>
     </div>
   </div>
 </section>
@@ -975,7 +958,7 @@
             <option value="the-table">The Table</option>
             <option value="relationship-intelligence">Relationship Intelligence</option>
             <option value="audit">AI Audit</option>
-            <option value="not-sure">Not Sure Yet — Let's Talk</option>
+            <option value="not-sure">Not Sure Yet -- Let's Talk</option>
           </select>
         </div>
       </div>
@@ -1305,12 +1288,12 @@
           consultationForm.querySelector('.form-submit').style.display = 'none';
           document.getElementById('contactSuccess').classList.add('visible');
         } else {
-          btn.textContent = 'Something went wrong — try again';
+          btn.textContent = 'Something went wrong -- try again';
           btn.disabled = false;
           setTimeout(() => { btn.textContent = originalText; }, 3000);
         }
       } catch (err) {
-        btn.textContent = 'Connection error — try again';
+        btn.textContent = 'Connection error -- try again';
         btn.disabled = false;
         setTimeout(() => { btn.textContent = originalText; }, 3000);
       }
