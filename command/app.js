@@ -134,8 +134,6 @@ function showSection(section) {
                 var filtered = applyContactFilters(commandData.contacts, filterState);
                 renderHeatmap(filtered);
             }
-            if (commandData.outreach_queue) renderOutreachQueue(commandData.outreach_queue);
-            if (commandData.pipeline) renderPipelineCRM(commandData);
         } else if (section === 'content') {
             renderLinkedInDrafts(commandData.linkedin_drafts);
             renderSnipeDrafts(commandData.snipe_drafts);
@@ -875,7 +873,6 @@ async function fetchCommandData() {
             const filtered = applyContactFilters(commandData.contacts, filterState);
             renderHeatmap(filtered);
         }
-        if (commandData.outreach_queue) renderOutreachQueue(commandData.outreach_queue);
         if (typeof renderBacklog === 'function') renderBacklog();
         if (commandData.tasks && typeof renderTasks === 'function') {
             renderTasks(commandData.tasks);
@@ -1968,10 +1965,9 @@ function createCrmContent() {
   crmSection.innerHTML = `
     <h2>CRM & Outreach</h2>
     <div class="crm-tabs">
-      <button onclick="switchCrmTab(0)" class="tab-btn active">Heatmap</button>
-      <button onclick="switchCrmTab(1)" class="tab-btn">Queue</button>
-      <button onclick="switchCrmTab(2)" class="tab-btn">Drafts</button>
-      <button onclick="switchCrmTab(3)" class="tab-btn">Sprint Shortlist</button>
+      <button onclick="switchCrmTab(0)" class="tab-btn active">Contacts</button>
+      <button onclick="switchCrmTab(1)" class="tab-btn">Drafts</button>
+      <button onclick="switchCrmTab(2)" class="tab-btn">Sprint Shortlist</button>
     </div>
     <div id="crm-heatmap" class="crm-panel active">
       <table class="crm-table">
@@ -2447,7 +2443,6 @@ window.refreshAll = async function() {
       const filtered = applyContactFilters(commandData.contacts, filterState);
       renderHeatmap(filtered);
     }
-    if (commandData.outreach_queue) renderOutreachQueue(commandData.outreach_queue);
     if (commandData.tasks && typeof renderTasks === 'function') renderTasks(commandData.tasks);
     if (commandData.content_queue && typeof renderContentQueue === 'function') renderContentQueue(commandData.content_queue);
   }

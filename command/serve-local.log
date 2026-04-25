@@ -41,3 +41,15 @@ GET     /app.js                                  404  7ms
 GET     /api/command                             200  80ms
 GET     /api/command/outreach/recent             200  0ms
 GET     /api/command                             200  58ms
+GET     /                                        404  2ms
+GET     /styles.css                              404  3ms
+GET     /app.js                                  404  7ms
+GET     /api/command                             200  8ms
+GET     /api/command/outreach/recent             200  0ms
+GET     /api/command                             200  62ms
+GET     /api/command                             200  60ms
+GET     /api/command                             200  83ms
+GET     /api/command                             200  79ms
+GET     /api/command                             200  10ms
+GET     /api/command                             200  8ms
+GET     /api/command                             200  3ms
