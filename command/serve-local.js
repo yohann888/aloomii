@@ -53,8 +53,9 @@ const { registerInfluencerRoutes } = require('../scripts/dashboard/command-api')
 registerInfluencerRoutes(app);
 const { registerResearchRoutes } = require('../scripts/dashboard/command-api');
 registerResearchRoutes(app);
-const { registerPromptLabRoutes } = require('../scripts/dashboard/command-api');
+const { registerPromptLabRoutes, registerOutreachSprintRoutes } = require('../scripts/dashboard/command-api');
 registerPromptLabRoutes(app);
+registerOutreachSprintRoutes(app);
 
 // ─── Route matcher ─────────────────────────────────────────────────────────────
 function matchRoute(method, urlPath) {

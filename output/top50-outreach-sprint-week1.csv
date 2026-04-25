@@ -1,0 +1,54 @@
+                  id                  |           name           |      handle      |           company            | tier |      last_outreach_date       
+--------------------------------------+--------------------------+------------------+------------------------------+------+-------------------------------
+ a777ed9f-1372-419a-b22a-22941c21ff0c | Colin Gardiner           | @ColinGardiner   | Yonder Ventures              |    1 | 
+ f4e4a60d-d856-445e-8994-b972d81f07d5 | Harrison Chase           |                  | LangChain                    |    1 | 
+ 3d954179-9b7f-472c-a11e-edc2dc70a1bc | John Brunner             |                  | Omura + Native Union         |    1 | 
+ 6384e037-dbe2-4ce9-ab03-97ef6c6c8988 | Matthew McConnell        | @spicenet        | Spicenet                     |    1 | 
+ a6de240b-96ca-48e8-a4b8-9490c9d85931 | Adam Draper              | @AdamDraper      | Unknown                      |    1 | 
+ ed19b7c8-5470-4f3e-926b-339f45b93dd5 | Vladimir Keil            | @askvladi        | Unknown                      |    1 | 
+ 667e2a1b-eed1-4a61-a5c9-39a6ccdaffc3 | Jake Brukhman            | @jbrukh          | Unknown                      |    1 | 
+ db615843-2db6-4432-98f5-4a403e8fd2b2 | René-Sylvain Bédard      |                  | Unknown                      |    1 | 
+ 0ef57dc0-f3a2-44f6-be6b-bf0d06e7dd5c | TBD — Visa Contact       |                  | Visa                         |    1 | 
+ 9b8830aa-cd3d-4661-b5b7-3d04b43aae69 | Nectarios Economakis     | @nectarios       | Amiral Ventures              |    1 | 
+ 99411460-ec7a-4955-b855-97e5b1176121 | Alexandre Bartolini      |                  | Unknown                      |    1 | 
+ c2cf0b4a-14e5-483a-bf88-782fe1af7953 | Alex Radu                | @Alex__Radu      | AccVentures / Astrarizon     |    1 | 
+ f7030050-0e63-430c-9b07-d87380fc492f | Tim Mackie               |                  | Unknown                      |    1 | 
+ 01bd0b60-b7fc-453a-942b-fc279aab7ab5 | Cuy Sheffield            | cuysheffield     | Unknown                      |    1 | 
+ 5649cace-1637-4793-b28e-707bb3224543 | Kimia Hamidi             | hkimia           | Unknown                      |    1 | 
+ 496915e6-fc4b-4ada-ac34-5de7d3b54fd5 | Josh                     |                  | Unknown                      |    1 | 
+ 5164704b-2684-47a6-b55b-9adce86c6054 | David Bailey             | @DavidFBailey    | Unknown                      |    1 | 
+ a911ff2c-aa7a-4894-bb3b-9f4e00f63ddc | Anthony Azrak            |                  | General Magic                |    1 | 
+ e7819186-6db0-4f4e-9cb4-012da1042b94 | Robleh Jama              | @robjama         | Boom Video / TMRW AI         |    1 | 
+ a111d1cd-3965-4951-85c1-1d54690f64a7 | Matt Mudano              | proofofmud       | Unknown                      |    1 | 
+ 6c9c36e5-e0f6-41c1-b5b1-3b5d2f5f4d79 | Nayrhit B                |                  | Gushwork.ai                  |    1 | 
+ a10684a3-802b-480e-9be7-1c9d8b7c830a | Sunny                    |                  | Kraken                       |    1 | 
+ 0110e7a4-0149-4e61-803b-b7414c844fcb | Charles Cormier          |                  | Raasrocket / GTM Ventures    |    1 | 
+ 14ff79d8-8e66-45fe-964d-0ab244e6b9cf | Austin Armstrong         | @AustinArmstrong | Syllaby / AI Marketing World |    1 | 
+ ddd8b039-2816-41c8-97fd-eb780d68e9b6 | Mike Belshe              |                  | Unknown                      |    1 | 
+ c14b31bf-8c77-45c5-9daf-d597592c67dc | Zeeshan Ali              |                  | Unknown                      |    1 | 
+ 952fefda-6ca2-46bb-ab0c-d2b45dbeffcc | Jack Couch               |                  | Sophtron                     |    1 | 
+ 9450da87-2adf-41ae-bb19-1063e6702b56 | Michael Gu (Boxmining)   | boxmining        | Unknown                      |    1 | 
+ 33fa435a-62ab-40b3-a17b-be9a9a717314 | Daniel Gould             |                  | Unknown                      |    1 | 
+ 88f680c9-9b13-4961-8d65-498a3b2ff096 | Winnicent Zuo            |                  | Unknown                      |    1 | 
+ f93a12e7-e5f9-47e1-8402-8cd7d7c94ba3 | Marcus Brotman           |                  | Launch.co                    |    1 | 
+ 0f1bd34e-59de-470d-9bc9-4f07893883d2 | Dani Lipkin              |                  | Unknown                      |    1 | 
+ 5f6430e4-b354-4cc7-b1ed-2987fcbd533c | Shawn Flynn              | ShawnFlynn_SV    | Unknown                      |    1 | 
+ a66f3302-c305-4a8e-afca-42454755bac7 | Daniel Foch              | @danielfoch      | Unknown                      |    1 | 
+ bf75bec8-6575-40df-9fdc-d9d4143bf141 | TBD — Salesforce Contact |                  | Salesforce                   |    1 | 
+ f27d8ad9-edfa-4990-a0df-a5ed06b82059 | Grant Lee                |                  | Gamma (gamma.app)            |    1 | 
+ 1799e6b5-db17-4049-b047-fbfbfefa3178 | Yona Belfort             |                  | Minnow (MinnowPod)           |    1 | 
+ c288fe34-3f93-4ee5-8ca3-e8f6e85da4f4 | Cameron McCord           | @CameronLMcCord  | Unknown                      |    1 | 
+ 610b8786-c36c-4d68-bff1-412e5642da12 | Nathan Stump             |                  | Unknown                      |    1 | 
+ 1c6eee8b-8197-4e67-b7c9-e39223996512 | Alex Steele              | @alexsteele      | Unknown                      |    1 | 
+ ecc68cf5-a3cb-4bbd-a9a6-85049c22abe4 | Zach Zelle               |                  | Matrica Labs / dm.fun        |    1 | 
+ 017075b1-b192-47ad-ba14-22f4ff02cd1f | Marc El Khoury           |                  | Unknown                      |    1 | 
+ 53df9413-b681-410f-90e8-76c8644d5b6d | Robert Cardiff           |                  | Unknown                      |    1 | 
+ 4266f956-a583-481a-b19a-ad4da674a49f | Ana Misra                |                  | Angel One Investor Network   |    1 | 
+ 156bbfce-8227-4439-9f31-c5e9ef6e3467 | Marek Miltner            |                  | PangeAI                      |    1 | 
+ f43be0dd-f993-4508-9ea2-7beef7bc5ba8 | Mandip Kanjiya           |                  | Unknown                      |    1 | 
+ 668fb1e0-cd1e-40d2-b9f6-23996c59ce14 | Brett Calhoun            | @brettcalhounn   | Unknown                      |    1 | 
+ b1ee484e-558d-4ef8-858c-199815e6d3f9 | Dani Lipkin              |                  | TMX Group                    |    1 | 2026-04-01 17:32:43.066904-04
+ 944071f1-5a38-4554-be36-047272d75c31 | Gil Elbaz                |                  | Onyx Security                |    1 | 2026-04-06 17:52:45.814215-04
+ 1dcc4b98-58f1-49cf-9009-b742d1956f3f | Vincent Pronesti         |                  | Unknown                      |    1 | 2026-04-06 20:05:04.946097-04
+(50 rows)
+

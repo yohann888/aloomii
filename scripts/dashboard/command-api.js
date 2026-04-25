@@ -1569,6 +1569,157 @@ function registerCommandAPI(app, pool = null) {
     }
   });
 
+  app.post('/api/command/outreach/prep', async (req, res) => {
+    const { contact_id, signal_id, channel = 'linkedin_dm' } = req.body;
+    if (!contact_id) return res.status(400).json({ error: 'contact_id required' });
+    try {
+      // 1. Load contact
+      const contactRes = await query(
+        `SELECT c.id, c.name, c.handle, 
+          COALESCE(a.name, c.metadata->>'company', c.metadata->>'org') as company,
+          c.tier, c.last_outreach_date, c.metadata
+         FROM contacts c
+         LEFT JOIN accounts a ON a.id = c.account_id
+         WHERE c.id = $1 LIMIT 1`,
+        [contact_id]
+      );
+      if (!contactRes.rows[0]) return res.status(404).json({ error: 'contact not found' });
+      const contact = contactRes.rows[0];
+      
+      // 2. Load signal (optional)
+      let signal = null;
+      if (signal_id) {
+        const sigRes = await query(
+          `SELECT id, signal_type, body, source_url, score, collection_method
+           FROM signals WHERE id = $1 LIMIT 1`,
+          [signal_id]
+        );
+        if (sigRes.rows[0]) signal = sigRes.rows[0];
+      }
+      
+      // 3. Load signals for scoring
+      const sigsRes = await query(
+        `SELECT id, signal_type, body, score, created_at
+         FROM signals
+         WHERE source_url IN (
+           SELECT source_url FROM signals s2
+           WHERE s2.id = $1
+         ) OR (
+           SELECT source_url FROM signals s3 WHERE s3.id = $1
+         ) IS NULL
+         ORDER BY score DESC NULLS LAST, created_at DESC
+         LIMIT 5`,
+        [signal_id || '00000000-0000-0000-0000-000000000000']
+      );
+      const signals = sigsRes.rows;
+      
+      // 4. Village paths
+      let villagePaths = [];
+      const vRes = await query(
+        `SELECT metadata->>'village_paths' as paths
+         FROM contacts WHERE id = $1 LIMIT 1`,
+        [contact_id]
+      );
+      if (vRes.rows[0]?.paths) {
+        try { villagePaths = JSON.parse(vRes.rows[0].paths); } catch {}
+      }
+      
+      // 5. Score
+      const scoring = calculateLeadScore(contact, signals, villagePaths);
+      
+      // 6. Draft
+      const draft = generateDraft(contact, signal, channel);
+      
+      // 7. Store draft in outreach_drafts for learn-loop tracking
+      const draftRes = await query(`
+        INSERT INTO outreach_drafts (contact_id, draft_text, channel, signal_context, status, draft_model, created_at)
+        VALUES ($1, $2, $3, $4, 'draft', 'prep-engine', NOW())
+        RETURNING id
+      `, [
+        contact_id,
+        draft.draft,
+        channel,
+        JSON.stringify({ signal_id, score: scoring.score, reasons: scoring.reasons })
+      ]);
+      
+      res.json({
+        success: true,
+        draft_id: draftRes.rows[0]?.id,
+        contact: { id: contact.id, name: contact.name, company: contact.company, tier: contact.tier },
+        score: scoring,
+        draft,
+        signal: signal ? { id: signal.id, body: signal.body?.substring(0, 100), score: signal.score } : null,
+        village_paths: villagePaths.slice(0, 3),
+        note: 'Review draft, edit if needed, then copy and send via your channel. Log outcome in CC.'
+      });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // POST /api/command/outreach/prep-contact-list — batch prep top N contacts
+  app.post('/api/command/outreach/prep-contact-list', async (req, res) => {
+    const { limit = 10, min_score = 0, channel = 'linkedin_dm' } = req.body;
+    try {
+      // Pull contacts with signals, ordered by recency + tier
+      const contactsRes = await query(`
+        SELECT c.id, c.name, c.handle, 
+          COALESCE(a.name, c.metadata->>'company', c.metadata->>'org') as company,
+          c.tier, c.last_outreach_date, c.metadata,
+          COALESCE(MAX(s.score), 0) as max_signal_score
+        FROM contacts c
+        LEFT JOIN accounts a ON a.id = c.account_id
+        LEFT JOIN entity_signals es ON es.entity_id = c.id
+        LEFT JOIN signals s ON s.id = es.signal_id
+        WHERE c.tier IN (1, 2)
+          AND (c.last_outreach_date IS NULL OR c.last_outreach_date < NOW() - INTERVAL '7 days')
+        GROUP BY c.id, c.name, c.handle, a.name, c.metadata, c.tier, c.last_outreach_date
+        ORDER BY c.tier ASC, COALESCE(MAX(s.score), 0) DESC NULLS LAST, c.last_outreach_date ASC NULLS FIRST
+        LIMIT $1
+      `, [limit]);
+      
+      const results = [];
+      for (const contact of contactsRes.rows) {
+        const sigRes = await query(`
+          SELECT s.id, s.signal_type, s.body, s.score, s.source_url
+          FROM signals s
+          JOIN entity_signals es ON es.signal_id = s.id
+          WHERE es.entity_id = $1
+          ORDER BY s.score DESC NULLS LAST, s.created_at DESC
+          LIMIT 1
+        `, [contact.id]);
+        const signal = sigRes.rows[0] || null;
+        
+        const vRes = await query(
+          `SELECT metadata->>'village_paths' as paths FROM contacts WHERE id = $1`,
+          [contact.id]
+        );
+        let villagePaths = [];
+        if (vRes.rows[0]?.paths) {
+          try { villagePaths = JSON.parse(vRes.rows[0].paths); } catch {}
+        }
+        
+        const scoring = calculateLeadScore(contact, signal ? [signal] : [], villagePaths);
+        if (scoring.score >= min_score) {
+          results.push({
+            contact: { id: contact.id, name: contact.name, company: contact.company || 'Unknown' },
+            score: scoring,
+            top_signal: signal ? { id: signal.id, body: signal.body?.substring(0, 80), score: signal.score } : null,
+            village_paths: villagePaths.slice(0, 2)
+          });
+        }
+      }
+      
+      res.json({
+        success: true,
+        count: results.length,
+        contacts: results.sort((a, b) => b.score.score - a.score.score)
+      });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
   // POST /api/command/outreach/log — quick one-liner outreach outcome logger
   app.post('/api/command/outreach/log', async (req, res) => {
     const { contact_name, channel = 'unknown', outcome = 'sent', note = '', email = '' } = req.body;
@@ -1698,6 +1849,87 @@ async function pushToBuffer(text, adapter) {
   });
 }
 
+// ── Outreach Sprint Shortlist API ────────────────────────────────────────────
+// Added 2026-04-25 — for manual outreach sprint workflow
+
+function registerOutreachSprintRoutes(app) {
+  // POST /api/command/outreach/shortlist — add contact to focused shortlist
+  app.post('/api/command/outreach/shortlist', async (req, res) => {
+    const { contact_id, sprint_name = 'week-1-sprint', status = 'shortlisted', notes = '', draft_id = null } = req.body;
+    if (!contact_id) return res.status(400).json({ error: 'contact_id required' });
+    try {
+      const result = await query(`
+        INSERT INTO outreach_sprint_shortlist (contact_id, sprint_name, status, draft_id, notes, created_by)
+        VALUES ($1, $2, $3, $4, $5, 'cc-user')
+        ON CONFLICT (contact_id, sprint_name) DO UPDATE
+        SET status = EXCLUDED.status, notes = EXCLUDED.notes, draft_id = EXCLUDED.draft_id, updated_at = NOW()
+        RETURNING *
+      `, [contact_id, sprint_name, status, draft_id, notes]);
+      res.json({ success: true, item: result.rows[0] });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // GET /api/command/outreach/shortlist — view shortlist with contact details
+  app.get('/api/command/outreach/shortlist', async (req, res) => {
+    const { sprint = 'week-1-sprint', status } = req.query;
+    try {
+      const statusFilter = status ? `AND s.status = '${status}'` : '';
+      const result = await query(`
+        SELECT 
+          s.id as shortlist_id, s.status, s.notes, s.draft_id, s.created_at, s.updated_at,
+          c.id as contact_id, c.name, c.handle, c.email,
+          COALESCE(a.name, c.metadata->>'company', c.metadata->>'org', 'Unknown') as company,
+          c.tier, c.last_outreach_date,
+          d.draft_text, d.channel as draft_channel
+        FROM outreach_sprint_shortlist s
+        JOIN contacts c ON c.id = s.contact_id
+        LEFT JOIN accounts a ON a.id = c.account_id
+        LEFT JOIN outreach_drafts d ON d.id = s.draft_id
+        WHERE s.sprint_name = $1 ${statusFilter}
+        ORDER BY 
+          CASE s.status WHEN 'shortlisted' THEN 1 WHEN 'contacted' THEN 2 WHEN 'replied' THEN 3 ELSE 4 END,
+          s.created_at DESC
+      `, [sprint]);
+      res.json({ success: true, sprint, count: result.rows.length, contacts: result.rows });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // PATCH /api/command/outreach/shortlist/:id/status — update status (replied, booked, passed, nurture)
+  app.patch('/api/command/outreach/shortlist/:id/status', async (req, res) => {
+    const { id } = req.params;
+    const { status, notes = '' } = req.body;
+    const allowed = ['shortlisted', 'contacted', 'replied', 'booked', 'passed', 'nurture'];
+    if (!allowed.includes(status)) return res.status(400).json({ error: `status must be one of: ${allowed.join(', ')}` });
+    try {
+      const result = await query(`
+        UPDATE outreach_sprint_shortlist
+        SET status = $1, notes = COALESCE(NULLIF($2, ''), notes), updated_at = NOW()
+        WHERE id = $3
+        RETURNING *
+      `, [status, notes, id]);
+      if (result.rows.length === 0) return res.status(404).json({ error: 'shortlist item not found' });
+      res.json({ success: true, item: result.rows[0] });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // DELETE /api/command/outreach/shortlist/:id — remove from shortlist
+  app.delete('/api/command/outreach/shortlist/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+      await query(`DELETE FROM outreach_sprint_shortlist WHERE id = $1`, [id]);
+      res.json({ success: true, deleted: id });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+}
+
 // Graceful shutdown helper
 process.on('SIGTERM', () => {
   if (poolInstance) poolInstance.end();
@@ -1752,6 +1984,7 @@ function registerPromptLabRoutes(app) {
   });
 }
 module.exports.registerPromptLabRoutes = registerPromptLabRoutes;
+module.exports.registerOutreachSprintRoutes = registerOutreachSprintRoutes;
 
 // ── Influencer Pipeline routes (registered standalone for serve-local) ──────
 function registerInfluencerRoutes(app) {
@@ -1855,6 +2088,83 @@ function registerInfluencerRoutes(app) {
 module.exports.registerInfluencerRoutes = registerInfluencerRoutes;
 
 // ── Research Routes ───────────────────────────────────────────────────────────
+// ── Outreach Prep Helpers ─────────────────────────────────────────────────────
+// Added 2026-04-25 — for manual outreach sprint support
+
+function calculateLeadScore(contact, signals, villagePaths) {
+  let score = 0;
+  const reasons = [];
+  
+  if (contact.tier == 1 || contact.tier == '1') { score += 30; reasons.push('Tier 1 contact'); }
+  else if (contact.tier == 2 || contact.tier == '2') { score += 20; reasons.push('Tier 2 contact'); }
+  else { score += 10; reasons.push('Tier 3+ contact'); }
+  
+  if (signals.length > 0) {
+    const avg = signals.reduce((s, sig) => s + (parseFloat(sig.score) || 3), 0) / signals.length;
+    score += Math.round(avg * 8);
+    reasons.push(`${signals.length} signal(s), avg ${avg.toFixed(1)}/5`);
+  }
+  
+  if (villagePaths && villagePaths.length > 0) {
+    score += 15;
+    reasons.push(`Warm path via ${villagePaths[0].connector || 'mutual connection'}`);
+  }
+  
+  if (contact.last_outreach_date) {
+    const days = Math.floor((Date.now() - new Date(contact.last_outreach_date).getTime()) / (1000*60*60*24));
+    if (days > 30) { score += 10; reasons.push('No touch in 30+ days'); }
+    else if (days < 7) { score -= 10; reasons.push('Touched recently'); }
+  } else {
+    score += 10; reasons.push('Never contacted');
+  }
+  
+  return { 
+    score: Math.min(100, Math.max(0, score)), 
+    reasons, 
+    priority: score >= 70 ? 'hot' : score >= 50 ? 'warm' : 'cold' 
+  };
+}
+
+function generateDraft(contact, signal, channel) {
+  const name = contact.name?.split(' ')[0] || 'there';
+  const company = contact.company || contact.metadata?.company || contact.metadata?.org || 'your company';
+  let context = '';
+  if (signal) {
+    context = signal.body || signal.signal_text || '';
+    if (context.length > 120) context = context.substring(0, 120) + '...';
+  }
+  
+  const templates = {
+    linkedin_dm: () => {
+      if (signal) {
+        return `Hey ${name}, saw your post about ${context}. ${signal.angle || "We've been helping founders at your stage replace their SDR function entirely."} Mind if I DM you? Also, what's the best email to reach you at?`;
+      }
+      return `Hey ${name} — noticed ${company} is building something interesting. We've been running GTM for B2B founders so their pipeline fills while they build. Worth a 15-min chat this week? What's the best email to reach you at?`;
+    },
+    x_dm: () => {
+      if (signal) {
+        return `${name} — ${context}. We're building exactly the layer that replaces the SDR function for founders. Mind if I reach out via email?`;
+      }
+      return `${name} — ${company} looks like it's at the stage where founder-led sales starts to break. We've fixed that for 5+ teams. Mind if I email you?`;
+    },
+    reddit_reply: () => {
+      if (signal) {
+        return `Hey ${name}, saw your post about ${context}. ${signal.angle || "We've been helping founders at your stage with exactly this."} Would love to share what's worked. Mind if I DM you? Also, what's the best email to reach you at?`;
+      }
+      return `Hey ${name} — your post resonated. We've been solving this exact problem for founders. Worth a quick chat? What's the best email to reach you at?`;
+    },
+    email: () => {
+      if (signal) {
+        return `Subject: ${name} — ${context.substring(0, 40)}...\n\n${name},\n\nSaw your post about ${context}. ${signal.angle || "We've been helping founders at your stage replace their SDR function entirely."}\n\nWorth a 15-min call this week?\n\nAlso, what's the best email to reach you at?`;
+      }
+      return `Subject: ${company} — quick question\n\n${name},\n\nNoticed ${company} is building something interesting. We've been running GTM for B2B founders so their pipeline fills while they build.\n\nWorth a 15-min chat this week?\n\nAlso, what's the best email to reach you at?`;
+    }
+  };
+  
+  const draft = templates[channel] ? templates[channel]() : templates.linkedin_dm();
+  return { draft, channel, includes_email_ask: true, estimated_chars: draft.length, tone: 'direct-warm' };
+}
+
 function registerResearchRoutes(app) {
 
   // GET /api/research/pulse — daily briefs + live prospect signals + enriched Reddit signals
