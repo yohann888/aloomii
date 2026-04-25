@@ -2033,7 +2033,8 @@ function registerInfluencerRoutes(app) {
       const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
       const result = await query(
         `SELECT id, handle, platform_primary, icp_target, followers, engagement_rate,
-                lead_score, lead_tier, email, email_source, profile_url, status, created_at
+                lead_score, lead_tier, email, email_source, profile_url, status, created_at,
+                last_outreach_at, last_outreach_status
          FROM influencer_pipeline ${where}
          ORDER BY lead_score DESC NULLS LAST, followers DESC NULLS LAST
          LIMIT $${idx}`,
@@ -2105,6 +2106,113 @@ function registerInfluencerRoutes(app) {
       });
       
       res.json({ active_icps, inactive_icps, platforms: ['tiktok','instagram','youtube','twitter','linkedin'] });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // POST /api/command/influencers/:id/outreach — log outreach
+  app.post('/api/command/influencers/:id/outreach', async (req, res) => {
+    try {
+      const influencer_id = parseInt(req.params.id);
+      if (isNaN(influencer_id)) return res.status(400).json({ error: 'Invalid influencer ID' });
+
+      const {
+        channel = 'email',
+        channel_contact_details,
+        subject,
+        body,
+        status,
+        outcome_note,
+        sent_at,
+        follow_up_at,
+        paid_at,
+        cost,
+        content_url
+      } = req.body;
+
+      if (!status) return res.status(400).json({ error: 'status is required' });
+
+      const validStatuses = ['drafted','sent','replied','follow_up','in_negotiation','contracted','content_submitted','live','paid','declined','ghosted'];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
+      }
+
+      // Insert log
+      const logRes = await query(`
+        INSERT INTO influencer_outreach_log
+          (influencer_id, channel, channel_contact_details, subject, body,
+           status, outcome_note, sent_at, follow_up_at, paid_at, cost, content_url, logged_by)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'cc-user')
+        RETURNING id
+      `, [
+        influencer_id, channel, channel_contact_details || null, subject || null, body || null,
+        status, outcome_note || null,
+        sent_at ? new Date(sent_at) : new Date(),
+        follow_up_at || null,
+        paid_at ? new Date(paid_at) : null,
+        cost ? parseFloat(cost) : null,
+        content_url || null
+      ]);
+
+      // Update denormalized columns
+      await query(`
+        UPDATE influencer_pipeline
+        SET last_outreach_at = NOW(),
+            last_outreach_status = $1
+        WHERE id = $2
+      `, [status, influencer_id]);
+
+      res.json({ success: true, log_id: logRes.rows[0].id });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // GET /api/command/influencers/:id/outreach — get history
+  app.get('/api/command/influencers/:id/outreach', async (req, res) => {
+    try {
+      const influencer_id = parseInt(req.params.id);
+      if (isNaN(influencer_id)) return res.status(400).json({ error: 'Invalid influencer ID' });
+
+      const history = await query(`
+        SELECT id, channel, channel_contact_details, subject, body,
+               sent_at, replied_at, follow_up_at, paid_at, status,
+               outcome_note, cost, content_url, logged_by, created_at
+        FROM influencer_outreach_log
+        WHERE influencer_id = $1
+        ORDER BY created_at DESC
+      `, [influencer_id]);
+
+      const lastRes = await query(`
+        SELECT last_outreach_at, last_outreach_status
+        FROM influencer_pipeline
+        WHERE id = $1
+      `, [influencer_id]);
+
+      res.json({
+        history: history.rows,
+        last_outreach_at: lastRes.rows[0]?.last_outreach_at,
+        last_outreach_status: lastRes.rows[0]?.last_outreach_status
+      });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // PATCH /api/command/influencers/:id/status — quick status update
+  app.patch('/api/command/influencers/:id/status', async (req, res) => {
+    try {
+      const influencer_id = parseInt(req.params.id);
+      const { status } = req.body;
+      if (!status) return res.status(400).json({ error: 'status required' });
+
+      await query(`
+        INSERT INTO influencer_outreach_log (influencer_id, status, logged_by)
+        VALUES ($1, $2, 'cc-user')
+      `, [influencer_id, status]);
+
+      await query(`
+        UPDATE influencer_pipeline
+        SET last_outreach_at = NOW(), last_outreach_status = $1
+        WHERE id = $2
+      `, [status, influencer_id]);
+
+      res.json({ success: true });
     } catch(e) { res.status(500).json({ error: e.message }); }
   });
 }

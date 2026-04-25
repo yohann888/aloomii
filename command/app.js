@@ -3291,6 +3291,165 @@ function safeHtml(str) {
   if (str == null) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+// ── Influencer Outreach Tracking (added 2026-04-25) ────────────────────────
+
+const STATUS_COLORS = {
+  drafted: '#555',
+  sent: '#3b82f6',
+  replied: '#00c8be',
+  follow_up: '#f5a623',
+  in_negotiation: '#8b5cf6',
+  contracted: '#14b8a6',
+  content_submitted: '#ec4899',
+  live: '#22c55e',
+  paid: '#eab308',
+  declined: '#ef4444',
+  ghosted: '#7f1d1d'
+};
+
+const STATUS_LABELS = {
+  drafted: 'Drafted',
+  sent: 'Sent',
+  replied: 'Replied',
+  follow_up: 'Follow Up',
+  in_negotiation: 'In Negotiation',
+  contracted: 'Contracted',
+  content_submitted: 'Content Submitted',
+  live: 'Live',
+  paid: 'Paid',
+  declined: 'Declined',
+  ghosted: 'Ghosted'
+};
+
+function getStatusBadge(status) {
+  const color = STATUS_COLORS[status] || '#555';
+  const label = STATUS_LABELS[status] || (status || 'Identified');
+  return `<span style="display:inline-block;padding:2px 8px;border-radius:4px;background:${color}22;color:${color};font-size:11px;font-weight:600;border:1px solid ${color}44;">${label}</span>`;
+}
+
+async function quickLogInfluencer(influencerId, status) {
+  try {
+    const res = await fetch(`/api/command/influencers/${influencerId}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    });
+    const data = await res.json();
+    if (data.success) {
+      loadInfluencers();
+    }
+  } catch(e) { console.error('Quick log failed:', e); }
+}
+
+async function openInfluencerLogModal(influencerId) {
+  // Fetch history first
+  let history = [];
+  try {
+    const res = await fetch(`/api/command/influencers/${influencerId}/outreach`);
+    const data = await res.json();
+    history = data.history || [];
+  } catch(e) { console.warn('Failed to load history:', e); }
+
+  const statuses = Object.keys(STATUS_LABELS);
+  const statusOptions = statuses.map(s => `<option value="${s}">${STATUS_LABELS[s]}</option>`).join('');
+
+  const historyHtml = history.length ? history.slice(0, 3).map(h => `
+    <div style="padding:8px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${STATUS_COLORS[h.status] || '#555'};">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;font-weight:600;color:${STATUS_COLORS[h.status] || '#555'};">${STATUS_LABELS[h.status] || h.status}</span>
+        <span style="font-size:11px;color:#666;">${new Date(h.created_at).toLocaleDateString()}</span>
+      </div>
+      ${h.body ? `<div style="font-size:11px;color:#888;margin-top:4px;white-space:pre-wrap;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${safeHtml(h.body)}</div>` : ''}
+    </div>
+  `).join('') + (history.length > 3 ? `<div style="font-size:11px;color:#666;text-align:center;margin-top:4px;">+${history.length - 3} more</div>` : '') : '<div style="font-size:12px;color:#666;padding:8px;">No outreach history yet.</div>';
+
+  const modal = document.createElement('div');
+  modal.id = 'inf-log-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:2000;display:flex;align-items:center;justify-content:center;';
+  modal.innerHTML = `
+    <div style="background:#1a1a2e;border:1px solid #2a2a4e;border-radius:12px;padding:20px;width:90%;max-width:480px;max-height:80vh;overflow:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="margin:0;font-size:16px;">Log Outreach</h3>
+        <button onclick="document.getElementById('inf-log-modal').remove()" style="background:none;border:none;color:#888;font-size:20px;cursor:pointer;">&times;</button>
+      </div>
+      <form id="inf-log-form">
+        <input type="hidden" name="influencer_id" value="${influencerId}">
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Status</label>
+          <select name="status" style="width:100%;padding:8px;background:#0d1117;border:1px solid #2a2a4e;border-radius:6px;color:#fff;font-size:13px;">
+            ${statusOptions}
+          </select>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Channel</label>
+          <select name="channel" style="width:100%;padding:8px;background:#0d1117;border:1px solid #2a2a4e;border-radius:6px;color:#fff;font-size:13px;">
+            <option value="email">Email</option>
+            <option value="dm">DM</option>
+            <option value="comment">Comment</option>
+          </select>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Subject</label>
+          <input type="text" name="subject" style="width:100%;padding:8px;background:#0d1117;border:1px solid #2a2a4e;border-radius:6px;color:#fff;font-size:13px;" placeholder="Optional">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Body / Draft</label>
+          <textarea name="body" rows="3" style="width:100%;padding:8px;background:#0d1117;border:1px solid #2a2a4e;border-radius:6px;color:#fff;font-size:13px;resize:vertical;" placeholder="Optional"></textarea>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Note</label>
+          <input type="text" name="outcome_note" style="width:100%;padding:8px;background:#0d1117;border:1px solid #2a2a4e;border-radius:6px;color:#fff;font-size:13px;" placeholder="Optional note">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+          <div>
+            <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Sent At</label>
+            <input type="datetime-local" name="sent_at" style="width:100%;padding:8px;background:#0d1117;border:1px solid #2a2a4e;border-radius:6px;color:#fff;font-size:12px;">
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Follow Up</label>
+            <input type="date" name="follow_up_at" style="width:100%;padding:8px;background:#0d1117;border:1px solid #2a2a4e;border-radius:6px;color:#fff;font-size:12px;">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button type="button" onclick="document.getElementById('inf-log-modal').remove()" style="padding:8px 16px;background:#2a2a4e;border:none;border-radius:6px;color:#fff;font-size:13px;cursor:pointer;">Cancel</button>
+          <button type="submit" style="padding:8px 16px;background:#00c8be;border:none;border-radius:6px;color:#000;font-size:13px;font-weight:600;cursor:pointer;">Save</button>
+        </div>
+      </form>
+      <div style="margin-top:16px;border-top:1px solid #2a2a4e;padding-top:12px;">
+        <div style="font-size:12px;font-weight:600;color:#888;margin-bottom:8px;">History</div>
+        ${historyHtml}
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Submit handler
+  modal.querySelector('#inf-log-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const body = {};
+    fd.forEach((v, k) => { if (v) body[k] = v; });
+    body.status = body.status || 'drafted';
+    if (body.sent_at) body.sent_at = new Date(body.sent_at).toISOString();
+    if (body.follow_up_at) body.follow_up_at = body.follow_up_at;
+
+    try {
+      const res = await fetch(`/api/command/influencers/${influencerId}/outreach`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (data.success) {
+        modal.remove();
+        loadInfluencers();
+      }
+    } catch(err) { console.error('Log failed:', err); }
+  });
+}
+
+// ── Updated loadInfluencers with Outreach Tracking ──────────────────────────
 async function loadInfluencers() {
   const icp = document.getElementById('inf-icp')?.value || '';
   const platform = document.getElementById('inf-platform')?.value || '';
@@ -3304,7 +3463,6 @@ async function loadInfluencers() {
   listEl.innerHTML = '<div class="empty-state">Loading...</div>';
   try {
     let url = `/api/command/influencers?limit=500`;
-    const includeInactive = document.getElementById('inf-include-inactive')?.checked;
     if (!icp && !includeInactive) url += `&active_only=true`;
     if (icp) url += `&icp_target=${encodeURIComponent(icp)}`;
     if (platform) url += `&platform=${encodeURIComponent(platform)}`;
@@ -3316,22 +3474,45 @@ async function loadInfluencers() {
     if (countEl) countEl.textContent = `${influencers.length} influencer${influencers.length !== 1 ? 's' : ''}`;
     if (budgetEl && budget) budgetEl.textContent = `EnsembleData today: ${budget.units_used}/${budget.total_daily} units used`;
     if (!influencers.length) { listEl.innerHTML = '<div class="empty-state">No influencers found.</div>'; return; }
-    listEl.innerHTML = influencers.map(p => `
-      <div style="background:#1a1a2e;border:1px solid #2a2a4e;border-radius:8px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
-        <div style="flex:1;">
-          <div style="font-weight:600;font-size:14px;">${safeHtml(p.handle)} <span style="color:#888;font-size:12px;">@${safeHtml(p.platform_primary)}</span></div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">ICP: ${p.icp_target||'?'} &middot; ${(p.followers||0).toLocaleString()} followers</div>
-          ${p.email ? `<div style="font-size:12px;color:#00c8be;margin-top:2px;">&#9993; ${safeHtml(p.email)} (${p.email_source||'?'})</div>` : '<div style="font-size:12px;color:#555;margin-top:2px;">No email</div>'}
+    listEl.innerHTML = influencers.map(p => {
+      const statusBadge = p.last_outreach_status ? getStatusBadge(p.last_outreach_status) : '';
+      const lastTouch = p.last_outreach_at ? new Date(p.last_outreach_at).toLocaleDateString() : '';
+      return `
+      <div style="background:#1a1a2e;border:1px solid #2a2a4e;border-radius:8px;padding:12px;margin-bottom:8px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span style="font-weight:600;font-size:14px;">${safeHtml(p.handle)}</span>
+              <span style="color:#888;font-size:12px;">@${safeHtml(p.platform_primary)}</span>
+              ${statusBadge}
+              ${lastTouch ? `<span style="font-size:11px;color:#666;">${lastTouch}</span>` : ''}
+            </div>
+            <div style="font-size:12px;color:#888;margin-top:4px;">ICP: ${p.icp_target||'?'} &middot; ${(p.followers||0).toLocaleString()} followers &middot; ${p.engagement_rate||'-'}% engagement</div>
+            ${p.email ? `<div style="font-size:12px;color:#00c8be;margin-top:2px;">&#9993; ${safeHtml(p.email)} (${p.email_source||'?'})</div>` : '<div style="font-size:12px;color:#555;margin-top:2px;">No email</div>'}
+          </div>
+          <div style="text-align:center;min-width:48px;flex-shrink:0;">
+            <div style="font-size:20px;font-weight:700;color:${p.lead_tier==='tier_1'?'#00c8be':p.lead_tier==='tier_2'?'#f5a623':'#555'}">${p.lead_score||'-'}</div>
+            <div style="font-size:10px;color:#666;">${p.lead_tier||'unscored'}</div>
+          </div>
+          ${p.profile_url ? `<a href="${safeHtml(p.profile_url)}" target="_blank" style="color:#888;font-size:12px;flex-shrink:0;">&#8599;</a>` : ''}
         </div>
-        <div style="text-align:center;min-width:48px;">
-          <div style="font-size:20px;font-weight:700;color:${p.lead_tier==='tier_1'?'#00c8be':p.lead_tier==='tier_2'?'#f5a623':'#555'}">${p.lead_score||'-'}</div>
-          <div style="font-size:10px;color:#666;">${p.lead_tier||'unscored'}</div>
+        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+          <button onclick="openInfluencerLogModal(${p.id})" style="padding:4px 10px;background:#2a2a4e;border:none;border-radius:4px;color:#fff;font-size:11px;cursor:pointer;">Log</button>
+          <button onclick="quickLogInfluencer(${p.id},'sent')" style="padding:4px 10px;background:#3b82f622;border:1px solid #3b82f644;border-radius:4px;color:#3b82f6;font-size:11px;cursor:pointer;">Mark Sent</button>
+          <button onclick="quickLogInfluencer(${p.id},'replied')" style="padding:4px 10px;background:#00c8be22;border:1px solid #00c8be44;border-radius:4px;color:#00c8be;font-size:11px;cursor:pointer;">Replied</button>
+          <button onclick="quickLogInfluencer(${p.id},'ghosted')" style="padding:4px 10px;background:#7f1d1d22;border:1px solid #7f1d1d44;border-radius:4px;color:#7f1d1d;font-size:11px;cursor:pointer;">Ghosted</button>
+          <button onclick="quickLogInfluencer(${p.id},'declined')" style="padding:4px 10px;background:#ef444422;border:1px solid #ef444444;border-radius:4px;color:#ef4444;font-size:11px;cursor:pointer;">Declined</button>
         </div>
-        ${p.profile_url ? `<a href="${safeHtml(p.profile_url)}" target="_blank" style="color:#888;font-size:12px;">&#8599;</a>` : ''}
-      </div>`).join('');
+      </div>`;
+    }).join('');
   } catch(e) { listEl.innerHTML = `<div class="empty-state">Error: ${safeHtml(e.message)}</div>`; }
 }
 
+// Expose to window
+window.getStatusBadge = getStatusBadge;
+window.quickLogInfluencer = quickLogInfluencer;
+window.openInfluencerLogModal = openInfluencerLogModal;
+window.loadInfluencers = loadInfluencers;
 async function loadInfluencerConfig() {
   try {
     const res = await fetch('/api/command/influencers/config');
