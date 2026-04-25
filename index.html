@@ -829,7 +829,7 @@
       <div class="diff-card glass reveal-child"><h3>Not a CRM</h3><p>We work with your existing CRM, Salesforce, HubSpot, Wealthbox, Bullhorn, whatever you use. We add the intelligence layer they're missing.</p></div>
     <div class="diff-card glass reveal-child">
       <h3>Not a generic AMC playbook.</h3>
-      <p>Most AI tooling is built for speed at the cost of nuance — fine for transactional work, disastrous when every client is a long arc of context and trust. Your AMC has to remember more, not just move faster.</p>
+      <p>Most AI tooling is built for speed at the cost of nuance. Fine for transactional work, disastrous when every client is a long arc of context and trust. Your AMC has to remember more, not just move faster.</p>
     </div>
   </div>
 </section>
@@ -958,7 +958,7 @@
             <option value="the-table">The Table</option>
             <option value="relationship-intelligence">Relationship Intelligence</option>
             <option value="audit">AI Audit</option>
-            <option value="not-sure">Not Sure Yet — Let's Talk</option>
+            <option value="not-sure">Not Sure Yet -- Let's Talk</option>
           </select>
         </div>
       </div>
@@ -1288,12 +1288,12 @@
           consultationForm.querySelector('.form-submit').style.display = 'none';
           document.getElementById('contactSuccess').classList.add('visible');
         } else {
-          btn.textContent = 'Something went wrong — try again';
+          btn.textContent = 'Something went wrong -- try again';
           btn.disabled = false;
           setTimeout(() => { btn.textContent = originalText; }, 3000);
         }
       } catch (err) {
-        btn.textContent = 'Connection error — try again';
+        btn.textContent = 'Connection error -- try again';
         btn.disabled = false;
         setTimeout(() => { btn.textContent = originalText; }, 3000);
       }
