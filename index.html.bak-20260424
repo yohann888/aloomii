@@ -648,11 +648,15 @@
 
 <!-- HERO -->
 <section class="hero" style="animation: heroFadeIn 1s ease forwards;">
-  <h1>Become an Agentic Micro Company.</h1>
-  <p class="sub">Aloomii helps relationship-driven businesses operate with tiny teams, a company brain, agents doing the work, and humans farming the last 20% — context, judgment, taste — that AI can’t.</p>
+  <h1>The last 20% still needs a human.</h1>
+  <p class="sub">AI made it easy to build products. It did not make it easy to be heard, trusted, or remembered.
+
+We close that gap. We build the distribution infrastructure that actually reflects your taste and judgment. The right podcast guests. The right tone of voice. The right signals at the right time. All of it compounds while you focus on the product.
+
+A million products are about to launch. Most will be invisible. Yours doesn’t have to be.</p>
   <div class="hero-ctas">
-    <a href="#contact" class="btn-primary">Start a Conversation</a>
-    <a href="https://aloomii.com/gtm-audit/" class="btn-secondary">Take the 2-minute GTM Audit</a>
+    <a href="#offerings" class="btn-primary">See Our Services</a>
+    <a href="https://aloomii.com/gtm-audit/" class="btn-secondary">Take the 2-minute GTM audit</a>
   </div>
 </section>
 
@@ -669,43 +673,12 @@
 <!-- PROBLEM -->
 <section class="problem reveal">
   <div class="problem-inner glass" style="padding: 56px 48px; max-width: 900px;">
-    <h2>The 2,000-year-old company is ending.</h2>
-    <p>The hierarchy you inherited was designed for a world constrained by human memory. Digital minds removed that constraint. The companies winning right now run with tiny teams, shared context, and agent fleets doing the operational work. They&#8217;re called Agentic Micro Companies. Most of the tooling being built for them assumes your business runs on transactions, not relationships. Yours doesn&#8217;t. That&#8217;s what we build for.</p>
+    <h2>Your CRM records contacts.<br>It doesn't protect relationships.</h2>
+    <p>Every relationship-dependent business has the same problem: hundreds of client relationships, no system for knowing which ones need attention right now. Signals get missed. Revenue walks out the door.</p>
     <div class="stat-row reveal-stagger">
       <div class="stat-card glass reveal-child"><div class="num">32%</div><div class="desc">annual client churn at small service businesses</div></div>
       <div class="stat-card glass reveal-child"><div class="num">20x</div><div class="desc">more expensive to acquire a new client than to keep one</div></div>
       <div class="stat-card glass reveal-child"><div class="num">10-15%</div><div class="desc">of client relationships are at elevated risk at any given time</div></div>
-
-    <p style="margin-top:32px;font-size:15px;color:rgba(255,255,255,0.75);text-align:center;max-width:700px;margin-left:auto;margin-right:auto;">When relationships are your business, every missed signal is revenue walking out the door. AMCs solve this &#8212; if they&#8217;re built for how you actually operate.</p>
-  </div>
-</section>
-
-<!-- FOUR PILLARS -->
-<section class="pillars reveal" style="padding: 64px 24px;">
-  <div style="max-width:1100px;margin:0 auto;">
-    <div class="section-label reveal">How an Aloomii-built AMC runs</div>
-    <h2 class="section-heading reveal">Four pillars. One operating system.</h2>
-    <div class="offering-grid" style="margin-top:40px;">
-      <div class="offering-card founders glass reveal-scale" style="padding:32px;">
-        <div style="font-size:28px;margin-bottom:12px;">&#128100;</div>
-        <h3 style="font-size:20px;margin-bottom:10px;">Tiny teams.</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Generalist player-coaches, not org charts. Every person on your team operates like a founder.</p>
-      </div>
-      <div class="offering-card founders glass reveal-scale" style="padding:32px;">
-        <div style="font-size:28px;margin-bottom:12px;">&#129504;</div>
-        <h3 style="font-size:20px;margin-bottom:10px;">Company Brain.</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">One source of context &#8212; clients, conversations, history, commitments &#8212; that every agent and every human draws from.</p>
-      </div>
-      <div class="offering-card founders glass reveal-scale" style="padding:32px;">
-        <div style="font-size:28px;margin-bottom:12px;">&#9881;</div>
-        <h3 style="font-size:20px;margin-bottom:10px;">Agents doing the work.</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Fleets of specialized agents handling the majority of operational work, governed by your rules and your voice.</p>
-      </div>
-      <div class="offering-card founders glass reveal-scale" style="padding:32px;">
-        <div style="font-size:28px;margin-bottom:12px;">&#127793;</div>
-        <h3 style="font-size:20px;margin-bottom:10px;">Humans farming context.</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Your team stops being the bottleneck. They tend the brain, add what only humans can sense, and let the business grow.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -713,54 +686,15 @@
 <!-- OFFERINGS -->
 <section class="offerings" id="offerings">
   <div class="offerings-inner">
-    <div class="section-label reveal">Four stages</div>
-    <h2 class="section-heading reveal">From diagnosis to distribution.</h2>
-    <p class="section-sub reveal">Start with The Audit. Most clients add Studio next, then graduate to The Table or Relationship Intelligence depending on whether they're building pipeline or protecting it.</p>
+    <div class="section-label reveal">Two ways we help</div>
+    <h2 class="section-heading reveal">Choose where you need intelligence.</h2>
+    <p class="section-sub reveal">Whether you're a founder building pipeline or a business protecting existing relationships, the core is the same: know who to talk to, when, and why.</p>
     <div class="offering-grid">
-
-        <div class="card-tag">Stage 1 &#8212; Diagnose</div>
-        <h3>See what your AMC could look like.</h3>
-        <div class="price">$2,500 one-time</div>
-        <p>A 60-minute process mapping call where Yohann walks through your daily operations and identifies the 3-5 workflows burning the most time. Then a written report within 5 business days: what to automate, what model routing to use, what it will cost to run monthly, and what order to build it in. Not generic recommendations, specific to your stack, your team size, your budget.</p>
-        <ul class="features">
-          <li>60-minute process mapping call with Yohann</li>
-          <li>Identify the 3-5 workflows burning the most time</li>
-          <li>Written automation report delivered in 5 business days</li>
-          <li>Recommended model routing by workflow</li>
-          <li>Monthly run-cost estimate before you build</li>
-          <li>Clear build order based on ROI and complexity</li>
-        </ul>
-        <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.6);border-left:2px solid var(--accent);padding-left:12px;margin-bottom:20px;">A one-time diagnosis for founders ready to see what their business could become.</p>
-        <div class="card-cta-row">
-          <a href="#contact" class="card-cta">Start a Conversation</a>
-          <a href="#contact" class="card-cta card-cta-outline">Book an Audit</a>
-        
-
-        <div class="card-tag">Stage 2 &#8212; Voice</div>
-        <h3>Your voice, amplified.</h3>
-        <div class="price">Starts at $399/mo</div>
-        <p>Show up. We do the rest. Studio comes in two tiers depending on how much show you want to build.</p>
-        <ul class="features">
-          <li>Pre-session research and strategic question development</li>
-          <li>One 45-minute directed recording session led by Yohann</li>
-          <li>8 to 10 produced short-form videos every month</li>
-          <li>Thought leadership clips, explainers, market commentary, client-facing takes</li>
-          <li>Editing, captions, thumbnails, and platform formatting</li>
-          <li>You post on your own channels, on your own schedule</li>
-        </ul>
-        <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.6);border-left:2px solid var(--accent);padding-left:12px;margin-bottom:20px;">Pale Blue Nexus is the proof. Studio is how you get there.</p>
-        <div class="card-cta-row">
-          <a href="#contact" class="card-cta">Start a Conversation</a>
-          <a href="/studio/" class="card-cta card-cta-outline">Learn More</a>
-        
-
-        <div class="card-tag">Stage 3 &#8212; Distribution</div>
-        <h3>Get your AMC into the market.</h3>
-        <div class="price">Two pricing models</div>
-        <p>Founder-led GTM that runs while you build. We keep your voice in market, build your podcast strategy, and deliver 12 qualified conversations in 90 days. You spend 1 hour a week. We handle the rest.
-
-        <strong style="color:var(--accent)">Model A &#8212; Fixed:</strong> $3,300/mo, 90-day engagement. Standard deliverables with a fixed end date.
-        <br><strong style="color:var(--accent)">Model B &#8212; Partnership:</strong> $1,800/mo + 12.5% of pipeline revenue, ongoing. Same deliverables, aligned incentives. Revenue share applies only to deals sourced from our pipeline. Best fit for founders closing 25%+ of qualified opportunities.</p>
+      <div class="offering-card founders glass reveal-scale">
+        <div class="card-tag">For Founders</div>
+        <h3>The Table</h3>
+        <div class="price">$3,300/month &middot; 90-day engagement</div>
+        <p>Founder-led GTM that runs while you build. We keep your voice in market, build your podcast strategy, and deliver 12 qualified conversations in 90 days. You spend 1 hour a week. We handle the rest.</p>
         <ul class="features">
           <li>2 LinkedIn posts per week in your voice</li>
           <li>Podcast-powered GTM: guest strategy, booking, and every episode repurposed into 8-10 content pieces</li>
@@ -773,24 +707,137 @@
         <div class="card-cta-row">
           <a href="#contact" class="card-cta">Start a Conversation</a>
           <a href="https://aloomii.com/table" class="card-cta card-cta-outline">More Information</a>
-        
-
-        <div class="card-tag">Stage 4 &#8212; The Brain</div>
-        <h3>Install your Company Brain.</h3>
+        </div>
+      </div>
+      <div class="offering-card founders glass reveal-scale">
+        <div class="card-tag">For Founders Who Want Aligned Incentives</div>
+        <h3>The Table: Partnership</h3>
+        <div class="price">$1,800/month + 12.5% of pipeline revenue &middot; Ongoing engagement</div>
+        <p>Everything in The Table, plus aligned incentives. We earn when you earn. Revenue share applies only to deals sourced from our pipeline. No 90-day end date, this runs as long as we are both winning.</p>
+        <ul class="features">
+          <li>Everything in The Table</li>
+          <li>Same deliverables and same human review</li>
+          <li>Same 1 hour a week from you</li>
+          <li>Revenue share applies only to pipeline we source</li>
+          <li>Ongoing engagement instead of a fixed 90-day end date</li>
+          <li>Built for founders who want a growth partner, not a service provider</li>
+        </ul>
+        <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.6);border-left:2px solid var(--accent);padding-left:12px;margin-bottom:20px;">Best fit for founders closing 25%+ of qualified opportunities who want us thinking like partners, not vendors.</p>
+        <div class="card-cta-row">
+          <a href="#contact" class="card-cta">Start a Conversation</a>
+          <a href="https://aloomii.com/table" class="card-cta card-cta-outline">More Information</a>
+        </div>
+      </div>
+      <div class="offering-card founders glass reveal-scale">
+        <div class="card-tag">For Founders Building Through Podcasting</div>
+        <h3>Podcast Infrastructure</h3>
+        <div class="price">$1,000/month &middot; 6-month commitment</div>
+        <p>You show up and talk. We do the rest. We shape the show vision, build the brand, handle production, book the guests, and turn every recording into content that keeps working after the conversation ends.</p>
+        <ul class="features">
+          <li>Show vision, positioning, description, and distribution strategy</li>
+          <li>High-quality, tasteful branding with cover art and visual identity</li>
+          <li>Audio and video intro and outro production</li>
+          <li>Full podcast launch and platform setup</li>
+          <li>2-4 produced episodes per month</li>
+          <li>4 qualified guest bookings per month</li>
+          <li>Pre-interview research brief for every confirmed guest</li>
+          <li>20+ content pieces per episode</li>
+          <li>Show notes and blog post per episode</li>
+          <li>Publishing to all major platforms within 48-72 hours</li>
+          <li>Monthly performance report</li>
+        </ul>
+        <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.6);border-left:2px solid var(--accent);padding-left:12px;margin-bottom:20px;">We guarantee at least 2 produced episodes and 4 qualified guest bookings every month. Miss either, your next month is free.</p>
+        <div class="card-cta-row">
+          <a href="#contact" class="card-cta">Start a Conversation</a>
+          <a href="/studio/" class="card-cta card-cta-outline">Learn More</a>
+        </div>
+      </div>
+      <div class="offering-card founders glass reveal-scale">
+        <div class="card-tag">For Founders Building Through Video</div>
+        <h3>Showreel</h3>
+        <div class="price">$399/month</div>
+        <p>You show up for one directed recording session. Yohann leads the conversation using questions and prompts we research and develop for your market, your story, and your positioning. We produce the clips. You handle the posting.</p>
+        <ul class="features">
+          <li>Pre-session research and strategic question development</li>
+          <li>One 45-minute directed recording session led by Yohann</li>
+          <li>8 to 10 produced short-form videos every month</li>
+          <li>Thought leadership clips, explainers, market commentary, and client-facing takes</li>
+          <li>Editing, captions, thumbnails, and platform formatting</li>
+          <li>You post on your own channels, on your own schedule</li>
+        </ul>
+        <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.6);border-left:2px solid var(--accent);padding-left:12px;margin-bottom:20px;">8 publish-ready videos every month from one 45-minute session. If we miss the deliverable, we fix it.</p>
+        <div class="card-cta-row">
+          <a href="#contact" class="card-cta">Start a Conversation</a>
+          <a href="/studio/" class="card-cta card-cta-outline">Learn More</a>
+        </div>
+      </div>
+      <div class="offering-card founders glass reveal-scale">
+        <div class="card-tag">For Founders Who Need Operations Clarity</div>
+        <h3>AI Audit</h3>
+        <div class="price">$2,500 one-time</div>
+        <p>A 60-minute process mapping call where Yohann walks through your daily operations and identifies the 3-5 workflows burning the most time. Then a written report within 5 business days: what to automate, what model routing to use, what it will cost to run monthly, and what order to build it in. Not generic recommendations, specific to your stack, your team size, your budget.</p>
+        <ul class="features">
+          <li>60-minute process mapping call with Yohann</li>
+          <li>Identify the 3-5 workflows burning the most time</li>
+          <li>Written automation report delivered in 5 business days</li>
+          <li>Recommended model routing by workflow</li>
+          <li>Monthly run-cost estimate before you build</li>
+          <li>Clear build order based on ROI and complexity</li>
+        </ul>
+        <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,0.6);border-left:2px solid var(--accent);padding-left:12px;margin-bottom:20px;">A one-time AI Audit for founders who need clarity before they commit to a bigger build.</p>
+        <div class="card-cta-row">
+          <a href="#contact" class="card-cta">Start a Conversation</a>
+          <a href="#contact" class="card-cta card-cta-outline">Book an Audit</a>
+        </div>
+      </div>
+      <div class="offering-card businesses glass reveal-scale">
+        <div class="card-tag">For Businesses With More Than 100 Accounts</div>
+        <h3>Relationship Intelligence</h3>
         <div class="price">$2,000-8,000/month &middot; Based on CRM contact size</div>
-        <p>The Company Brain is the foundation every AMC runs on &#8212; a single source of context for clients, conversations, history, and commitments that every agent and every human can draw from. We install it on top of your existing CRM (Salesforce, Attio, HubSpot, Wealthbox, Bullhorn) and run it for you. Your team stops chasing signals. The brain catches them.</p>
+        <p>We monitor the relationships that drive your revenue and tell your team exactly who needs attention, when, and why. Works on top of your existing CRM.</p>
         <ul class="features">
           <li>Weekly Relationship Health Brief</li>
           <li>Reconnection prompts: who to call and what to say</li>
           <li>Relationship signals your team doesn't have time to catch</li>
-          <li>Monthly relationship report with red/amber/green flagging. Dashboard or inbox, your call.</li>
+          <li>Monthly relationship report. Top issues flagged red, amber, green. Dashboard or inbox, your call.</li>
           <li>Proactively drafted client communications</li>
           <li>Always-on relationship hygiene: your network stays current so your outreach lands with the right person</li>
-          <li>Works on top of your existing CRM</li>
         </ul>
         <a href="#contact" class="card-cta">Start a Conversation</a>
-      
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- STUDIO PROMO BANNER -->
+<section class="studio-promo reveal" style="padding: 0 24px 64px;">
+  <a href="/studio/" style="text-decoration:none;display:block;">
+    <div class="studio-promo-inner glass" style="max-width:900px;margin:0 auto;padding:40px 48px;display:flex;align-items:center;gap:40px;border:1px solid rgba(0,200,190,0.25);border-radius:16px;transition:border-color 0.2s;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,158,150,0.07) 0%,transparent 60%);pointer-events:none;"></div>
+      <div style="flex-shrink:0;width:64px;height:64px;background:rgba(0,158,150,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;">🎙</div>
+      <div style="flex:1;">
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px;">Podcast + Video Production</div>
+        <h3 style="font-size:22px;font-weight:700;color:#fff;margin:0 0 8px;line-height:1.3;">Pale Blue Nexus is the proof. Studio is how you get there.</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.6);margin:0;">Production, branding, guest strategy, and content systems for founders who want a show that builds pipeline. See what we built for ourselves first.</p>
+      </div>
+      <div style="flex-shrink:0;display:flex;align-items:center;gap:6px;color:var(--accent);font-weight:600;font-size:14px;white-space:nowrap;">See Studio <span style="font-size:18px;">&#8594;</span></div>
+    </div>
+  </a>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works reveal" id="how">
+  <div class="glass" style="padding: 56px 48px;">
+    <div class="section-label">How it works</div>
+    <h2 class="section-heading">AI scans. Humans judge. You act.</h2>
+    <div class="steps reveal-stagger">
+      <div class="step reveal-child"><div class="step-num">01</div><div class="step-content"><h3>Right place, right time, right relationship</h3><p>Your CRM, your socials (LinkedIn/X), your future clients &amp; partners. We connect to the signals that matter, not just what's in your database, but what's happening around your relationships in real time.</p></div></div>
+      <div class="step reveal-child"><div class="step-num">02</div><div class="step-content"><h3>AI detects what humans miss</h3><p>Our agents monitor hundreds of touchpoints simultaneously: client activity, competitor moves, life events, job changes, market shifts, engagement signals.</p></div></div>
+      <div class="step reveal-child"><div class="step-num">03</div><div class="step-content"><h3>Humans add the last 20%</h3><p>AI gets you 80% of the way there. The last 20%, tone, timing, judgment, the sense that something is off or an opportunity is opening, that's where our team steps in.</p></div></div>
+      <div class="step reveal-child"><div class="step-num">04</div><div class="step-content"><h3>You get a clear action list</h3><p>Call this person. For this reason. Say this. Send this message. Show up to this event.</p></div></div>
+    </div>
+  </div>
+</section>
 
 <!-- PROOF POINT -->
 <section class="proof-point reveal">
@@ -799,22 +846,7 @@
       <div class="eyebrow">Real Story</div>
       <h3>17 years from 5 emails.</h3>
       <p>Jim Rogers wasn't a lead. He was a name in a CRM that hadn't been touched in months. Our system flagged a signal, drafted the outreach, and our team refined the timing. Five emails later, he became a 17-year client relationship.</p>
-      <span class="proof-highlight">That's what context farming looks like when you play the long game.</span>
-    </div>
-  </div>
-</section>
-
-
-<!-- HOW IT WORKS -->
-<section class="how-it-works reveal" id="how">
-  <div class="glass" style="padding: 56px 48px;">
-    <div class="section-label">What it feels like to work with us</div>
-    <h2 style="text-align:center;font-size:28px;font-weight:700;margin-bottom:8px;color:#fff;">AI scans. Humans judge. You act.</h2>
-    <div class="steps reveal-stagger">
-      <div class="step reveal-child"><div class="step-num">01</div><div class="step-content"><h3>Right place, right time, right relationship</h3><p>Your CRM, your socials (LinkedIn/X), your future clients &amp; partners. We connect to the signals that matter, not just what's in your database, but what's happening around your relationships in real time.</p></div></div>
-      <div class="step reveal-child"><div class="step-num">02</div><div class="step-content"><h3>AI detects what humans miss</h3><p>Our agents monitor hundreds of touchpoints simultaneously: client activity, competitor moves, life events, job changes, market shifts, engagement signals.</p></div></div>
-      <div class="step reveal-child"><div class="step-num">03</div><div class="step-content"><h3>Humans add the last 20%</h3><p>AI gets you 80% of the way there. The last 20%, tone, timing, judgment, the sense that something is off or an opportunity is opening, that's where our team steps in.</p></div></div>
-      <div class="step reveal-child"><div class="step-num">04</div><div class="step-content"><h3>You get a clear action list</h3><p>Call this person. For this reason. Say this. Send this message. Show up to this event.</p></div></div>
+      <span class="proof-highlight">That's what relationship intelligence looks like.</span>
     </div>
   </div>
 </section>
@@ -827,9 +859,6 @@
       <div class="diff-card glass reveal-child"><h3>Not a traditional agency</h3><p>We don't spend three months onboarding. We don't send reports full of impressions. We track pipeline, relationships, and conversations that matter.</p></div>
       <div class="diff-card glass reveal-child"><h3>Not an AI tool you manage</h3><p>We don't hand you a login and wish you luck. Most AI tools get abandoned in 60 days. We handle the review, the tone, the decisions.</p></div>
       <div class="diff-card glass reveal-child"><h3>Not a CRM</h3><p>We work with your existing CRM, Salesforce, HubSpot, Wealthbox, Bullhorn, whatever you use. We add the intelligence layer they're missing.</p></div>
-    <div class="diff-card glass reveal-child">
-      <h3>Not a generic AMC playbook.</h3>
-      <p>Most AI tooling is built for speed at the cost of nuance — fine for transactional work, disastrous when every client is a long arc of context and trust. Your AMC has to remember more, not just move faster.</p>
     </div>
   </div>
 </section>
@@ -955,9 +984,9 @@
           <label for="service">What Are You Looking For?</label>
           <select id="service" name="service">
             <option value="" disabled selected>Select a service</option>
-            <option value="the-table">The Table</option>
+            <option value="the-table">The Table (Founder-Focused GTM)</option>
             <option value="relationship-intelligence">Relationship Intelligence</option>
-            <option value="audit">AI Audit</option>
+            <option value="both">Both</option>
             <option value="not-sure">Not Sure Yet — Let's Talk</option>
           </select>
         </div>
@@ -997,7 +1026,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-logo"><img src="images/logos/Aloomii - final.png" alt="Aloomii"></div>
-      <p>Relationship intelligence for businesses becoming Agentic Micro Companies. AI scans. Humans judge. You act.</p>
+      <p>Relationship intelligence for businesses that run on trust. AI scans. Humans judge. You act.</p>
     </div>
     <div class="footer-col"><h4>Services</h4><a href="https://aloomii.com/table">The Table</a><a href="https://aloomii.com/studio">Studio</a><a href="#offerings">Relationship Intelligence</a></div>
     <div class="footer-col"><h4>Company</h4><a href="#team">About</a><a href="https://aloomii.com/blog/">Blog</a><a href="#contact">Contact</a></div>
