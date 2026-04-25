@@ -1119,6 +1119,7 @@ function renderHeatmap(contacts) {
       <td>
         <button onclick="editContact('${contact.id}')" class="btn-small">Edit</button>
         <button onclick="quickOutreach('${contact.id}')" class="btn-small primary">Outreach</button>
+        <button onclick="addToSprint('${contact.id}')" class="btn-small" style="background:#1e3a5f;border-color:#3b82f6;color:#93c5fd;">+ Sprint</button>
       </td>
     `;
     tbody.appendChild(row);
@@ -1415,7 +1416,7 @@ function renderOutreachQueue(items) {
       <div class="queue-actions">
         <button onclick="snoozeQueueItem('${item.id}', 7)" class="btn-snooze">Snooze 7d</button>
         <button onclick="skipQueueItem('${item.id}')" class="btn-skip">Skip</button>
-        ${item.status === 'blocked' ? '' : `<button onclick="executeQueueItem('${item.id}')" class="btn-primary">Send Now</button>`}
+        <button onclick="addToSprintFromQueue('${item.id}')" class="btn-small">+ Sprint</button>
       </div>
     `;
     container.appendChild(card);
@@ -1970,6 +1971,7 @@ function createCrmContent() {
       <button onclick="switchCrmTab(0)" class="tab-btn active">Heatmap</button>
       <button onclick="switchCrmTab(1)" class="tab-btn">Queue</button>
       <button onclick="switchCrmTab(2)" class="tab-btn">Drafts</button>
+      <button onclick="switchCrmTab(3)" class="tab-btn">Sprint Shortlist</button>
     </div>
     <div id="crm-heatmap" class="crm-panel active">
       <table class="crm-table">
@@ -1987,6 +1989,7 @@ function createCrmContent() {
       </table>
     </div>
     <div id="outreach-queue-container" class="crm-panel"></div>
+    <div id="sprint-shortlist-container" class="crm-panel"></div>
   `;
 }
 
@@ -2429,6 +2432,10 @@ function switchCrmTab(tabIndex) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => {
     b.classList.toggle('active', i === tabIndex);
   });
+  
+  if (tabIndex === 3) {
+    loadSprintShortlist();
+  }
 }
 
 // Update fetchCommandData to call new renderers
@@ -3832,3 +3839,195 @@ window.applyTone = applyTone;
 window.saveDraftTemplate = saveDraftTemplate;
 window.rejectDraft = rejectDraft;
 
+// === SPRINT SHORTLIST FUNCTIONS (added 2026-04-25) ===
+
+let currentSprint = 'week-1-sprint';
+let shortlistData = [];
+
+function addToSprint(contactId) {
+  const sprint = prompt('Sprint name (default: week-1-sprint):') || currentSprint;
+  const notes = prompt('Notes (optional):') || '';
+  
+  fetch('/api/command/outreach/shortlist', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contact_id: contactId, sprint_name: sprint, notes })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      showToast('Added to sprint shortlist', 'success');
+      currentSprint = sprint;
+      loadSprintShortlist();
+    } else {
+      showToast(data.error || 'Failed to add', 'error');
+    }
+  })
+  .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+
+function loadSprintShortlist() {
+  fetch(`/api/command/outreach/shortlist?sprint=${currentSprint}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        shortlistData = data.contacts;
+        renderSprintShortlist(data.contacts);
+      }
+    })
+    .catch(err => console.error('Failed to load shortlist:', err));
+}
+
+function renderSprintShortlist(contacts) {
+  const container = document.getElementById('sprint-shortlist-container');
+  if (!container) return;
+  
+  if (!contacts || contacts.length === 0) {
+    container.innerHTML = '<div class="empty-state">No contacts in sprint shortlist yet. Click "+ Sprint" on a contact to add.</div>';
+    return;
+  }
+  
+  const statusColors = {
+    shortlisted: '#3b82f6',
+    contacted: '#f59e0b',
+    replied: '#10b981',
+    booked: '#22c55e',
+    passed: '#6b7280',
+    nurture: '#8b5cf6'
+  };
+  
+  let html = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;">Sprint Shortlist — ${currentSprint}</h3>
+      <div style="display:flex;gap:8px;">
+        <span style="font-size:12px;color:#888;">${contacts.length} contacts</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      ${['all','shortlisted','contacted','replied','booked','passed','nurture'].map(s => 
+        `<button onclick="filterShortlist('${s}')" class="btn-small ${s === 'all' ? 'primary' : ''}" style="text-transform:capitalize;">${s}</button>`
+      ).join('')}
+    </div>
+  `;
+  
+  contacts.forEach(c => {
+    const draft = c.draft_text ? `<div style="margin-top:8px;padding:8px;background:#111827;border-radius:8px;font-size:12px;line-height:1.5;"
+      onclick="copyToClipboard('${encodeURIComponent(c.draft_text)}')" 
+      style="cursor:pointer;"
+    >📋 ${c.draft_text.substring(0, 120)}${c.draft_text.length > 120 ? '...' : ''}</div>` : '';
+    
+    html += `
+      <div style="border:1px solid #2a2a4a;border-radius:12px;padding:16px;margin-bottom:12px;background:#0f172a;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-weight:600;font-size:15px;">${c.name}</div>
+            <div style="font-size:12px;color:#888;margin-top:2px;">${c.company || 'Unknown'} • T${c.tier || '?'}</div>
+          </div>
+          <span style="font-size:11px;padding:4px 10px;border-radius:12px;background:${statusColors[c.status] || '#3b82f6'}20;color:${statusColors[c.status] || '#3b82f6'};border:1px solid ${statusColors[c.status] || '#3b82f6'}40;"
+            ondblclick="cycleShortlistStatus('${c.shortlist_id}', '${c.status}')"
+            title="Double-click to cycle status"
+          >${c.status}</span>
+        </div>
+        ${c.email ? `<div style="font-size:12px;color:#7dd3fc;margin-top:4px;">✉️ ${c.email}</div>` : ''}
+        ${c.handle ? `<div style="font-size:12px;color:#888;margin-top:2px;">@${c.handle}</div>` : ''}
+        ${c.notes ? `<div style="font-size:11px;color:#666;margin-top:4px;font-style:italic;">${c.notes}</div>` : ''}
+        ${draft}
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+          <button onclick="prepOutreach('${c.contact_id}')" class="btn-small">📝 Prep</button>
+          <button onclick="copyToClipboard('${encodeURIComponent(c.draft_text || '')}')" class="btn-small" ${!c.draft_text ? 'disabled' : ''}>📋 Copy</button>
+          <button onclick="updateShortlistStatus('${c.shortlist_id}', 'contacted')" class="btn-small">✉️ Mark Contacted</button>
+          <button onclick="updateShortlistStatus('${c.shortlist_id}', 'replied')" class="btn-small">💬 Replied</button>
+          <button onclick="updateShortlistStatus('${c.shortlist_id}', 'booked')" class="btn-small" style="background:#166534;border-color:#22c55e;color:#bbf7d0;">📅 Booked</button>
+          <button onclick="updateShortlistStatus('${c.shortlist_id}', 'passed')" class="btn-small" style="background:#374151;border-color:#6b7280;color:#d1d5db;">Skip</button>
+          <button onclick="updateShortlistStatus('${c.shortlist_id}', 'nurture')" class="btn-small" style="background:#4c1d95;border-color:#8b5cf6;color:#ddd6fe;">Nurture</button>
+          <button onclick="removeFromShortlist('${c.shortlist_id}')" class="btn-small" style="background:#7f1d1d;border-color:#ef4444;color:#fca5a5;">Remove</button>
+        </div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+function prepOutreach(contactId) {
+  const channel = prompt('Channel (linkedin_dm, x_dm, email):') || 'linkedin_dm';
+  
+  fetch('/api/command/outreach/prep', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contact_id: contactId, channel })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      alert(`Score: ${data.score.score}/100 (${data.score.priority})\n\nDraft:\n${data.draft.draft}\n\n(Copied to clipboard)`);
+      if (data.draft.draft) {
+        navigator.clipboard.writeText(data.draft.draft).catch(() => {});
+      }
+      loadSprintShortlist();
+    } else {
+      showToast(data.error || 'Prep failed', 'error');
+    }
+  })
+  .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+
+function updateShortlistStatus(shortlistId, status) {
+  fetch(`/api/command/outreach/shortlist/${shortlistId}/status`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      showToast(`Status updated: ${status}`, 'success');
+      loadSprintShortlist();
+    }
+  })
+  .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+
+function cycleShortlistStatus(shortlistId, currentStatus) {
+  const cycle = ['shortlisted', 'contacted', 'replied', 'booked', 'passed', 'nurture'];
+  const nextStatus = cycle[(cycle.indexOf(currentStatus) + 1) % cycle.length];
+  updateShortlistStatus(shortlistId, nextStatus);
+}
+
+function removeFromShortlist(shortlistId) {
+  if (!confirm('Remove from shortlist?')) return;
+  fetch(`/api/command/outreach/shortlist/${shortlistId}`, { method: 'DELETE' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        showToast('Removed', 'success');
+        loadSprintShortlist();
+      }
+    })
+    .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+
+function filterShortlist(status) {
+  if (status === 'all') {
+    renderSprintShortlist(shortlistData);
+  } else {
+    renderSprintShortlist(shortlistData.filter(c => c.status === status));
+  }
+}
+
+function copyToClipboard(text) {
+  const decoded = decodeURIComponent(text);
+  navigator.clipboard.writeText(decoded)
+    .then(() => showToast('Copied to clipboard', 'success'))
+    .catch(() => showToast('Failed to copy', 'error'));
+}
+
+// Expose globals
+window.addToSprint = addToSprint;
+window.loadSprintShortlist = loadSprintShortlist;
+window.updateShortlistStatus = updateShortlistStatus;
+window.cycleShortlistStatus = cycleShortlistStatus;
+window.removeFromShortlist = removeFromShortlist;
+window.filterShortlist = filterShortlist;
+window.prepOutreach = prepOutreach;
+window.copyToClipboard = copyToClipboard;
