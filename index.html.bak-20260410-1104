@@ -630,7 +630,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo"><img src="images/logos/Aloomii - final.png" alt="Aloomii"></a>
+  <a href="#" class="nav-logo"><img src="/images/logos/aloomii-logo.png" alt="Aloomii"></a>
   <ul class="nav-links">
     <li><a href="#offerings">Services</a></li>
     <li><a href="#how">How It Works</a></li>
@@ -664,9 +664,9 @@ A million products are about to launch. Most will be invisible. Yours doesn’t 
 <div class="proof-bar reveal">
   <div class="label">Built by operators from</div>
   <div class="proof-logos">
-    <img src="images/logos/jpmorgan.png" alt="JP Morgan">
-    <img src="images/logos/mto.png" alt="Ontario Government" style="height: 105px !important;">
-    <img src="images/logos/ibm.png" alt="IBM">
+    <img src="/images/logos/jpmorgan.png" alt="JP Morgan">
+    <img src="/images/logos/mto.png" alt="Ontario Government" style="height: 105px !important;">
+    <img src="/images/logos/ibm.png" alt="IBM">
   </div>
 </div>
 
@@ -830,7 +830,7 @@ A million products are about to launch. Most will be invisible. Yours doesn’t 
   <h2 class="section-heading">Operators, not consultants.</h2>
   <div class="team-grid reveal-stagger">
     <div class="team-member glass reveal-child">
-      <img src="images/yohann-calpu.jpg" alt="Yohann Calpu" class="team-member-photo">
+      <img src="/images/yohann-calpu.jpg" alt="Yohann Calpu" class="team-member-photo">
       <div class="team-member-info">
         <h3>Yohann Calpu</h3>
         <div class="role">Co-Founder &middot; Strategy &amp; Judgment</div>
@@ -838,7 +838,7 @@ A million products are about to launch. Most will be invisible. Yours doesn’t 
       </div>
     </div>
     <div class="team-member glass reveal-child">
-      <img src="images/jenny-calpu.jpeg" alt="Jenny Calpu" class="team-member-photo">
+      <img src="/images/jenny-calpu.jpeg" alt="Jenny Calpu" class="team-member-photo">
       <div class="team-member-info">
         <h3>Jenny Calpu</h3>
         <div class="role">Co-Founder &middot; Creative Director</div>
@@ -947,7 +947,7 @@ A million products are about to launch. Most will be invisible. Yours doesn’t 
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="footer-logo"><img src="images/logos/Aloomii - final.png" alt="Aloomii"></div>
+      <div class="footer-logo"><img src="/images/logos/aloomii-logo.png" alt="Aloomii"></div>
       <p>Relationship intelligence for businesses that run on trust. AI scans. Humans judge. You act.</p>
     </div>
     <div class="footer-col"><h4>Services</h4><a href="https://aloomii.com/table">The Table</a><a href="https://aloomii.com/studio">Studio</a><a href="#offerings">Relationship Intelligence</a></div>
