@@ -13,7 +13,7 @@ aloomii/
 ├── INSTRUCTIONS.md          # Deployment & maintenance guide
 └── images/
     └── logos/
-        ├── aloomii-logo.png    # Nav/brand logo
+        ├── brand-logo.png    # Nav/brand logo
         ├── ibm.png                # Past Experience logos (8)
         ├── jpmorgan.png
         ├── maersk.png
