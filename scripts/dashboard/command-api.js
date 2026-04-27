@@ -595,8 +595,8 @@ function registerCommandAPI(app, pool = null) {
                 
                 let status = 'offline';
                 if (job.enabled === false) status = 'disabled';
-                else if (job.state?.lastRunStatus === 'ok' && job.state?.consecutiveErrors === 0) status = 'healthy';
                 else if (job.state?.consecutiveErrors > 0 || job.state?.lastRunStatus === 'error') status = 'attention';
+                else status = 'healthy'; // enabled, no errors = healthy (even if never run yet)
                 
                 return {
                   id: job.id,
@@ -627,6 +627,20 @@ function registerCommandAPI(app, pool = null) {
                   })
                   .slice(0, 50) // show up to 50 agents
               };
+
+              // Load pending cron changes
+              try {
+                const pendingPath = path.join(process.env.HOME, '.openclaw', 'cron', 'pending-changes.json');
+                if (fs.existsSync(pendingPath)) {
+                  const pendingRaw = fs.readFileSync(pendingPath, 'utf8');
+                  const pendingData = JSON.parse(pendingRaw);
+                  fleetData.pending_changes = pendingData.changes || [];
+                } else {
+                  fleetData.pending_changes = [];
+                }
+              } catch (e) {
+                fleetData.pending_changes = [];
+              }
               
               // Real economics from economics_daily table (Bridge C)
               try {
@@ -1947,6 +1961,83 @@ function registerOutreachSprintRoutes(app) {
     try {
       await query(`DELETE FROM outreach_sprint_shortlist WHERE id = $1`, [id]);
       res.json({ success: true, deleted: id });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // ── CRON TOGGLE ENDPOINTS ──────────────────────────────────────────────
+  const CRON_BASE = path.join(process.env.HOME || '', '.openclaw', 'cron');
+  const CRON_JOBS = path.join(CRON_BASE, 'jobs.json');
+  const PENDING_FILE = path.join(CRON_BASE, 'pending-changes.json');
+
+  app.post('/api/command/cron/:id/toggle', async (req, res) => {
+    try {
+      const { id } = req.params;
+      if (!fs.existsSync(CRON_JOBS)) return res.status(500).json({ error: 'jobs.json not found' });
+      const registry = JSON.parse(fs.readFileSync(CRON_JOBS, 'utf8'));
+      const job = (registry.jobs || []).find(j => j.id === id);
+      if (!job) return res.status(404).json({ error: 'cron job not found' });
+
+      const currentEnabled = job.enabled !== false;
+      const action = currentEnabled ? 'disable' : 'enable';
+
+      let pending = { changes: [] };
+      if (fs.existsSync(PENDING_FILE)) {
+        pending = JSON.parse(fs.readFileSync(PENDING_FILE, 'utf8'));
+      }
+      pending.changes = (pending.changes || []).filter(c => c.id !== id);
+      pending.changes.push({ id, action, at: new Date().toISOString(), name: job.name });
+      fs.writeFileSync(PENDING_FILE, JSON.stringify(pending, null, 2));
+
+      res.json({ success: true, id, current_enabled: currentEnabled, action, pending_count: pending.changes.length });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.get('/api/command/cron/pending', async (req, res) => {
+    try {
+      if (!fs.existsSync(PENDING_FILE)) return res.json({ changes: [] });
+      const pending = JSON.parse(fs.readFileSync(PENDING_FILE, 'utf8'));
+      res.json({ changes: pending.changes || [] });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.post('/api/command/cron/apply-pending', async (req, res) => {
+    try {
+      if (!fs.existsSync(PENDING_FILE)) return res.json({ success: true, applied: 0, message: 'No pending changes' });
+      if (!fs.existsSync(CRON_JOBS)) return res.status(500).json({ error: 'jobs.json not found' });
+
+      const pending = JSON.parse(fs.readFileSync(PENDING_FILE, 'utf8'));
+      const changes = pending.changes || [];
+      if (changes.length === 0) return res.json({ success: true, applied: 0, message: 'No pending changes' });
+
+      let registry = JSON.parse(fs.readFileSync(CRON_JOBS, 'utf8'));
+      const jobs = registry.jobs || [];
+      let applied = 0;
+
+      for (const change of changes) {
+        const job = jobs.find(j => j.id === change.id);
+        if (job) {
+          job.enabled = (change.action === 'enable');
+          applied++;
+        }
+      }
+
+      fs.writeFileSync(CRON_JOBS, JSON.stringify(registry, null, 2));
+      fs.writeFileSync(PENDING_FILE, JSON.stringify({ changes: [] }, null, 2));
+
+      const { execSync } = require('child_process');
+      try {
+        execSync('openclaw gateway restart', { timeout: 10000, stdio: 'pipe' });
+      } catch (restartErr) {
+        console.warn('[cron] gateway restart non-zero:', restartErr.message);
+      }
+
+      res.json({ success: true, applied, changes, gateway_restart: 'scheduled' });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

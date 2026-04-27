@@ -763,49 +763,101 @@ function updateHQFromData(data) {
 function renderFleetTable(fleet) {
     const container = document.querySelector('.fleet-health');
     if (!container || !fleet.agents) return;
-    
-    // Replace the static table with dynamic one
-    let tableHTML = `
-        <table class="agent-table">
+
+    const pending = fleet.pending_changes || [];
+    const pendingIds = new Set(pending.map(c => c.id));
+    const hasPending = pending.length > 0;
+
+    const applyBtnHTML = hasPending
+        ? `<div style="margin:8px 0 12px;text-align:right"><button onclick="applyCronPending()" class="btn-small" style="background:#f59e0b;color:#000;font-weight:600;border:none;padding:6px 12px;border-radius:4px;cursor:pointer">Apply ${pending.length} Pending Change${pending.length > 1 ? 's' : ''} & Restart</button></div>`
+        : '';
+
+    let tableHTML = applyBtnHTML + `
+        <table class="agent-table" style="width:100%;border-collapse:collapse;font-size:12px">
             <thead>
                 <tr>
-                    <th style="text-align:left">Agent</th>
-                    <th>Model</th>
-                    <th>Schedule</th>
-                    <th style="text-align:right">Status</th>
+                    <th style="text-align:left;padding:6px 8px;font-size:11px;color:#888;font-weight:500">Agent</th>
+                    <th style="text-align:left;padding:6px 8px;font-size:11px;color:#888;font-weight:500">Model</th>
+                    <th style="text-align:left;padding:6px 8px;font-size:11px;color:#888;font-weight:500">Schedule</th>
+                    <th style="text-align:right;padding:6px 8px;font-size:11px;color:#888;font-weight:500">Status</th>
+                    <th style="text-align:center;padding:6px 8px;font-size:11px;color:#888;font-weight:500;width:70px">Action</th>
                 </tr>
             </thead>
             <tbody>
     `;
-    
+
     fleet.agents.forEach(agent => {
+        const isPending = pendingIds.has(agent.id);
+        const pendingAction = isPending ? pending.find(c => c.id === agent.id)?.action : null;
+
         let statusHTML = '';
         if (agent.status === 'healthy') {
             statusHTML = `<span style="color:#10b981">● healthy</span>`;
         } else if (agent.status === 'attention') {
             statusHTML = `<span style="color:#f59e0b">● attention</span>`;
+        } else if (agent.status === 'disabled') {
+            statusHTML = `<span style="color:#6b7280">● disabled</span>`;
         } else {
             statusHTML = `<span style="color:#ef4444">● ${agent.status}</span>`;
         }
-        
+
+        if (isPending) {
+            statusHTML += ` <span style="font-size:10px;color:#f59e0b;background:rgba(245,158,11,0.15);padding:2px 6px;border-radius:4px;margin-left:4px">\uD83D\uDD04 ${pendingAction}</span>`;
+        }
+
+        const btnLabel = agent.enabled ? 'Disable' : 'Enable';
+        const btnStyle = agent.enabled
+            ? 'background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid #ef4444'
+            : 'background:rgba(16,185,129,0.15);color:#10b981;border:1px solid #10b981';
+
         tableHTML += `
-            <tr>
-                <td><strong>${agent.name}</strong></td>
-                <td style="font-family:var(--font-mono);font-size:12px;color:#888">${agent.model.split('/').pop()}</td>
-                <td style="font-family:var(--font-mono);font-size:12px">${agent.schedule}</td>
-                <td style="text-align:right">${statusHTML}</td>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:6px 8px"><strong>${agent.name}</strong></td>
+                <td style="font-family:var(--font-mono);font-size:11px;color:#888;padding:6px 8px">${(agent.model || 'unknown').split('/').pop()}</td>
+                <td style="font-family:var(--font-mono);font-size:11px;color:#888;padding:6px 8px">${agent.schedule}</td>
+                <td style="text-align:right;padding:6px 8px;white-space:nowrap">${statusHTML}</td>
+                <td style="text-align:center;padding:6px 8px">
+                    <button onclick="toggleCron('${agent.id}')" style="${btnStyle};font-size:10px;padding:3px 9px;border-radius:4px;cursor:pointer">${btnLabel}</button>
+                </td>
             </tr>
         `;
     });
-    
+
     tableHTML += '</tbody></table>';
-    
-    // Find and replace the old table
+
     const oldTable = container.querySelector('.agent-table');
     if (oldTable) {
         oldTable.outerHTML = tableHTML;
     } else {
         container.insertAdjacentHTML('beforeend', tableHTML);
+    }
+}
+
+async function toggleCron(cronId) {
+    try {
+        const res = await fetch(`/api/command/cron/${cronId}/toggle`, { method: 'POST' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        console.log('[cron] toggled:', data);
+        fetchCommandData();
+    } catch (e) {
+        console.error('[cron] toggle failed:', e);
+        alert('Failed to toggle cron: ' + e.message);
+    }
+}
+
+async function applyCronPending() {
+    if (!confirm('Apply pending cron changes and restart the gateway?')) return;
+    try {
+        const res = await fetch('/api/command/cron/apply-pending', { method: 'POST' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        console.log('[cron] applied:', data);
+        alert(`Applied ${data.applied} change(s). Gateway restart scheduled.`);
+        setTimeout(() => fetchCommandData(), 3000);
+    } catch (e) {
+        console.error('[cron] apply failed:', e);
+        alert('Failed to apply changes: ' + e.message);
     }
 }
 
