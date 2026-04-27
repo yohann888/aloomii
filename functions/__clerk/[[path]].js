@@ -22,15 +22,26 @@ export async function onRequest(context) {
   // routes correctly and the Next.js middleware sees the right host.
   const headers = new Headers(request.headers);
   headers.set("host", "app.aloomii.com");
-  // Forward the original origin so the worker / Clerk see the real client origin.
-  // Browsers already send Origin/Referer; we just pass them through.
+
+  // Tell Clerk middleware (and Clerk's edge) that the proxy lives on the apex.
+  // The proxy URL registered in Clerk Dashboard is https://aloomii.com/__clerk
+  // The Next.js middleware uses this header (or X-Forwarded-Host) to set
+  // the Clerk-Proxy-Url header that Clerk's edge requires.
+  headers.set("x-forwarded-host", "aloomii.com");
+  headers.set("x-forwarded-proto", "https");
+  headers.set("clerk-proxy-url", "https://aloomii.com/__clerk");
+
+  // Forward the original client IP
+  const clientIp = request.headers.get("cf-connecting-ip");
+  if (clientIp) {
+    headers.set("x-forwarded-for", clientIp);
+  }
+
   // Strip CF-specific headers that could confuse the upstream.
   headers.delete("cf-connecting-ip");
   headers.delete("cf-ipcountry");
   headers.delete("cf-ray");
   headers.delete("cf-visitor");
-  headers.delete("x-forwarded-for");
-  headers.delete("x-forwarded-proto");
   headers.delete("x-real-ip");
 
   const init = {
