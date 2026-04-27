@@ -1,0 +1,19 @@
+# Redirect Clerk auth flows from apex to app subdomain.
+# Required because Clerk's proxy URL is on the apex (https://aloomii.com/__clerk),
+# so OAuth callbacks land on aloomii.com after sign-in. The portal lives on
+# app.aloomii.com, so we forward auth-related paths there.
+#
+# Status 302 (temporary) so browsers don't cache and we can change later.
+# Order matters: more specific paths first, then catch-alls.
+# DO NOT redirect /__clerk/* — the Pages Function in functions/__clerk handles it.
+
+/sign-in              https://app.aloomii.com/sign-in              302
+/sign-in/*            https://app.aloomii.com/sign-in/:splat       302
+/sign-up              https://app.aloomii.com/sign-up              302
+/sign-up/*            https://app.aloomii.com/sign-up/:splat       302
+/sso-callback         https://app.aloomii.com/sso-callback         302
+/sso-callback/*       https://app.aloomii.com/sso-callback/:splat  302
+/user                 https://app.aloomii.com/user                 302
+/user/*               https://app.aloomii.com/user/:splat          302
+/app                  https://app.aloomii.com/app                  302
+/app/*                https://app.aloomii.com/app/:splat           302
