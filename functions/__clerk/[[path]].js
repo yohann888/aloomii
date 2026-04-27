@@ -29,7 +29,8 @@ export async function onRequest(context) {
   // the Clerk-Proxy-Url header that Clerk's edge requires.
   headers.set("x-forwarded-host", "aloomii.com");
   headers.set("x-forwarded-proto", "https");
-  headers.set("clerk-proxy-url", "https://aloomii.com/__clerk");
+  // Trailing slash REQUIRED — Clerk does exact-match against Dashboard config.
+  headers.set("clerk-proxy-url", "https://aloomii.com/__clerk/");
 
   // Forward the original client IP
   const clientIp = request.headers.get("cf-connecting-ip");
