@@ -318,8 +318,6 @@ function registerCommandAPI(app, pool = null) {
               FROM prospect_signals ps
               LEFT JOIN contacts c ON ps.contact_id = c.id
               WHERE ps.acted_on = false
-                AND ps.signal_source != 'reddit'
-                AND ps.signal_source != 'reddit_signal'
               ORDER BY ps.captured_at DESC
               LIMIT 50
             `);

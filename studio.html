@@ -1,1186 +1,2418 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Studio — Aloomii | Podcast-Powered GTM for Founders</title>
-<meta name="description" content="We spent 17 years booking one guest. He said yes. Podcast-powered GTM for founders. 5 shows. 56,000+ downloads. 3,000 hours listened. Apply for The Table.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="The Studio — Aloomii | Podcast-Powered GTM for Founders">
-<meta property="og:description" content="We spent 17 years booking one guest. He said yes. 5 shows. 56,000+ downloads. Now we build it for you.">
-<meta property="og:url" content="https://aloomii.com/studio">
-<meta property="og:site_name" content="Aloomii">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://aloomii.com/studio">
+<meta name="description" content="End-to-end podcast production and content multiplication for founders. We build the show, then turn every episode into thirty pieces of content across five platforms." />
+
+<!-- Fonts: Cormorant Garamond (display serif), Manrope (body), IBM Plex Mono (technical accents) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
+/* ========================================================================
+   ALOOMII STUDIO — DESIGN TOKENS
+   ======================================================================== */
 :root {
-  --bg: #0b0b14;
-  --bg-elevated: #0f1018;
-  --bg-card: rgba(255,255,255,0.05);
-  --bg-card-hover: rgba(255,255,255,0.08);
-  --border: rgba(255,255,255,0.10);
-  --border-accent: rgba(0,200,190,0.25);
-  --accent: #00c8be;
-  --accent-dark: #009e96;
-  --accent-dim: rgba(0,200,190,0.08);
-  --accent-mid: rgba(0,200,190,0.20);
-  --warm: #f5c562;
-  --warm-dim: rgba(245,197,98,0.10);
-  --text: #f0f0f0;
-  --text-body: rgba(255,255,255,0.72);
-  --text-muted: rgba(255,255,255,0.38);
-  --nav-height: 72px;
+  /* Palette — editorial cosmos */
+  --deep-space: #0A0E1A;
+  --deep-space-2: #11172A;
+  --void: #050811;
+  --pale-blue: #7EB8DA;
+  --pale-blue-soft: #A8CCE0;
+  --warm-gold: #C9A227;
+  --warm-gold-soft: #E0BD52;
+  --paper: #F4F1EA;
+  --paper-warm: #EFE9DC;
+  --ink: #1A1F2E;
+  --muted: #8FA3B8;
+  --muted-deep: #5A6B82;
+  --border-faint: rgba(126, 184, 218, 0.12);
+  --border-soft: rgba(126, 184, 218, 0.22);
+
+  /* Typography */
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Spacing rhythm */
+  --section-y: clamp(5rem, 10vw, 9rem);
+  --container: 1240px;
+
+  /* Motion */
+  --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-
+/* ========================================================================
+   RESET / BASE
+   ======================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: var(--text);
-  background: var(--bg);
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
   line-height: 1.6;
+  color: var(--paper);
+  background: var(--deep-space);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* ── NAV ── */
-nav {
-  position: sticky;
-  top: 0; z-index: 100;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 18px 48px;
-  background: rgba(11,11,20,0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo { text-decoration: none; }
-.nav-logo img { height: 36px; width: auto; }
-.nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
-.nav-links a { color: var(--text-body); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-.nav-links a:hover { color: #fff; }
-.nav-links .nav-cta {
-  background: var(--accent); color: #000; padding: 10px 22px;
-  border-radius: 8px; font-weight: 600; font-size: 13px; transition: all 0.25s;
-}
-.nav-links .nav-cta:hover { background: #00e0d5; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,200,190,0.3); }
-.hamburger {
-  display: none; flex-direction: column; gap: 5px;
-  cursor: pointer; padding: 8px; background: none; border: none;
-}
-.hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: all 0.3s; border-radius: 2px; }
-.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-.hamburger.active span:nth-child(2) { opacity: 0; }
-.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
-.mobile-menu {
-  display: none; position: fixed; top: var(--nav-height); left: 0; right: 0;
-  background: rgba(11,11,20,0.97); backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px); padding: 24px 40px;
-  border-bottom: 1px solid var(--border); z-index: 99;
-}
-.mobile-menu.active { display: block; }
-.mobile-menu a { display: block; padding: 14px 0; color: var(--text-body); text-decoration: none; font-size: 1rem; border-bottom: 1px solid var(--border); }
-.mobile-menu a:last-child { border-bottom: none; }
-.mobile-menu a:hover { color: #fff; }
-@media (max-width: 768px) { nav { padding: 14px 20px; } .nav-links { display: none; } .hamburger { display: flex; } }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
 
-/* ── LAYOUT ── */
-.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
-@media (max-width: 600px) { .container { padding: 0 20px; } }
+::selection { background: var(--warm-gold); color: var(--void); }
 
-/* ── HERO ── */
-/* ── PBN EPISODE CARD HERO ── */
-.hero {
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  padding: 100px 0 64px;
-}
-.hero .container { position: relative; z-index: 1; }
-
-/* Studio label above card */
-.studio-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-  text-align: center;
-  margin-bottom: 28px;
-  opacity: 0;
-  animation: fadeUp 0.6s ease forwards 0.1s;
-}
-
-/* The card itself — gold border, dark navy */
-.pbn-episode-card {
-  border: 1px solid #c5a059;
-  border-radius: 24px;
-  padding: 52px 52px 44px;
-  background: rgba(8, 10, 18, 0.85);
-  backdrop-filter: blur(12px);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 52px;
-  align-items: center;
-  max-width: 1000px;
-  margin: 0 auto;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.25s;
-}
-@media (max-width: 820px) {
-  .pbn-episode-card { grid-template-columns: 1fr; padding: 36px 28px; gap: 32px; }
-}
-
-/* Left: video */
-.pbn-video-wrap {
-  border-radius: 14px;
+/* ========================================================================
+   COSMIC BACKGROUND LAYERS — fixed, ambient
+   ======================================================================== */
+.cosmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   overflow: hidden;
-  aspect-ratio: 16/9;
-  box-shadow: 0 20px 56px rgba(0,0,0,0.6);
 }
-.pbn-video-wrap iframe { width: 100%; height: 100%; display: block; border: 0; }
+.cosmos__nebula {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%, rgba(126, 184, 218, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 70%, rgba(201, 162, 39, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(126, 184, 218, 0.06) 0%, transparent 60%);
+  filter: blur(40px);
+  animation: nebulaDrift 40s ease-in-out infinite alternate;
+}
+@keyframes nebulaDrift {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-3%, 2%) scale(1.05); }
+  100% { transform: translate(2%, -3%) scale(1.02); }
+}
+.cosmos__stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.6), transparent 50%),
+    radial-gradient(1px 1px at 28% 72%, rgba(255,255,255,0.5), transparent 50%),
+    radial-gradient(1px 1px at 47% 32%, rgba(255,255,255,0.7), transparent 50%),
+    radial-gradient(1px 1px at 63% 88%, rgba(255,255,255,0.4), transparent 50%),
+    radial-gradient(1px 1px at 81% 12%, rgba(255,255,255,0.6), transparent 50%),
+    radial-gradient(1px 1px at 92% 56%, rgba(255,255,255,0.5), transparent 50%),
+    radial-gradient(0.5px 0.5px at 8% 60%, rgba(126,184,218,0.8), transparent 50%),
+    radial-gradient(0.5px 0.5px at 35% 22%, rgba(201,162,39,0.7), transparent 50%),
+    radial-gradient(0.5px 0.5px at 70% 45%, rgba(255,255,255,0.6), transparent 50%),
+    radial-gradient(0.5px 0.5px at 22% 92%, rgba(126,184,218,0.5), transparent 50%);
+  background-size: 100% 100%;
+  animation: starsTwinkle 8s ease-in-out infinite;
+}
+@keyframes starsTwinkle {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+.cosmos__grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+}
 
-/* Right: text column */
-.pbn-episode-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
+/* ========================================================================
+   LAYOUT PRIMITIVES
+   ======================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+  position: relative;
+  z-index: 1;
 }
-.pbn-episode-label-bar {
-  width: 22px;
-  height: 2px;
-  background: #c5a059;
-  flex-shrink: 0;
-}
-.pbn-episode-label-text {
-  font-size: 11px;
-  font-weight: 700;
+section { position: relative; z-index: 1; }
+.section { padding: var(--section-y) 0; }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #c5a059;
+  color: var(--pale-blue);
+  margin-bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
 }
-.pbn-episode-title {
-  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-  font-weight: 800;
-  line-height: 1.2;
-  color: #ffffff;
-  margin: 0 0 18px;
-  letter-spacing: -0.02em;
+.eyebrow::before {
+  content: "";
+  width: 28px; height: 1px;
+  background: var(--pale-blue);
+  opacity: 0.6;
 }
-.pbn-episode-desc {
-  font-size: 15px;
-  line-height: 1.75;
-  color: #a0aab8;
-  margin: 0 0 22px;
-}
-.pbn-episode-meta {
-  display: flex;
-  gap: 20px;
-  font-size: 13px;
-  color: #7a8494;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
-}
-.pbn-episode-meta span { display: flex; align-items: center; gap: 5px; }
-.pbn-episode-ctas {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  padding-top: 4px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  padding-top: 20px;
-}
-.pbn-cta {
-  font-size: 14px;
-  font-weight: 600;
-  color: #4a7fff;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.pbn-cta:hover { color: #7aaaff; }
 
-/* Stats row below card */
-.hero-stats-row {
-  display: flex;
-  justify-content: center;
-  gap: 52px;
-  margin-top: 44px;
-  flex-wrap: wrap;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.5s;
-}
-.hero-stat { text-align: center; }
-.hero-stat-num {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.02em;
-}
-.hero-stat-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 4px;
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
   font-weight: 500;
-  letter-spacing: 0.3px;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    radial-gradient(ellipse at 15% 30%, rgba(0,200,190,0.05) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 70%, rgba(245,197,98,0.03) 0%, transparent 50%);
-  z-index: 0; pointer-events: none;
-}
-.hero .container { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
-
-.hero-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 28px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.2s;
-}
-.hero-title {
-  font-size: clamp(2.2rem, 4.5vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1.15;
-  color: var(--text);
-  max-width: 800px;
-  text-align: center;
-  margin-bottom: 28px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.35s;
+  line-height: 1.1;
   letter-spacing: -0.02em;
+  margin: 0 0 1rem 0;
+  color: var(--paper);
 }
-.hero-title em { font-style: normal; color: var(--text); }
-.hero-sub {
-  font-size: 18px;
-  line-height: 1.75;
-  color: var(--text-body);
-  max-width: 560px;
-  margin-bottom: 52px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.5s;
+h1 { font-size: clamp(2.5rem, 6vw, 4.75rem); font-weight: 400; }
+h2 { font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 400; }
+h3 { font-size: clamp(1.5rem, 2.4vw, 2rem); }
+h4 { font-size: 1.25rem; }
+
+p { margin: 0 0 1rem 0; color: var(--muted); }
+.lead { font-size: 1.125rem; line-height: 1.7; color: var(--paper); }
+
+.italic-display { font-style: italic; color: var(--warm-gold-soft); font-weight: 400; }
+
+/* ========================================================================
+   NAV
+   ======================================================================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.25rem 0;
+  background: rgba(10, 14, 26, 0.6);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid var(--border-faint);
 }
-.hero-stats {
+.nav__inner {
   display: flex;
-  gap: 48px;
-  flex-wrap: wrap;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.65s;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
 }
-.hero-stat { }
-.hero-stat-num {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.02em;
-}
-.hero-stat-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 4px;
+.nav__logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
   font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
-/* ── SECTION COMMONS ── */
-.section-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 14px;
-}
-.section-heading {
-  font-size: clamp(28px, 3.5vw, 44px);
-  font-weight: 700;
-  line-height: 1.15;
   letter-spacing: -0.02em;
-  margin-bottom: 56px;
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav__logo-mark {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--warm-gold);
+  box-shadow: 0 0 12px rgba(201, 162, 39, 0.6);
+  animation: logoMarkPulse 3s ease-in-out infinite;
+}
+@keyframes logoMarkPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.3); opacity: 0.7; }
+}
+.nav__links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.nav__links a { transition: color 0.3s ease; }
+.nav__links a:hover { color: var(--paper); }
+.nav__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(126, 184, 218, 0.05);
+  color: var(--paper) !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.nav__cta:hover {
+  border-color: var(--warm-gold);
+  background: rgba(201, 162, 39, 0.1);
+  transform: translateY(-1px);
+}
+@media (max-width: 720px) {
+  .nav__links { display: none; }
 }
 
-/* ── STORY ── */
-.story {
-  padding: 110px 0;
-  border-top: 1px solid var(--border);
+/* ========================================================================
+   HERO
+   ======================================================================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding: 9rem 0 5rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
-.story-grid {
+.hero__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 72px;
+  gap: 5rem;
+  align-items: center;
+}
+@media (max-width: 960px) {
+  .hero__inner { grid-template-columns: 1fr; gap: 3rem; }
+}
+.hero__title {
+  font-size: clamp(2.6rem, 5.8vw, 5rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+  margin-bottom: 1.75rem;
+}
+.hero__title .accent {
+  font-style: italic;
+  color: var(--warm-gold-soft);
+}
+.hero__sub {
+  font-size: 1.125rem;
+  color: var(--paper-warm);
+  line-height: 1.65;
+  max-width: 540px;
+  margin-bottom: 2.5rem;
+}
+.hero__meta {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.hero__meta span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.hero__cta-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.5rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: all 0.35s var(--ease-out-cubic);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.btn--primary {
+  background: var(--paper);
+  color: var(--void);
+}
+.btn--primary:hover {
+  background: var(--warm-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px -10px rgba(201, 162, 39, 0.5);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--paper);
+  border-color: var(--border-soft);
+}
+.btn--ghost:hover {
+  border-color: var(--pale-blue);
+  background: rgba(126, 184, 218, 0.08);
+  transform: translateY(-2px);
+}
+.btn .arrow { transition: transform 0.3s ease; }
+.btn:hover .arrow { transform: translateX(3px); }
+
+/* Hero visual — episode card with animated waveform */
+.episode-card {
+  position: relative;
+  background: linear-gradient(155deg, rgba(126,184,218,0.08), rgba(201,162,39,0.04));
+  border: 1px solid var(--border-soft);
+  border-radius: 18px;
+  padding: 2.25rem;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+.episode-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--warm-gold), transparent);
+  animation: scanLine 6s ease-in-out infinite;
+}
+@keyframes scanLine {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 1; }
+}
+.episode-card__label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--warm-gold-soft);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--warm-gold);
+  box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.5);
+  animation: liveDotPulse 2s infinite;
+}
+@keyframes liveDotPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.6); }
+  70%  { box-shadow: 0 0 0 12px rgba(201, 162, 39, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0); }
+}
+.episode-card__title {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--paper);
+  margin: 0 0 1rem 0;
+}
+.episode-card__quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--pale-blue-soft);
+  border-left: 2px solid var(--warm-gold);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  line-height: 1.5;
+}
+.episode-card__attribution {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+/* Animated waveform */
+.waveform {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 56px;
+  margin: 1.5rem 0 0.5rem;
+}
+.waveform__bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--pale-blue), var(--warm-gold-soft));
+  border-radius: 2px;
+  animation: waveformDance 1.4s ease-in-out infinite;
+  transform-origin: bottom;
+}
+@keyframes waveformDance {
+  0%, 100% { transform: scaleY(0.3); }
+  50%      { transform: scaleY(1); }
+}
+
+/* Scroll indicator */
+.scroll-cue {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0.7;
+}
+.scroll-cue__line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--pale-blue), transparent);
+  animation: scrollCueLine 2s ease-in-out infinite;
+}
+@keyframes scrollCueLine {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ========================================================================
+   STORY (Cold email)
+   ======================================================================== */
+.story { padding: var(--section-y) 0; }
+.story__grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
   align-items: start;
 }
-.story-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--warm);
-  margin-bottom: 20px;
+@media (max-width: 860px) {
+  .story__grid { grid-template-columns: 1fr; gap: 2rem; }
 }
-.story-heading {
-  font-size: clamp(28px, 3.5vw, 44px);
-  font-weight: 700;
-  line-height: 1.15;
-  margin-bottom: 28px;
+.story__title h2 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
   letter-spacing: -0.02em;
 }
-.story-text {
-  font-size: 15px;
-  line-height: 1.85;
-  color: var(--text-body);
-  margin-bottom: 18px;
-}
-.story-text strong { color: var(--text); font-weight: 600; }
-
-.story-aside {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 40px;
-  position: relative;
-}
-.story-aside::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 40px; right: 40px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-}
-.quote-mark {
-  font-size: 64px;
-  line-height: 1;
-  color: var(--accent);
-  opacity: 0.25;
-  font-weight: 800;
-  margin-bottom: -12px;
-}
-.quote-text {
-  font-size: 20px;
-  font-style: italic;
-  line-height: 1.65;
-  color: var(--text);
-  margin-bottom: 24px;
-  font-weight: 300;
-}
-.quote-attr {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-.quote-attr strong { color: var(--text-body); font-weight: 500; }
-
-@media (max-width: 900px) { .story-grid { grid-template-columns: 1fr; gap: 48px; } }
-
-/* ── TIMELINE ── */
-.timeline {
-  padding: 110px 0;
-  border-top: 1px solid var(--border);
-}
-.timeline-track {
-  position: relative;
-  padding-left: 44px;
-}
-.timeline-track::before {
-  content: '';
-  position: absolute;
-  left: 7px; top: 8px; bottom: 0; width: 1px;
-  background: linear-gradient(180deg, var(--accent), var(--border) 80%, transparent);
-}
-.tl-item {
-  position: relative;
-  margin-bottom: 52px;
-}
-.tl-item::before {
-  content: '';
-  position: absolute;
-  left: -40px; top: 8px;
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 14px var(--accent-mid);
-}
-.tl-item:last-child::before {
-  background: var(--warm);
-  box-shadow: 0 0 14px var(--warm-dim);
-}
-.tl-year {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.tl-item:last-child .tl-year { color: var(--warm); }
-.tl-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 4px;
-  letter-spacing: -0.01em;
-}
-.tl-format {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.tl-desc {
-  font-size: 15px;
+.story__body p {
+  color: var(--paper-warm);
+  font-size: 1.05rem;
   line-height: 1.75;
-  color: var(--text-body);
-  max-width: 580px;
+  margin-bottom: 1.5rem;
 }
-.tl-stat {
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent);
-  background: var(--accent-dim);
-  padding: 4px 12px;
-  border-radius: 6px;
-  margin-top: 12px;
-  letter-spacing: 0.3px;
+.story__body strong { color: var(--paper); font-weight: 600; }
+.story__quote {
+  margin-top: 3rem;
+  padding: 2rem 2.5rem;
+  border-left: 2px solid var(--warm-gold);
+  background: linear-gradient(90deg, rgba(201,162,39,0.05), transparent);
 }
-.tl-item:last-child .tl-stat { color: var(--warm); background: var(--warm-dim); }
+.story__quote p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.45rem;
+  line-height: 1.45;
+  color: var(--paper);
+  margin-bottom: 1rem;
+}
+.story__quote cite {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
 
-/* ── COLLAGE ── */
-.collage {
-  padding: 80px 0;
-  border-top: 1px solid var(--border);
+/* ========================================================================
+   TIMELINE
+   ======================================================================== */
+.timeline-section {
+  background: linear-gradient(180deg, transparent, rgba(5, 8, 17, 0.5), transparent);
 }
-.collage-heading {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted);
+.timeline-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 5rem;
 }
-.collage-grid {
+.timeline {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom,
+    transparent,
+    var(--border-soft) 10%,
+    var(--border-soft) 90%,
+    transparent);
+}
+@media (max-width: 720px) {
+  .timeline::before { left: 20px; }
+}
+.timeline__item {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
-  gap: 12px;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  margin-bottom: 4rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--ease-out-cubic), transform 0.8s var(--ease-out-cubic);
 }
-.collage-item {
+.timeline__item.is-visible { opacity: 1; transform: translateY(0); }
+@media (max-width: 720px) {
+  .timeline__item {
+    grid-template-columns: 50px 1fr;
+    gap: 1rem;
+  }
+}
+.timeline__dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--deep-space);
+  border: 2px solid var(--warm-gold);
+  position: absolute;
+  left: 50%;
+  top: 0.5rem;
+  transform: translateX(-50%);
+  z-index: 2;
+  box-shadow: 0 0 0 4px var(--deep-space), 0 0 16px rgba(201, 162, 39, 0.4);
+}
+@media (max-width: 720px) {
+  .timeline__dot { left: 20px; }
+}
+.timeline__year {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: var(--warm-gold-soft);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.timeline__date-col {
+  text-align: right;
+  padding-right: 2.5rem;
+}
+.timeline__content {
+  padding-left: 2.5rem;
+}
+.timeline__item--right .timeline__date-col {
+  grid-column: 3;
+  text-align: left;
+  padding-right: 0;
+  padding-left: 2.5rem;
+}
+.timeline__item--right .timeline__content {
+  grid-column: 1;
+  padding-left: 0;
+  padding-right: 2.5rem;
+  text-align: right;
+}
+@media (max-width: 720px) {
+  .timeline__date-col,
+  .timeline__item--right .timeline__date-col {
+    grid-column: 2;
+    text-align: left;
+    padding: 0;
+  }
+  .timeline__content,
+  .timeline__item--right .timeline__content {
+    grid-column: 2;
+    padding: 0;
+    text-align: left;
+  }
+}
+.timeline__title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--paper);
+  margin-bottom: 0.25rem;
+}
+.timeline__kind {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pale-blue);
+  margin-bottom: 0.75rem;
+}
+.timeline__desc {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+.timeline__stats {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--warm-gold-soft);
+  letter-spacing: 0.05em;
+}
+
+/* ========================================================================
+   PODCAST LOGO BADGES (in timeline)
+   ======================================================================== */
+.timeline__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+.timeline__item--right .timeline__brand {
+  flex-direction: row-reverse;
+}
+.timeline__logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid var(--border-soft);
+  background: rgba(126, 184, 218, 0.05);
+  flex-shrink: 0;
+  transition: all 0.4s var(--ease-out-cubic);
+}
+.timeline__item:hover .timeline__logo {
+  border-color: var(--warm-gold);
+  box-shadow: 0 0 24px rgba(201, 162, 39, 0.25);
+  transform: rotate(-2deg) scale(1.05);
+}
+.timeline__logo-pair {
+  display: inline-flex;
+  gap: -8px;
+  align-items: center;
+}
+.timeline__logo-pair .timeline__logo:nth-child(2) {
+  margin-left: -12px;
+  z-index: 1;
+}
+.timeline__logo--svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 30%, var(--pale-blue), var(--deep-space-2));
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  aspect-ratio: 16/10;
-  transition: transform 0.3s, border-color 0.3s;
 }
-.collage-item:hover {
-  transform: scale(1.02);
-  border-color: var(--border-accent);
-  z-index: 2;
+.timeline__logo--svg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 70% 70%, transparent 30%, rgba(201, 162, 39, 0.3) 80%);
 }
-.collage-item.featured {
-  grid-column: span 2;
-  aspect-ratio: 16/9;
+
+/* ========================================================================
+   PHOTO MARQUEE — "9 years in the room"
+   Horizontal infinite scroll of production photos
+   ======================================================================== */
+.photo-marquee {
+  padding: 4rem 0 6rem;
+  position: relative;
+  overflow: hidden;
 }
-.collage-item img {
+.photo-marquee__header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 0 1.5rem;
+}
+.photo-marquee__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--paper);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.photo-marquee__title .em { color: var(--warm-gold-soft); }
+.photo-marquee__kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pale-blue);
+  margin-bottom: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.photo-marquee__kicker::before,
+.photo-marquee__kicker::after {
+  content: "";
+  width: 24px; height: 1px;
+  background: var(--pale-blue);
+  opacity: 0.6;
+}
+.photo-marquee__viewport {
+  position: relative;
   width: 100%;
-  height: 100%;
+  overflow: hidden;
+}
+.photo-marquee__viewport::before,
+.photo-marquee__viewport::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 140px;
+  z-index: 2;
+  pointer-events: none;
+}
+.photo-marquee__viewport::before {
+  left: 0;
+  background: linear-gradient(to right, var(--deep-space) 10%, transparent);
+}
+.photo-marquee__viewport::after {
+  right: 0;
+  background: linear-gradient(to left, var(--deep-space) 10%, transparent);
+}
+.photo-marquee__track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  padding: 1rem 0;
+  animation: photoScroll 60s linear infinite;
+}
+.photo-marquee__track:hover { animation-play-state: paused; }
+@keyframes photoScroll {
+  to { transform: translateX(-50%); }
+}
+.photo-card {
+  flex-shrink: 0;
+  width: clamp(260px, 28vw, 340px);
+  margin: 0;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-faint);
+  background: var(--deep-space-2);
+  transition: transform 0.5s var(--ease-out-cubic), border-color 0.5s ease;
+}
+.photo-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--warm-gold);
+}
+.photo-card__media {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, rgba(126,184,218,0.1), rgba(201,162,39,0.05));
+  position: relative;
+  overflow: hidden;
+}
+.photo-card__media img {
+  width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center top;
-  display: block;
-  filter: brightness(0.88) saturate(0.85);
-  transition: filter 0.3s;
+  transition: transform 0.7s var(--ease-out-cubic);
 }
-.collage-item:hover img {
-  filter: brightness(1) saturate(1);
+.photo-card:hover .photo-card__media img { transform: scale(1.06); }
+.photo-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,14,26,0.7) 0%, transparent 50%);
+  pointer-events: none;
 }
-.collage-caption {
+.photo-card__caption {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  padding: 10px 14px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.75));
-  font-size: 11px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.5px;
-  opacity: 0;
-  transition: opacity 0.3s;
+  padding: 1rem 1.15rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--paper);
+  line-height: 1.3;
+  z-index: 1;
 }
-.collage-item:hover .collage-caption { opacity: 1; }
-@media (max-width: 768px) {
-  .collage-grid { grid-template-columns: 1fr 1fr; }
-  .collage-item.featured { grid-column: span 2; }
-}
-@media (max-width: 500px) {
-  .collage-grid { grid-template-columns: 1fr; }
-  .collage-item.featured { grid-column: span 1; }
+.photo-card__caption small {
+  display: block;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--warm-gold-soft);
+  margin-top: 0.4rem;
+  text-transform: uppercase;
 }
 
-/* ── NUMBERS ── */
-.numbers {
-  padding: 72px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+/* ========================================================================
+   STATS BAR (animated counters)
+   ======================================================================== */
+.stats {
+  padding: 4rem 0;
+  border-top: 1px solid var(--border-faint);
+  border-bottom: 1px solid var(--border-faint);
+  background:
+    radial-gradient(ellipse 60% 100% at 50% 50%, rgba(126, 184, 218, 0.06), transparent),
+    rgba(5, 8, 17, 0.4);
 }
-.numbers-grid {
+.stats__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
+  gap: 2rem;
 }
-.number-item { text-align: center; }
-.number-value {
-  font-size: 48px;
-  font-weight: 800;
-  color: var(--text);
+@media (max-width: 760px) {
+  .stats__grid { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 1rem; }
+}
+.stat { text-align: center; }
+.stat__value {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
   line-height: 1;
-  margin-bottom: 8px;
-  letter-spacing: -0.03em;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.4rem;
+  font-feature-settings: "tnum";
 }
-.number-label {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 500;
+.stat__suffix {
+  font-style: italic;
+  color: var(--warm-gold-soft);
 }
-@media (max-width: 900px) { .numbers-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; } }
-@media (max-width: 600px) { .numbers-grid { grid-template-columns: 1fr 1fr; gap: 32px; } .number-value { font-size: 36px; } }
+.stat__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
-/* ── SERVICES ── */
-.services {
-  padding: 110px 0;
+/* ========================================================================
+   SERVICES GRID
+   ======================================================================== */
+.services-header {
+  max-width: 720px;
+  margin-bottom: 4rem;
+}
+.services-header h2 {
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
 }
 .services-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 56px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 960px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+  .services-grid { grid-template-columns: 1fr; }
 }
 .service-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 32px;
-  transition: border-color 0.3s, background 0.3s, transform 0.2s;
-}
-.service-card:hover {
-  border-color: var(--border-accent);
-  background: var(--bg-card-hover);
-  transform: translateY(-2px);
-}
-.service-icon { font-size: 22px; margin-bottom: 14px; }
-.service-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  letter-spacing: -0.01em;
-}
-.service-desc {
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--text-body);
-}
-@media (max-width: 900px) { .services-grid { grid-template-columns: 1fr; } }
-
-/* ── PROOF POINT ── */
-.proof {
-  padding: 110px 0;
-  border-top: 1px solid var(--border);
-}
-
-/* ── TEAM ── */
-.team {
-  padding: 110px 0;
-  border-top: 1px solid var(--border);
-}
-.team-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 48px;
-}
-/* Jenny featured card */
-.team-featured {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 44px;
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 40px;
-  align-items: start;
-  margin-bottom: 24px;
-}
-@media (max-width: 700px) { .team-featured { grid-template-columns: 1fr; text-align: center; } .team-featured-photo { margin: 0 auto; } }
-.team-featured-photo {
-  width: 200px;
-  height: 200px;
-  border-radius: 14px;
-  object-fit: cover;
-  object-position: top center;
-  border: 1px solid rgba(0,200,190,0.2);
-  display: block;
-}
-.team-featured-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.team-featured-label::before { content: ''; display: block; width: 18px; height: 2px; background: var(--accent); }
-/* Standard card */
-.team-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 36px;
-  display: flex;
-  gap: 24px;
-  align-items: flex-start;
-}
-@media (max-width: 700px) { .team-card { flex-direction: column; } }
-.team-card-photo {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: top;
-  border: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.team-card-body { flex: 1; }
-.team-linkedin {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 14px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent);
-  text-decoration: none;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-}
-.team-linkedin:hover { opacity: 1; }
-.team-name {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 4px;
-  letter-spacing: -0.02em;
-}
-.team-role {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 18px;
-}
-.team-bio {
-  font-size: 14px;
-  line-height: 1.82;
-  color: var(--text-body);
-}
-@media (max-width: 900px) { .team-grid { grid-template-columns: 1fr; } }
-
-/* ── CTA ── */
-.cta {
-  padding: 120px 0;
-  text-align: center;
-  border-top: 1px solid var(--border);
   position: relative;
+  padding: 2.25rem 1.75rem;
+  border: 1px solid var(--border-faint);
+  border-radius: 14px;
+  background: linear-gradient(165deg, rgba(126,184,218,0.03), rgba(10,14,26,0.4));
+  transition: all 0.4s var(--ease-out-cubic);
+  overflow: hidden;
 }
-.cta::before {
-  content: '';
+.service-card::after {
+  content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(0,200,190,0.05) 0%, transparent 65%);
+  inset: 0;
+  border-radius: 14px;
+  padding: 1px;
+  background: linear-gradient(140deg, var(--warm-gold), transparent 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
   pointer-events: none;
 }
-.cta .container { position: relative; }
-.cta-heading {
-  font-size: clamp(32px, 4.5vw, 54px);
+.service-card:hover {
+  transform: translateY(-4px);
+  background: linear-gradient(165deg, rgba(126,184,218,0.07), rgba(10,14,26,0.6));
+}
+.service-card:hover::after { opacity: 1; }
+.service-card__icon {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  display: inline-flex;
+  width: 44px; height: 44px;
+  align-items: center; justify-content: center;
+  border-radius: 10px;
+  background: rgba(201, 162, 39, 0.1);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+}
+.service-card h3 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: var(--paper);
+}
+.service-card p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ========================================================================
+   VELOCITY SECTION  ★ NEW ★
+   The multiplier engine — most visually striking moment on the page
+   ======================================================================== */
+.velocity {
+  padding: var(--section-y) 0;
+  position: relative;
+  overflow: hidden;
+}
+.velocity::before {
+  content: "";
+  position: absolute;
+  top: 10%; left: -10%;
+  width: 60%; height: 80%;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.08), transparent 60%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+.velocity__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+@media (max-width: 960px) {
+  .velocity__grid { grid-template-columns: 1fr; gap: 3rem; }
+}
+.velocity__title {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin-bottom: 1.75rem;
+}
+.velocity__title .em {
+  font-style: italic;
+  color: var(--warm-gold-soft);
+}
+.velocity__lead {
+  font-size: 1.1rem;
+  color: var(--paper-warm);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 2rem;
+}
+.velocity__bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+  display: grid;
+  gap: 0.85rem;
+}
+.velocity__bullets li {
+  font-size: 0.98rem;
+  color: var(--paper-warm);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  line-height: 1.55;
+}
+.velocity__bullets li::before {
+  content: "→";
+  color: var(--warm-gold);
   font-weight: 700;
-  line-height: 1.15;
-  margin-bottom: 24px;
-  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
 }
-.cta-heading em { font-style: italic; color: var(--accent); }
-.cta-sub {
-  font-size: 17px;
-  color: var(--text-body);
-  max-width: 500px;
-  margin: 0 auto 44px;
-  line-height: 1.75;
-}
-.cta-button {
+.velocity__pricing {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 16px 40px;
-  background: var(--accent);
-  color: #000;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  border: none;
-  border-radius: 10px;
-  text-decoration: none;
-  transition: all 0.25s;
-  cursor: pointer;
+  gap: 0.85rem;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(126, 184, 218, 0.04);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--pale-blue-soft);
 }
-.cta-button:hover {
-  background: #00e0d5;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0,200,190,0.3);
+.velocity__pricing strong { color: var(--paper); font-weight: 500; }
+
+/* The multiplier visual — single source fans out into thirty pieces */
+.multiplier {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
 }
-.cta-footnote {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 18px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-.cat-line {
-  font-size: 13px;
-  color: var(--text-muted);
+.multiplier__center {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--warm-gold), var(--warm-gold-soft));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
   font-style: italic;
-  margin-top: 48px;
+  color: var(--void);
+  font-weight: 500;
+  z-index: 4;
+  box-shadow: 0 0 60px rgba(201, 162, 39, 0.4), 0 0 120px rgba(201, 162, 39, 0.2);
+  animation: centerPulse 3s ease-in-out infinite;
+}
+@keyframes centerPulse {
+  0%, 100% { box-shadow: 0 0 60px rgba(201, 162, 39, 0.4), 0 0 120px rgba(201, 162, 39, 0.2); }
+  50%      { box-shadow: 0 0 80px rgba(201, 162, 39, 0.6), 0 0 160px rgba(201, 162, 39, 0.3); }
+}
+.multiplier__center small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-style: normal;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+  opacity: 0.7;
+}
+.multiplier__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed var(--border-soft);
+  animation: ringSpin 60s linear infinite;
+}
+.multiplier__ring--inner { inset: 18%; animation-duration: 40s; animation-direction: reverse; }
+.multiplier__ring--outer { inset: -3%; animation-duration: 80s; }
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+/* Orbiting clip nodes — 30 of them, distributed in two rings */
+.multiplier__node {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 10px; height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--pale-blue);
+  box-shadow: 0 0 10px var(--pale-blue);
+  animation: nodeOrbit 20s linear infinite, nodeBlink 2s ease-in-out infinite;
+}
+@keyframes nodeOrbit {
+  from { transform: rotate(0deg) translateX(var(--r, 180px)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(var(--r, 180px)) rotate(-360deg); }
+}
+@keyframes nodeBlink {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
 }
 
-/* ── FOOTER ── */
-.site-footer {
-  padding: 56px 32px 32px;
-  border-top: 1px solid var(--border);
+/* Distribution platform marquee */
+.platforms-strip {
+  margin-top: 5rem;
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--border-faint);
+  border-bottom: 1px solid var(--border-faint);
+  background: rgba(5, 8, 17, 0.3);
+  overflow: hidden;
+  position: relative;
 }
-.footer-inner {
-  max-width: 1100px;
+.platforms-strip__label {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--deep-space);
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border-faint);
+  border-radius: 999px;
+  z-index: 2;
+}
+.platforms-strip::before,
+.platforms-strip::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 120px;
+  z-index: 1;
+  pointer-events: none;
+}
+.platforms-strip::before {
+  left: 0;
+  background: linear-gradient(to right, var(--deep-space), transparent);
+}
+.platforms-strip::after {
+  right: 0;
+  background: linear-gradient(to left, var(--deep-space), transparent);
+}
+.platforms-track {
+  display: flex;
+  gap: 3.5rem;
+  width: max-content;
+  animation: platformsScroll 35s linear infinite;
+  padding-left: 12rem;
+  align-items: center;
+}
+@keyframes platformsScroll {
+  to { transform: translateX(-50%); }
+}
+.platform-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-style: italic;
+  color: var(--paper-warm);
+  white-space: nowrap;
+}
+.platform-pill__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--warm-gold);
+}
+
+/* ========================================================================
+   PRICING TIERS
+   ======================================================================== */
+.pricing {
+  padding: var(--section-y) 0;
+  position: relative;
+}
+.pricing::before {
+  content: "";
+  position: absolute;
+  top: 20%; right: -10%;
+  width: 50%; height: 60%;
+  background: radial-gradient(circle, rgba(126, 184, 218, 0.06), transparent 60%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+.pricing__header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 4rem;
+}
+.pricing__header h2 {
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+}
+.pricing__header p {
+  color: var(--paper-warm);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  margin-top: 1rem;
+}
+.pricing__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+@media (max-width: 980px) {
+  .pricing__grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+}
+.tier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 2rem 2.25rem;
+  border: 1px solid var(--border-faint);
+  border-radius: 16px;
+  background: linear-gradient(165deg, rgba(126,184,218,0.04), rgba(10,14,26,0.5));
+  transition: all 0.45s var(--ease-out-cubic);
+  overflow: hidden;
+}
+.tier:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-soft);
+  background: linear-gradient(165deg, rgba(126,184,218,0.07), rgba(10,14,26,0.65));
+}
+.tier--featured {
+  border-color: rgba(201, 162, 39, 0.4);
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(201,162,39,0.10), transparent 70%),
+    linear-gradient(165deg, rgba(126,184,218,0.05), rgba(10,14,26,0.6));
+  box-shadow: 0 0 40px -10px rgba(201, 162, 39, 0.2);
+}
+.tier--featured::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--warm-gold), transparent);
+}
+.tier--featured:hover {
+  border-color: var(--warm-gold);
+  box-shadow: 0 0 60px -10px rgba(201, 162, 39, 0.35);
+}
+.tier__badge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: var(--warm-gold);
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.tier__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pale-blue);
+  margin-bottom: 0.75rem;
+}
+.tier--featured .tier__eyebrow { color: var(--warm-gold-soft); }
+.tier__name {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--paper);
+  margin: 0 0 0.6rem;
+  letter-spacing: -0.02em;
+}
+.tier__audience {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.98rem;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-bottom: 1.5rem;
+  min-height: 2.6em;
+}
+.tier__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-faint);
+}
+.tier__price-amount {
+  font-family: var(--font-display);
+  font-size: 3.25rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+  font-feature-settings: "tnum";
+}
+.tier__price-period {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.tier__commitment {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--warm-gold-soft);
+  text-transform: uppercase;
+  margin: 1.25rem 0 1rem;
+  display: block;
+}
+.tier__features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  flex-grow: 1;
+  display: grid;
+  gap: 0.75rem;
+}
+.tier__features li {
+  font-size: 0.92rem;
+  color: var(--paper-warm);
+  line-height: 1.55;
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+.tier__features li::before {
+  content: "✓";
+  color: var(--warm-gold);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+  font-size: 0.85rem;
+}
+.tier__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  background: rgba(126, 184, 218, 0.08);
+  color: var(--paper);
+  border: 1px solid var(--border-soft);
+  transition: all 0.35s var(--ease-out-cubic);
+}
+.tier__cta:hover {
+  background: var(--paper);
+  color: var(--void);
+  transform: translateY(-1px);
+}
+.tier--featured .tier__cta {
+  background: var(--warm-gold);
+  color: var(--void);
+  border-color: var(--warm-gold);
+}
+.tier--featured .tier__cta:hover {
+  background: var(--warm-gold-soft);
+  box-shadow: 0 12px 32px -8px rgba(201, 162, 39, 0.4);
+}
+.pricing__footnote {
+  text-align: center;
+  margin-top: 3rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+.pricing__footnote a {
+  color: var(--warm-gold-soft);
+  border-bottom: 1px solid rgba(201, 162, 39, 0.3);
+  transition: border-color 0.3s ease;
+}
+.pricing__footnote a:hover { border-color: var(--warm-gold); }
+
+/* ========================================================================
+   TBPN / SAM ALTMAN PULL QUOTE
+   ======================================================================== */
+.feature-quote {
+  padding: var(--section-y) 0;
+}
+.feature-quote__inner {
+  max-width: 880px;
   margin: 0 auto;
+  text-align: center;
+}
+.feature-quote blockquote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.4;
+  color: var(--paper);
+  margin: 0 0 1.5rem;
+  position: relative;
+}
+.feature-quote blockquote::before {
+  content: "\201C";
+  font-family: var(--font-display);
+  font-size: 6rem;
+  position: absolute;
+  top: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--warm-gold);
+  opacity: 0.4;
+  line-height: 1;
+}
+.feature-quote cite {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.feature-quote__body {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  text-align: left;
+}
+@media (max-width: 720px) {
+  .feature-quote__body { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+.feature-quote__body p {
+  font-size: 1.05rem;
+  color: var(--paper-warm);
+  line-height: 1.7;
+}
+.feature-quote__body strong { color: var(--paper); }
+
+/* ========================================================================
+   FOUNDERS
+   ======================================================================== */
+.founders {
+  padding: var(--section-y) 0;
+  background: linear-gradient(180deg, transparent, rgba(5, 8, 17, 0.4));
+}
+.founders__header { max-width: 600px; margin-bottom: 4rem; }
+.founders__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+@media (max-width: 760px) {
+  .founders__grid { grid-template-columns: 1fr; }
+}
+.founder-card {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1.75rem;
+  padding: 2rem;
+  border: 1px solid var(--border-faint);
+  border-radius: 16px;
+  background: linear-gradient(165deg, rgba(126,184,218,0.03), rgba(10,14,26,0.4));
+  transition: all 0.4s var(--ease-out-cubic);
+}
+.founder-card:hover {
+  border-color: var(--border-soft);
+  transform: translateY(-3px);
+}
+@media (max-width: 540px) {
+  .founder-card { grid-template-columns: 1fr; text-align: center; }
+}
+.founder-card__avatar {
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-soft);
+}
+@media (max-width: 540px) {
+  .founder-card__avatar { margin: 0 auto; }
+}
+.founder-card__role {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--warm-gold-soft);
+  margin-bottom: 0.5rem;
+}
+.founder-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.4rem;
+}
+.founder-card__title {
+  font-size: 0.85rem;
+  color: var(--pale-blue);
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+.founder-card p {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+.founder-card__link {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--pale-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.3s ease;
+}
+.founder-card__link:hover { color: var(--warm-gold); }
+
+/* ========================================================================
+   FINAL CTA
+   ======================================================================== */
+.final-cta {
+  padding: var(--section-y) 0;
+  text-align: center;
+  position: relative;
+}
+.final-cta__title {
+  font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  max-width: 880px;
+  margin: 0 auto 2rem;
+}
+.final-cta__title .em {
+  font-style: italic;
+  color: var(--warm-gold-soft);
+}
+.final-cta__sub {
+  font-size: 1.05rem;
+  color: var(--paper-warm);
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.65;
+}
+.final-cta__meta {
+  margin-top: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* ========================================================================
+   FOOTER
+   ======================================================================== */
+.footer {
+  padding: 4rem 0 2.5rem;
+  border-top: 1px solid var(--border-faint);
+  background: var(--void);
+  position: relative;
+  z-index: 1;
+}
+.footer__top {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 48px;
-  padding-bottom: 40px;
+  gap: 3rem;
+  margin-bottom: 3rem;
 }
-.footer-brand p {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.7;
-  margin-top: 12px;
-  max-width: 260px;
+@media (max-width: 760px) {
+  .footer__top { grid-template-columns: 1fr 1fr; }
 }
-.footer-logo img { height: 32px; width: auto; }
-.footer-col h4 {
-  font-size: 12px;
-  font-weight: 700;
+.footer__brand p {
+  font-size: 0.92rem;
+  color: var(--muted);
+  max-width: 320px;
+  margin-top: 1.25rem;
+  line-height: 1.6;
+}
+.footer__col h5 {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 16px;
+  color: var(--paper);
+  margin: 0 0 1.25rem;
+  font-weight: 500;
 }
-.footer-col a {
-  display: block;
-  color: var(--text-body);
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 10px;
-  transition: color 0.2s;
+.footer__col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.65rem;
 }
-.footer-col a:hover { color: var(--accent); }
-.footer-bottom {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
+.footer__col a {
+  font-size: 0.9rem;
+  color: var(--muted);
+  transition: color 0.3s ease;
+}
+.footer__col a:hover { color: var(--paper); }
+.footer__bottom {
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-faint);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted-deep);
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
-.footer-bottom a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-.footer-bottom a:hover { color: var(--accent); }
-@media (max-width: 768px) {
-  .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
-  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+.footer__easter {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px dashed var(--border-faint);
 }
-@media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* ========================================================================
+   SCROLL REVEAL (generic)
+   ======================================================================== */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.65s ease, transform 0.65s ease;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease-out-cubic), transform 0.9s var(--ease-out-cubic);
 }
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="https://aloomii.com" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
-  <ul class="nav-links">
-    <li><a href="https://aloomii.com#offerings">Services</a></li>
-    <li><a href="https://aloomii.com/blog/">Blog</a></li>
-    <li><a href="https://palebluenexus.com" target="_blank">Podcast</a></li>
-    <li><a href="https://aloomii.com/table" class="nav-cta">Apply for The Table</a></li>
-  </ul>
-  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="https://aloomii.com#offerings" onclick="closeMenu()">Services</a>
-  <a href="https://aloomii.com/blog/" onclick="closeMenu()">Blog</a>
-  <a href="https://palebluenexus.com" onclick="closeMenu()">Podcast</a>
-  <a href="https://aloomii.com/table" onclick="closeMenu()">Apply for The Table</a>
+<!-- ============================ COSMIC BACKGROUND ============================ -->
+<div class="cosmos" aria-hidden="true">
+  <div class="cosmos__nebula"></div>
+  <div class="cosmos__stars"></div>
+  <div class="cosmos__grain"></div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="container">
-    <div class="studio-eyebrow">The Studio &middot; Aloomii &middot; We build shows like this for founders</div>
-    <div class="pbn-episode-card">
-      <!-- Left: video -->
-      <div class="pbn-video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/t3dDHRRZyHk?rel=0&modestbranding=1"
-          title="Jim Rogers — Pale Blue Nexus Episode 1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
-      </div>
-      <!-- Right: episode info -->
-      <div>
-        <div class="pbn-episode-label">
-          <div class="pbn-episode-label-bar"></div>
-          <div class="pbn-episode-label-text">Episode 01 &middot; Pale Blue Nexus</div>
-        </div>
-        <h1 class="pbn-episode-title">Pursue What You Love.<br>The World Will Pay You for It.</h1>
-        <p class="pbn-episode-desc">Co-founder of the Quantum Fund with George Soros. 4,200% returns in a decade. 17 years of email correspondence. Episode 1 of Pale Blue Nexus. How he found his calling by accident, what 116 countries in a yellow Mercedes taught him, and the one piece of advice he repeated six times.</p>
-        <div class="pbn-episode-meta">
-          <span>&#128344; March 2026</span>
-          <span>&#127897; Full Interview</span>
-          <span>&#127758; <a href="https://palebluenexus.com" target="_blank" style="color:inherit;text-decoration:none;">palebluenexus.com</a></span>
-        </div>
-        <div class="pbn-episode-ctas">
-          <a href="https://youtu.be/t3dDHRRZyHk" target="_blank" class="pbn-cta">Watch on YouTube</a>
-          <a href="https://podcasts.apple.com/podcast/pale-blue-nexus" target="_blank" class="pbn-cta">Apple Podcasts</a>
-          <a href="https://palebluenexus.com" target="_blank" class="pbn-cta">All Episodes &#8594;</a>
-        </div>
-      </div>
-    </div>
-    <!-- Stats row -->
-    <div class="hero-stats-row">
-      <div class="hero-stat"><div class="hero-stat-num">~5K</div><div class="hero-stat-label">Subscribers in 30 days</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">20K+</div><div class="hero-stat-label">Views, first month</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">9</div><div class="hero-stat-label">Years producing media</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">5</div><div class="hero-stat-label">Shows produced</div></div>
+<!-- ============================ NAV ============================ -->
+<nav class="nav">
+  <div class="container nav__inner">
+    <a href="https://aloomii.com" class="nav__logo">
+      <span class="nav__logo-mark"></span>
+      Aloomii
+    </a>
+    <div class="nav__links">
+      <a href="https://aloomii.com#offerings">Services</a>
+      <a href="https://aloomii.com/blog/">Blog</a>
+      <a href="https://palebluenexus.com">Podcast</a>
+      <a href="https://aloomii.com/table" class="nav__cta">Apply for The Table →</a>
     </div>
   </div>
-</section>
+</nav>
 
-<section class="reveal" style="padding: 40px 0 0; text-align: center;">
-  <div class="container">
-    <p style="font-size: 15px; color: var(--text-body); border-top: 1px solid var(--border); padding-top: 40px;">New to podcast-powered GTM? Start with <a href="/podcast-powered-gtm" style="color: var(--accent); text-decoration: none; font-weight: 600;">the complete guide</a>.</p>
+<!-- ============================ HERO ============================ -->
+<header class="hero">
+  <div class="container hero__inner">
+    <div>
+      <div class="eyebrow">The Studio · Aloomii</div>
+      <h1 class="hero__title">
+        We build shows<br>
+        <span class="accent">like this</span> for founders.
+      </h1>
+      <p class="hero__sub">
+        End-to-end podcast production, multiplied across every platform that matters. Built by operators who've been doing this for nine years.
+      </p>
+      <div class="hero__meta">
+        <span>◐ Episode 01 · Pale Blue Nexus</span>
+        <span>◐ March 2026</span>
+        <span>◐ Full Interview</span>
+      </div>
+      <div class="hero__cta-row">
+        <a href="https://youtu.be/t3dDHRRZyHk" class="btn btn--primary">Watch Episode 01 <span class="arrow">→</span></a>
+        <a href="https://palebluenexus.com" class="btn btn--ghost">All Episodes</a>
+      </div>
+    </div>
+
+    <div class="episode-card">
+      <div class="episode-card__label">
+        <span class="live-dot"></span>
+        Now Streaming · Episode 01
+      </div>
+      <h2 class="episode-card__title">
+        Pursue What You Love. The World Will Pay You for It.
+      </h2>
+      <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 1.25rem;">
+        Co-founder of the Quantum Fund with George Soros. 4,200% returns in a decade. 17 years of email correspondence.
+      </p>
+      <blockquote class="episode-card__quote">
+        Please figure out a way to find out what you love the most. Pursue it, pursue it, pursue it.
+      </blockquote>
+      <div class="episode-card__attribution">— Jim Rogers</div>
+      <div class="waveform" aria-hidden="true">
+        <!-- 32 bars, JS staggers their delays -->
+        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+      </div>
+    </div>
   </div>
-</section>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <span class="scroll-cue__line"></span>
+  </div>
+</header>
 
-<!-- JIM ROGERS STORY -->
+<!-- ============================ STORY ============================ -->
 <section class="story">
   <div class="container">
-    <div class="story-grid">
-      <div class="reveal">
-        <div class="story-label">The Jim Rogers Story</div>
-        <h2 class="story-heading">A cold email in 2009.<br>A podcast guest in 2026.</h2>
-        <p class="story-text">In 2009, Yohann sent a cold email to <strong>Jim Rogers</strong>, co-founder of the Quantum Fund with George Soros. 4,200% returns in a single decade. One of the most sought-after investors alive.</p>
-        <p class="story-text">Rogers replied. Most people would have asked for something immediately. Yohann didn't. He kept the conversation going. Year after year. <strong>No pitch. No ask.</strong> Just genuine connection maintained over time.</p>
-        <p class="story-text">Seventeen years later, Jim sat down as the first guest on Pale Blue Nexus. The episode is live.</p>
-        <div style="margin: 24px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.4); aspect-ratio: 16/9;">
-          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/t3dDHRRZyHk?rel=0&modestbranding=1" title="Jim Rogers — Pale Blue Nexus Episode 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+    <div class="story__grid">
+      <div class="story__title reveal">
+        <div class="eyebrow">The Jim Rogers Story</div>
+        <h2>A cold email in <span class="italic-display">2009</span>. A podcast guest in <span class="italic-display">2026</span>.</h2>
+      </div>
+      <div class="story__body reveal">
+        <p>
+          In 2009, Yohann sent a cold email to <strong>Jim Rogers</strong>, co-founder of the Quantum Fund with George Soros. 4,200% returns in a single decade. One of the most sought-after investors alive.
+        </p>
+        <p>
+          Rogers replied. Most people would have asked for something immediately. Yohann didn't. He kept the conversation going. Year after year. <strong>No pitch. No ask.</strong> Just genuine connection maintained over time.
+        </p>
+        <p>
+          Seventeen years later, Jim sat down as the first guest on Pale Blue Nexus. The episode is live.
+        </p>
+        <p>
+          No agency would have kept that thread alive for 17 years. Most wouldn't last 17 weeks. This is the difference between transactional media and <strong>relationship-driven media</strong>. We build the second kind.
+        </p>
+        <div class="story__quote">
+          <p>Please figure out a way to find out what you love the most. Many people never find it. Or even if they find it, they're afraid to do it. Pursue it, pursue it, pursue it.</p>
+          <cite>Jim Rogers · Pale Blue Nexus, Episode 1</cite>
         </div>
-        <p class="story-text">No agency would have kept that thread alive for 17 years. Most wouldn't last 17 weeks. This is the difference between transactional media and <strong>relationship-driven media</strong>. We build the second kind.</p>
-      </div>
-      <div class="story-aside reveal">
-        <div class="quote-mark">"</div>
-        <p class="quote-text">Please figure out a way to find out what you love the most. Many people never find it. Or even if they find it, they're afraid to do it. Pursue it, pursue it, pursue it.</p>
-        <p class="quote-attr"><strong>Jim Rogers</strong> — Pale Blue Nexus, Episode 1</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TIMELINE -->
-<section class="timeline">
+<!-- ============================ TIMELINE ============================ -->
+<section class="section timeline-section">
   <div class="container">
-    <div class="section-label reveal">Five shows · Three eras · One through line</div>
-    <h2 class="section-heading reveal">We showed up early. Every time.</h2>
-    <div class="timeline-track">
-      <div class="tl-item reveal">
-        <div class="tl-year">2017 — 2018</div>
-        <div class="tl-title">EOS Go</div>
-        <div class="tl-format">Podcast + Live Streams</div>
-        <div class="tl-desc">Early crypto. Hosted and produced across Podbean and all major directories. Broadcast the EOS blockchain launch live to thousands of viewers worldwide. Sat down with Dan Larimer at Block.one headquarters (now Bullish, BLSH on NYSE).</div>
-        <div class="tl-stat">16K views on launch livestream · 3.6K subscribers</div>
+    <div class="timeline-header reveal">
+      <div class="eyebrow">Five shows · Three eras · One through line</div>
+      <h2>We showed up <span class="italic-display">early</span>. Every time.</h2>
+    </div>
+
+    <div class="timeline">
+      <!-- 2017–2018 -->
+      <div class="timeline__item">
+        <div class="timeline__dot"></div>
+        <div class="timeline__date-col">
+          <div class="timeline__year">2017 — 2018</div>
+        </div>
+        <div class="timeline__content">
+          <div class="timeline__brand">
+            <img class="timeline__logo" src="/images/podcasts/eos-go-logo.png" alt="EOS Go logo" />
+          </div>
+          <h3 class="timeline__title">EOS Go</h3>
+          <div class="timeline__kind">Podcast + Live Streams</div>
+          <p class="timeline__desc">Early crypto. Hosted and produced across Podbean and all major directories. Broadcast the EOS blockchain launch live to thousands of viewers worldwide. Sat down with Dan Larimer at Block.one headquarters (now Bullish, BLSH on NYSE).</p>
+          <div class="timeline__stats">16K views on launch livestream · 3.6K subscribers</div>
+        </div>
       </div>
-      <div class="tl-item reveal">
-        <div class="tl-year">2020 — 2023</div>
-        <div class="tl-title">NFT Hype + CryptoSlam Clubhouse</div>
-        <div class="tl-format">Podcast + Live Panels</div>
-        <div class="tl-desc">NFT Hype was the first NFT podcast ever. 50,000+ downloads across rare digital art, Bitcoin Ordinals, AI and NFTs. Yohann interviewed Yat Siu, who went on to lead CryptoSlam's $9M seed round in 2021. Ran live Clubhouse rooms for CryptoSlam, the Mark Cuban-backed NFT data platform, and closed $2M in deals in the process.</div>
-        <div class="tl-stat">56K all-time downloads · 50K+ milestone · First NFT podcast ever</div>
+
+      <!-- 2020–2023 -->
+      <div class="timeline__item timeline__item--right">
+        <div class="timeline__dot"></div>
+        <div class="timeline__date-col">
+          <div class="timeline__year">2020 — 2023</div>
+        </div>
+        <div class="timeline__content">
+          <div class="timeline__brand">
+            <span class="timeline__logo-pair">
+              <img class="timeline__logo" src="/images/podcasts/nft-hype-logo.png" alt="NFT Hype logo" />
+              <img class="timeline__logo" src="/images/podcasts/cryptoslam-clubhouse.png" alt="CryptoSlam Clubhouse logo" />
+            </span>
+          </div>
+          <h3 class="timeline__title">NFT Hype + CryptoSlam Clubhouse</h3>
+          <div class="timeline__kind">Podcast + Live Panels</div>
+          <p class="timeline__desc">NFT Hype was the first NFT podcast ever. 50,000+ downloads across rare digital art, Bitcoin Ordinals, AI and NFTs. Yohann interviewed Yat Siu, who went on to lead CryptoSlam's $9M seed round in 2021. Ran live Clubhouse rooms for CryptoSlam, the Mark Cuban-backed NFT data platform, and closed $2M in deals in the process.</p>
+          <div class="timeline__stats">56K all-time downloads · First NFT podcast ever</div>
+        </div>
       </div>
-      <div class="tl-item reveal">
-        <div class="tl-year">2024</div>
-        <div class="tl-title">Orange Cubicle</div>
-        <div class="tl-format">Pilot Series</div>
-        <div class="tl-desc">Early format experimentation. Testing what works before it matters. Format R&D that informed everything that came after.</div>
+
+      <!-- 2024 -->
+      <div class="timeline__item">
+        <div class="timeline__dot"></div>
+        <div class="timeline__date-col">
+          <div class="timeline__year">2024</div>
+        </div>
+        <div class="timeline__content">
+          <div class="timeline__brand">
+            <img class="timeline__logo" src="/images/podcasts/orange-cubicle-icon.png" alt="Orange Cubicle logo" />
+          </div>
+          <h3 class="timeline__title">Orange Cubicle</h3>
+          <div class="timeline__kind">Pilot Series</div>
+          <p class="timeline__desc">Early format experimentation. Testing what works before it matters. Format R&D that informed everything that came after.</p>
+        </div>
       </div>
-      <div class="tl-item reveal">
-        <div class="tl-year">2026 — Present</div>
-        <div class="tl-title">Pale Blue Nexus</div>
-        <div class="tl-format">Flagship Podcast</div>
-        <div class="tl-desc">The culmination. Jim Rogers as first guest. Austin Armstrong (4M+ followers). Technologies reshaping the world: AI, space, physics, human implications. Distributed across YouTube, Apple Podcasts, Spotify, and iHeart. Listeners in NYC, London, Seattle, and Denver.</div>
-        <div class="tl-stat">~5K subscribers · 20K+ views · first 30 days</div>
+
+      <!-- 2026 -->
+      <div class="timeline__item timeline__item--right">
+        <div class="timeline__dot"></div>
+        <div class="timeline__date-col">
+          <div class="timeline__year">2026 — Present</div>
+        </div>
+        <div class="timeline__content">
+          <div class="timeline__brand">
+            <span class="timeline__logo timeline__logo--svg" aria-label="Pale Blue Nexus mark">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5" fill="#7EB8DA"/>
+                <circle cx="12" cy="12" r="9" stroke="#C9A227" stroke-width="0.8" stroke-dasharray="2 2" opacity="0.7"/>
+                <circle cx="19" cy="6" r="0.8" fill="#F4F1EA"/>
+                <circle cx="4" cy="18" r="0.6" fill="#F4F1EA" opacity="0.6"/>
+              </svg>
+            </span>
+          </div>
+          <h3 class="timeline__title">Pale Blue Nexus</h3>
+          <div class="timeline__kind">Flagship Podcast</div>
+          <p class="timeline__desc">The culmination. Jim Rogers as first guest. Austin Armstrong (4M+ followers). Technologies reshaping the world: AI, space, physics, human implications. Distributed across YouTube, Apple Podcasts, Spotify, and iHeart. Listeners in NYC, London, Seattle, and Denver.</p>
+          <div class="timeline__stats">~5K subscribers · 20K+ views · first 30 days</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- COLLAGE -->
-<section class="collage">
+<!-- ============================ PHOTO MARQUEE ============================ -->
+<section class="photo-marquee" aria-label="Production photos across nine years">
+  <div class="photo-marquee__header">
+    <div class="photo-marquee__kicker">9 years in the room</div>
+    <h3 class="photo-marquee__title">From <span class="em">Block.one</span> to the <span class="em">SLAMvision</span> stage.</h3>
+  </div>
+  <div class="photo-marquee__viewport">
+    <div class="photo-marquee__track">
+      <!-- Set 1 -->
+      <figure class="photo-card">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/blockone-hq.png" alt="At Block.one HQ during EOS Go era" />
+        </div>
+        <figcaption class="photo-card__caption">
+          Block.one HQ
+          <small>EOS Go · 2018</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/eos-go-launch-vote.png" alt="EOS GO/NO-GO Launch Vote livestream" />
+        </div>
+        <figcaption class="photo-card__caption">
+          GO/NO-GO Launch Vote
+          <small>16K live viewers · 2018</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/eos-go-streams.png" alt="EOS Go launch party stream series" />
+        </div>
+        <figcaption class="photo-card__caption">
+          Launch Party series
+          <small>94 videos · 3.6K subs</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card">
+        <div class="photo-card__media">
+          <img src="/images/podcasts/nft-hype-logo.png" alt="NFT Hype — first NFT podcast ever" />
+        </div>
+        <figcaption class="photo-card__caption">
+          First NFT Podcast Ever
+          <small>NFT Hype · 2020</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/yat-siu-interview.png" alt="Yat Siu interview on NFT Hype" />
+        </div>
+        <figcaption class="photo-card__caption">
+          Yat Siu interview
+          <small>Future CryptoSlam lead investor · 2021</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card">
+        <div class="photo-card__media">
+          <img src="/images/podcasts/cryptoslam-clubhouse.png" alt="CryptoSlam Clubhouse — Preparing for the Next NFT Bull Run" />
+        </div>
+        <figcaption class="photo-card__caption">
+          NFT Bull Run panel
+          <small>CryptoSlam Clubhouse · 2022</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/orange-cubicle-panel.png" alt="Orange Cubicle SLAMvision panel" />
+        </div>
+        <figcaption class="photo-card__caption">
+          SLAMvision panel
+          <small>Orange Cubicle · 2024</small>
+        </figcaption>
+      </figure>
+
+      <!-- Set 2 (duplicate for seamless infinite scroll) -->
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/blockone-hq.png" alt="" />
+        </div>
+        <figcaption class="photo-card__caption">
+          Block.one HQ
+          <small>EOS Go · 2018</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/eos-go-launch-vote.png" alt="" />
+        </div>
+        <figcaption class="photo-card__caption">
+          GO/NO-GO Launch Vote
+          <small>16K live viewers · 2018</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/eos-go-streams.png" alt="" />
+        </div>
+        <figcaption class="photo-card__caption">
+          Launch Party series
+          <small>94 videos · 3.6K subs</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-card__media">
+          <img src="/images/podcasts/nft-hype-logo.png" alt="" />
+        </div>
+        <figcaption class="photo-card__caption">
+          First NFT Podcast Ever
+          <small>NFT Hype · 2020</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/yat-siu-interview.png" alt="" />
+        </div>
+        <figcaption class="photo-card__caption">
+          Yat Siu interview
+          <small>Future CryptoSlam lead investor · 2021</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-card__media">
+          <img src="/images/podcasts/cryptoslam-clubhouse.png" alt="" />
+        </div>
+        <figcaption class="photo-card__caption">
+          NFT Bull Run panel
+          <small>CryptoSlam Clubhouse · 2022</small>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-card__media">
+          <img src="https://aloomii.com/images/studio/orange-cubicle-panel.png" alt="" />
+        </div>
+        <figcaption class="photo-card__caption">
+          SLAMvision panel
+          <small>Orange Cubicle · 2024</small>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ STATS ============================ -->
+<section class="stats">
   <div class="container">
-    <div class="collage-heading reveal">9 years in the room</div>
-    <div class="collage-grid">
-      <div class="collage-item featured reveal">
-        <img src="/images/studio/blockone-hq.png" alt="At Block.one HQ with EOS Go" loading="lazy">
-        <div class="collage-caption">Block.one HQ · EOS Go era</div>
+    <div class="stats__grid">
+      <div class="stat reveal">
+        <div class="stat__value" data-count="5" data-suffix="M+">0</div>
+        <div class="stat__label">Total views across all shows</div>
       </div>
-      <div class="collage-item reveal">
-        <img src="/images/studio/yat-siu-interview.png" alt="Yat Siu interview on NFT Hype" loading="lazy">
-        <div class="collage-caption">Yat Siu · NFT Hype (future CryptoSlam lead investor)</div>
+      <div class="stat reveal">
+        <div class="stat__value" data-count="9">0</div>
+        <div class="stat__label">Years producing shows</div>
       </div>
-      <div class="collage-item reveal">
-        <img src="/images/studio/eos-go-launch-vote.png" alt="EOS GO/NO-GO Launch Vote livestream" loading="lazy">
-        <div class="collage-caption">EOS GO/NO-GO Launch Vote · 16K live viewers</div>
+      <div class="stat reveal">
+        <div class="stat__value" data-count="3000" data-suffix="">0</div>
+        <div class="stat__label">Hours listened on PBN</div>
       </div>
-      <div class="collage-item reveal">
-        <img src="/images/studio/orange-cubicle-panel.png" alt="Orange Cubicle live panel" loading="lazy">
-        <div class="collage-caption">Orange Cubicle · SLAMvision powered by CryptoSlam</div>
-      </div>
-      <div class="collage-item featured reveal">
-        <img src="/images/studio/eos-go-streams.png" alt="EOS Go launch party streams" loading="lazy">
-        <div class="collage-caption">EOS Go · Launch Party series · 94 videos · 3.6K subscribers</div>
+      <div class="stat reveal">
+        <div class="stat__value" data-count="75" data-suffix="%">0</div>
+        <div class="stat__label">Listeners who aren't followers</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- NUMBERS -->
-<section class="numbers">
+<!-- ============================ SERVICES ============================ -->
+<section class="section">
   <div class="container">
-    <div class="numbers-grid">
-      <div class="number-item reveal">
-        <div class="number-value">5M+</div>
-        <div class="number-label">Total views across all shows</div>
-      </div>
-      <div class="number-item reveal">
-        <div class="number-value">9</div>
-        <div class="number-label">Years producing shows</div>
-      </div>
-      <div class="number-item reveal">
-        <div class="number-value">3,000</div>
-        <div class="number-label">Hours listened on PBN</div>
-      </div>
-      <div class="number-item reveal">
-        <div class="number-value">75%</div>
-        <div class="number-label">Listeners who aren't followers</div>
-      </div>
+    <div class="services-header reveal">
+      <div class="eyebrow">What we build for founders</div>
+      <h2>Your show. <span class="italic-display">Our studio.</span></h2>
     </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="services">
-  <div class="container">
-    <div class="section-label reveal">What we build for founders</div>
-    <h2 class="section-heading reveal">Your show. Our studio.</h2>
     <div class="services-grid">
       <div class="service-card reveal">
-        <div class="service-icon">🎙</div>
-        <div class="service-title">End-to-end podcast production</div>
-        <div class="service-desc">Concept, format design, recording, editing, publishing, distribution. You show up and talk. We handle everything else. From zero to published in under two weeks.</div>
+        <div class="service-card__icon">🎙</div>
+        <h3>End-to-end production</h3>
+        <p>Concept, format design, recording, editing, publishing, distribution. You show up and talk. We handle everything else. From zero to published in under two weeks.</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon">🤝</div>
-        <div class="service-title">Guest booking that opens doors</div>
-        <div class="service-desc">Not cold DMs to people with 500 followers. Operators, investors, and founders who move markets. Every guest becomes a relationship asset, not a content credit.</div>
+        <div class="service-card__icon">🤝</div>
+        <h3>Guest booking that opens doors</h3>
+        <p>Not cold DMs to people with 500 followers. Operators, investors, and founders who move markets. Every guest becomes a relationship asset, not a content credit.</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon">🎬</div>
-        <div class="service-title">One conversation, 10 content pieces</div>
-        <div class="service-desc">Every episode becomes LinkedIn posts, newsletter editions, blog articles, YouTube Shorts, and social clips. Your AI-powered content engine multiplies a single hour into weeks of visibility.</div>
+        <div class="service-card__icon">📡</div>
+        <h3>Live panels and audio events</h3>
+        <p>We ran live Clubhouse rooms during the NFT boom for a Mark Cuban-backed platform. We know how to fill a room, keep it sharp, and make you the convener, not the attendee.</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon">📡</div>
-        <div class="service-title">Live panels and audio events</div>
-        <div class="service-desc">We ran live Clubhouse rooms during the NFT boom for a Mark Cuban-backed platform. We know how to fill a room, keep it sharp, and make you the convener, not the attendee.</div>
+        <div class="service-card__icon">🎨</div>
+        <h3>Brand voice and creative direction</h3>
+        <p>Your show sounds like you, not a template. AI-enhanced visuals, soundscapes, and editing. Jenny's creative direction has defined brand identities across crypto, NFTs, and founder content for 8+ years.</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon">🎨</div>
-        <div class="service-title">Brand voice and creative direction</div>
-        <div class="service-desc">Your show sounds like you, not a template. AI-enhanced visuals, soundscapes, and editing. Jenny's creative direction has defined brand identities across crypto, NFTs, and founder content for 8+ years.</div>
+        <div class="service-card__icon">📈</div>
+        <h3>Relationship compounding</h3>
+        <p>Every guest is tracked in your relationship intelligence system. Post-episode follow-ups. Reconnection triggers. The person from Episode 3 introduces you to your biggest client by Episode 20.</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon">📈</div>
-        <div class="service-title">Relationship compounding</div>
-        <div class="service-desc">Every guest is tracked in your relationship intelligence system. Post-episode follow-ups. Reconnection triggers. The person from Episode 3 introduces you to your biggest client by Episode 20.</div>
+        <div class="service-card__icon">⚡</div>
+        <h3>Velocity™ engine</h3>
+        <p>The AI multiplication layer running inside every Studio engagement. Clip discovery, hook generation, multi-platform distribution. The full breakdown is below.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PROOF POINT: TBPN -->
-<section class="proof">
+<!-- ============================ ★ VELOCITY (NEW) ★ ============================ -->
+<section class="velocity">
   <div class="container">
-    <div class="story-grid">
-      <div class="story-aside reveal">
-        <div class="quote-mark">"</div>
-        <p class="quote-text">TBPN is my favorite tech show. We want them to keep that going and for them to do what they do so well.</p>
-        <p class="quote-attr"><strong>Sam Altman</strong> — on acquiring TBPN for OpenAI, April 2026</p>
-      </div>
+    <div class="velocity__grid">
       <div class="reveal">
-        <div class="story-label">Why this matters</div>
-        <h2 class="story-heading">A podcast with 58K subscribers just sold for hundreds of millions.</h2>
-        <p class="story-text">OpenAI didn't buy TBPN for the audience size. They bought it for the <strong>relationships every episode created</strong>. Zuckerberg, Nadella, Altman. They came on the show because the hosts had built genuine connections over years.</p>
-        <p class="story-text">TBPN started from a text message. 18 months later: $30M in annual revenue and an acquisition by the most valuable AI company in the world.</p>
-        <p class="story-text"><strong>Media isn't content. Media is infrastructure.</strong> The show is the excuse to have the conversation. The conversation builds the relationship. The relationship is the asset.</p>
-        <p class="story-text">We've been building this way for 9 years. Now we build it for you.</p>
+        <div class="eyebrow">★ Velocity™ · The engine inside the studio</div>
+        <h2 class="velocity__title">
+          One conversation.<br>
+          Thirty pieces of content.<br>
+          <span class="em">Five platforms.</span> Zero burnout.
+        </h2>
+        <p class="velocity__lead">
+          Velocity is the AI multiplication engine that runs inside every Studio engagement. Whether you're shipping 12 clips a month or building a full show, the same fleet finds the moments, writes the hooks, builds the cuts, and ships them where your audience actually lives.
+        </p>
+        <ul class="velocity__bullets">
+          <li><strong>Clip discovery.</strong> Agents watch every recording, identify high-engagement moments using audio energy, chat signal, and topic shifts.</li>
+          <li><strong>Hook engineering.</strong> Platform-specific opening lines, captions, and titles tuned to TikTok, Shorts, Reels, X, and LinkedIn.</li>
+          <li><strong>Distribution + scheduling.</strong> Posts sequenced over weeks, scheduled at optimal times per platform, killed if they underperform.</li>
+          <li><strong>Performance loop.</strong> Underperformers get killed. Hits get amplified. Weekly intel brief on what's working and why.</li>
+          <li><strong>Founder voice locked in.</strong> Jenny's last set of eyes. Nothing ships that doesn't sound like you.</li>
+        </ul>
+        <div class="velocity__pricing">
+          <span>Powered into every Studio tier</span>
+          <strong>·</strong>
+          <a href="#pricing" style="color: var(--warm-gold-soft); text-decoration: none;">See pricing ↓</a>
+        </div>
+      </div>
+
+      <!-- The multiplier visual: orbiting clip nodes around a central episode -->
+      <div class="reveal">
+        <div class="multiplier" aria-hidden="true">
+          <div class="multiplier__ring multiplier__ring--outer"></div>
+          <div class="multiplier__ring"></div>
+          <div class="multiplier__ring multiplier__ring--inner"></div>
+          <div class="multiplier__center">
+            1 episode
+            <small>The Source</small>
+          </div>
+          <!-- 30 nodes — JS distributes them across two rings -->
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+          <div class="multiplier__node"></div><div class="multiplier__node"></div><div class="multiplier__node"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Distribution platform marquee -->
+    <div class="platforms-strip" aria-label="Distribution platforms">
+      <span class="platforms-strip__label">Ships to</span>
+      <div class="platforms-track">
+        <span class="platform-pill">TikTok <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">YouTube Shorts <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">Instagram Reels <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">X / Twitter <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">LinkedIn <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">Spotify Clips <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">Apple Podcasts <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">YouTube Long <span class="platform-pill__dot"></span></span>
+        <!-- duplicate for seamless loop -->
+        <span class="platform-pill">TikTok <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">YouTube Shorts <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">Instagram Reels <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">X / Twitter <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">LinkedIn <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">Spotify Clips <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">Apple Podcasts <span class="platform-pill__dot"></span></span>
+        <span class="platform-pill">YouTube Long <span class="platform-pill__dot"></span></span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TEAM -->
-<section class="team">
+<!-- ============================ PRICING TIERS ============================ -->
+<section class="pricing" id="pricing">
   <div class="container">
-    <div class="section-label reveal">Who runs this</div>
-    <h2 class="section-heading reveal">Operators, not consultants.</h2>
+    <div class="pricing__header reveal">
+      <div class="eyebrow" style="justify-content: center;">Engagement options</div>
+      <h2>Three ways to <span class="italic-display">start.</span></h2>
+      <p>Every tier ships on Velocity™. Pick where you are now — graduate as your show gets bigger.</p>
+    </div>
 
-    <!-- Jenny — featured -->
-    <div class="team-featured reveal">
-      <img src="/images/jenny-calpu.jpg" alt="Jenny Calpu" class="team-featured-photo">
-      <div>
-        <div class="team-featured-label">The Studio Producer</div>
-        <div class="team-name">Jenny Calpu</div>
-        <div class="team-role" style="margin-bottom:18px;">Creative Director · Producer · Taste</div>
-        <div class="team-bio">Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking, years of building trust face to face. Self-taught design, video editing, web development, and AI creative tools from the ground up. Every visual, every soundscape, every cut goes through her. Built aloomii.com, vibrnt.ai, and palebluenexus.com from scratch. Yohann books the guests. Jenny makes it look and sound like it belongs on a real network. She is the last set of eyes before anything ships.</div>
-        <a href="https://www.linkedin.com/in/jenny-calpu/" target="_blank" class="team-linkedin">&#128279; Connect on LinkedIn</a>
+    <div class="pricing__grid">
+      <!-- Tier A — Clips -->
+      <div class="tier reveal">
+        <div class="tier__eyebrow">Tier A</div>
+        <h3 class="tier__name">Clips</h3>
+        <p class="tier__audience">For founders who want short-form distribution without building a full show yet.</p>
+        <div class="tier__price">
+          <span class="tier__price-amount">$699</span>
+          <span class="tier__price-period">/ month</span>
+        </div>
+        <span class="tier__commitment">Month-to-month</span>
+        <ul class="tier__features">
+          <li>One 45-min directed session per month, led by Yohann</li>
+          <li>Pre-session research and strategic question development</li>
+          <li>10–12 produced short-form videos per month, powered by Velocity</li>
+          <li>Editing, captions, thumbnails, platform-formatted</li>
+          <li>You post on your own channels, on your own schedule</li>
+        </ul>
+        <a href="https://aloomii.com/#contact" class="tier__cta">Start with Clips →</a>
+      </div>
+
+      <!-- Tier B — Show -->
+      <div class="tier reveal">
+        <div class="tier__eyebrow">Tier B</div>
+        <h3 class="tier__name">Show</h3>
+        <p class="tier__audience">For founders building a full show as a strategic asset.</p>
+        <div class="tier__price">
+          <span class="tier__price-amount">$1,299</span>
+          <span class="tier__price-period">/ month</span>
+        </div>
+        <span class="tier__commitment">6-month commitment</span>
+        <ul class="tier__features">
+          <li>Full show vision, branding, and platform launch</li>
+          <li>2–4 produced episodes per month with 4 strategic guest bookings</li>
+          <li>25–30 derivative content pieces per episode through Velocity</li>
+          <li>Show notes, blog posts, clips, multi-platform publishing within 48–72 hours</li>
+          <li>Monthly performance report · 2 episodes + 4 bookings guaranteed</li>
+        </ul>
+        <a href="https://aloomii.com/#contact" class="tier__cta">Build the Show →</a>
+      </div>
+
+      <!-- Tier C — Velocity Pro (NEW) -->
+      <div class="tier tier--featured reveal">
+        <span class="tier__badge">New</span>
+        <div class="tier__eyebrow">Tier C · Velocity Pro</div>
+        <h3 class="tier__name">Multiply</h3>
+        <p class="tier__audience">For founders who already have source content and want extreme distribution.</p>
+        <div class="tier__price">
+          <span class="tier__price-amount">$1,899</span>
+          <span class="tier__price-period">/ month</span>
+        </div>
+        <span class="tier__commitment">Bring your own content</span>
+        <ul class="tier__features">
+          <li>Up to 60 produced short-form videos per month from your existing recordings</li>
+          <li>5-platform distribution: TikTok, Shorts, Reels, X, LinkedIn</li>
+          <li>AI-driven clip discovery from podcasts, talks, webinars, panels, interviews</li>
+          <li>Platform-specific hook engineering and metadata optimization</li>
+          <li>Weekly intel brief: what's working, what's killed, what's next</li>
+        </ul>
+        <a href="https://aloomii.com/#contact" class="tier__cta">Multiply What You Have →</a>
       </div>
     </div>
 
-    <!-- Yohann — featured (same as Jenny) -->
-    <div class="team-featured reveal">
-      <img src="/images/yohann-calpu.jpg" alt="Yohann Calpu" class="team-featured-photo">
-      <div>
-        <div class="team-featured-label">Host &amp; Strategist</div>
-        <div class="team-name">Yohann Calpu</div>
-        <div class="team-role" style="margin-bottom:18px;">Host &middot; Strategy &middot; Guest Relations</div>
-        <div class="team-bio">Books the guests, runs the strategy, and hosts. JP Morgan, IBM, Ontario Government, then CryptoSlam, where he closed $2M in deals and helped raise a $9M seed round backed by Mark Cuban. Yohann's edge isn't a playbook. It's the ability to sit in a conversation and feel when something is about to shift. He cold-emailed Jim Rogers in 2009. The relationship took 17 years. That's the kind of patience no agency has.</div>
-        <a href="https://www.linkedin.com/in/yohanncalpu/" target="_blank" class="team-linkedin">&#128279; Connect on LinkedIn</a>
-      </div>
-    </div>
-
+    <p class="pricing__footnote reveal">
+      Already running a Studio engagement and ready for full GTM? <a href="https://aloomii.com/table">Graduate to The Table →</a>
+    </p>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta">
+<!-- ============================ TBPN / SAM ALTMAN PULL QUOTE ============================ -->
+<section class="feature-quote">
   <div class="container">
-    <h2 class="cta-heading reveal">Which 20 relationships would<br><em>change your business?</em></h2>
-    <p class="cta-sub reveal">A podcast with the right guests puts you in rooms you can't buy your way into. We've done this five times for ourselves. Now we build it for you.</p>
-    <a href="https://aloomii.com/table" class="cta-button reveal">Apply for The Table →</a>
-    <div class="cta-footnote reveal">90-day engagement · $3,300/month</div>
-    <p class="cat-line reveal">Aloomii is named in memory of our two cats, Aloo and Mittens. The company is slightly more productive than they were.</p>
+    <div class="feature-quote__inner">
+      <div class="eyebrow" style="justify-content: center;">Why this matters</div>
+      <blockquote class="reveal">
+        TBPN is my favorite tech show. We want them to keep that going and for them to do what they do so well.
+      </blockquote>
+      <cite>Sam Altman · on acquiring TBPN for OpenAI, April 2026</cite>
+      <div class="feature-quote__body">
+        <p class="reveal">
+          OpenAI didn't buy TBPN for the audience size — 58K subscribers. They bought it for the <strong>relationships every episode created</strong>. Zuckerberg, Nadella, Altman. They came on the show because the hosts had built genuine connections over years.
+        </p>
+        <p class="reveal">
+          TBPN started from a text message. 18 months later: $30M in annual revenue and an acquisition by the most valuable AI company in the world. <strong>Media isn't content. Media is infrastructure.</strong> The show is the excuse to have the conversation. The conversation builds the relationship. The relationship is the asset.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></div>
-      <p>Relationship intelligence for founders who run on trust. AI scans. Humans judge. You act.</p>
+<!-- ============================ FOUNDERS ============================ -->
+<section class="founders">
+  <div class="container">
+    <div class="founders__header reveal">
+      <div class="eyebrow">Who runs this</div>
+      <h2>Operators, <span class="italic-display">not consultants.</span></h2>
     </div>
-    <div class="footer-col">
-      <h4>Services</h4>
-      <a href="https://aloomii.com/table">The Table</a>
-      <a href="https://aloomii.com/studio">The Studio</a>
-      <a href="/#offerings">Relationship Intelligence</a>
-    </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <a href="https://aloomii.com">Home</a>
-      <a href="https://aloomii.com/blog/">Blog</a>
-      <a href="https://palebluenexus.com" target="_blank">Pale Blue Nexus</a>
-    </div>
-    <div class="footer-col">
-      <h4>Legal</h4>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms of Service</a>
-      <a href="/client-terms.html">Client Terms</a>
+    <div class="founders__grid">
+      <article class="founder-card reveal">
+        <img class="founder-card__avatar" src="https://aloomii.com/images/jenny-calpu.jpg" alt="Jenny Calpu" />
+        <div>
+          <div class="founder-card__role">The Studio Producer</div>
+          <h3>Jenny Calpu</h3>
+          <div class="founder-card__title">Creative Director · Producer · Taste</div>
+          <p>Jenny is the reason Aloomii's work feels like a person, not a platform. Started in personal banking, years of building trust face to face. Self-taught design, video editing, web development, and AI creative tools from the ground up. Every visual, every soundscape, every cut goes through her. Built aloomii.com, vibrnt.ai, and palebluenexus.com from scratch. Yohann books the guests. Jenny makes it look and sound like it belongs on a real network. She is the last set of eyes before anything ships.</p>
+          <a href="https://www.linkedin.com/in/jenny-calpu/" class="founder-card__link">Connect on LinkedIn →</a>
+        </div>
+      </article>
+
+      <article class="founder-card reveal">
+        <img class="founder-card__avatar" src="https://aloomii.com/images/yohann-calpu.jpg" alt="Yohann Calpu" />
+        <div>
+          <div class="founder-card__role">Host & Strategist</div>
+          <h3>Yohann Calpu</h3>
+          <div class="founder-card__title">Host · Strategy · Guest Relations</div>
+          <p>Books the guests, runs the strategy, and hosts. JP Morgan, IBM, Ontario Government, then CryptoSlam, where he closed $2M in deals and helped raise a $9M seed round backed by Mark Cuban. Yohann's edge isn't a playbook. It's the ability to sit in a conversation and feel when something is about to shift. He cold-emailed Jim Rogers in 2009. The relationship took 17 years. That's the kind of patience no agency has.</p>
+          <a href="https://www.linkedin.com/in/yohanncalpu/" class="founder-card__link">Connect on LinkedIn →</a>
+        </div>
+      </article>
     </div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2026 Aloomii. All rights reserved.</span>
-    <span><a href="mailto:hello@aloomii.com">hello@aloomii.com</a></span>
+</section>
+
+<!-- ============================ FINAL CTA ============================ -->
+<section class="final-cta">
+  <div class="container">
+    <h2 class="final-cta__title reveal">
+      The show is the excuse.<br>
+      <span class="em">The relationship is the asset.</span>
+    </h2>
+    <p class="final-cta__sub reveal">
+      A podcast with the right guests puts you in rooms you can't buy your way into. We've done this five times for ourselves. Now we build it for you.
+    </p>
+    <a href="https://aloomii.com/#contact" class="btn btn--primary reveal">
+      Start a Conversation <span class="arrow">→</span>
+    </a>
+    <div class="final-cta__meta reveal">
+      Studio engagements start at $699/mo · Ready for full GTM? <a href="https://aloomii.com/table" style="color: var(--warm-gold-soft); border-bottom: 1px solid rgba(201,162,39,0.3);">Graduate to The Table →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="https://aloomii.com" class="nav__logo" style="font-size: 1.4rem;">
+          <span class="nav__logo-mark"></span>
+          Aloomii
+        </a>
+        <p>Relationship intelligence for founders who run on trust. AI scans. Humans judge. You act.</p>
+      </div>
+      <div class="footer__col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="https://aloomii.com/table">The Table</a></li>
+          <li><a href="https://aloomii.com/studio">The Studio</a></li>
+          <li><a href="https://aloomii.com/#offerings">Relationship Intelligence</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="https://aloomii.com">Home</a></li>
+          <li><a href="https://aloomii.com/blog/">Blog</a></li>
+          <li><a href="https://palebluenexus.com">Pale Blue Nexus</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="https://aloomii.com/privacy.html">Privacy Policy</a></li>
+          <li><a href="https://aloomii.com/terms.html">Terms of Service</a></li>
+          <li><a href="https://aloomii.com/client-terms.html">Client Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__easter">
+      Aloomii is named in memory of our two cats, Aloo and Mittens. The company is slightly more productive than they were.
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Aloomii. All rights reserved.</span>
+      <span>Built with relationships in mind.</span>
+    </div>
   </div>
 </footer>
 
+<!-- ============================ MOTION JS ============================ -->
 <script>
-// Mobile menu
-function toggleMenu() {
-  document.querySelector('.hamburger').classList.toggle('active');
-  document.getElementById('mobileMenu').classList.toggle('active');
-}
-function closeMenu() {
-  document.querySelector('.hamburger').classList.remove('active');
-  document.getElementById('mobileMenu').classList.remove('active');
-}
+(() => {
+  // 1. Stagger waveform bar animation delays
+  document.querySelectorAll('.waveform__bar').forEach((bar, i) => {
+    bar.style.animationDelay = `${(i * 0.04) % 1.4}s`;
+    bar.style.animationDuration = `${1.2 + (i % 3) * 0.2}s`;
+  });
 
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+  // 2. Distribute multiplier nodes — half on inner ring, half on outer
+  const nodes = document.querySelectorAll('.multiplier__node');
+  const total = nodes.length;
+  nodes.forEach((node, i) => {
+    const ring = i < total / 2 ? 'inner' : 'outer';
+    const radius = ring === 'inner' ? 110 : 195;
+    const ringNodes = total / 2;
+    const indexInRing = ring === 'inner' ? i : i - ringNodes;
+    const angle = (indexInRing / ringNodes) * 360;
+    const orbitDuration = ring === 'inner' ? 18 : 28;
+    const direction = ring === 'inner' ? 'reverse' : 'normal';
+    const colors = ['var(--pale-blue)', 'var(--warm-gold)', 'var(--paper)'];
+    const color = colors[i % colors.length];
+
+    node.style.setProperty('--r', `${radius}px`);
+    node.style.background = color;
+    node.style.boxShadow = `0 0 10px ${color}`;
+    node.style.animation = `nodeOrbit ${orbitDuration}s linear infinite ${direction}, nodeBlink ${1.5 + (i % 4) * 0.4}s ease-in-out infinite`;
+    node.style.animationDelay = `${-(angle / 360) * orbitDuration}s, ${(i * 0.07) % 2}s`;
+  });
+
+  // 3. Generic scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal, .timeline__item').forEach(el => io.observe(el));
+
+  // 4. Animated counter on scroll into view
+  const animateCount = (el) => {
+    const target = parseFloat(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    const start = performance.now();
+    const startVal = 0;
+
+    const tick = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      const value = Math.floor(startVal + (target - startVal) * eased);
+      const formatted = target >= 1000 && !suffix.includes('M')
+        ? value.toLocaleString()
+        : value.toString();
+      el.innerHTML = `${formatted}<span class="stat__suffix">${suffix}</span>`;
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const counterIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCount(entry.target);
+        counterIO.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat__value[data-count]').forEach(el => counterIO.observe(el));
+
+  // 5. Subtle parallax on cosmic nebula
+  let ticking = false;
+  const nebula = document.querySelector('.cosmos__nebula');
+  window.addEventListener('scroll', () => {
+    if (!ticking && nebula) {
+      requestAnimationFrame(() => {
+        const y = window.scrollY * 0.05;
+        nebula.style.transform = `translate(0, ${-y}px)`;
+        ticking = false;
+      });
+      ticking = true;
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
 </script>
 
 </body>
