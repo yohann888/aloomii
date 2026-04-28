@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moji.gg — 种子前轮募资文件</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+ :root {
+ --bg: #FAF7F0;
+ --bg-2: #F2EDE0;
+ --ink: #0D1B2A;
+ --ink-soft: #2A3A4F;
+ --muted: #4A5A6E;
+ --pale-blue: #2E6FA0;
+ --warm-gold: #9A7A1C;
+ --warm-gold-soft: #B8941F;
+ --rule: rgba(13, 27, 42, 0.18);
+ --card: #FFFFFF;
+ --card-shadow: 0 1px 3px rgba(13, 27, 42, 0.06), 0 8px 24px rgba(13, 27, 42, 0.04);
+ }
+
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+
+ html {
+ scroll-behavior: smooth;
+ background: #FAF7F0;
+ }
+
+ body {
+ background: #FAF7F0;
+ color: #0D1B2A;
+ font-family: "Noto Sans SC", "Inter", system-ui, sans-serif;
+ line-height: 1.75;
+ font-size: 17px;
+ -webkit-font-smoothing: antialiased;
+ min-height: 100vh;
+ }
+
+ body::before {
+ content: "";
+ position: fixed;
+ inset: 0;
+ background:
+ radial-gradient(ellipse at 20% 0%, rgba(46, 111, 160, 0.06), transparent 50%),
+ radial-gradient(ellipse at 80% 100%, rgba(154, 122, 28, 0.05), transparent 50%);
+ pointer-events: none;
+ z-index: 0;
+ }
+
+ main {
+ position: relative;
+ z-index: 1;
+ max-width: 1080px;
+ margin: 0 auto;
+ padding: 80px 32px 120px;
+ }
+
+ /* HERO */
+ .hero {
+ text-align: center;
+ padding: 60px 0 80px;
+ border-bottom: 1px solid var(--rule);
+ margin-bottom: 80px;
+ }
+
+ .hero .eyebrow {
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-style: italic;
+ color: var(--warm-gold);
+ letter-spacing: 0.2em;
+ text-transform: uppercase;
+ font-size: 13px;
+ margin-bottom: 24px;
+ }
+
+ .hero h1 {
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-size: clamp(56px, 9vw, 110px);
+ font-weight: 600;
+ letter-spacing: -0.02em;
+ line-height: 1;
+ margin-bottom: 24px;
+ color: var(--ink);
+ }
+
+ .hero .tagline {
+ font-family: "Noto Serif SC", serif;
+ font-size: clamp(20px, 2.5vw, 28px);
+ font-weight: 300;
+ color: var(--ink);
+ max-width: 720px;
+ margin: 0 auto 40px;
+ }
+
+ .hero .tagline em {
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-style: italic;
+ color: var(--warm-gold);
+ font-weight: 500;
+ }
+
+ .emoji-strip {
+ font-size: 28px;
+ letter-spacing: 0.5em;
+ margin: 32px 0;
+ opacity: 0.85;
+ }
+
+ .by {
+ color: var(--muted);
+ font-size: 14px;
+ letter-spacing: 0.05em;
+ }
+
+ .by strong { color: var(--ink); font-weight: 600; }
+
+ /* SLIDE */
+ .slide {
+ padding: 64px 0;
+ border-top: 1px solid var(--rule);
+ }
+
+ .slide-meta {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ font-size: 12px;
+ letter-spacing: 0.2em;
+ text-transform: uppercase;
+ color: var(--warm-gold);
+ margin-bottom: 32px;
+ }
+
+ .slide-meta .count {
+ color: var(--muted);
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ letter-spacing: 0.05em;
+ text-transform: none;
+ font-size: 14px;
+ }
+
+ .slide-eyebrow {
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-style: italic;
+ color: var(--pale-blue);
+ font-size: 18px;
+ margin-bottom: 12px;
+ }
+
+ .slide h2 {
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-size: clamp(36px, 5vw, 56px);
+ font-weight: 600;
+ letter-spacing: -0.01em;
+ line-height: 1.15;
+ margin-bottom: 32px;
+ max-width: 920px;
+ }
+
+ .slide h2 em {
+ font-style: italic;
+ color: var(--warm-gold);
+ }
+
+ .slide .lede {
+ font-size: 18px;
+ color: var(--muted);
+ max-width: 780px;
+ margin-bottom: 48px;
+ }
+
+ /* GAP / PRIMITIVE CARDS */
+ .grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+ gap: 24px;
+ margin-top: 32px;
+ }
+
+ .card {
+ background: var(--card);
+ border: 1px solid var(--rule);
+ border-radius: 4px;
+ padding: 32px 28px;
+ position: relative;
+ transition: border-color 0.3s ease, transform 0.3s ease;
+ box-shadow: var(--card-shadow);
+ }
+
+ .card:hover { border-color: var(--warm-gold); transform: translateY(-2px); }
+
+ .card .roman {
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ color: var(--warm-gold);
+ font-size: 20px;
+ margin-bottom: 8px;
+ }
+
+ .card .icon {
+ font-size: 36px;
+ margin-bottom: 16px;
+ display: block;
+ }
+
+ .card .tag {
+ display: inline-block;
+ font-size: 11px;
+ letter-spacing: 0.15em;
+ text-transform: uppercase;
+ color: var(--warm-gold);
+ border: 1px solid var(--rule);
+ padding: 4px 10px;
+ border-radius: 999px;
+ margin-bottom: 16px;
+ }
+
+ .card h3 {
+ font-family: "Noto Serif SC", serif;
+ font-size: 22px;
+ font-weight: 600;
+ margin-bottom: 12px;
+ line-height: 1.3;
+ }
+
+ .card h3 em {
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-style: italic;
+ color: var(--warm-gold);
+ }
+
+ .card p {
+ color: var(--muted);
+ font-size: 15px;
+ line-height: 1.7;
+ }
+
+ .card p strong { color: var(--ink); font-weight: 600; }
+
+ /* STATS */
+ .stats {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+ gap: 32px;
+ margin: 40px 0;
+ padding: 40px 0;
+ border-top: 1px solid var(--rule);
+ border-bottom: 1px solid var(--rule);
+ }
+
+ .stat .num {
+ font-family: "Cormorant Garamond", serif;
+ font-size: 56px;
+ font-weight: 600;
+ color: var(--warm-gold);
+ line-height: 1;
+ letter-spacing: -0.02em;
+ margin-bottom: 8px;
+ }
+
+ .stat .num em { font-style: italic; }
+
+ .stat .label {
+ font-size: 13px;
+ letter-spacing: 0.1em;
+ text-transform: uppercase;
+ color: var(--ink);
+ margin-bottom: 8px;
+ }
+
+ .stat .desc {
+ font-size: 14px;
+ color: var(--muted);
+ line-height: 1.6;
+ }
+
+ /* STEPS */
+ .steps {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+ gap: 16px;
+ margin-top: 32px;
+ }
+
+ .step {
+ background: var(--card);
+ border: 1px solid var(--rule);
+ border-radius: 4px;
+ padding: 24px 20px;
+ text-align: center;
+ box-shadow: var(--card-shadow);
+ }
+
+ .step .step-num {
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ font-size: 13px;
+ color: var(--pale-blue);
+ letter-spacing: 0.1em;
+ margin-bottom: 12px;
+ }
+
+ .step .step-emoji {
+ font-size: 40px;
+ margin: 8px 0;
+ }
+
+ .step h4 {
+ font-family: "Noto Serif SC", serif;
+ font-size: 18px;
+ margin: 8px 0;
+ color: var(--warm-gold);
+ }
+
+ .step p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+ /* EMOJI UNIVERSE */
+ .universe {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+ gap: 12px;
+ margin: 32px 0;
+ }
+
+ .ticker {
+ background: var(--card);
+ border: 1px solid var(--rule);
+ border-radius: 4px;
+ aspect-ratio: 1;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ transition: all 0.2s ease;
+ box-shadow: 0 1px 2px rgba(13, 27, 42, 0.05);
+ }
+
+ .ticker:hover {
+ border-color: var(--warm-gold);
+ transform: translateY(-2px);
+ }
+
+ .ticker .e { font-size: 28px; }
+
+ .ticker .t {
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ font-size: 12px;
+ color: var(--warm-gold);
+ margin-top: 4px;
+ }
+
+ .legend {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 24px;
+ font-size: 13px;
+ color: var(--muted);
+ margin-top: 16px;
+ }
+
+ .legend span::before {
+ content: "●";
+ color: var(--warm-gold);
+ margin-right: 6px;
+ }
+
+ /* AUDIENCE */
+ .phases {
+ display: flex;
+ flex-direction: column;
+ gap: 16px;
+ margin: 32px 0;
+ }
+
+ .phase {
+ display: grid;
+ grid-template-columns: 60px 1fr 100px;
+ gap: 24px;
+ align-items: start;
+ padding: 24px;
+ background: var(--card);
+ border-left: 3px solid var(--warm-gold);
+ box-shadow: var(--card-shadow);
+ }
+
+ .phase .ph-num {
+ font-family: "Cormorant Garamond", serif;
+ font-size: 36px;
+ color: var(--warm-gold);
+ line-height: 1;
+ }
+
+ .phase .ph-tag {
+ font-size: 11px;
+ letter-spacing: 0.15em;
+ text-transform: uppercase;
+ color: var(--pale-blue);
+ margin-bottom: 6px;
+ }
+
+ .phase h3 {
+ font-family: "Noto Serif SC", serif;
+ font-size: 20px;
+ margin-bottom: 8px;
+ }
+
+ .phase p {
+ color: var(--muted);
+ font-size: 14px;
+ }
+
+ .phase .ph-time {
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ color: var(--warm-gold);
+ text-align: right;
+ font-size: 14px;
+ }
+
+ /* INSIGHT BOX */
+ .insight {
+ margin: 48px 0 0;
+ padding: 32px;
+ background: linear-gradient(135deg, rgba(154, 122, 28, 0.08), rgba(46, 111, 160, 0.05));
+ border: 1px solid var(--rule);
+ border-radius: 4px;
+ }
+
+ .insight .ins-eyebrow {
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ color: var(--pale-blue);
+ font-size: 14px;
+ margin-bottom: 12px;
+ letter-spacing: 0.05em;
+ }
+
+ .insight blockquote {
+ font-family: "Noto Serif SC", serif;
+ font-size: 22px;
+ line-height: 1.5;
+ color: var(--ink);
+ margin-bottom: 16px;
+ }
+
+ .insight blockquote em {
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-style: italic;
+ color: var(--warm-gold);
+ }
+
+ .insight p { color: var(--muted); font-size: 15px; }
+ .insight p strong { color: var(--ink); font-weight: 600; }
+
+ /* CHART */
+ .chart-block {
+ margin: 32px 0;
+ padding: 32px;
+ background: var(--card);
+ border: 1px solid var(--rule);
+ border-radius: 4px;
+ box-shadow: var(--card-shadow);
+ }
+
+ .chart-block .ch-title {
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ color: var(--pale-blue);
+ margin-bottom: 8px;
+ }
+
+ .chart-block .ch-headline {
+ font-family: "Noto Serif SC", serif;
+ font-size: 20px;
+ color: var(--ink);
+ margin-bottom: 24px;
+ }
+
+ .chart-block .ch-headline em {
+ color: var(--warm-gold);
+ font-style: italic;
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ }
+
+ .chart-bars {
+ display: flex;
+ align-items: flex-end;
+ height: 160px;
+ gap: 6px;
+ border-bottom: 1px solid var(--rule);
+ padding-bottom: 8px;
+ }
+
+ .bar {
+ flex: 1;
+ background: linear-gradient(to top, rgba(154, 122, 28, 0.4), var(--warm-gold));
+ border-radius: 1px 1px 0 0;
+ position: relative;
+ }
+
+ .bar.peak {
+ background: linear-gradient(to top, var(--warm-gold), var(--warm-gold-soft));
+ }
+
+ .bar.peak::after {
+ content: "$260M · 4月16日峰值";
+ position: absolute;
+ top: -28px;
+ left: 50%;
+ transform: translateX(-50%);
+ font-size: 11px;
+ color: var(--warm-gold);
+ white-space: nowrap;
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ }
+
+ .chart-axis {
+ display: flex;
+ justify-content: space-between;
+ font-size: 11px;
+ color: var(--muted);
+ margin-top: 8px;
+ letter-spacing: 0.05em;
+ }
+
+ /* TEAM */
+ .team {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+ gap: 32px;
+ margin-top: 40px;
+ }
+
+ .person {
+ padding: 28px;
+ background: var(--card);
+ border: 1px solid var(--rule);
+ border-radius: 4px;
+ box-shadow: var(--card-shadow);
+ }
+
+ .person-top {
+ display: grid;
+ grid-template-columns: 80px 1fr;
+ gap: 20px;
+ align-items: center;
+ margin-bottom: 20px;
+ padding-bottom: 20px;
+ border-bottom: 1px solid var(--rule);
+ }
+
+ .person-photo {
+ width: 80px;
+ height: 80px;
+ border-radius: 50%;
+ overflow: hidden;
+ border: 1px solid var(--rule);
+ }
+
+ .person-photo img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ }
+
+ .person .name {
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-size: 28px;
+ color: var(--warm-gold);
+ margin-bottom: 4px;
+ }
+
+ .person .role {
+ font-size: 13px;
+ letter-spacing: 0.1em;
+ text-transform: uppercase;
+ color: var(--pale-blue);
+ margin-bottom: 16px;
+ }
+
+ .person p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+ /* SOURCE */
+ .source {
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ font-size: 13px;
+ color: var(--muted);
+ margin-top: 24px;
+ letter-spacing: 0.05em;
+ }
+
+ /* FOOTER */
+ footer {
+ margin-top: 80px;
+ padding-top: 40px;
+ border-top: 1px solid var(--rule);
+ text-align: center;
+ color: var(--muted);
+ font-size: 13px;
+ }
+
+ footer .moji-mark {
+ font-family: "Cormorant Garamond", serif;
+ font-style: italic;
+ font-size: 24px;
+ color: var(--warm-gold);
+ margin-bottom: 8px;
+ }
+
+ /* TRANSLATION NOTE */
+ .trans-note {
+ background: rgba(46, 111, 160, 0.06);
+ border: 1px dashed var(--pale-blue);
+ border-radius: 4px;
+ padding: 16px 24px;
+ margin-bottom: 48px;
+ font-size: 13px;
+ color: var(--ink-soft);
+ font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+ font-style: italic;
+ }
+
+ .trans-note strong { color: var(--pale-blue); font-style: normal; }
+
+ @media (max-width: 640px) {
+ main { padding: 40px 20px 80px; }
+ .phase { grid-template-columns: 1fr; }
+ .phase .ph-time { text-align: left; }
+ }
+</style>
+</head>
+<body>
+<main>
+
+ <!-- HERO -->
+ <section class="hero">
+ <div class="eyebrow">种子前轮 · 机密文件</div>
+ <h1>Moji.gg</h1>
+ <p class="tagline">
+ 建立在比特币之上的<em>表情符号 DeFi 层</em>。<br>
+ 为今日的人类而建。<em>为明日的智能体而备。</em>
+ </p>
+ <div class="emoji-strip">🥞 🦄 🍌 🌽 🌹 🛸 ✋ 🥭 🍿</div>
+ <p class="tagline" style="font-size: 16px; color: var(--muted);">
+ 可编程的模因币,在比特币 L1 完成结算。
+ </p>
+ <p class="by" style="margin-top: 40px;">
+ 项目方 · <strong>Aloomii Inc.</strong> · 加拿大安大略省
+ </p>
+ </section>
+
+ <div class="trans-note">
+ <strong>翻译说明:</strong> 本文件为 aloomii.com/moji 之简体中文翻译版本,内容如实保留原页结构 with data. BRC-20, Ordinals, USDT, USDC, Bitcoin L1 etc industry terms remain in English.
+ </div>
+
+ <!-- SLIDE 02: PROBLEM -->
+ <section class="slide" id="slide-02">
+ <div class="slide-meta">
+ <span>02 / 问题</span>
+ <span class="count">种子前轮募资 · 机密</span>
+ </div>
+ <div class="slide-eyebrow">何处出了问题</div>
+ <h2>BRC-20 <em>仍在运行</em>。其周边基础设施却<em>已经死寂</em>。</h2>
+ <p class="lede">
+ 比特币原生模因币正在产生机构级的成交量。但搭建其上的产品层尚未交付。三个空白,一个机会。
+ </p>
+
+ <div class="grid">
+ <div class="card">
+ <div class="roman">第一</div>
+ <div class="icon">🥞🌽</div>
+ <h3>比特币原生资产之上,缺乏<em>游戏化界面</em>。</h3>
+ <p>持有者能买入并持有 ORDI、SATS 或稀有表情符号代币。这就是<strong>用户体验的全部</strong>。没有 LP,没有排行榜,没有 PvP 机制,也没有让人明天再来的理由。热度一退,注意力随之蒸发。</p>
+ </div>
+
+ <div class="card">
+ <div class="roman">第二</div>
+ <div class="icon">🀄</div>
+ <h3>中文散户,<em>无原生场所</em>可玩。</h3>
+ <p>推动 $ORDI <strong>月成交量 68 亿美元</strong>的头部声音,几乎全部用普通话发声。但他们手上的产品只是<strong>微信截图与中心化交易所的合约</strong>。面对全球最大的比特币模因币受众,链上、模因原生、比特币原生的 DeFi 游戏一个都没有。</p>
+ </div>
+
+ <div class="card">
+ <div class="roman">第三</div>
+ <div class="icon">🧨</div>
+ <h3>模因币的注意力<em>无法复利</em>。</h3>
+ <p>代币暴涨,持有者跑路,社区解散。没有任何机制能把投机性注意力转化为<strong>产品黏性</strong>。每一轮 BRC-20 周期的价值都漏回了 CEX,因为链上没有任何东西在捕获它。</p>
+ </div>
+ </div>
+
+ <p class="source">问题 · 三个空白,一个机会 · 02 / 14</p>
+ </section>
+
+ <!-- SLIDE 03: SOLUTION -->
+ <section class="slide" id="slide-03">
+ <div class="slide-meta">
+ <span>03 / 解决方案</span>
+ <span class="count">四项原语 · 一个表情符号竞技场</span>
+ </div>
+ <div class="slide-eyebrow">四项原语</div>
+ <h2>把每一个表情符号变成<em>具竞争力</em>的链上资产。</h2>
+ <p class="lede">
+ Moji.gg 是一个建于比特币之上的游戏化 DeFi 平台。用户铸造表情符号代币、把它们押注于 PvP 机制中、并通过会上瘾的游戏循环获取收益。一切均通过 BRC-2.0 在比特币 L1 完成结算。
+ </p>
+
+ <div class="grid">
+ <div class="card">
+ <span class="tag">MVP · 上线即就绪</span>
+ <div class="icon">🏭</div>
+ <h3>表情符号<em>代币工厂</em></h3>
+ <p>无许可铸造 BRC-20 表情符号代币,自带绑定流动性池。<strong>BRC-20 是唯一一个原生支持 Unicode 的主流代币标准</strong> —— 这意味着表情符号代币只存在于比特币之上,别无他处。创作者永久赚取池内 0.3% 手续费。稀有 Unicode 字符将成为可交易的稀缺原语。</p>
+ </div>
+
+ <div class="card">
+ <span class="tag">MVP · 上线即就绪</span>
+ <div class="icon">⚔️</div>
+ <h3>流动性<em>大战</em></h3>
+ <p>各战队竞相主导表情符号 / 稳定币交易池的 LP 仓位。每周派奖、表情符号阵营归属、跨平台冲榜工具一应俱全。收益以<strong>美元计价</strong>,而非随 BTC 波动。把被动的流动性提供变成 PvP 体育赛事。</p>
+ </div>
+
+ <div class="card">
+ <span class="tag">MVP · 上线即就绪</span>
+ <div class="icon">🧧</div>
+ <h3>红包<em>抽奖</em></h3>
+ <p>以中国红包文化为主题的无损奖池。用户押注表情符号代币,本金不动,以收益部分竞争头奖。对我们第一阶段的目标受众而言,这是一种文化原生的玩法。</p>
+ </div>
+
+ <div class="card">
+ <span class="tag">MVP · 上线即就绪</span>
+ <div class="icon">💥</div>
+ <h3>闪电<em>劫案</em></h3>
+ <p>单笔交易完成的套利挑战,设有派奖上限。这是奖励链上熟练度的技能型机制,带来反复参与的动力,也为冲榜网络提供病毒式的素材剪辑。</p>
+ </div>
+ </div>
+
+ <p class="source">解决方案 · 由 MVP 定义,而非空中楼阁 · 03 / 14</p>
+ </section>
+
+ <!-- SLIDE 04: WHY NOW -->
+ <section class="slide" id="slide-04">
+ <div class="slide-meta">
+ <span>04 / 为什么是现在</span>
+ <span class="count">我们要消灭的反对意见</span>
+ </div>
+ <div class="slide-eyebrow">市场为何被低估</div>
+ <h2>都说 BRC-20 死了。$ORDI 三十天内做了 <em>68 亿美元</em>。</h2>
+ <p class="lede">
+ 在市场把它一笔勾销两年之后,这个最初的比特币原生模因币标准,每天都在处理机构级的流动性。需求一侧已经醒来。我们正在交付它一直在等待的可编程层。
+ </p>
+
+ <div class="chart-block">
+ <div class="ch-title">ORDI · 日交易量</div>
+ <div class="ch-headline">自四月行情爆发以来,持续维持<em>九位数</em>的日均流动性</div>
+ <div class="chart-bars">
+ <div class="bar" style="height: 30%"></div>
+ <div class="bar" style="height: 38%"></div>
+ <div class="bar" style="height: 42%"></div>
+ <div class="bar" style="height: 50%"></div>
+ <div class="bar" style="height: 55%"></div>
+ <div class="bar" style="height: 62%"></div>
+ <div class="bar" style="height: 70%"></div>
+ <div class="bar peak" style="height: 95%"></div>
+ <div class="bar" style="height: 78%"></div>
+ <div class="bar" style="height: 72%"></div>
+ <div class="bar" style="height: 68%"></div>
+ <div class="bar" style="height: 65%"></div>
+ <div class="bar" style="height: 60%"></div>
+ <div class="bar" style="height: 64%"></div>
+ </div>
+ <div class="chart-axis">
+ <span>3月</span>
+ <span>4月11日</span>
+ <span>4月18日</span>
+ <span>4月21日</span>
+ </div>
+ <p class="source" style="margin-top: 16px;">30 天区间 · 来源:LunarCrush · CoinGecko</p>
+ </div>
+
+ <div class="stats">
+ <div class="stat">
+ <div class="num">$68亿</div>
+ <div class="label">30 天交易量</div>
+ <p class="desc">在四月行情爆发前的 30 天里,$ORDI 处理了约 90 亿加元的成交量。</p>
+ </div>
+ <div class="stat">
+ <div class="num">$2.6亿</div>
+ <div class="label">单日峰值</div>
+ <p class="desc">4 月 16 日至 17 日的爆发将 24 小时成交量推至 2.30–2.60 亿美元区间(主流交易场所合计)。</p>
+ </div>
+ <div class="stat">
+ <div class="num">$1.6–2.18亿</div>
+ <div class="label">爆发后稳定基线</div>
+ <p class="desc">峰值过后,日成交量稳稳停在九位数。爆发并未坍塌。</p>
+ </div>
+ </div>
+
+ <p class="source">来源:CoinGecko · 一线交易所聚合数据 · 2026 年 4 月 · 04 / 14</p>
+ </section>
+
+ <!-- SLIDE 05: PROOF OF DEMAND -->
+ <section class="slide" id="slide-05">
+ <div class="slide-meta">
+ <span>05 / 需求实证</span>
+ <span class="count">两年时间,一个赛道,真金白银</span>
+ </div>
+ <div class="slide-eyebrow">两年时间,一个赛道,真金白银</div>
+ <h2>BRC-20 是比特币<em>第一也是最佳</em>的同质化代币标准,而且体量已经很大。</h2>
+ <p class="lede">
+ 这是 BRC-20 赛道的累计数据。不是预测,不是 TAM 推算。是在全球最具中立信用的账本——比特币上,真实结算的经济 activity。
+ </p>
+
+ <div class="stats">
+ <div class="stat">
+ <div class="num">170<em>万</em>+</div>
+ <div class="label">链上独立钱包</div>
+ <p class="desc">每一个钱包都代表了对该标准真实的经济参与,链上有真实资本承担风险。</p>
+ </div>
+ <div class="stat">
+ <div class="num">$500<em>亿</em>+</div>
+ <div class="label">保守口径累计成交量</div>
+ <p class="desc">涵盖初始上线、2023–2024 年 Ordinals 热潮周期,以及一线交易所上长期稳定的深度流动性。乐观口径下可能突破 800 亿美元。</p>
+ </div>
+ <div class="stat">
+ <div class="num">$5.2<em>亿</em>+</div>
+ <div class="label">支付给比特币矿工</div>
+ <p class="desc">直接付给比特币网络的手续费。是经由该标准实际流转的资本,不是投机性的纸面数字。</p>
+ </div>
+ </div>
+
+ <p class="lede" style="margin-top: 32px;">
+ 这个赛道并非热度周期的产物,而是一个<strong style="color: var(--warm-gold);">数百亿美元体量</strong>的流动性池。它挺过了两年的盘整,并在 2026 年再度加速。Moji.gg 就是为它变现的那一层游戏化界面。
+ </p>
+
+ <p class="source">来源:Dune Analytics · UniSat · Best in Slot · 05 / 14</p>
+ </section>
+
+ <!-- SLIDE 06: PRODUCT EXPERIENCE -->
+ <section class="slide" id="slide-06">
+ <div class="slide-meta">
+ <span>06 / 产品体验</span>
+ <span class="count">一位表情符号 Degen 的一日</span>
+ </div>
+ <div class="slide-eyebrow">一位表情符号 Degen 的一日</div>
+ <h2>一位用户。<em>五分钟。</em>五个有意义的链上动作。</h2>
+ <p class="lede">
+ 每个机制都强化下一个。铸造变成 LP,LP 变成排行榜,排行榜变成冲榜素材,冲榜素材变成新用户。这是飞轮,不是漏斗。
+ </p>
+
+ <div class="steps">
+ <div class="step">
+ <div class="step-num">第 01 步</div>
+ <div class="step-emoji">🥭</div>
+ <h4>铸造</h4>
+ <p>Alice 通过代币工厂铸造 <em>$🥭</em>,创作者手续费流被永久锁定。</p>
+ </div>
+ <div class="step">
+ <div class="step-num">第 02 步</div>
+ <div class="step-emoji">💧</div>
+ <h4>质押</h4>
+ <p>她把 $🥭 押进对阵 🥥 阵营的流动性大战。LP 仓位除交易费外还赚取战役奖励。</p>
+ </div>
+ <div class="step">
+ <div class="step-num">第 03 步</div>
+ <div class="step-emoji">📣</div>
+ <h4>冲榜</h4>
+ <p>Alice 启动微信冲榜工具,排行榜截图自动排版以便分享。新 LP 蜂拥而入。</p>
+ </div>
+ <div class="step">
+ <div class="step-num">第 04 步</div>
+ <div class="step-emoji">🧧</div>
+ <h4>开抽</h4>
+ <p>用 $🥭 作为入场券进入无损红包抽奖。本金安全,以收益部分竞争头奖。</p>
+ </div>
+ <div class="step">
+ <div class="step-num">第 05 步</div>
+ <div class="step-emoji">💥</div>
+ <h4>劫案</h4>
+ <p>她发现一个闪电劫案套利窗口,执行单笔交易,把奖金落袋,再发出剪辑视频。</p>
+ </div>
+ </div>
+
+ <p class="source">产品 · 整合的循环,不是功能堆砌 · 06 / 14</p>
+ </section>
+
+ <!-- EMOJI UNIVERSE -->
+ <section class="slide" id="universe">
+ <div class="slide-eyebrow">Moji.gg 资产宇宙</div>
+ <h2>每一个表情符号都是<em>可交易的原语</em>。</h2>
+ <p class="lede">
+ <strong>BRC-20 是唯一一个原生支持 Unicode 的主流代币标准</strong> —— 因此表情符号资产只存在于比特币之上,别无他处。可铸 ticker 超过 3,782 个,已铭刻 20 个,余下数千个等待铸造。最稀有的几个,将成为蓝筹。
+ </p>
+
+ <div class="universe">
+ <div class="ticker"><span class="e">💰</span><span class="t">$💰</span></div>
+ <div class="ticker"><span class="e">🌈</span><span class="t">$🌈</span></div>
+ <div class="ticker"><span class="e">🍌</span><span class="t">$🍌</span></div>
+ <div class="ticker"><span class="e">🥩</span><span class="t">$🥩</span></div>
+ <div class="ticker"><span class="e">🧡</span><span class="t">$🧡</span></div>
+ <div class="ticker"><span class="e">🥭</span><span class="t">$🥭</span></div>
+ <div class="ticker"><span class="e">🪙</span><span class="t">$🪙</span></div>
+ <div class="ticker"><span class="e">🌮</span><span class="t">$🌮</span></div>
+ <div class="ticker"><span class="e">🌭</span><span class="t">$🌭</span></div>
+ <div class="ticker"><span class="e">🍊</span><span class="t">$🍊</span></div>
+ <div class="ticker"><span class="e">🍹</span><span class="t">$🍹</span></div>
+ <div class="ticker"><span class="e">🌹</span><span class="t">$🌹</span></div>
+ <div class="ticker"><span class="e">🍺</span><span class="t">$🍺</span></div>
+ <div class="ticker"><span class="e">🥞</span><span class="t">$🥞</span></div>
+ <div class="ticker"><span class="e">🥕</span><span class="t">$🥕</span></div>
+ <div class="ticker"><span class="e">🌷</span><span class="t">$🌷</span></div>
+ <div class="ticker"><span class="e">🔫</span><span class="t">$🔫</span></div>
+ <div class="ticker"><span class="e">🗽</span><span class="t">$🗽</span></div>
+ <div class="ticker"><span class="e">🧀</span><span class="t">$🧀</span></div>
+ <div class="ticker"><span class="e">🍣</span><span class="t">$🍣</span></div>
+ <div class="ticker"><span class="e">🌽</span><span class="t">$🌽</span></div>
+ <div class="ticker"><span class="e">🍉</span><span class="t">$🍉</span></div>
+ <div class="ticker"><span class="e">🛸</span><span class="t">$🛸</span></div>
+ <div class="ticker"><span class="e">👽</span><span class="t">$👽</span></div>
+ <div class="ticker"><span class="e">🍎</span><span class="t">$🍎</span></div>
+ </div>
+
+ <div class="legend">
+ <span>传奇 · 持有人数前 20</span>
+ <span>稀有 · 新兴社区代币</span>
+ <span>普通 · 开放铸造</span>
+ </div>
+ </section>
+
+ <!-- SLIDE 07: TARGET AUDIENCE -->
+ <section class="slide" id="slide-07">
+ <div class="slide-meta">
+ <span>07 / 目标受众</span>
+ <span class="count">分阶段,而非分散</span>
+ </div>
+ <div class="slide-eyebrow">分阶段,而非分散</div>
+ <h2>从<em>已经在交易</em>表情符号代币的人群开始。</h2>
+ <p class="lede">
+ 我们不是为地球上每一个玩家而建。我们建的,是为那群正在驱动 <strong>$ORDI 月成交量 68 亿美元</strong>的具体人群,然后由内向外、一圈一圈地拓展。
+ </p>
+
+ <div class="phases">
+ <div class="phase">
+ <div class="ph-num">01</div>
+ <div>
+ <div class="ph-tag">滩头阵地 · 第 1–6 个月</div>
+ <h3>中文母语的 BRC-20 散户</h3>
+ <p>熟悉微信、痴迷模因、可触达 CEX 的 Ordinals / Runes / BRC-20 交易者。$ORDI 的暴涨已经把这群人公开放在了台面上。<strong>USDT 通道</strong>用于入金 —— 这是这个市场已经在使用的稳定币。</p>
+ </div>
+ <div class="ph-time">2026 第二季度<br>2026 第三季度</div>
+ </div>
+
+ <div class="phase">
+ <div class="ph-num">02</div>
+ <div>
+ <div class="ph-tag">扩张期 · 第 6–12 个月</div>
+ <h3>全球加密 Degen</h3>
+ <p>说英语的 BRC-20 持有者、Runes 投机者,以及在寻找有真实赌注的链上游戏的模因币轮动者。届时启用 <strong>USDC 通道</strong> —— 受合规、贴近 GENIUS 法案、机构就位即可对接。</p>
+ </div>
+ <div class="ph-time">2026 第三季度<br>2026 第四季度</div>
+ </div>
+
+ <div class="phase">
+ <div class="ph-num">03</div>
+ <div>
+ <div class="ph-tag">可选上行空间</div>
+ <h3>游戏与社交跨界</h3>
+ <p>Roblox / UEFN 集成、Discord 社区层、TikTok 分发。这些不是达成基线财务模型的必要条件,但都是潜在加成。</p>
+ </div>
+ <div class="ph-time">2027+</div>
+ </div>
+ </div>
+
+ <div class="insight">
+ <div class="ins-eyebrow">战略洞察</div>
+ <blockquote>推动 ORDI 暴涨的前 10 大声音,绝大多数是<em>中文账户</em>。</blockquote>
+ <p>西方 Crypto Twitter 几乎完全错过了那一波行情。这不是一个全球产品被本地化到中国 —— 这是一个由<strong>与 BRC-20 和 Ordinals 圈内社区领袖有直接关系的创始人</strong>从第一天起就以中文模因为原生构建的产品,西方扩张是次要渠道。</p>
+ </div>
+
+ <p class="source">受众 · 先聚焦,后扩张 · 07 / 14</p>
+ </section>
+
+ <!-- SLIDE 08: TEAM -->
+ <section class="slide" id="slide-08">
+ <div class="slide-meta">
+ <span>08 / 团队</span>
+ <span class="count">运营者,不是观光客</span>
+ </div>
+ <div class="slide-eyebrow">运营者,不是观光客</div>
+ <h2>企业级公信力遇上<em>BRC-20 原生</em>的执行力。</h2>
+ <p class="lede">
+ 两位创始人,能力面互补。Aloomii 品牌之下已有正在生产环境运行的智能体集群。早期的基础设施工作积累了深度的 BRC-20 运营者人脉。
+ </p>
+
+ <div class="team">
+   <div class="person">
+     <div class="person-top">
+       <div class="person-photo">
+         <img src="/images/jenny-calpu.jpeg" alt="Jenny Calpu">
+       </div>
+       <div class="person-info">
+         <div class="name">Jenny Calpu</div>
+         <div class="role">联合创始人 · 系统与基础设施</div>
+       </div>
+     </div>
+     <p>Aloomii 联合创始人,曾任职于 IBM 及 JP Morgan,具备面向受监管行业客户所需的企业级公信力。负责模型路由、智能体集群编排,以及 100x 预测系统的整体架构。</p>
+   </div>
+   <div class="person">
+     <div class="person-top">
+       <div class="person-photo">
+         <img src="/images/yohann-calpu.jpg" alt="Yohann Calpu">
+       </div>
+       <div class="person-info">
+         <div class="name">Yohann Calpu</div>
+         <div class="role">联合创始人 · 战略与社区</div>
+       </div>
+     </div>
+     <p>Aloomii 联合创始人。负责战略、客户关系,并担任 Pale Blue Nexus 播客主持人。在 BRC-20 与 Ordinals 圈内拥有可直接调用的关系网络。</p>
+   </div>
+ </div>
+
+ <p class="source">团队 · 已在生产环境中的智能体集群 · 08 / 14</p>
+ </section>
+
+ <footer>
+ <div class="moji-mark">Moji.gg</div>
+ <p>由 Aloomii Inc. 于加拿大安大略省呈递</p>
+ <p style="margin-top: 8px;">本文件依据 aloomii.com/moji 现行内容翻译。原始版本以英文为准。</p>
+ </footer>
+
+</main>
+</body>
+</html>
