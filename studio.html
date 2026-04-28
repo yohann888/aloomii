@@ -575,10 +575,12 @@ p { margin: 0 0 1rem 0; color: var(--muted); }
   margin-bottom: 0.5rem;
 }
 .timeline__date-col {
+  grid-column: 1;
   text-align: right;
   padding-right: 2.5rem;
 }
 .timeline__content {
+  grid-column: 3;
   padding-left: 2.5rem;
 }
 .timeline__item--right .timeline__date-col {
@@ -1643,7 +1645,7 @@ p { margin: 0 0 1rem 0; color: var(--muted); }
 <nav class="nav">
   <div class="container nav__inner">
     <a href="https://aloomii.com" class="nav__logo">
-      <span class="nav__logo-mark"></span>
+      <img src="/images/logos/brand-logo.png" alt="" class="nav__logo-mark" style="width:28px;height:auto;border-radius:0;background:transparent;box-shadow:none;animation:none;">
       Aloomii
     </a>
     <div class="nav__links">
@@ -1678,33 +1680,28 @@ p { margin: 0 0 1rem 0; color: var(--muted); }
       </div>
     </div>
 
-    <div class="episode-card">
-      <div class="episode-card__label">
-        <span class="live-dot"></span>
-        Now Streaming · Episode 01
+    <a href="https://youtu.be/t3dDHRRZyHk" target="_blank" rel="noopener" style="text-decoration:none;display:block;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--border-soft);background:linear-gradient(155deg, rgba(126,184,218,0.08), rgba(201,162,39,0.04));backdrop-filter:blur(8px);transition:transform 0.35s var(--ease-out-cubic),box-shadow 0.35s ease;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 20px 60px -15px rgba(0,0,0,0.5)';" onmouseout="this.style.transform='';this.style.boxShadow='';">
+      <div style="position:relative;">
+        <img src="/images/studio/jim-rogers-video.png" alt="Jim Rogers on Pale Blue Nexus — Episode 01" style="width:100%;height:auto;display:block;aspect-ratio:16/9;object-fit:cover;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,14,26,0.35);transition:background 0.3s ease;">
+          <div style="width:72px;height:72px;border-radius:50%;background:rgba(244,241,234,0.95);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(0,0,0,0.4);transition:transform 0.3s ease,background 0.3s ease;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left:3px;"><path d="M8 5v14l11-7L8 5z" fill="#0A0E1A"/></svg>
+          </div>
+        </div>
       </div>
-      <h2 class="episode-card__title">
-        Pursue What You Love. The World Will Pay You for It.
-      </h2>
-      <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 1.25rem;">
-        Co-founder of the Quantum Fund with George Soros. 4,200% returns in a decade. 17 years of email correspondence.
-      </p>
-      <blockquote class="episode-card__quote">
-        Please figure out a way to find out what you love the most. Pursue it, pursue it, pursue it.
-      </blockquote>
-      <div class="episode-card__attribution">— Jim Rogers</div>
-      <div class="waveform" aria-hidden="true">
-        <!-- 32 bars, JS staggers their delays -->
-        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
-        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
-        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
-        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
-        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
-        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
-        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
-        <div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div><div class="waveform__bar"></div>
+      <div style="padding:1.5rem;">
+        <div style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--warm-gold-soft);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--warm-gold);box-shadow:0 0 0 0 rgba(201,162,39,0.6);animation:liveDotPulse 2s infinite;"></span>
+          Now Streaming · Episode 01
+        </div>
+        <h2 style="font-family:var(--font-display);font-size:1.6rem;font-weight:500;line-height:1.2;color:var(--paper);margin:0 0 0.5rem;">
+          Pursue What You Love. The World Will Pay You for It.
+        </h2>
+        <p style="color:var(--muted);font-size:0.9rem;margin:0;line-height:1.5;">
+          Co-founder of the Quantum Fund with George Soros. 4,200% returns in a decade. 17 years of email correspondence.
+        </p>
       </div>
-    </div>
+    </a>
   </div>
   <div class="scroll-cue">
     <span>Scroll</span>
@@ -2286,7 +2283,7 @@ p { margin: 0 0 1rem 0; color: var(--muted); }
     <div class="footer__top">
       <div class="footer__brand">
         <a href="https://aloomii.com" class="nav__logo" style="font-size: 1.4rem;">
-          <span class="nav__logo-mark"></span>
+          <img src="/images/logos/brand-logo.png" alt="" class="nav__logo-mark" style="width:28px;height:auto;border-radius:0;background:transparent;box-shadow:none;animation:none;">
           Aloomii
         </a>
         <p>Relationship intelligence for founders who run on trust. AI scans. Humans judge. You act.</p>
