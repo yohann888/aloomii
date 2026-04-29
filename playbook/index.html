@@ -77,7 +77,10 @@
       font-weight: 400;
       font-style: normal;
       letter-spacing: 0;
-      font-size: 1.3em;
+      font-size: 1em;
+      /* Italiana only ships in one weight; thicken via stroke */
+      -webkit-text-stroke: 0.6px currentColor;
+      text-stroke: 0.6px currentColor;
     }
     
     .font-mono {
@@ -741,6 +744,22 @@
     /* ============================================
        EDITIONS SECTION
        ============================================ */
+
+    /* Per-edition accent color — drives all "teal" coloring inside #editions only */
+    #editions[data-active-edition="founder"]  { --section-accent: #6fceff; }
+    #editions[data-active-edition="solo"]     { --section-accent: #22ccba; }
+    #editions[data-active-edition="operator"] { --section-accent: #24ff13; }
+
+    /* Override every teal usage scoped to #editions */
+    #editions .edition-tab.active             { color: var(--section-accent); }
+    #editions .edition-tagline                { color: var(--section-accent); }
+    #editions .text-teal                      { color: var(--section-accent); }
+    #editions .edition-card-label             { color: var(--section-accent); }
+    #editions .edition-card-glow              { background: var(--section-accent); }
+    #editions .edition-card-feature svg       { color: var(--section-accent); }
+    #editions .btn-teal                       { background: var(--section-accent); color: #000; }
+    #editions .btn-teal:hover                 { background: var(--section-accent); filter: brightness(0.9); }
+
     .editions-intro {
       max-width: 48rem;
       margin-bottom: 4rem;
@@ -1679,42 +1698,111 @@
             <div class="hero-meta-divider hidden-mobile"></div>
             <div class="hero-meta-item hidden-mobile">
               <p>Guarantee</p>
-              <p>14-day refund</p>
+              <p>72-hour refund</p>
             </div>
           </div>
         </div>
 
         <div class="hero-visual">
-          <div class="hero-visual-inner">
-            <div class="hero-shape-center">
-              <div class="hero-shape-group">
-                <div class="hero-shape hero-shape-1"></div>
-                <div class="hero-shape hero-shape-2"></div>
-                <div class="hero-shape hero-shape-3"></div>
-                <div class="hero-shape hero-shape-4">
-                  <span class="hero-shape-4-letter">A</span>
-                </div>
-                <div class="corner-mark corner-tl"></div>
-                <div class="corner-mark corner-tr"></div>
-                <div class="corner-mark corner-bl"></div>
-                <div class="corner-mark corner-br"></div>
+          <div class="book-flip-stage">
+            <div class="book-floater">
+              <div class="book-flipper" role="img" aria-label="Aloomii Playbook">
+                <div class="book-face book-face-front" style="background-image: url('/images/playbook/book-1.png');"></div>
+                <!-- Back face: dedicated back-of-book artwork -->
+                <div class="book-face book-face-back" style="background-image: url('/images/playbook/book-back.png');"></div>
               </div>
-            </div>
-
-            <div class="floating-badge badge-top-left animate-fade-up delay-300">
-              <p>Library</p>
-              <p>150 examples</p>
-            </div>
-            <div class="floating-badge badge-bottom-right animate-fade-up delay-400">
-              <p>Prompts</p>
-              <p>20+ curated</p>
-            </div>
-            <div class="badge-teal animate-fade-up delay-200">
-              <p>Editions</p>
-              <p>Founder · Solo · Operator</p>
             </div>
           </div>
         </div>
+
+        <style>
+          .book-flip-stage {
+            perspective: 1600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 520px;
+            filter: drop-shadow(0 30px 40px rgba(0,0,0,.45));
+          }
+          .book-floater {
+            transform-style: preserve-3d;
+            animation: book-float 5s ease-in-out infinite;
+          }
+          .book-flipper {
+            position: relative;
+            width: 320px;
+            height: 384px;
+            transform-style: preserve-3d;
+          }
+          /* NOTE: no filter/drop-shadow on these elements — filter on the same element
+             as transform-style: preserve-3d collapses the 3D context, breaking
+             backface-visibility (you'd see mirrored cover text at 180°). */
+          .book-flipper.flipping {
+            animation: book-flip 2s cubic-bezier(.55, 0, .25, 1) both;
+          }
+          @keyframes book-flip {
+            0%   { transform: rotateY(0deg); }
+            35%  { transform: rotateY(-180deg); }   /* flip to back */
+            65%  { transform: rotateY(-180deg); }   /* hold on back */
+            100% { transform: rotateY(0deg); }      /* flip back to front (now showing next title) */
+          }
+          .book-face {
+            position: absolute;
+            inset: 0;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+          }
+          .book-face-back {
+            transform: rotateY(180deg);
+          }
+          @keyframes book-float {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-10px); }
+          }
+          @media (max-width: 900px) {
+            .book-flipper { width: 260px; height: 312px; }
+          }
+          @media (max-width: 480px) {
+            .book-flip-stage { min-height: 380px; }
+            .book-flipper { width: 220px; height: 264px; }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .book-floater, .book-flipper { animation: none; transition: none; }
+          }
+        </style>
+
+        <script>
+          (function() {
+            const sources = [
+              '/images/playbook/book-1.png',
+              '/images/playbook/book-2.png',
+              '/images/playbook/book-3.png'
+            ];
+            const flipper = document.querySelector('.book-flipper');
+            if (!flipper) return;
+            const front = flipper.querySelector('.book-face-front');
+            let i = 0;
+            const FLIP_MS = 2000;
+
+            function tick() {
+              flipper.classList.add('flipping');
+              // Swap front image during the back-facing hold (~50% mark of the 2s animation)
+              setTimeout(function() {
+                i = (i + 1) % sources.length;
+                front.style.backgroundImage = "url('" + sources[i] + "')";
+              }, FLIP_MS / 2);
+              setTimeout(function() {
+                flipper.classList.remove('flipping');
+              }, FLIP_MS + 50);
+            }
+
+            setInterval(tick, 4500);
+          })();
+        </script>
       </div>
     </div>
   </section>
@@ -1753,7 +1841,7 @@
           </p>
         </div>
 
-        <!-- DASHBOARD SCREENSHOT PLACEHOLDER #1 — REPLACE WITH REAL SCREENSHOT -->
+        <!-- DASHBOARD SCREENSHOT — live portal dashboard -->
         <div class="screenshot-placeholder">
           <div class="screenshot-browser-bar">
             <div class="browser-dot"></div>
@@ -1761,21 +1849,14 @@
             <div class="browser-dot"></div>
             <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">app.aloomii.com</div>
           </div>
-          <div class="screenshot-grid-bg"></div>
-          <div class="screenshot-placeholder-inner">
-            <p class="screenshot-label">Portal Screenshot</p>
-            <p class="screenshot-title">app.aloomii.com dashboard</p>
-            <p class="screenshot-caption">
-              Prompts, tools, workflows, and the Library, with your personal state across every item.
-            </p>
-          </div>
+          <img src="/images/playbook/portal-dashboard.jpeg" alt="The Aloomii Playbook portal — viewing the 'Cold Outreach for Insurance Brokers' prompt with sidebar showing Prompts, AI Tools, Workflows, and Library" style="display:block;width:100%;height:auto;">
         </div>
       </div>
     </div>
   </section>
 
   <!-- EDITIONS -->
-  <section id="editions" class="section section-bg-gray">
+  <section id="editions" class="section section-bg-gray" data-active-edition="founder">
     <div class="container">
       
       <div class="editions-intro">
@@ -1826,12 +1907,11 @@
             </div>
 
             <div class="edition-cta-row">
-              <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
-              <a href="#buy" class="btn-teal">
+              <a href="https://aloomii.gumroad.com/l/founder-edition" class="btn-teal" target="_blank" rel="noopener">
                 Get the Founder Edition · $149
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
-              <span class="edition-guarantee">One-time · 14-day refund · Instant access</span>
+              <span class="edition-guarantee">One-time · 72-hour refund · Instant access</span>
             </div>
           </div>
 
@@ -1847,12 +1927,12 @@
                 <h4 class="edition-card-title">Founder<br>Edition</h4>
                 <p class="edition-card-subtitle font-emphasis">For founders of 2-50 person companies.</p>
                 <div class="edition-card-features">
-                  <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>65+ page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>20+ curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Custom web portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>6 complete workflows</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>The Library</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Lifetime updates</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                 </div>
                 <div class="edition-card-price">
@@ -1894,12 +1974,11 @@
             </div>
 
             <div class="edition-cta-row">
-              <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
-              <a href="#buy" class="btn-teal">
+              <a href="https://aloomii.gumroad.com/l/solopreneur-edition" class="btn-teal" target="_blank" rel="noopener">
                 Get the Solo Edition · $149
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
-              <span class="edition-guarantee">One-time · 14-day refund · Instant access</span>
+              <span class="edition-guarantee">One-time · 72-hour refund · Instant access</span>
             </div>
           </div>
 
@@ -1915,12 +1994,12 @@
                 <h4 class="edition-card-title">Solo<br>Edition</h4>
                 <p class="edition-card-subtitle font-emphasis">For solopreneurs running the whole show.</p>
                 <div class="edition-card-features">
-                  <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>65+ page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>20+ curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Custom web portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>6 complete workflows</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>The Library</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Lifetime updates</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                 </div>
                 <div class="edition-card-price">
@@ -1962,12 +2041,11 @@
             </div>
 
             <div class="edition-cta-row">
-              <!-- BUY LINK PLACEHOLDER: update to Gumroad URL when ready -->
-              <a href="#buy" class="btn-teal">
+              <a href="https://aloomii.gumroad.com/l/operating-leader-edition" class="btn-teal" target="_blank" rel="noopener">
                 Get the Operator Edition · $149
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
-              <span class="edition-guarantee">One-time · 14-day refund · Instant access</span>
+              <span class="edition-guarantee">One-time · 72-hour refund · Instant access</span>
             </div>
           </div>
 
@@ -1983,12 +2061,12 @@
                 <h4 class="edition-card-title">Operator<br>Edition</h4>
                 <p class="edition-card-subtitle font-emphasis">For department heads in regulated industries.</p>
                 <div class="edition-card-features">
-                  <div class="edition-card-feature"><span>70-page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>65+ page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>20+ curated prompts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Custom web portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>6 complete workflows</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                  <div class="edition-card-feature"><span>The Library (150 examples)</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="edition-card-feature"><span>The Library</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Compliance frameworks</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                 </div>
                 <div class="edition-card-price">
@@ -2020,22 +2098,15 @@
             Every element designed to compound. The ebook teaches the thinking. The prompts apply it. The Library provides proven patterns to inject. The portal remembers what works for you.
           </p>
           
-          <!-- DASHBOARD SCREENSHOT PLACEHOLDER #2 — REPLACE WITH REAL SCREENSHOT -->
-          <div class="screenshot-placeholder" style="aspect-ratio: 4/3;">
+          <!-- DASHBOARD SCREENSHOT — Company Brain HQ -->
+          <div class="screenshot-placeholder">
             <div class="screenshot-browser-bar">
               <div class="browser-dot"></div>
               <div class="browser-dot"></div>
               <div class="browser-dot"></div>
-              <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">OpenClaw · Agent Fleet</div>
+              <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">Aloomii Company Brain · HQ</div>
             </div>
-            <div class="screenshot-grid-bg"></div>
-            <div class="screenshot-placeholder-inner">
-              <p class="screenshot-label">Internal Tools</p>
-              <p class="screenshot-title">The engine behind the Playbook</p>
-              <p class="screenshot-caption">
-                OpenClaw, our 7-agent system for client operations, powers the workflows you'll learn.
-              </p>
-            </div>
+            <img src="/images/playbook/openclaw-dashboard.jpeg" alt="Aloomii Company Brain dashboard — HQ view showing signals, hot leads, active opportunities, pipeline value, and PM action tasks" style="display:block;width:100%;height:auto;">
           </div>
         </div>
 
@@ -2048,7 +2119,7 @@
               <div class="inside-item-line"></div>
               <span class="inside-item-num">01</span>
             </div>
-            <h4>The Playbook (70-page ebook)</h4>
+            <h4>The Playbook (65+ page ebook)</h4>
             <p>The thinking behind Aloomii's approach to AI operations, written in essay form with generous illustrations.</p>
           </div>
 
@@ -2061,7 +2132,7 @@
               <span class="inside-item-num">02</span>
             </div>
             <h4>Audio narration</h4>
-            <p>Full ElevenLabs-produced audio version for deep listening or background reference.</p>
+            <p>Two-voice audio version for deep listening or background reference.</p>
           </div>
 
           <div class="inside-item">
@@ -2133,8 +2204,8 @@
               <div class="inside-item-line"></div>
               <span class="inside-item-num">08</span>
             </div>
-            <h4>The Library (150 examples)</h4>
-            <p>A curated swipe file of high-performing content with commentary. Inject into prompts for output that matches proven patterns.</p>
+            <h4>The Library</h4>
+            <p>Production-ready patterns across Voice, Client Communication, Content, Sales, and Operations. Each one includes the prompt, the principle, real examples of good and bad output, and the customization points that make it yours. Updated as the tools change.</p>
           </div>
         </div>
       </div>
@@ -2154,19 +2225,8 @@
             Stop writing from scratch.<br>
             <span class="font-emphasis text-teal">Borrow and improve from what works.</span>
           </h2>
-          <p>150 high-performing LinkedIn posts, landing pages, email subjects, cold outreach templates, and visual references, each with commentary explaining why it works.</p>
+          <p>Production-ready patterns across Voice, Client Communication, Content, Sales, and Operations. Each one includes the prompt, the principle, real examples of good and bad output, and the customization points that make it yours. Updated as the tools change.</p>
           <p>Inject them into your AI prompts. Output that matches proven patterns beats generic AI output every time.</p>
-          <div class="library-stats">
-            <div>
-              <p class="library-stat-label">Launch size</p>
-              <p class="library-stat-value">150 examples</p>
-            </div>
-            <div class="library-divider"></div>
-            <div>
-              <p class="library-stat-label">Growing to</p>
-              <p class="library-stat-value">300+ in 6mo</p>
-            </div>
-          </div>
         </div>
 
         <div class="library-preview">
@@ -2307,7 +2367,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>Contact us within 14 days and we'll swap you to the correct edition at no charge. We'd rather have you in the right edition than collect a refund. After 14 days, you can upgrade by paying the difference.</p></div>
+          <div class="faq-answer"><p>Contact us within 72 hours and we'll swap you to the correct edition at no charge. We'd rather have you in the right edition than collect a refund. After 72 hours, you can upgrade by paying the difference.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2316,7 +2376,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>14-day money-back guarantee. If the Playbook isn't worth $149 to you in the first two weeks, reach out via our <a href="https://www.aloomii.com/#contact">contact form</a> and we'll refund you in full. No friction, no interrogation.</p></div>
+          <div class="faq-answer"><p>72-hour money-back guarantee. If the Playbook isn't worth $149 to you in the first 72 hours, reach out via our <a href="https://www.aloomii.com/#contact">contact form</a> and we'll refund you in full. No friction, no interrogation.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2369,7 +2429,7 @@
           <span>·</span>
           <span>Instant access</span>
           <span>·</span>
-          <span>14-day refund</span>
+          <span>72-hour refund</span>
         </div>
       </div>
     </div>
@@ -2449,7 +2509,8 @@
     // Edition tabs
     const tabs = document.querySelectorAll('.edition-tab');
     const contents = document.querySelectorAll('.edition-content');
-    
+    const editionsSection = document.getElementById('editions');
+
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         const edition = tab.dataset.edition;
@@ -2459,6 +2520,8 @@
           c.classList.remove('active');
           if (c.dataset.edition === edition) c.classList.add('active');
         });
+        // Drive per-edition accent color
+        if (editionsSection) editionsSection.setAttribute('data-active-edition', edition);
       });
     });
 
