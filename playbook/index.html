@@ -280,15 +280,15 @@
     }
     
     .hero-headline {
-      font-size: 2.5rem;
+      font-size: 2.25rem;
       margin-bottom: 2rem;
       line-height: 1;
     }
     @media (min-width: 768px) {
-      .hero-headline { font-size: 3.25rem; }
+      .hero-headline { font-size: 2.875rem; }
     }
     @media (min-width: 1024px) {
-      .hero-headline { font-size: 4rem; line-height: 0.98; }
+      .hero-headline { font-size: 3.5rem; line-height: 0.98; }
     }
     
     .section-headline {
@@ -774,20 +774,24 @@
        EDITIONS SECTION
        ============================================ */
 
-    /* Per-edition accent color — drives all "teal" coloring inside #editions only */
-    #editions[data-active-edition="founder"]  { --section-accent: #6fceff; }
-    #editions[data-active-edition="solo"]     { --section-accent: #22ccba; }
-    #editions[data-active-edition="operator"] { --section-accent: #24ff13; }
+    /* Per-edition accent colors.
+       --section-accent: bright, decorative (card glow, button background, icons on dark)
+       --section-accent-text: darker variant, used for text on light backgrounds */
+    #editions[data-active-edition="smb"]              { --section-accent: #6fceff; --section-accent-text: #1d7eb0; }
+    #editions[data-active-edition="solopreneur"]      { --section-accent: #22ccba; --section-accent-text: #0a7066; }
+    #editions[data-active-edition="operating-leader"] { --section-accent: #24ff13; --section-accent-text: #1a8c0a; }
 
-    /* Override every teal usage scoped to #editions */
-    #editions .edition-tab.active             { color: var(--section-accent); }
-    #editions .edition-tagline                { color: var(--section-accent); }
-    #editions .text-teal                      { color: var(--section-accent); }
+    /* Decorative usage — bright accent (on dark cards / as background) */
     #editions .edition-card-label             { color: var(--section-accent); }
     #editions .edition-card-glow              { background: var(--section-accent); }
     #editions .edition-card-feature svg       { color: var(--section-accent); }
     #editions .btn-teal                       { background: var(--section-accent); color: #000; }
     #editions .btn-teal:hover                 { background: var(--section-accent); filter: brightness(0.9); }
+
+    /* Text usage on white — darker variant for proper contrast */
+    #editions .edition-tab.active             { color: var(--section-accent-text); }
+    #editions .edition-tagline                { color: var(--section-accent-text); }
+    #editions .text-teal                      { color: var(--section-accent-text); }
 
     .editions-intro {
       max-width: 48rem;
@@ -811,8 +815,12 @@
     }
     
     .edition-tab {
-      padding: 0.75rem 1.5rem;
-      font-size: 0.7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.75rem;
+      font-size: 0.875rem;
       font-weight: 700;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -824,6 +832,16 @@
       background: var(--white);
       color: var(--neutral-900);
       box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .edition-tab-id {
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--neutral-400);
+    }
+    .edition-tab.active .edition-tab-id {
+      color: var(--neutral-600);
     }
     
     .edition-content {
@@ -841,9 +859,9 @@
     }
     
     .edition-tagline {
-      font-size: 0.625rem;
+      font-size: 0.875rem;
       font-weight: 700;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--teal);
       margin-bottom: 1rem;
@@ -1698,13 +1716,14 @@
           </div>
 
           <h1 class="hero-headline animate-fade-up delay-100">
-            Where your AI work finally<br>
-            compounds <span class="font-emphasis text-teal">into revenue</span>,<br>
+            Where your AI work<br>
+            finally compounds<br>
+            <span class="font-emphasis text-teal">into revenue</span>,<br>
             not just saved time.
           </h1>
 
           <p class="hero-subhead animate-fade-up delay-200">
-            The AI portal where every prompt, every workflow, and every result makes the next one better, across three role-specific playbooks.
+            The AI system where every prompt, every workflow, and every result makes the next one better. Three editions, one playbook.
           </p>
 
           <div class="hero-cta-row animate-fade-up delay-300">
@@ -1724,7 +1743,7 @@
           <div class="hero-meta animate-fade-up delay-400">
             <div class="hero-meta-item">
               <p>Three editions</p>
-              <p>Founder · Solo · Operator</p>
+              <p>Operating Leader · <span style="color:#1d7eb0;">SMB Owner</span> · Solopreneur</p>
             </div>
             <div class="hero-meta-divider hidden-mobile"></div>
             <div class="hero-meta-item">
@@ -1863,7 +1882,7 @@
         <div class="showcase-copy">
           <div class="eyebrow">
             <div class="eyebrow-line"></div>
-            <span class="eyebrow-text">Inside the Portal</span>
+            <span class="eyebrow-text">Your Portal</span>
           </div>
           <h2 class="section-headline">
             Your AI workspace,<br>
@@ -1898,7 +1917,7 @@
   </section>
 
   <!-- EDITIONS -->
-  <section id="editions" class="section section-bg-gray" data-active-edition="founder">
+  <section id="editions" class="section section-bg-gray" data-active-edition="operating-leader">
     <div class="container">
       
       <div class="editions-intro">
@@ -1907,7 +1926,7 @@
           <span class="eyebrow-text">Three Editions · One Playbook</span>
         </div>
         <h2 class="section-headline-lg">
-          Built for three specific <span class="font-emphasis text-teal">operators</span>.
+          Built for three specific <span class="font-emphasis text-teal">paths</span>.
         </h2>
         <p>
           Each edition shares a common foundation, the core Playbook, with content specifically tuned for how each operator actually works.
@@ -1915,19 +1934,28 @@
       </div>
 
       <div class="edition-tabs">
-        <button class="edition-tab active" data-edition="founder">Founder</button>
-        <button class="edition-tab" data-edition="solo">Solo</button>
-        <button class="edition-tab" data-edition="operator">Operating Leader</button>
+        <button class="edition-tab active" data-edition="operating-leader">
+          <span>Operating Leader</span>
+          <span class="edition-tab-id">You manage a department</span>
+        </button>
+        <button class="edition-tab" data-edition="smb">
+          <span>SMB Owner</span>
+          <span class="edition-tab-id">You hire and lead a business</span>
+        </button>
+        <button class="edition-tab" data-edition="solopreneur">
+          <span>Solopreneur</span>
+          <span class="edition-tab-id">You run the whole show</span>
+        </button>
       </div>
 
-      <!-- FOUNDER -->
-      <div class="edition-content active" data-edition="founder">
+      <!-- SMB OWNER -->
+      <div class="edition-content" data-edition="smb">
         <div class="edition-grid">
           <div>
-            <p class="edition-tagline">For founders of 2-50 person companies</p>
-            <h3 class="edition-hook">Your prompts are scattered across 14 tools.</h3>
-            <p class="edition-subhook font-emphasis">Your AI has no memory of what works.</p>
-            <p class="edition-promise">The Aloomii Playbook gives founders the operating system their AI has been missing.</p>
+            <p class="edition-tagline">For SMB owners of 5-200 person companies</p>
+            <h3 class="edition-hook">A competitor in your category is pulling ahead with AI.</h3>
+            <p class="edition-subhook font-emphasis">You don't know who. You don't know how. But you can feel it.</p>
+            <p class="edition-promise">The Aloomii Playbook is the operating system that turns the gap into your advantage. Soon, they'll be the ones who can feel it.</p>
 
             <div class="edition-lists">
               <div>
@@ -1949,8 +1977,8 @@
             </div>
 
             <div class="edition-cta-row">
-              <a href="https://aloomii.gumroad.com/l/founder-edition" class="btn-teal" target="_blank" rel="noopener">
-                Get the Founder Edition · $179
+              <a href="https://aloomii.gumroad.com/l/smb-edition" class="btn-teal" target="_blank" rel="noopener">
+                Get the SMB Owner Edition · $179
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
               <span class="edition-guarantee">One-time · 72-hour refund · Instant access</span>
@@ -1964,10 +1992,10 @@
               <div class="edition-card-inner">
                 <div class="edition-card-header">
                   <p class="edition-card-label">Aloomii Playbook</p>
-                  <div class="edition-card-badge">Founder</div>
+                  <div class="edition-card-badge">SMB Owner</div>
                 </div>
-                <h4 class="edition-card-title">Founder<br>Edition</h4>
-                <p class="edition-card-subtitle font-emphasis">For founders of 2-50 person companies.</p>
+                <h4 class="edition-card-title">SMB Owner<br>Edition</h4>
+                <p class="edition-card-subtitle font-emphasis">For SMB owners of 5-200 person companies.</p>
                 <div class="edition-card-features">
                   <div class="edition-card-feature"><span>65+ page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1987,14 +2015,14 @@
         </div>
       </div>
 
-      <!-- SOLO -->
-      <div class="edition-content" data-edition="solo">
+      <!-- SOLOPRENEUR -->
+      <div class="edition-content" data-edition="solopreneur">
         <div class="edition-grid">
           <div>
             <p class="edition-tagline">For solopreneurs running the whole show</p>
-            <h3 class="edition-hook">AI content that sounds like everyone else's AI content.</h3>
-            <p class="edition-subhook font-emphasis">Which defeats the whole point of being solo.</p>
-            <p class="edition-promise">The Aloomii Playbook is the solo operator's system for AI that sounds like you at your most focused.</p>
+            <h3 class="edition-hook">Another solopreneur just hit the output of a five-person team.</h3>
+            <p class="edition-subhook font-emphasis">Same hours in the day. Different system underneath.</p>
+            <p class="edition-promise">The Aloomii Playbook is the operating system for solopreneurs. AI that multiplies your voice and your output, instead of flattening either.</p>
 
             <div class="edition-lists">
               <div>
@@ -2009,7 +2037,7 @@
                 <p class="list-heading">What You'll Achieve</p>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>AI that multiplies your voice instead of flattening it</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Scale output 30% without adding a single person</span></div>
-                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Frameworks specifically for solo operators</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Frameworks specifically for solopreneurs</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Workflows where AI genuinely saves more time than it costs</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Admin handled so you can focus on craft</span></div>
               </div>
@@ -2017,7 +2045,7 @@
 
             <div class="edition-cta-row">
               <a href="https://aloomii.gumroad.com/l/solopreneur-edition" class="btn-teal" target="_blank" rel="noopener">
-                Get the Solo Edition · $179
+                Get the Solopreneur Edition · $179
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
               <span class="edition-guarantee">One-time · 72-hour refund · Instant access</span>
@@ -2031,9 +2059,9 @@
               <div class="edition-card-inner">
                 <div class="edition-card-header">
                   <p class="edition-card-label">Aloomii Playbook</p>
-                  <div class="edition-card-badge">Solo</div>
+                  <div class="edition-card-badge">Solopreneur</div>
                 </div>
-                <h4 class="edition-card-title">Solo<br>Edition</h4>
+                <h4 class="edition-card-title">Solopreneur<br>Edition</h4>
                 <p class="edition-card-subtitle font-emphasis">For solopreneurs running the whole show.</p>
                 <div class="edition-card-features">
                   <div class="edition-card-feature"><span>65+ page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -2054,14 +2082,14 @@
         </div>
       </div>
 
-      <!-- OPERATOR -->
-      <div class="edition-content" data-edition="operator">
+      <!-- OPERATING LEADER -->
+      <div class="edition-content active" data-edition="operating-leader">
         <div class="edition-grid">
           <div>
-            <p class="edition-tagline">For department heads in regulated industries</p>
-            <h3 class="edition-hook">Leadership says "get moving on AI."</h3>
-            <p class="edition-subhook font-emphasis">They haven't told you how.</p>
-            <p class="edition-promise">The Aloomii Playbook is the credible, industry-aware framework for running a professional team in an AI-shaped world.</p>
+            <p class="edition-tagline">For Managers</p>
+            <h3 class="edition-hook">The new AI-focused VP role opens next year.</h3>
+            <p class="edition-subhook font-emphasis">Your name isn't on the shortlist. Hers is.</p>
+            <p class="edition-promise">The Aloomii Playbook is the framework that turns AI from a project you manage into a reputation you carry. The kind that lands the next role.</p>
 
             <div class="edition-lists">
               <div>
@@ -2075,7 +2103,7 @@
               <div>
                 <p class="list-heading">What You'll Achieve</p>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>A defensible rollout framework for your department</span></div>
-                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>AI guidance specifically for regulated-industry professionals</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Frameworks that survive a procurement review</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Workflows that work within your compliance constraints</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Team brought up the curve together, not one-at-a-time</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Credible authority in leadership conversations about AI</span></div>
@@ -2084,7 +2112,7 @@
 
             <div class="edition-cta-row">
               <a href="https://aloomii.gumroad.com/l/operating-leader-edition" class="btn-teal" target="_blank" rel="noopener">
-                Get the Operator Edition · $179
+                Get the Operating Leader Edition · $179
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
               <span class="edition-guarantee">One-time · 72-hour refund · Instant access</span>
@@ -2098,10 +2126,10 @@
               <div class="edition-card-inner">
                 <div class="edition-card-header">
                   <p class="edition-card-label">Aloomii Playbook</p>
-                  <div class="edition-card-badge">Operator</div>
+                  <div class="edition-card-badge">Operating Leader</div>
                 </div>
-                <h4 class="edition-card-title">Operator<br>Edition</h4>
-                <p class="edition-card-subtitle font-emphasis">For department heads in regulated industries.</p>
+                <h4 class="edition-card-title">Operating Leader<br>Edition</h4>
+                <p class="edition-card-subtitle font-emphasis">For department heads.</p>
                 <div class="edition-card-features">
                   <div class="edition-card-feature"><span>65+ page ebook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                   <div class="edition-card-feature"><span>Audio narration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -2215,7 +2243,7 @@
               <span class="inside-item-num">06</span>
             </div>
             <h4>Custom web portal</h4>
-            <p>Your content at app.aloomii.com with favorites, notes, status tracking, and continuous updates.</p>
+            <p>Your content at app.aloomii.com with favorites, notes, status tracking, and continuous updates. <strong>Lifetime access included.</strong></p>
           </div>
 
           <div class="inside-item">
@@ -2348,7 +2376,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>The Founder Edition is for people running companies (2-50 employees). The Solo Edition is for independent operators with no employees. The Operating Leader Edition is for department heads inside larger companies (50+ employees). If you're genuinely between two editions, we recommend the one that matches your day-to-day reality, not your aspiration.</p></div>
+          <div class="faq-answer"><p>The Operating Leader Edition is for department heads inside larger companies (50+ employees). The SMB Owner Edition is for people running companies (5-200 employees). The Solopreneur Edition is for independent operators with no employees. If you're genuinely between two editions, we recommend the one that matches your day-to-day reality, not your aspiration.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2366,7 +2394,7 @@
             <svg class="faq-icon faq-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <svg class="faq-icon faq-icon-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <div class="faq-answer"><p>No. The Library and prompts in the portal at <a href="https://app.aloomii.com">app.aloomii.com</a> receive ongoing updates as models evolve. You keep access to updates indefinitely with your one-time purchase. The ebook and audio are versioned. If we publish a meaningful v2, you get it.</p></div>
+          <div class="faq-answer"><p>No. The Library and prompts in the portal at <a href="https://app.aloomii.com">app.aloomii.com</a> receive ongoing updates as models evolve. Today's buyers keep lifetime portal access. Future versions will move to a subscription. Buy now and you're locked in indefinitely. The ebook and audio are versioned. If we publish a meaningful v2, you get it.</p></div>
         </div>
 
         <div class="faq-item">
@@ -2415,13 +2443,13 @@
     
     <div class="container-narrow">
       <div class="final-cta-inner">
-        <p class="final-cta-eyebrow">The Aloomii Playbook · Launch Edition</p>
+        <p class="final-cta-eyebrow">The Aloomii Playbook · V1</p>
         <h2 class="final-cta-headline">
-          Stop reinventing<br>
-          <span class="font-emphasis">what already works.</span>
+          Where AI compounds.<br>
+          <span class="font-emphasis">Pick your path.</span>
         </h2>
         <p class="final-cta-sub">
-          Three editions. One system. Instant access to every prompt, every workflow, the full Library, and the custom portal.
+          Three editions. One playbook. Lifetime portal access. Locked in while V1 is live.
         </p>
         
         <div class="final-cta-row">
@@ -2455,9 +2483,9 @@
         <div>
           <p class="footer-heading">The Playbook</p>
           <ul class="footer-links">
-            <li><a href="#editions">Founder Edition</a></li>
-            <li><a href="#editions">Solo Edition</a></li>
             <li><a href="#editions">Operating Leader Edition</a></li>
+            <li><a href="#editions">SMB Owner Edition</a></li>
+            <li><a href="#editions">Solopreneur Edition</a></li>
           </ul>
         </div>
 
