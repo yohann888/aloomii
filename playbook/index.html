@@ -55,7 +55,7 @@
     
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: 5rem;
+      scroll-padding-top: 9rem;
     }
     
     body {
@@ -111,6 +111,35 @@
     /* ============================================
        NAV (with flicker fix)
        ============================================ */
+    /* Top banner — sits below the nav, sticky */
+    .top-banner {
+      position: sticky;
+      top: 81px;
+      z-index: 49;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 1.125rem 1.5rem;
+      background: var(--neutral-900);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9375rem;
+      text-align: center;
+      transition: background 0.2s ease;
+      outline: none;
+    }
+    .top-banner:hover { background: var(--black); }
+    .top-banner-eyebrow {
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .top-banner-sep { color: var(--neutral-500); }
+
     .nav {
       position: sticky;
       top: 0;
@@ -131,7 +160,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 0;
+      padding: 1.5rem 0;
     }
     
     .nav-logo {
@@ -1647,6 +1676,13 @@
     </div>
   </nav>
 
+  <!-- TOP BANNER -->
+  <a href="#portal" class="top-banner">
+    <span class="top-banner-eyebrow">Limited time</span>
+    <span class="top-banner-sep">·</span>
+    <span>Lifetime portal access. Becoming subscription soon.</span>
+  </a>
+
   <!-- HERO -->
   <section class="hero">
     <div class="grid-pattern"></div>
@@ -1821,7 +1857,7 @@
   </section>
 
   <!-- PORTAL SHOWCASE (dashboard screenshot placeholder #1) -->
-  <section class="section">
+  <section id="portal" class="section">
     <div class="container">
       <div class="showcase-grid">
         <div class="showcase-copy">
@@ -1842,14 +1878,20 @@
         </div>
 
         <!-- DASHBOARD SCREENSHOT — live portal dashboard -->
-        <div class="screenshot-placeholder">
-          <div class="screenshot-browser-bar">
-            <div class="browser-dot"></div>
-            <div class="browser-dot"></div>
-            <div class="browser-dot"></div>
-            <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">app.aloomii.com</div>
+        <div style="position:relative;">
+          <div class="screenshot-placeholder">
+            <div class="screenshot-browser-bar">
+              <div class="browser-dot"></div>
+              <div class="browser-dot"></div>
+              <div class="browser-dot"></div>
+              <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">app.aloomii.com</div>
+            </div>
+            <img src="/images/playbook/portal-dashboard.jpeg" alt="The Aloomii Playbook portal — viewing the 'Cold Outreach for Insurance Brokers' prompt with sidebar showing Prompts, AI Tools, Workflows, and Library" style="display:block;width:100%;height:auto;">
           </div>
-          <img src="/images/playbook/portal-dashboard.jpeg" alt="The Aloomii Playbook portal — viewing the 'Cold Outreach for Insurance Brokers' prompt with sidebar showing Prompts, AI Tools, Workflows, and Library" style="display:block;width:100%;height:auto;">
+          <div class="floating-info floating-info-top">
+            <p>Get access</p>
+            <p>With any edition</p>
+          </div>
         </div>
       </div>
     </div>
