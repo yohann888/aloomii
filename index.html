@@ -438,7 +438,84 @@
     transform: scale(1) translateY(0);
   }
 
-  /* ==================== PROOF POINT ==================== */
+  /* ==================== PROOF ==================== */
+  .proof { padding: 100px 48px; }
+  .proof .content-wrapper { max-width: 1100px; margin: 0 auto; }
+  .receipt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .receipt-card {
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.35s ease;
+  }
+  .receipt-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 40px rgba(0,200,190,0.12);
+  }
+  .receipt-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 16px rgba(0,200,190,0.3);
+  }
+  .receipt-tag {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+    opacity: 0.7;
+  }
+  .receipt-number {
+    font-size: 56px; font-weight: 800;
+    letter-spacing: -2px; line-height: 1;
+    color: #fff; margin-bottom: 6px;
+  }
+  .receipt-label {
+    font-size: 15px; font-weight: 600;
+    color: #fff; margin-bottom: 16px;
+  }
+  .receipt-body {
+    font-size: 14px; color: var(--text-body);
+    line-height: 1.65; flex-grow: 1;
+  }
+  .receipt-tags {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+  .receipt-tags span {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.05em; color: var(--text-muted);
+  }
+  .proof-bottom-line {
+    margin-top: 56px;
+    padding: 40px 44px;
+    border-left: 3px solid var(--accent);
+    background: rgba(0,200,190,0.04);
+    border-radius: 0 16px 16px 0;
+  }
+  .proof-bottom-line p {
+    font-size: 18px;
+    color: #fff; line-height: 1.7;
+    font-style: italic; margin: 0;
+    font-weight: 500;
+  }
+  @media (max-width: 992px) {
+    .receipt-grid { grid-template-columns: 1fr; max-width: 640px; margin: 0 auto; }
+  }
+  @media (max-width: 768px) {
+    .proof { padding: 60px 20px; }
+    .receipt-card { padding: 28px 24px; }
+    .receipt-number { font-size: 44px; }
+    .proof-bottom-line { padding: 28px 24px; }
+    .proof-bottom-line p { font-size: 16px; }
+  }
+
+  /* ==================== PROOF POINT (legacy) ==================== */
+
   .proof-point { padding: 80px 48px; }
   .proof-point-inner { max-width: 1000px; margin: 0 auto; }
   .proof-point .section-heading { margin-bottom: 40px; }
@@ -914,14 +991,60 @@
   </div>
 </section>
 
-<!-- PROOF POINT -->
-<section class="proof-point reveal">
-  <div class="proof-point-inner">
-    <div class="proof-story glass reveal-scale" style="max-width: 750px; margin: 0 auto;">
-      <div class="eyebrow">Real Story</div>
-      <h3>17 years from 5 emails.</h3>
-      <p>Jim Rogers wasn't a lead. He was a name in a CRM that hadn't been touched in months. Our system flagged a signal, drafted the outreach, and our team refined the timing. Five emails later, he became a 17-year client relationship.</p>
-      <span class="proof-highlight">That's what context farming looks like when you play the long game.</span>
+<!-- PROOF -->
+<section class="proof reveal" id="proof">
+  <div class="content-wrapper">
+    <p class="section-label">What happens when relationships are the strategy</p>
+    <h2 class="section-heading">We don't have a portfolio of logos.<br>We have <span class="highlight">receipts</span>.</h2>
+    <p class="sub" style="max-width: 640px; margin: 0 auto 56px;">Every result below came from the same approach: build the relationship first, create value second, ask for nothing until the timing is undeniable.</p>
+
+    <div class="receipt-grid reveal-stagger">
+      <!-- Card 1: CryptoSlam -->
+      <div class="receipt-card glass reveal-child">
+        <div class="receipt-accent"></div>
+        <p class="receipt-tag">Relationship → Introduction → Capital</p>
+        <h3 class="receipt-number">$9M</h3>
+        <p class="receipt-label">Seed round raised</p>
+        <p class="receipt-body">Started a podcast during COVID. Cold-pitched the Chairman of Animoca Brands as a guest. He said yes. We introduced him to the founder of CryptoSlam. He led their $9M seed round, backed by Mark Cuban and Animoca Brands. One podcast. One introduction. One relationship played long.</p>
+        <div class="receipt-tags">
+          <span>ANIMOCA BRANDS</span>
+          <span>MARK CUBAN</span>
+          <span>CRYPTOSLAM</span>
+        </div>
+      </div>
+
+      <!-- Card 2: EOS -->
+      <div class="receipt-card glass reveal-child">
+        <div class="receipt-accent"></div>
+        <p class="receipt-tag">Production → Launch → Global Event</p>
+        <h3 class="receipt-number">$4B</h3>
+        <p class="receipt-label">ICO — largest in history</p>
+        <p class="receipt-body">Jenny produced the live broadcast of the EOS blockchain launch. 200 guests. The famous Go/No-Go call. A global audience watching in real time. She created every live show, launch special, and piece of promotional content for EOS Go. No playbook existed. She wrote it.</p>
+        <div class="receipt-tags">
+          <span>EOS GO</span>
+          <span>BLOCK.ONE</span>
+          <span>200 LIVE GUESTS</span>
+        </div>
+      </div>
+
+      <!-- Card 3: PBN / Jim Rogers -->
+      <div class="receipt-card glass reveal-child">
+        <div class="receipt-accent"></div>
+        <p class="receipt-tag">Content → Distribution → Growth</p>
+        <h3 class="receipt-number">23K+</h3>
+        <p class="receipt-label">Views on Episode 1</p>
+        <p class="receipt-body">Our first Pale Blue Nexus guest was Jim Rogers — billionaire investor, co-founder of the Quantum Fund. Not because we pitched him cold. Because we built a relationship over 17 years before we ever asked. The episode grew the channel to 4,400+ subscribers and counting.</p>
+        <div class="receipt-tags">
+          <span>JIM ROGERS</span>
+          <span>4,400+ SUBSCRIBERS</span>
+          <span>PALE BLUE NEXUS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Line -->
+    <div class="proof-bottom-line reveal-scale glass">
+      <p>We didn't start Aloomii with a product. We started with 17 years of relationships, 5 podcasts, and a track record of turning conversations into capital. The AI and the systems came later. The instinct for relationships came first.</p>
     </div>
   </div>
 </section>
