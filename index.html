@@ -684,20 +684,21 @@
       padding-right: 0 !important;
       padding-top: 60px !important;
       padding-bottom: 60px !important;
+      width: 100% !important;
     }
 
-    /* Grid & Flex Reset: No side-margins on children, padding on parent instead */
-    .offering-grid, .diff-grid, .team-grid, .blog-grid, .receipt-grid, .stat-row, .form-grid, .steps {
+    /* Grid & Flex Reset: Padding on parent instead of margins on children */
+    .offering-grid, .diff-grid, .team-grid, .blog-grid, .receipt-grid, .stat-row, .form-grid, .steps, .tier-grid {
       display: flex !important;
       flex-direction: column !important;
-      gap: 20px !important;
+      gap: 24px !important;
       width: 100% !important;
-      padding: 0 20px !important; /* This is the "safe zone" */
+      padding: 0 20px !important;
       margin: 0 !important;
       box-sizing: border-box !important;
     }
 
-    /* Card/Box Styling: Take 100% of the parent's width (which is already padded) */
+    /* Card/Box Styling: Full width within padded parent */
     .offering-card, .receipt-card, .diff-card, .team-member, .blog-card, .stat-card, .glass, .trades-spotlight, .proof-story, .proof-bottom-line {
       width: 100% !important;
       max-width: 100% !important;
@@ -707,18 +708,30 @@
       grid-column: auto !important;
     }
 
-    /* Specific Fix for Stage 2 Title/Text bleeding */
-    .offering-card h3, .offering-card p {
+    /* Force nested tier divs to behave */
+    .tier-grid > div {
+      width: 100% !important;
       max-width: 100% !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-      word-wrap: break-word !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
     }
 
-    /* Typography scale-down */
-    .hero h1 { font-size: 34px !important; line-height: 1.1; letter-spacing: -1px; padding: 0 20px; }
-    .section-heading { font-size: 28px !important; line-height: 1.2; padding: 0 20px; }
-    .section-sub { padding: 0 24px; font-size: 16px; }
+    /* Special case for the "NEW" Velocity Pro card (it has its own border/bg) */
+    .tier-grid > div[style*="border: 1px solid"] {
+      padding: 24px !important;
+      margin-top: 12px !important;
+    }
+
+    /* Typography and text reflow */
+    .hero h1 { font-size: 34px !important; line-height: 1.1; letter-spacing: -1px; padding: 0 20px; text-align: center; }
+    .section-heading { font-size: 28px !important; line-height: 1.2; padding: 0 20px; text-align: center; }
+    .section-sub { padding: 0 24px; font-size: 16px; text-align: center; }
+    h1, h2, h3, h4, p, span, strong, li { 
+      word-wrap: break-word !important; 
+      overflow-wrap: break-word !important; 
+      max-width: 100% !important;
+    }
 
     /* Fix Ticker */
     .ticker-wrap { width: 100% !important; max-width: 100vw !important; overflow: hidden !important; }
@@ -726,7 +739,7 @@
     /* GTM Banner text shrink */
     .gtm-banner { font-size: 12px !important; padding: 10px 40px 10px 16px !important; }
     
-    /* Override aggressive inline styles */
+    /* Global overrides for aggressive inline styles */
     [style*="max-width"] { max-width: 100% !important; }
     [style*="padding: 56px 48px"] { padding: 32px 20px !important; }
     [style*="padding: 36px 40px"] { padding: 32px 20px !important; }
@@ -868,7 +881,7 @@
 
         <div class="price" style="margin-bottom: 32px;">Three tiers</div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+        <div class="tier-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
           <!-- Tier A -->
           <div>
             <p><strong style="color:var(--accent)">Tier A — Clips: $699/mo</strong></p>
