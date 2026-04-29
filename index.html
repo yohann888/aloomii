@@ -92,7 +92,6 @@
   .mobile-menu a { display: block; padding: 14px 0; color: var(--text-body); text-decoration: none; font-size: 1rem; border-bottom: 1px solid var(--border); }
   .mobile-menu a:last-child { border-bottom: none; }
   .mobile-menu a:hover { color: #fff; }
-  @media (max-width: 768px) { nav { padding: 14px 20px; } .nav-links { display: none; } .hamburger { display: flex; } }
 
   /* ==================== GLASS CARD ==================== */
   .glass {
@@ -108,7 +107,6 @@
 
   /* ==================== CONTENT WRAPPER ==================== */
   .content-wrapper { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
-  @media (max-width: 768px) { .content-wrapper { padding: 0 20px; width: 100%; } }
 
   /* ==================== HERO ==================== */
   .hero {
@@ -374,10 +372,6 @@
     justify-content: center; font-size: 1.4rem; font-weight: 700;
   }
   .form-success p { font-size: 17px; color: var(--text-body); }
-  @media (max-width: 768px) {
-    .contact-section { padding: 60px 20px; }
-    .form-grid { grid-template-columns: 1fr; }
-  }
 
   /* ==================== GTM BAR ==================== */
   .gtm-bar {
@@ -402,8 +396,6 @@
   .footer-bottom a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
   .footer-bottom a:hover { color: var(--accent); }
   .footer-social { display: flex; gap: 16px; }
-  @media (max-width: 768px) { .site-footer { padding: 48px 20px 32px; } .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; } .footer-bottom { flex-direction: column; gap: 12px; text-align: center; } }
-  @media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
 
   .pillars { padding: 80px var(--section-pad-h); }
   .pillars-inner { max-width: 1100px; margin: 0 auto; }
@@ -514,16 +506,6 @@
     font-style: italic; margin: 0;
     font-weight: 500;
   }
-  @media (max-width: 992px) {
-    .receipt-grid { grid-template-columns: 1fr; max-width: 640px; margin: 0 auto; }
-  }
-  @media (max-width: 768px) {
-    .proof { padding: 60px 20px; }
-    .receipt-card { padding: 28px 24px; }
-    .receipt-number { font-size: 44px; }
-    .proof-bottom-line { padding: 28px 24px; }
-    .proof-bottom-line p { font-size: 16px; }
-  }
 
   /* ==================== PROOF POINT (legacy) ==================== */
 
@@ -541,9 +523,6 @@
     display: inline-block; margin-top: 16px; font-size: 14px; font-weight: 600;
     color: var(--accent); border-bottom: 1px solid rgba(0,200,190,0.3); padding-bottom: 2px;
   }
-  @media (max-width: 768px) {
-    .proof-point { padding: 60px 20px; }
-  }
 
   /* ==================== TEAM WITH PHOTOS ==================== */
   .team-member {
@@ -554,10 +533,6 @@
     flex-shrink: 0; border: 2px solid rgba(255,255,255,0.12);
   }
   .team-member-info { flex: 1; }
-  @media (max-width: 480px) {
-    .team-member { flex-direction: column; align-items: center; text-align: center; }
-    .team-member-photo { width: 80px; height: 80px; }
-  }
 
   /* ==================== BLOG PREVIEW ==================== */
   .blog-preview { padding: 80px var(--section-pad-h); }
@@ -591,10 +566,6 @@
     border: 2px solid rgba(255,255,255,0.35); transition: all 0.3s;
   }
   .blog-view-all a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
-  @media (max-width: 768px) {
-    .blog-preview { padding: 60px 20px; }
-    .blog-grid { grid-template-columns: 1fr; }
-  }
 
   /* ==================== FREE SCAN ==================== */
   .free-scan { padding: 80px var(--section-pad-h); }
@@ -623,10 +594,6 @@
   }
   .free-scan-inner .scan-cta:hover { background: #00e0d5; transform: translateY(-2px); }
   .free-scan-inner .no-commitment { font-size: 13px; color: var(--text-muted); margin-top: 14px; }
-  @media (max-width: 768px) {
-    .free-scan { padding: 60px 20px; }
-    .free-scan-inner { padding: 36px 24px; }
-  }
 
   /* ==================== GTM BANNER ==================== */
   .gtm-banner {
@@ -683,71 +650,84 @@
 
   .studio-promo { padding: 0 var(--section-pad-h) 80px; }
   .studio-promo-inner { max-width: 900px; margin: 0 auto; padding: 40px 48px; display: flex; align-items: center; gap: 40px; border: 1px solid rgba(0,200,190,0.25); border-radius: 16px; transition: border-color 0.2s; position: relative; overflow: hidden; }
+  /* ==================== RESPONSIVE ==================== */
   @media (max-width: 768px) {
-    .hero { padding: 60px 20px 40px; }
-    .hero h1 { letter-spacing: -1px; }
-    .offering-grid { grid-template-columns: 1fr; gap: 20px; }
-    .diff-grid { grid-template-columns: 1fr; gap: 20px; }
-    .team-grid { grid-template-columns: 1fr; gap: 20px; }
-    .stat-row { flex-direction: column; align-items: stretch; gap: 16px; }
-    .problem, .how-it-works, .team { padding: 60px 20px; }
-    .offerings, .differentiator, .newsletter { padding: 60px 20px; }
-    .newsletter-inner { padding: 36px 24px !important; }
-    .newsletter-form { flex-direction: column; }
-    .newsletter-form button { width: 100%; }
-    .step { flex-direction: column; gap: 12px; }
-    .step-num { font-size: 36px; min-width: auto; }
-    .proof-logos { gap: 36px; }
-    .proof-logos img { height: 56px; }
-    .gtm-audit { padding: 60px 20px; }
-    .gtm-audit-inner { padding: 36px 24px !important; }
-    .gtm-banner { font-size: 12px; padding: 10px 40px 10px 20px; }
+    :root {
+      --nav-height: 64px;
+    }
 
-    /* Mobile padding fixes (added 2026-04-28) */
-    nav { padding: 14px 16px; }
+    nav { padding: 14px 20px !important; width: 100% !important; left: 0 !important; }
     .nav-logo img { height: 28px; }
-    .verticals { padding: 60px 20px; }
-    .proof { padding: 60px 20px; }
-    .proof-bar { padding: 36px 20px; }
-    .receipt-card { padding: 28px 20px !important; }
-    .receipt-number { font-size: 44px !important; }
-    .receipt-tags { gap: 12px !important; }
-    .receipt-tags span { font-size: 11px; }
-    .proof-bottom-line { padding: 24px 20px !important; }
-    .proof-bottom-line p { font-size: 16px !important; }
-    .problem-inner.glass { padding: 36px 24px !important; }
-    .glass[style*="56px 48px"] { padding: 36px 24px !important; }
-    .studio-promo-inner.glass { padding: 28px 20px !important; gap: 20px !important; flex-direction: column !important; text-align: center; }
-    .team-member { padding: 28px 20px !important; }
-    .diff-card { padding: 28px 20px !important; }
-    .stat-card.glass { padding: 24px 20px !important; min-width: auto !important; width: 100% !important; }
-    .free-scan { padding: 60px 20px; }
-    .free-scan-inner { padding: 32px 22px !important; }
-    .pillars { padding: 48px 20px !important; }
-    .vertical-pills { padding: 0 8px; }
-    .offering-card { padding: 32px 22px !important; width: 100% !important; max-width: 100% !important; }
-    .receipt-grid { gap: 16px !important; }
-    section[id="proof"] .glass { padding: 28px 20px !important; }
-    .how-it-works .glass { padding: 36px 24px !important; }
-    .blog-preview { padding: 60px 20px; }
-    .blog-grid { grid-template-columns: 1fr; gap: 20px; }
-    .blog-card { padding: 28px 20px !important; }
-    .contact-section { padding: 60px 20px; }
-    .team-bottom { padding: 28px 20px !important; }
-    .gtm-bar { padding: 14px 20px; }
-    .ticker-wrap { padding: 20px 0; }
-    .proof-story { padding: 28px 20px !important; }
-    .offering-card .card-cta-row { flex-direction: column; }
-    .offering-card .card-cta-row a { width: 100%; text-align: center; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+
+    /* Force all containers to viewport width */
+    .content-wrapper, .offerings-inner, .problem-inner, .team, .gtm-audit-inner, .free-scan-inner, .differentiator-inner, .pillars-inner {
+      max-width: 100% !important;
+      width: 100% !important;
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Uniform section spacing */
+    section, .problem, .pillars, .offerings, .how-it-works, .differentiator, .verticals, .team, .newsletter, .blog-preview, .free-scan, .gtm-audit, .contact-section, .proof {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      padding-top: 60px !important;
+      padding-bottom: 60px !important;
+      width: 100% !important;
+      overflow-x: hidden !important;
+    }
+
+    /* Unified Box/Card Widths */
+    .offering-card, .receipt-card, .diff-card, .team-member, .blog-card, .stat-card, .glass, .trades-spotlight, .proof-story, .proof-bottom-line {
+      width: calc(100% - 40px) !important; /* Screen width minus 20px padding on each side */
+      margin-left: 20px !important;
+      margin-right: 20px !important;
+      max-width: none !important;
+      box-sizing: border-box !important;
+      padding: 32px 24px !important;
+      grid-column: auto !important;
+    }
+
+    /* Grid/Flex Resets */
+    .offering-grid, .diff-grid, .team-grid, .blog-grid, .receipt-grid, .stat-row, .form-grid, .steps {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 20px !important;
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Typography scale-down */
+    .hero h1 { font-size: 34px !important; line-height: 1.1; letter-spacing: -1px; padding: 0 20px; }
+    .section-heading { font-size: 28px !important; line-height: 1.2; padding: 0 20px; }
+    .section-sub { padding: 0 24px; font-size: 16px; }
+
+    /* Fix Ticker */
+    .ticker-wrap { width: 100% !important; max-width: 100vw !important; overflow: hidden !important; }
+    .ticker { gap: 24px !important; }
+    .ticker span { font-size: 12px !important; gap: 24px !important; }
+
+    /* Fix Logos */
+    .proof-logos { gap: 24px !important; padding: 0 20px !important; }
+    .proof-logos img { height: 44px !important; max-width: 100% !important; }
+
+    /* Receipt Specifics */
+    .receipt-number { font-size: 48px !important; }
+    .receipt-tags { gap: 8px !important; }
+
+    /* Footer */
+    .site-footer { padding: 48px 20px 32px !important; width: 100% !important; }
+    .footer-inner { grid-template-columns: 1fr !important; gap: 40px !important; text-align: center; }
+    .footer-brand p { margin: 12px auto !important; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   }
 
-  @media (max-width: 480px) {
-    .hero h1 { font-size: 32px !important; line-height: 1.1 !important; }
-    .section-heading { font-size: 26px !important; line-height: 1.2 !important; }
-    .receipt-number { font-size: 44px !important; }
-    .vertical-pill { padding: 8px 14px; font-size: 12px; }
-  }
-</style>
+  </style>
 </head>
 <body>
 
@@ -803,7 +783,7 @@
 
 <!-- PROBLEM -->
 <section class="problem reveal">
-  <div class="problem-inner glass" style="padding: 56px 48px; max-width: 900px;">
+  <div class="problem-inner glass">
     <h2>The 2,000-year-old company is ending.</h2>
     <p>The hierarchy you inherited was designed for a world constrained by human memory. Digital minds removed that constraint. The companies winning right now run with tiny teams, shared context, and agent fleets doing the operational work. They're called Agentic Micro Companies. Most of the tooling being built for them assumes your business runs on transactions, not relationships. Yours doesn't. That's what we build for.</p>
     <div class="stat-row reveal-stagger">
@@ -816,27 +796,27 @@
 </section>
 
 <!-- FOUR PILLARS -->
-<section class="pillars reveal" style="padding: 64px 24px;">
-  <div style="max-width:1100px;margin:0 auto;">
+<section class="pillars reveal">
+  <div class="pillars-inner">
     <div class="section-label reveal">How an Aloomii-built AMC runs</div>
     <h2 class="section-heading reveal">Four pillars. One operating system.</h2>
-    <div class="offering-grid" style="margin-top:40px;">
-      <div class="offering-card founders glass reveal-scale" style="padding:32px;">
+    <div class="offering-grid">
+      <div class="offering-card founders glass reveal-scale">
         <div style="font-size:28px;margin-bottom:12px;">&#128100;</div>
         <h3 style="font-size:20px;margin-bottom:10px;">Tiny teams.</h3>
         <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Generalist player-coaches, not org charts. Every person on your team operates like a founder.</p>
       </div>
-      <div class="offering-card founders glass reveal-scale" style="padding:32px;">
+      <div class="offering-card founders glass reveal-scale">
         <div style="font-size:28px;margin-bottom:12px;">&#129504;</div>
         <h3 style="font-size:20px;margin-bottom:10px;">Company Brain.</h3>
         <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">One source of context — clients, conversations, history, commitments — that every agent and every human draws from.</p>
       </div>
-      <div class="offering-card founders glass reveal-scale" style="padding:32px;">
+      <div class="offering-card founders glass reveal-scale">
         <div style="font-size:28px;margin-bottom:12px;">&#9881;</div>
         <h3 style="font-size:20px;margin-bottom:10px;">Agents doing the work.</h3>
         <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Fleets of specialized agents handling the majority of operational work, governed by your rules and your voice.</p>
       </div>
-      <div class="offering-card founders glass reveal-scale" style="padding:32px;">
+      <div class="offering-card founders glass reveal-scale">
         <div style="font-size:28px;margin-bottom:12px;">&#127793;</div>
         <h3 style="font-size:20px;margin-bottom:10px;">Humans farming context.</h3>
         <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Your team stops being the bottleneck. They tend the brain, add what only humans can sense, and let the business grow.</p>
@@ -852,7 +832,7 @@
     <h2 class="section-heading reveal">From diagnosis to distribution.</h2>
     <p class="section-sub reveal">Start with The Audit. Most clients add Studio next, then graduate to The Table or Relationship Intelligence depending on whether they're building pipeline or protecting it.</p>
     <div class="offering-grid">
-<div class="offering-card founders glass reveal-scale" style="grid-column: 1 / -1; max-width: 800px; margin: 0 auto;">
+<div class="offering-card founders glass reveal-scale full-width">
         <div class="card-tag">Stage 1 — Diagnose</div>
         <h3>See what your AMC could look like.</h3>
         <div class="price">$2,500 one-time</div>
@@ -871,7 +851,7 @@
           <a href="#contact" class="card-cta card-cta-outline">Book an Audit</a>
         </div>
       </div>
-      <div class="offering-card founders glass reveal-scale" style="grid-column: 1 / -1;">
+      <div class="offering-card founders glass reveal-scale full-width">
         <div class="card-tag">Stage 2 — Voice</div>
         <h3 style="font-size: clamp(24px, 4vw, 36px); margin-bottom: 24px;">Your voice, amplified — by Velocity™.</h3>
         <p style="max-width: 800px; margin-bottom: 40px;">We design your show. We decide which guests advance your positioning, what each conversation needs to land, and how to turn one recording into distribution that compounds for months. Every Studio engagement runs on <strong>Velocity™</strong>, our AI multiplication engine: clip discovery, hook engineering, multi-platform distribution, all reviewed by Jenny before anything ships. Volume is a byproduct of the strategy, not the product.</p>
@@ -1018,9 +998,9 @@
 </section>
 
 <!-- STUDIO PROMO BANNER -->
-<section class="studio-promo reveal" style="padding: 0 24px 64px;">
+<section class="studio-promo reveal">
   <a href="/studio/" style="text-decoration:none;display:block;">
-    <div class="studio-promo-inner glass" style="max-width:900px;margin:0 auto;padding:40px 48px;display:flex;align-items:center;gap:40px;border:1px solid rgba(0,200,190,0.25);border-radius:16px;transition:border-color 0.2s;position:relative;overflow:hidden;">
+    <div class="studio-promo-inner glass">
       <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,158,150,0.07) 0%,transparent 60%);pointer-events:none;"></div>
       <div style="flex-shrink:0;width:64px;height:64px;background:rgba(0,158,150,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;">🎙</div>
       <div style="flex:1;">
@@ -1035,7 +1015,7 @@
 
 <!-- HOW IT WORKS -->
 <section class="how-it-works reveal" id="how">
-  <div class="glass" style="padding: 56px 48px;">
+  <div class="glass">
     <div class="section-label">What it feels like to work with us</div>
     <h2 style="text-align:center;font-size:28px;font-weight:700;margin-bottom:8px;color:#fff;">AI scans. Humans judge. You act.</h2>
     <div class="steps reveal-stagger">
@@ -1159,7 +1139,7 @@
   </div>
 
   <!-- Trades & Services Spotlight Card -->
-  <div class="glass reveal-scale" style="max-width: 820px; margin: 56px auto 0; padding: 36px 40px; text-align: left; border-left: 3px solid var(--accent);">
+  <div class="glass reveal-scale trades-spotlight">
     <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px;">For Trades, Contractors &amp; Service Businesses</div>
     <h3 style="font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 12px; line-height: 1.3;">Your crew is on-site. Who is finding next month's work?</h3>
     <p style="font-size: 15px; color: var(--text-body); line-height: 1.7; margin: 0;">If your revenue depends on bids, contracts, and crew schedules, we keep your pipeline full while your team is on-site. Same system. Same human review. Different language. We track property managers, plant supervisors, and dormant accounts so the next contract is in motion before this one ends.</p>
