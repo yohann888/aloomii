@@ -61,5 +61,19 @@
 | 1srj41n   | done_with_nonsense | 8 | high | Feeling consistently reduced to physical appearance, with accomplishments and inner self ignored. |
 | 1stynk7   | done_with_nonsense | ? | high | A man openly credits his girlfriend with teaching him basic adulting skills (emotional labor). |
 
+
+## Run #6 (09:41 AM)
+- **Items Processed:** 5
+- **Signals Inserted/Updated:** 5
+- **Primary ICP:** `women_mood_buyers`
+
+| Source ID | Mood Primary | Punch | Shirt Potential | Trigger Context |
+|-----------|--------------|-------|-----------------|-----------------|
+| 1suyknv   | tired_and_unhinged | 9 | high | Sleep deprivation from baby's refusal to sleep in crib/bassinet, leading to desperate and unsustainable sleep solutions. |
+| 1svf8a5   | tired_and_unhinged | 8 | high | Deep mental and emotional burnout leading to complete lack of energy for self-care, social interaction, or responsibilities. |
+| 1srj41n   | done_with_nonsense | 8 | high | Feeling consistently reduced to physical appearance, with accomplishments and inner self ignored, leading to eroded self-worth. |
+| 1sqneu4   | never_enough       | 9 | high | The constant internal pressure to achieve and the emotional burden of feeling perpetually inadequate despite successes. |
+| 1sqy4iv   | tired_and_unhinged | 8 | high | Dread of repeating a traumatic, exhausting birth experience and recovery while making a high-stakes decision for a subsequent pregnancy. |
+
 ## Updated Summary
-Run #5 added signals highlighting creative vulnerability (`earned_calm`) and the ongoing frustration with gendered emotional labor and appearance-based reductionism (`done_with_nonsense`). These reinforce the "vibe" of Vibrnt's target audience — seeking validation and expression for the invisible work and internal struggles of modern womanhood.
+Run #6 intensifies the focus on maternal exhaustion and the systemic "never enough" pressure. The `tired_and_unhinged` mood is the dominant signal today, specifically around sleep deprivation and burnout. These provide direct hooks for Vibrnt's "unfiltered" aesthetic — high emotional punch (8-9) and high shirt potential.
