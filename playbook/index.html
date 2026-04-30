@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>The Aloomii Playbook — AI Operations That Compound Into Revenue</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
   <meta name="description" content="The AI portal where every prompt, every workflow, and every result makes the next one better, across three role-specific playbooks.">
   <meta name="keywords" content="AI operations, AI playbook, founder AI, solopreneur AI, AI for professionals, AI prompts, AI workflows, Aloomii">
   <meta name="author" content="Jenny Calpu and Yohann Calpu">
@@ -1363,9 +1365,6 @@
       grid-template-columns: 1fr;
       gap: 2rem;
     }
-    @media (min-width: 640px) {
-      .founder-cards { grid-template-columns: 1fr 1fr; }
-    }
     
     .founder-card {
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1386,6 +1385,16 @@
       font-weight: 900;
       font-size: 1.25rem;
       letter-spacing: -0.05em;
+    }
+
+    .founder-photo {
+      width: 4.5rem;
+      height: 4.5rem;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+      display: block;
+      border: 2px solid rgba(255, 255, 255, 0.15);
     }
     
     .founder-role {
@@ -1908,7 +1917,7 @@
               <div class="browser-dot"></div>
               <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">app.aloomii.com</div>
             </div>
-            <img src="/images/playbook/portal-dashboard.jpeg" alt="The Aloomii Playbook portal — viewing the 'Cold Outreach for Insurance Brokers' prompt with sidebar showing Prompts, AI Tools, Workflows, and Library" style="display:block;width:100%;height:auto;">
+            <img src="/images/playbook/portal-dashboard.png" alt="The Aloomii Playbook portal — viewing the 'Cold Outreach for Insurance Brokers' prompt with sidebar showing Prompts, AI Tools, Workflows, and Library" style="display:block;width:100%;height:auto;">
           </div>
           <div class="floating-info floating-info-top">
             <p>Get access</p>
@@ -2039,7 +2048,7 @@
               <div>
                 <p class="list-heading">What You'll Achieve</p>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>AI that multiplies your voice instead of flattening it</span></div>
-                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Scale output 30% without adding a single person</span></div>
+                <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Scale at 500% without adding a single person</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Frameworks specifically for solopreneurs</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Workflows where AI genuinely saves more time than it costs</span></div>
                 <div class="list-item"><svg class="list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Admin handled so you can focus on craft</span></div>
@@ -2164,15 +2173,22 @@
             <span class="eyebrow-text">What's Inside</span>
           </div>
           <h2 class="section-headline">
-            Not a PDF.<br>
-            <span class="font-emphasis text-teal">A system.</span>
+            Not just an ebook.<br>
+            <span class="font-emphasis text-teal">A complete system.</span>
           </h2>
           <p class="inside-intro-text">
             Every element designed to compound. The ebook teaches the thinking. The prompts apply it. The Library provides proven patterns to inject. The portal remembers what works for you.
           </p>
 
-          <!-- DASHBOARD SCREENSHOT — Company Brain HQ -->
-          <img src="/images/playbook/openclaw-dashboard-cropped.jpeg" alt="Aloomii Company Brain dashboard — HQ view showing signals, hot leads, active opportunities, pipeline value, and PM action tasks" style="display:block;width:100%;height:auto;border:1px solid var(--neutral-200);">
+          <div class="screenshot-placeholder">
+            <div class="screenshot-browser-bar">
+              <div class="browser-dot"></div>
+              <div class="browser-dot"></div>
+              <div class="browser-dot"></div>
+              <div style="font-size:0.6875rem;color:var(--neutral-400);margin-left:0.5rem;font-family:'SF Mono',monospace;">app.aloomii.com</div>
+            </div>
+            <img src="/images/playbook/library-ai-tells-scrubber.png" alt="The Aloomii Playbook portal — Library entry showing 'The AI Tells Scrubber' diagnostic prompt for catching AI-written patterns in drafts" style="display:block;width:100%;height:auto;">
+          </div>
         </div>
 
         <div class="inside-items">
@@ -2324,11 +2340,12 @@
           <p>
             The Aloomii Playbook wasn't written by consultants theorizing about AI. It was extracted from the actual systems we run, for ourselves, for our clients, and for the agent fleet that powers our operations.
           </p>
+          <img src="/images/playbook/openclaw-dashboard-cropped.jpeg" alt="Aloomii Company Brain dashboard — HQ view showing signals, hot leads, active opportunities, pipeline value, and PM action tasks" style="display:block;width:100%;height:auto;margin-top:2rem;border:1px solid rgba(255,255,255,0.15);">
         </div>
 
         <div class="founder-cards">
           <div class="founder-card">
-            <div class="founder-initial">Y</div>
+            <img class="founder-photo" src="/images/yohann-calpu.jpg" alt="Yohann Calpu">
             <p class="founder-role">Co-Founder · Strategy & Judgment</p>
             <h3 class="founder-name">Yohann Calpu</h3>
             <p class="founder-bio">
@@ -2337,7 +2354,7 @@
           </div>
 
           <div class="founder-card">
-            <div class="founder-initial">J</div>
+            <img class="founder-photo" src="/images/jenny-calpu.jpeg" alt="Jenny Calpu">
             <p class="founder-role">Co-Founder · Creative Director</p>
             <h3 class="founder-name">Jenny Calpu</h3>
             <p class="founder-bio">
