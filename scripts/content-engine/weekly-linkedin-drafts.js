@@ -11,8 +11,8 @@
  *
  * Flow:
  *   1. Load signal scout data (score 4-5, last 5 signals)
- *   2. Pull trending GTM/founder topic via Gemini 3 Pro
- *   3. For each of 3 posts: pick author, pick template, pick anecdote, generate with Gemini 3 Pro
+ *   2. Pull trending GTM/founder topic via Sonnet 4.6 with web grounding prompt
+ *   3. For each of 6 posts: pick author, pick template, pick anecdote, generate with Sonnet 4.6
  *   4. Push all 3 to Buffer as drafts
  *   5. Alert Discord with previews
  *   6. Update rotation state
@@ -25,23 +25,20 @@
 const fs   = require('fs');
 const path = require('path');
 const https = require('https');
-const { randomUUID } = require('crypto');
 const { Client } = require('pg');
-const { runHookLoop } = require('./hook-loop');
 
 // ── Config ─────────────────────────────────────────────────────────────────────
 
 const WORKSPACE = path.resolve(__dirname, '../..');
-const OPENCLAW_WORKSPACE = path.join(process.env.HOME, '.openclaw/workspace');
 
-const YOHANN_ANECDOTES_FILE  = fs.existsSync(path.join(WORKSPACE, 'content/anecdotes.json')) ? path.join(WORKSPACE, 'content/anecdotes.json') : path.join(OPENCLAW_WORKSPACE, 'content/anecdotes.json');
-const JENNY_ANECDOTES_FILE   = fs.existsSync(path.join(WORKSPACE, 'content/jenny-anecdotes.json')) ? path.join(WORKSPACE, 'content/jenny-anecdotes.json') : path.join(OPENCLAW_WORKSPACE, 'content/jenny-anecdotes.json');
-const YOHANN_VOICE_FILE      = fs.existsSync(path.join(WORKSPACE, 'config/voice-profiles/yohann-calpu.yaml')) ? path.join(WORKSPACE, 'config/voice-profiles/yohann-calpu.yaml') : path.join(OPENCLAW_WORKSPACE, 'config/voice-profiles/yohann-calpu.yaml');
-const JENNY_VOICE_FILE       = fs.existsSync(path.join(WORKSPACE, 'config/voice-profiles/jenny-calpu.yaml')) ? path.join(WORKSPACE, 'config/voice-profiles/jenny-calpu.yaml') : path.join(OPENCLAW_WORKSPACE, 'config/voice-profiles/jenny-calpu.yaml');
+const YOHANN_ANECDOTES_FILE  = path.join(WORKSPACE, 'content/anecdotes.json');
+const JENNY_ANECDOTES_FILE   = path.join(WORKSPACE, 'content/jenny-anecdotes.json');
+const YOHANN_VOICE_FILE      = path.join(WORKSPACE, 'config/voice-profiles/yohann-calpu.yaml');
+const JENNY_VOICE_FILE       = path.join(WORKSPACE, 'config/voice-profiles/jenny-calpu.yaml');
 const DB_URL                 = 'postgresql://superhana@localhost:5432/aloomii';
-const STATE_FILE             = fs.existsSync(path.join(WORKSPACE, 'memory')) ? path.join(WORKSPACE, 'memory/content-engine-state.json') : path.join(OPENCLAW_WORKSPACE, 'memory/content-engine-state.json');
-const SIGNALS_FILE           = fs.existsSync(path.join(WORKSPACE, 'pipeline/signals.md')) ? path.join(WORKSPACE, 'pipeline/signals.md') : path.join(OPENCLAW_WORKSPACE, 'pipeline/signals.md');
-const LOG_FILE               = fs.existsSync(path.join(WORKSPACE, 'logs')) ? path.join(WORKSPACE, 'logs/weekly-linkedin-drafts.log') : path.join(OPENCLAW_WORKSPACE, 'logs/weekly-linkedin-drafts.log');
+const STATE_FILE             = path.join(WORKSPACE, 'memory/content-engine-state.json');
+const SIGNALS_FILE           = path.join(WORKSPACE, 'pipeline/signals.md');
+const LOG_FILE               = path.join(WORKSPACE, 'logs/weekly-linkedin-drafts.log');
 
 const BUFFER_API_KEY         = 'GkB7cingsMpgX-DpfbRwdqAN1Spir8QxeEe7gp_9Jn1';
 const BUFFER_ENDPOINT        = 'https://api.buffer.com/graphql';
@@ -163,7 +160,6 @@ function loadJSON(file) {
 }
 
 function saveJSON(file, data) {
-  fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
 }
 
@@ -235,35 +231,45 @@ async function getRelevantHooks(owner) {
   }
 }
 
+function getAnthropicApiKey() {
+  try {
+    const profiles = loadJSON(path.join(process.env.HOME, '.openclaw/agents/main/agent/auth-profiles.json'));
+    const key = profiles?.profiles?.['anthropic:default']?.key;
+    if (key) return key;
+  } catch {}
+  const config = loadJSON(path.join(process.env.HOME, '.openclaw/openclaw.json'));
+  return config?.models?.providers?.anthropic?.apiKey;
+}
 
-async function generateWithGemini(prompt, apiKey, maxTokens = 2000) {
+async function generateWithSonnet(prompt, apiKey, maxTokens = 1200) {
   const body = {
-    contents: [{ role: 'user', parts: [{ text: prompt }] }],
-    generationConfig: {
-      maxOutputTokens: maxTokens,
-      temperature: 0.8,
-    }
+    model: 'claude-sonnet-4-6',
+    max_tokens: maxTokens,
+    temperature: 0.8,
+    messages: [{ role: 'user', content: prompt }]
   };
 
   const res = await httpPost(
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=' + apiKey,
-    { 'Content-Type': 'application/json' },
+    'https://api.anthropic.com/v1/messages',
+    {
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01'
+    },
     body
   );
 
-  const text = res?.candidates?.[0]?.content?.parts
-    ?.filter(part => part?.text)
-    ?.map(part => part.text)
-    ?.join('\n')
-    ?.trim();
+  const text = (res?.content || [])
+    .filter(part => part?.type === 'text' && part?.text)
+    .map(part => part.text)
+    .join('\n')
+    .trim();
 
   if (!text) {
-    throw new Error('Gemini returned no content: ' + JSON.stringify(res).slice(0, 300));
+    throw new Error('Sonnet returned no content: ' + JSON.stringify(res).slice(0, 200));
   }
 
-  return { model: 'gemini-3.1-pro-preview', text, res };
+  return { model: 'claude-sonnet-4-6', text, res };
 }
-
 
 function httpPost(url, headers, body) {
   return new Promise((resolve, reject) => {
@@ -330,13 +336,10 @@ function pickAnecdote(anecdotesData, excludeId) {
   return sorted[0] || anecdotesData.anecdotes[0];
 }
 
-// ── Trending topic via Gemini 3 Pro ──────────────────────────────────────────
+// ── Trending topic via Sonnet 4.6 ────────────────────────────────────────────
 
-async function getTrendingTopic() {
-  const googleApiKey = getGoogleApiKey();
-  if (!googleApiKey) throw new Error('Google API key not found');
-
-  log('Pulling trending GTM/founder topic via Gemini 3.1 Pro...');
+async function getTrendingTopic(apiKey) {
+  log('Pulling trending GTM/founder topic via Sonnet 4.6...');
   const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const prompt = `Today is ${today}.
 
@@ -356,18 +359,15 @@ Give me exactly this structure:
 
 Be specific. No hashtags. No fluff.`;
 
-  const { model, text } = await generateWithGemini(prompt, googleApiKey, 1000);
+  const { model, text } = await generateWithSonnet(prompt, apiKey, 500);
   log(`Trending topic retrieved via ${model}.`);
   return text.trim();
 }
 
-// ── Post generator via Gemini 3 Pro ─────────────────────────────────────────────
+// ── Post generator via Sonnet 4.6 ─────────────────────────────────────────────
 
 async function generatePost({ author, voiceProfileText, anecdote, trendingTopic, template, signals, hooks = [] }) {
   log(`Generating ${author.name} post: ${template.name}`);
-
-  const googleApiKey = getGoogleApiKey();
-  if (!googleApiKey) throw new Error('Google API key not found');
 
   const signalContext = signals?.length
     ? `\nREAL FOUNDER PAIN SIGNALS (from Signal Scout — what founders are saying RIGHT NOW):\n` +
@@ -382,27 +382,18 @@ Story: ${anecdote.story}
 Best angles: ${anecdote.hook_angles?.join(' | ') || 'n/a'}`
     : `PERSONAL ANECDOTE: Use a general Aloomii story — named after two cats (Aloo and Mittens), AI fleet of 15 agents, built by operators for operators.`;
 
-  const prompt = `SYSTEM Directives: LinkedIn High-Signal Operator Persona
-
-Role: You are a veteran operator and business strategist writing for an audience of your peers. You prioritize "distribution-first" thinking and deep, practical insights. Your tone is sharp, contrarian but grounded, and intensely practical. You do not write for engagement bait; you write to establish undeniable authority.
-
-Negative Constraints (Strictly Forbidden):
-- Do not use typical LinkedIn hooks: "I am thrilled to announce," "I never thought I'd say this, but...", "Here's the truth about..."
-- Do not use emoji spam (keep it to a maximum of 1 or 2, or none at all).
-- Do not end the post with an engagement-bait question like "What are your thoughts?" or "Do you agree?"
-- Avoid the typical "broetry" formatting of single-sentence paragraphs for 20 lines straight. Group thoughts logically.
-- Ban the words: "Delve," "crucial," "unlock," "synergy," "navigating," "realm," "supercharge."
-- Never use em dashes (—). Use periods, commas, or colons instead.
-
-Stylistic Execution:
-- The Hook: Start with a counter-intuitive statement, a hard truth, or a specific, vivid observation about the market.
-- The Meat: Back up the hook immediately with concrete mechanics. Use sharp contrasts (e.g., "Amateurs do X. Professionals do Y.") to illustrate the point.
-- The Sign-off: End abruptly and confidently. State your final thesis and walk away. Leave the reader thinking, rather than begging them to comment.
-
-You are writing a LinkedIn post for ${author.name}, ${author.role} of Aloomii.
+  const prompt = `You are writing a LinkedIn post for ${author.name}, ${author.role} of Aloomii.
 
 VOICE PROFILE:
 ${voiceProfileText}
+
+CRITICAL RULES:
+- Never use em dashes (—). Use periods, commas, or colons instead.
+- Never use: leverage, synergy, disrupt, game-changer, revolutionize, cutting-edge, unlock, seamlessly
+- No hashtags anywhere in the post
+- No hollow openers ("Great news!", "I'm excited to share...", "In today's landscape...")
+- Contractions are natural and encouraged
+- Specific details over vague claims
 
 TODAY'S TRENDING TOPIC:
 ${trendingTopic}
@@ -417,11 +408,14 @@ ${template.instructions}
 
 TASK:
 Write a LinkedIn post for ${author.name} that connects today's trending topic to the personal anecdote using the ${template.name} formula.
-Write in ${author.name}'s authentic voice as described in the voice profile above, while STRICTLY following the SYSTEM Directives.
+Write in ${author.name}'s authentic voice as described in the voice profile above.
 The trend should feel timely. The anecdote should feel earned, not forced.
 Output ONLY the post text. No title, no labels, no markdown. Just the post.`;
 
-  const { model, text } = await generateWithGemini(prompt, googleApiKey, 2000);
+  const anthropicApiKey = getAnthropicApiKey();
+  if (!anthropicApiKey) throw new Error('Anthropic API key not found');
+
+  const { model, text } = await generateWithSonnet(prompt, anthropicApiKey, 1400);
   log(`Post generated for ${author.name} (${model}).`);
   return text.trim();
 }
@@ -492,6 +486,7 @@ async function alertDiscord(results, dryRun) {
 async function main() {
   log(`=== weekly-linkedin-drafts START${DRY_RUN ? ' [DRY RUN]' : ''} ===`);
 
+  const anthropicApiKey = getAnthropicApiKey();
   const state = loadState();
 
   // Load anecdotes
@@ -509,7 +504,7 @@ async function main() {
   log(`Signal Scout context: ${signals.length} score-4+ signals loaded`);
 
   // Get trending topic (shared across all 3 posts)
-  const trendingTopic = await getTrendingTopic();
+  const trendingTopic = await getTrendingTopic(anthropicApiKey);
 
   // Pick 3 templates each, all different
   const yT1 = YOHANN_TEMPLATES[ state.yohannTemplateIndex      % YOHANN_TEMPLATES.length];
@@ -582,94 +577,29 @@ async function main() {
     { author: 'Jenny Calpu',  template: jT3.name, text: jPost3, bufferId: null },
   ];
 
-  for (const r of results) {
-    try {
-      const hookRun = await runHookLoop({
-        business: 'Aloomii runs GTM for founders',
-        icp: r.author.includes('Jenny') ? 'creative operators and founders using AI in content' : 'B2B founders and GTM operators',
-        topic: r.template,
-        funnelStage: 'top',
-        platform: 'linkedin'
-      });
-      r.hookRun = hookRun;
-      const recommendedHook = hookRun?.recommended?.hook_text;
-      if (recommendedHook) {
-        r.text = `${recommendedHook}\n\n${r.text}`;
-      }
-    } catch (e) {
-      log(`[HOOK_LAB] failed for ${r.author} / ${r.template}: ${e.message}`);
-    }
-  }
-
   await alertDiscord(results, DRY_RUN);
 
-  // Write drafts and Hook Lab candidates to Command Center DB
+  // Write drafts to Command Center DB
   try {
-    const client = new Client({ connectionString: DB_URL });
-    await client.connect();
+    const { execSync } = await import('child_process');
     for (const r of results) {
       const adapter = r.author.includes('Jenny') ? 'jenny' : 'yohann';
       const brandProfileId = adapter === 'jenny' ? jennyProfile.id : yohannProfile.id;
-      const postRes = await client.query(
-        `INSERT INTO content_posts (platform, post_type, topic, content_text, draft_text, adapter, brand_profile_id, status, published_at)
-         VALUES ('linkedin', 'draft', $1, $2, $2, $3, $4, 'draft', NULL)
-         RETURNING id`,
-        [r.template || 'LinkedIn Post', r.text, adapter, brandProfileId]
-      );
-      const postId = postRes.rows[0]?.id;
-
-      if (postId && r.hookRun?.candidates?.length) {
-        const sessionId = randomUUID();
-        await client.query(
-          `INSERT INTO attention_line_sessions (id, post_id, platform, asset_type, status, metadata)
-           VALUES ($1, $2, 'linkedin', 'hook', 'complete', $3::jsonb)`,
-          [sessionId, postId, JSON.stringify({ topic: r.template, author: r.author })]
-        );
-
-        let selectedHookId = null;
-        for (const candidate of r.hookRun.candidates) {
-          const hookRes = await client.query(
-            `INSERT INTO content_hooks (
-              post_id, platform, asset_type, loop_session_id, loop_role,
-              judge_score, judge_rationale, is_selected, brand_persona, topic_tag, hook_text, hook_confidence, metadata
-            ) VALUES (
-              $1, 'linkedin', 'hook', $2, $3,
-              $4, $5, $6, $7, $8, $9, $10, $11::jsonb
-            ) RETURNING id`,
-            [
-              postId,
-              sessionId,
-              candidate.type,
-              candidate.score_total || null,
-              candidate.metadata?.judge_reasoning || null,
-              !!candidate.recommended,
-              adapter,
-              r.template,
-              candidate.hook_text,
-              candidate.score_total || null,
-              JSON.stringify({ ...(candidate.metadata || {}), generation_run_id: r.hookRun.runId })
-            ]
-          );
-          const hookId = hookRes.rows[0]?.id;
-          if (candidate.recommended && hookId) selectedHookId = hookId;
-        }
-
-        if (selectedHookId) {
-          await client.query(
-            `UPDATE content_posts SET selected_hook_id = $2 WHERE id = $1`,
-            [postId, selectedHookId]
-          );
-          await client.query(
-            `UPDATE attention_line_sessions SET winner_hook_id = $2 WHERE id = $1`,
-            [sessionId, selectedHookId]
-          );
-        }
-      }
+      const payload = JSON.stringify({
+        platform: 'linkedin',
+        post_type: 'draft',
+        topic: r.template || 'LinkedIn Post',
+        content_text: r.text,
+        adapter: adapter,
+        brand_profile_id: brandProfileId,
+        external_id: r.bufferId || null
+      });
+      const bridgePath = path.join(process.env.HOME, 'Desktop/aloomii/scripts/bridge/ingest-content.js');
+      execSync(`node ${bridgePath} '${payload.replace(/'/g, "'\\\''")}'`, { timeout: 5000 });
     }
-    await client.end();
-    log('[DB] LinkedIn drafts and Hook Lab candidates written to Command Center');
+    log('[DB] LinkedIn drafts written to Command Center');
   } catch (e) {
-    log(`[DB] Draft/Hook Lab write failed (non-fatal): ${e.message}`);
+    log(`[DB] Bridge failed (non-fatal): ${e.message}`);
   }
 
   // Update state

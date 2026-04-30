@@ -1,0 +1,10 @@
+# Signal Scout — ICP Toggle Config
+# Edit enabled: true/false to turn each ICP on or off independently.
+# Signal Scout reads this at Step 0.1 each run.
+# Both can run simultaneously. Either can be disabled without touching the other.
+
+sprint:
+  enabled: true          # B2B founders $50K-$100K MRR OR raised >$2M recently
+
+ai_workforce:
+  enabled: false         # Insurance/financial advisors/wealth managers $1M-$10M ARR
