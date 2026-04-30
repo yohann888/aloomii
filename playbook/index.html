@@ -674,20 +674,22 @@
       padding: 2rem 0;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 1.5rem;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
     }
-    @media (min-width: 768px) {
-      .cred-strip-inner { flex-direction: row; align-items: center; }
-    }
-    
+
     .cred-items {
       display: flex;
       align-items: center;
-      gap: 2rem;
+      justify-content: center;
+      gap: 1.5rem;
       flex-wrap: wrap;
     }
+    @media (min-width: 900px) {
+      .cred-items { flex-wrap: nowrap; gap: 1.75rem; }
+    }
+    .cred-item { white-space: nowrap; }
     
     .cred-item {
       font-size: 0.75rem;
@@ -1865,12 +1867,13 @@
   <!-- CREDIBILITY STRIP -->
   <section class="cred-strip">
     <div class="container cred-strip-inner">
-      <p class="eyebrow-text">Built by operators who've shipped AI at scale</p>
+      <p class="eyebrow-text">Built by operators who've shipped at scale</p>
       <div class="cred-items">
-        <p class="cred-item">Enterprise AI · IBM</p>
+        <p class="cred-item">Enterprise · IBM</p>
         <p class="cred-item">Financial Infra · JP Morgan</p>
         <p class="cred-item">Agent Fleets · Aloomii</p>
         <p class="cred-item">Podcasts · Pale Blue Nexus</p>
+        <p class="cred-item">Government · Ministry of Transportation Ontario</p>
       </div>
     </div>
   </section>
