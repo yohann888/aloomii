@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aloomii — Live Fleet Demo</title>
+<title>Aloomii - Live Fleet Demo</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -161,6 +161,23 @@ body::before {
 .sig-cat-fill { height: 100%; border-radius: 4px; width: var(--w); animation: sigBarGrow 1s ease-out forwards; transform-origin: left; }
 @keyframes sigBarGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .sig-cat-val { font-family: var(--mono); font-size: 12px; color: var(--text-dim); width: 20px; text-align: right; flex-shrink: 0; }
+.agent-run { margin-bottom: 20px; }
+.agent-run-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
+.agent-run-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.agent-run-subtitle { font-size: 13px; color: var(--text-label); line-height: 1.5; max-width: 720px; }
+.agent-run-badge { font-family: var(--mono); font-size: 11px; color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent-mid); border-radius: 999px; padding: 6px 10px; white-space: nowrap; }
+.run-flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 18px 0; }
+.run-step { border: 1px solid var(--border); background: rgba(255,255,255,0.02); border-radius: 10px; padding: 12px; min-height: 104px; position: relative; }
+.run-step::after { content: ''; position: absolute; right: -10px; top: 50%; width: 10px; height: 1px; background: var(--accent-mid); }
+.run-step:last-child::after { display: none; }
+.run-step-num { font-family: var(--mono); font-size: 10px; color: var(--accent); margin-bottom: 8px; }
+.run-step-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.run-step-meta { font-family: var(--mono); font-size: 10px; color: var(--text-dim); line-height: 1.5; }
+.run-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+.run-metric { border-top: 1px solid var(--border); padding-top: 12px; }
+.run-metric-label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+.run-metric-value { font-size: 18px; font-weight: 700; color: var(--text); }
+.run-json { font-family: var(--mono); font-size: 11px; color: var(--text-label); background: #08111c; border: 1px solid var(--border); border-radius: 8px; padding: 12px; overflow-x: auto; margin-top: 14px; }
 
 .trend-bar-fill { height: 100%; border-radius: 3px; animation: trendGrow 1.2s ease-out forwards; transform-origin: left; }
 @keyframes trendGrow { from { transform: scaleX(0); } }
@@ -204,9 +221,9 @@ body::before {
 }
 .cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-mid); }
 .table-cta { font-family: var(--mono); font-size: 13px; color: var(--text-dim); margin-top: 16px; letter-spacing: 1px; }
-@media (max-width: 1100px) { .grid-3-row { grid-template-columns: 1fr; } }
-@media (max-width: 900px) { .stats-row { grid-template-columns: repeat(2, 1fr); } .grid, .grid-3, .grid-3-row { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .stats-row { grid-template-columns: 1fr; } .container { padding: 24px 16px 60px; } }
+@media (max-width: 1100px) { .grid-3-row { grid-template-columns: 1fr; } .run-flow { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px) { .stats-row { grid-template-columns: repeat(2, 1fr); } .grid, .grid-3, .grid-3-row { grid-template-columns: 1fr; } .run-flow, .run-metrics { grid-template-columns: 1fr 1fr; } .agent-run-header { flex-direction: column; } }
+@media (max-width: 600px) { .stats-row { grid-template-columns: 1fr; } .container { padding: 24px 16px 60px; } .run-flow, .run-metrics { grid-template-columns: 1fr; } .run-step::after { display: none; } }
 .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s ease-out forwards; }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 .delay-1 { animation-delay: 0.1s; }
@@ -221,7 +238,7 @@ body::before {
 <body>
 <div class="container">
   <div class="header fade-up">
-    <a href="https://aloomii.com" target="_blank" rel="noopener noreferrer"><img src="/images/logos/Aloomii%20-%20final.png" alt="Aloomii" style="height: 48px; display: block; margin: 0 auto 14px;" /></a>
+    <a href="https://aloomii.com" target="_blank" rel="noopener noreferrer"><img src="/assets/aloomii-logo.png" alt="Aloomii" style="height: 48px; display: block; margin: 0 auto 14px; object-fit: contain;" /></a>
     <div style="text-align: center;"><div class="status"><span class="live-dot"></span> Live Fleet</div></div>
   </div>
 
@@ -250,7 +267,7 @@ body::before {
 
   <div class="grid fade-up delay-3">
     <div class="card">
-      <div class="card-title"><span class="icon">&#128279;</span> Signals Detected — 30 Days</div>
+      <div class="card-title"><span class="icon">&#128279;</span> Signals Detected - 30 Days</div>
       <div class="chart-area">
         <svg class="chart-svg" viewBox="0 0 500 180" preserveAspectRatio="none">
           <line class="chart-grid-line" x1="0" y1="45" x2="500" y2="45"/>
@@ -285,17 +302,17 @@ body::before {
         <div class="donut-legend">
           <div class="legend-item">
             <div class="legend-dot" style="background: var(--accent);"></div>
-            <span id="legend-healthy">Healthy — 21 crons</span>
+            <span id="legend-healthy">Healthy - 21 crons</span>
           </div>
           <div class="legend-item">
             <div class="legend-dot" style="background: var(--amber);"></div>
-            <span id="legend-attention">Needs Attention — 9 crons</span>
+            <span id="legend-attention">Needs Attention - 9 crons</span>
           </div>
           <div class="legend-item">
             <div class="legend-dot" style="background: var(--red);"></div>
-            <span id="legend-offline">Offline — 3 crons</span>
+            <span id="legend-offline">Offline - 3 crons</span>
           </div>
-          <div style="margin-top: 8px; font-family: var(--mono); font-size: 11px; color: var(--text-dim);" id="donut-footer">Signals this week: 2 | Compute: id="donut-footer">2.10</div>
+          <div style="margin-top: 8px; font-family: var(--mono); font-size: 11px; color: var(--text-dim);" id="donut-footer">Signals this week: 2 | Compute: $12.10</div>
         </div>
       </div>
     </div>
@@ -354,6 +371,32 @@ body::before {
         </svg>
       </div>
     </div>
+  </div>
+
+  <div class="card agent-run fade-up delay-5">
+    <div class="agent-run-header">
+      <div>
+        <div class="card-title" style="margin-bottom: 10px;"><span class="icon">&#9654;</span> Replay an Agent Run</div>
+        <div class="agent-run-title">From public signal to reviewed outreach in 7 minutes</div>
+        <div class="agent-run-subtitle">A sanitized production run that shows the operating system underneath the dashboard: source capture, scoring, enrichment, CRM update, draft generation, and human review.</div>
+      </div>
+      <div class="agent-run-badge">run_2026_05_01_1241</div>
+    </div>
+    <div class="run-flow">
+      <div class="run-step"><div class="run-step-num">01</div><div class="run-step-label">Signal captured</div><div class="run-step-meta">Reddit + hiring pages<br>buyer pain detected</div></div>
+      <div class="run-step"><div class="run-step-num">02</div><div class="run-step-label">ICP scored</div><div class="run-step-meta">fit: 92/100<br>urgency: high</div></div>
+      <div class="run-step"><div class="run-step-num">03</div><div class="run-step-label">Account enriched</div><div class="run-step-meta">CRM matched<br>warm-path check</div></div>
+      <div class="run-step"><div class="run-step-num">04</div><div class="run-step-label">Draft generated</div><div class="run-step-meta">tone guardrails<br>human review required</div></div>
+      <div class="run-step"><div class="run-step-num">05</div><div class="run-step-label">Cost logged</div><div class="run-step-meta">$0.009 model cost<br>42s latency</div></div>
+      <div class="run-step"><div class="run-step-num">06</div><div class="run-step-label">Next action</div><div class="run-step-meta">review queued<br>follow-up date set</div></div>
+    </div>
+    <div class="run-metrics">
+      <div class="run-metric"><div class="run-metric-label">Artifacts created</div><div class="run-metric-value">4</div></div>
+      <div class="run-metric"><div class="run-metric-label">Human approval</div><div class="run-metric-value">Required</div></div>
+      <div class="run-metric"><div class="run-metric-label">Traceability</div><div class="run-metric-value">100%</div></div>
+      <div class="run-metric"><div class="run-metric-label">Runbook link</div><div class="run-metric-value">Logged</div></div>
+    </div>
+    <div class="run-json">{ "signal": "founder hiring first sales role", "decision": "research_more", "crm_update": true, "draft_status": "awaiting_review" }</div>
   </div>
 
   <div class="grid-3 fade-up delay-5">
@@ -451,7 +494,7 @@ body::before {
           <div class="queue-text">The Referral Ceiling</div>
           <div class="queue-meta">
             <span class="queue-chars">287 chars</span>
-            <span class="queue-status status-queued">Queued — Mon</span>
+            <span class="queue-status status-queued">Queued - Mon</span>
           </div>
         </div>
         <div class="queue-item">
@@ -489,9 +532,9 @@ body::before {
 
     <div class="card">
       <div class="card-title"><span class="icon">&#128197;</span> Upcoming Events</div>
-      <div class="outreach-item"><span class="contact-name">CIX Summit</span><span class="outreach-status status-sent">Mar 25 — Past</span></div>
+      <div class="outreach-item"><span class="contact-name">CIX Summit</span><span class="outreach-status status-sent">Mar 25 - Past</span></div>
       <div class="outreach-item"><span class="contact-name">OpenClaw Meetup Toronto</span><span class="outreach-status status-sent">Mar 26</span></div>
-      <div class="outreach-item"><span class="contact-name">Consensus 2026</span><span class="outreach-status status-demo">May 5 — Miami</span></div>
+      <div class="outreach-item"><span class="contact-name">Consensus 2026</span><span class="outreach-status status-demo">May 5 - Miami</span></div>
       <div class="outreach-item"><span class="contact-name">Bitcoin Conference</span><span class="outreach-status status-demo">May 2026</span></div>
     </div>
   </div>
@@ -542,6 +585,8 @@ body::before {
     el.style.width = '0';
     setTimeout(function() { el.style.width = targetWidth; }, 100);
   });
+
+  fetch('/data/public_metrics.json')
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(d) {
       if (!d) return;
@@ -553,17 +598,18 @@ body::before {
       var healthy = cf.healthy || 21;
       var total = cf.total || 30;
       var attention = Math.max(0, Math.floor(total * 0.3));
-      var offline = total - healthy - attention;
-      var pct = Math.round((healthy / total) * 100);
+      var offline = Math.max(0, total - healthy - attention);
+      var pct = total ? Math.round((healthy / total) * 100) : 70;
 
       document.getElementById('donut-pct').textContent = pct + '%';
-      document.getElementById('legend-healthy').textContent = 'Healthy — ' + healthy + ' crons';
-      document.getElementById('legend-attention').textContent = 'Needs Attention — ' + attention + ' crons';
-      document.getElementById('legend-offline').textContent = 'Offline — ' + offline + ' crons';
+      document.getElementById('legend-healthy').textContent = 'Healthy - ' + healthy + ' crons';
+      document.getElementById('legend-attention').textContent = 'Needs Attention - ' + attention + ' crons';
+      document.getElementById('legend-offline').textContent = 'Offline - ' + offline + ' crons';
 
       // Stat cards
       if (e.weekly_cost_usd !== undefined) {
         document.getElementById('stat-cost').innerHTML = '$' + e.weekly_cost_usd.toFixed(2).replace('.', '<span class="unit">.') + '</span>';
+        document.getElementById('donut-footer').textContent = 'Signals this week: ' + (p.signals_this_week || 2) + ' | Compute: $' + e.weekly_cost_usd.toFixed(2);
       }
       if (e.roi_multiplier !== undefined) {
         document.getElementById('stat-roi').innerHTML = e.roi_multiplier.toFixed(1) + '<span class="unit">x</span>';
@@ -574,6 +620,9 @@ body::before {
       if (p.signals_detected !== undefined) {
         countUp(document.getElementById('stat-agents'), p.signals_detected, '', '', 0);
       }
+    })
+    .catch(function() {
+      // Static fallback stays visible when public metrics are unavailable.
     });
 })();
 </script>
