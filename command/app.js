@@ -136,6 +136,7 @@ function showSection(section) {
             }
         } else if (section === 'content') {
             renderLinkedInDrafts(commandData.linkedin_drafts);
+            renderBufferDrafts();
             renderSnipeDrafts(commandData.snipe_drafts);
             renderPBNBriefs(commandData.content_queue);
             renderAllContent(commandData.content_queue);
@@ -2296,6 +2297,117 @@ function renderAiUgc() {
   
   // Load pain signals after rendering
   loadPainSignals();
+}
+
+// === BUFFER DRAFTS SECTION (Phase 1 — read-only) ===
+
+async function renderBufferDrafts() {
+  const container = document.getElementById('buffer-drafts-panel');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div style="padding:20px;max-width:900px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="margin:0;color:var(--text-primary);">📋 Buffer Drafts</h3>
+        <button onclick="loadBufferDrafts()" style="background:#2a2a4a;color:#fff;padding:6px 14px;border:none;border-radius:6px;cursor:pointer;font-size:12px;">
+          🔄 Refresh
+        </button>
+      </div>
+      <div id="buffer-drafts-list">
+        <div style="text-align:center;padding:40px;color:var(--text-dim);">
+          <div style="font-size:32px;margin-bottom:12px;">⏳</div>
+          <div>Loading Buffer drafts...</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  await loadBufferDrafts();
+}
+
+async function loadBufferDrafts() {
+  const listContainer = document.getElementById('buffer-drafts-list');
+  if (!listContainer) return;
+
+  listContainer.innerHTML = `
+    <div style="text-align:center;padding:40px;color:var(--text-dim);">
+      <div style="font-size:32px;margin-bottom:12px;">⏳</div>
+      <div>Loading Buffer drafts...</div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch('/api/command/buffer/drafts');
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to load Buffer drafts');
+    }
+
+    const drafts = data.drafts || [];
+
+    if (drafts.length === 0) {
+      listContainer.innerHTML = `
+        <div class="empty-state" style="text-align:center;padding:40px;">
+          <div style="font-size:48px;margin-bottom:12px">📭</div>
+          <div>No drafts in Buffer.</div>
+          <div style="color:var(--text-dim);font-size:13px;margin-top:8px">
+            Create drafts from the LinkedIn Drafts tab and push them to Buffer.
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    let html = `<div style="display:flex;flex-direction:column;gap:12px;">`;
+
+    drafts.forEach(draft => {
+      const preview = (draft.text || '').substring(0, 200);
+      const isYohann = draft.adapter === 'yohann';
+      const authorColor = isYohann ? '#00e5a0' : '#e56bf5';
+      const authorLabel = isYohann ? 'Yohann' : 'Jenny';
+      const updated = draft.updatedAt
+        ? new Date(draft.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : 'Unknown';
+
+      html += `
+        <div style="background:#1a1a2e;border:1px solid #2a2a4a;border-radius:10px;padding:16px;position:relative;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <span style="background:${authorColor}20;color:${authorColor};padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;">
+              ${authorLabel}
+            </span>
+            <span style="color:var(--text-dim);font-size:12px;">
+              Updated: ${updated}
+            </span>
+          </div>
+          <div style="color:var(--text-primary);font-size:14px;line-height:1.6;white-space:pre-wrap;word-break:break-word;">
+            ${preview}${draft.text?.length > 200 ? '...' : ''}
+          </div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid #2a2a4a;display:flex;gap:8px;">
+            <span style="color:var(--text-dim);font-size:11px;font-family:monospace;">
+              Buffer ID: ${draft.id}
+            </span>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    listContainer.innerHTML = html;
+
+  } catch(e) {
+    console.error('Buffer drafts load error:', e);
+    listContainer.innerHTML = `
+      <div style="text-align:center;padding:40px;color:var(--text-dim);">
+        <div style="font-size:32px;margin-bottom:12px;">⚠️</div>
+        <div>Failed to load Buffer drafts.</div>
+        <div style="font-size:12px;margin-top:8px;color:#ef4444;">${e.message || 'Check API connection'}</div>
+        <button onclick="loadBufferDrafts()" style="margin-top:16px;background:#2a2a4a;color:#fff;padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:12px;">
+          Try Again
+        </button>
+      </div>
+    `;
+  }
 }
 
 function toggleBriefExpand(id) {

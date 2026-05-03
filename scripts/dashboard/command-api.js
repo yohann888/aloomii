@@ -2812,6 +2812,97 @@ function registerResearchRoutes(app) {
 }
 module.exports.registerResearchRoutes = registerResearchRoutes;
 // ═══════════════════════════════════════════════════════════════
+// Buffer Drafts Routes (Phase 1 — read-only)
+// ═══════════════════════════════════════════════════════════════
+function registerBufferRoutes(app) {
+  const BUFFER_TOKEN = 'GkB7cingsMpgX-DpfbRwdqAN1Spir8QxeEe7gp_9Jn1';
+  const ORG_ID = '69c5d72e44dbc563b3e02e34';
+  const CHANNELS = {
+    yohann: '69c5d74baf47dacb695bff50',
+    jenny: '69cec9b0af47dacb69816953'
+  };
+
+  async function bufferGraphQL(query, variables) {
+    const https = require('https');
+    const body = JSON.stringify({ query, variables });
+    return new Promise((resolve, reject) => {
+      const req = https.request({
+        hostname: 'api.buffer.com',
+        path: '/graphql',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${BUFFER_TOKEN}`,
+          'Content-Length': Buffer.byteLength(body)
+        }
+      }, res => {
+        let data = '';
+        res.on('data', c => data += c);
+        res.on('end', () => {
+          try { resolve(JSON.parse(data)); } catch(e) { reject(e); }
+        });
+      });
+      req.on('error', reject);
+      req.setTimeout(15000, () => { req.destroy(); reject(new Error('Timeout')); });
+      req.write(body);
+      req.end();
+    });
+  }
+
+  // GET /api/command/buffer/drafts — fetch drafts from both channels
+  app.get('/api/command/buffer/drafts', async (req, res) => {
+    try {
+      const allDrafts = [];
+
+      for (const [adapter, channelId] of Object.entries(CHANNELS)) {
+        const result = await bufferGraphQL(`
+          query GetDrafts($organizationId: ID!, $channelId: ID!) {
+            posts(input: {
+              organizationId: $organizationId,
+              filter: {
+                channelIds: [$channelId],
+                status: ["draft"]
+              }
+            }) {
+              edges {
+                node {
+                  id
+                  text
+                  createdAt
+                  updatedAt
+                  status
+                }
+              }
+            }
+          }
+        `, { organizationId: ORG_ID, channelId });
+
+        const nodes = result?.data?.posts?.edges?.map(e => e.node) || [];
+        nodes.forEach(n => {
+          allDrafts.push({
+            id: n.id,
+            text: n.text,
+            createdAt: n.createdAt,
+            updatedAt: n.updatedAt,
+            status: n.status,
+            adapter
+          });
+        });
+      }
+
+      // Sort by updatedAt desc
+      allDrafts.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+      res.json({ drafts: allDrafts, count: allDrafts.length });
+    } catch(e) {
+      console.error('Buffer drafts fetch error:', e);
+      res.status(500).json({ error: e.message });
+    }
+  });
+}
+module.exports.registerBufferRoutes = registerBufferRoutes;
+
+// ═══════════════════════════════════════════════════════════════
 // UGC Routes
 // ═══════════════════════════════════════════════════════════════
 function registerUgcRoutes(app) {

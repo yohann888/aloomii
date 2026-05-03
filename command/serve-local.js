@@ -56,8 +56,9 @@ registerResearchRoutes(app);
 const { registerPromptLabRoutes, registerOutreachSprintRoutes } = require('../scripts/dashboard/command-api');
 registerPromptLabRoutes(app);
 registerOutreachSprintRoutes(app);
-const { registerUgcRoutes } = require('../scripts/dashboard/command-api');
+const { registerUgcRoutes, registerBufferRoutes } = require('../scripts/dashboard/command-api');
 registerUgcRoutes(app);
+registerBufferRoutes(app);
 
 // ─── Route matcher ─────────────────────────────────────────────────────────────
 function matchRoute(method, urlPath) {
