@@ -2118,14 +2118,25 @@ function registerInfluencerRoutes(app) {
       if (active_only === 'true' && !icp_target) {
         conditions.push(`icp_target NOT IN (SELECT slug FROM icp_brands WHERE active = false)`);
       }
+
+      // Filter by influencer type (social vs newsletter)
+      const infType = req.query.influencer_type;
+      if (infType && ['social','newsletter'].includes(infType)) {
+        conditions.push(`influencer_type = $${idx}`); params.push(infType); idx++;
+      }
       
       const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
       const result = await query(
         `SELECT id, handle, platform_primary, icp_target, followers, engagement_rate,
                 lead_score, lead_tier, email, email_source, profile_url, status, created_at,
-                last_outreach_at, last_outreach_status
+                last_outreach_at, last_outreach_status,
+                influencer_type, subscriber_count, topic_focus, frequency,
+                sponsorship_pricing, icp_fit_label, priority_rank, contact_info,
+                (SELECT jsonb_build_object('status', po.status, 'commission_pct', po.commission_pct,
+                                           'discount_pct', po.discount_pct, 'discount_code', po.discount_code)
+                 FROM partner_offers po WHERE po.influencer_id = influencer_pipeline.id ORDER BY po.created_at DESC LIMIT 1) as current_offer
          FROM influencer_pipeline ${where}
-         ORDER BY lead_score DESC NULLS LAST, followers DESC NULLS LAST
+         ORDER BY priority_rank ASC NULLS LAST, lead_score DESC NULLS LAST, followers DESC NULLS LAST
          LIMIT $${idx}`,
         [...params, lim]
       );
@@ -2304,6 +2315,168 @@ function registerInfluencerRoutes(app) {
       res.json({ success: true });
     } catch(e) { res.status(500).json({ error: e.message }); }
   });
+
+  // ── Partner Offer Routes ──────────────────────────────────────────────────────
+
+  // GET /api/command/offer-defaults — current default templates
+  app.get('/api/command/offer-defaults', async (req, res) => {
+    try {
+      const result = await query(`SELECT * FROM offer_defaults ORDER BY offer_type`);
+      res.json(result.rows);
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // POST /api/command/offer-defaults — update default templates (admin only)
+  app.post('/api/command/offer-defaults', async (req, res) => {
+    try {
+      const { offer_type, commission_pct, discount_pct, free_editions, studio_membership, co_marketing, sponsored_placement, default_notes } = req.body;
+      const result = await query(`
+        INSERT INTO offer_defaults (offer_type, commission_pct, discount_pct, free_editions, studio_membership, co_marketing, sponsored_placement, default_notes, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
+        ON CONFLICT (offer_type) DO UPDATE SET
+          commission_pct = EXCLUDED.commission_pct,
+          discount_pct = EXCLUDED.discount_pct,
+          free_editions = EXCLUDED.free_editions,
+          studio_membership = EXCLUDED.studio_membership,
+          co_marketing = EXCLUDED.co_marketing,
+          sponsored_placement = EXCLUDED.sponsored_placement,
+          default_notes = EXCLUDED.default_notes,
+          updated_at = NOW()
+        RETURNING *
+      `, [offer_type, commission_pct, discount_pct, free_editions, studio_membership, co_marketing, sponsored_placement, default_notes]);
+      res.json(result.rows[0]);
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // GET /api/command/influencers/:id/offers — list all offers for an influencer
+  app.get('/api/command/influencers/:id/offers', async (req, res) => {
+    try {
+      const influencer_id = parseInt(req.params.id);
+      const result = await query(`
+        SELECT * FROM partner_offers WHERE influencer_id = $1 ORDER BY created_at DESC
+      `, [influencer_id]);
+      res.json(result.rows);
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // POST /api/command/influencers/:id/offers — create or update an offer
+  app.post('/api/command/influencers/:id/offers', async (req, res) => {
+    try {
+      const influencer_id = parseInt(req.params.id);
+      const { id: offer_id, ...fields } = req.body;
+
+      if (offer_id) {
+        // Update existing
+        const allowed = ['commission_pct','discount_pct','discount_code','free_editions','studio_membership','co_marketing','sponsored_placement','custom_notes','status'];
+        const setParts = [];
+        const vals = [];
+        let idx = 1;
+        for (const k of allowed) {
+          if (fields[k] !== undefined) { setParts.push(`${k} = $${idx++}`); vals.push(fields[k]); }
+        }
+        setParts.push(`updated_at = NOW()`);
+        vals.push(offer_id);
+        const result = await query(`
+          UPDATE partner_offers SET ${setParts.join(', ')} WHERE id = $${idx} RETURNING *
+        `, vals);
+        res.json(result.rows[0] || { error: 'Offer not found' });
+      } else {
+        // Create new: load defaults from offer_defaults for influencer type
+        const infRes = await query(`SELECT influencer_type FROM influencer_pipeline WHERE id = $1`, [influencer_id]);
+        const offer_type = infRes.rows[0]?.influencer_type === 'social' ? 'social' : 'newsletter';
+        const defRes = await query(`SELECT * FROM offer_defaults WHERE offer_type = $1`, [offer_type]);
+        const d = defRes.rows[0];
+        const result = await query(`
+          INSERT INTO partner_offers (influencer_id, offer_type, commission_pct, discount_pct, discount_code, free_editions, studio_membership, co_marketing, sponsored_placement, custom_notes)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+          RETURNING *
+        `, [
+          influencer_id, offer_type,
+          fields.commission_pct ?? d?.commission_pct ?? (offer_type === 'social' ? 20 : 25),
+          fields.discount_pct ?? d?.discount_pct ?? (offer_type === 'social' ? 15 : 20),
+          fields.discount_code ?? null,
+          fields.free_editions ?? d?.free_editions ?? (offer_type === 'social' ? ['Founder','Solo','Operator'] : ['Operator']),
+          fields.studio_membership ?? d?.studio_membership ?? true,
+          fields.co_marketing ?? d?.co_marketing ?? (offer_type === 'social'),
+          fields.sponsored_placement ?? d?.sponsored_placement ?? (offer_type === 'newsletter'),
+          fields.custom_notes ?? null
+        ]);
+        res.json(result.rows[0]);
+      }
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // PATCH /api/command/influencers/:id/offers/:offerId/status — status transition only
+  app.patch('/api/command/influencers/:id/offers/:offerId/status', async (req, res) => {
+    try {
+      const offerId = req.params.offerId;
+      const { status } = req.body;
+      const timestampCol = { sent: 'sent_at', accepted: 'accepted_at', declined: 'declined_at' }[status];
+      const setParts = [`status = $1`, `updated_at = NOW()`];
+      const vals = [status];
+      if (timestampCol) { setParts.push(`${timestampCol} = NOW()`); }
+      const result = await query(`
+        UPDATE partner_offers SET ${setParts.join(', ')} WHERE id = $${setParts.length + 1} RETURNING *
+      `, [...vals, offerId]);
+      res.json(result.rows[0] || { error: 'Offer not found' });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // POST /api/command/influencers/bulk-import — import newsletters from JSON
+  app.post('/api/command/influencers/bulk-import', async (req, res) => {
+    try {
+      const items = req.body;
+      if (!Array.isArray(items) || items.length > 100) {
+        return res.status(400).json({ error: 'Body must be an array of ≤100 items' });
+      }
+      let inserted = 0;
+      let updated = 0;
+      for (const item of items) {
+        const handle = item.handle;
+        const platform = item.platform_primary || 'newsletter';
+        if (!handle) continue;
+        // Upsert by (handle, platform_primary) composite key
+        const result = await query(`
+          INSERT INTO influencer_pipeline (
+            handle, platform_primary, influencer_type, subscriber_count, topic_focus,
+            frequency, sponsorship_pricing, icp_target, icp_fit_label, priority_rank,
+            contact_info, profile_url, lead_tier, lead_score, topics, email, status
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'active')
+          ON CONFLICT DO NOTHING
+          RETURNING id
+        `, [
+          handle, platform, item.influencer_type || 'newsletter',
+          item.subscriber_count || null, item.topic_focus || null,
+          item.frequency || null, item.sponsorship_pricing || null,
+          item.icp_target || null, item.icp_fit_label || null,
+          item.priority_rank || null, item.contact_info || null,
+          item.profile_url || null, item.lead_tier || 'tier_3', item.lead_score || 5,
+          item.topics || null, item.email || null
+        ]);
+        if (result.rows.length > 0) { inserted++; } else { updated++; }
+      }
+      res.json({ inserted, updated, total: items.length });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // POST /api/command/contacts/:id/suppress — suppress from reconnection engine
+  app.post('/api/command/contacts/:id/suppress', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { reason, suppress_until } = req.body;
+      
+      const result = await query(`
+        UPDATE contacts
+        SET metadata = jsonb_set(COALESCE(metadata, '{}'), '{suppressed_from_reconnection}', 'true') || jsonb_build_object('suppressed_reason', $2, 'suppress_until', $3),
+            notes = COALESCE(notes || E'\n', '') || '[' || NOW()::date || '] Suppressed from reconnection: ' || $2 || ' (until ' || $3 || ')'
+        WHERE id = $1
+        RETURNING id, name
+      `, [id, reason || 'Manual suppression', suppress_until || (new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0])]);
+      
+      if (result.rows.length === 0) return res.status(404).json({ error: 'Contact not found' });
+      res.json({ success: true, contact: result.rows[0] });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
 }
 module.exports.registerInfluencerRoutes = registerInfluencerRoutes;
 
@@ -2390,7 +2563,7 @@ function registerResearchRoutes(app) {
   // GET /api/research/pulse — daily briefs + live prospect signals + enriched Reddit signals
   app.get('/api/research/pulse', async (req, res) => {
     try {
-      const [briefsResult, signalsResult, cachedPainResult, cachedMoodResult] = await Promise.all([
+      const [briefsResult, signalsResult, cachedPainResult, cachedMoodResult, hallucinationResult, moodHallucinationResult] = await Promise.all([
         query(
           `SELECT brand, brief_date, markdown_body, signal_count
            FROM daily_briefs
@@ -2399,30 +2572,57 @@ function registerResearchRoutes(app) {
         ),
         query(
           `SELECT ps.company, ps.handle, ps.signal_text, ps.signal_type, ps.signal_source, ps.relevance_score,
-                  ps.signal_url, c.name as contact_name
+                  ps.signal_url, ps.captured_at, ps.stale, ps.url_alive, c.name as contact_name
            FROM prospect_signals ps
            LEFT JOIN contacts c ON ps.contact_id = c.id
            WHERE ps.acted_on = false
+             AND ps.stale = FALSE
            ORDER BY ps.relevance_score DESC, ps.captured_at DESC
-           LIMIT 10`
+           LIMIT 15`
         ),
         query(
           `SELECT ps.icp_slug, ps.pain_category, ps.severity, ps.verbatim_quote, ps.insight, ps.tags, ps.action_suggestion, ps.created_at,
-                  COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
+                  ps.reddit_url as source_url, ps.quote_verified, ps.quote_match_score, ps.accuracy_score, ps.icp_confidence
            FROM pain_signals ps
-           LEFT JOIN reddit_posts rp ON rp.id = ps.source_id
            WHERE ps.insight IS NOT NULL
-           ORDER BY ps.severity DESC, ps.created_at DESC
-           LIMIT 5`
+             AND ps.quote_match_score >= 0.5
+           ORDER BY ps.accuracy_score DESC NULLS LAST, ps.severity DESC, ps.created_at DESC
+           LIMIT 15`
         ),
         query(
           `SELECT ms.icp_slug, ms.mood_primary, ms.mood_secondary, ms.verbatim_phrases, ms.emotional_punch, ms.shirt_potential, ms.insight, ms.tags, ms.action_suggestion, ms.created_at,
-                  COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
+                  ms.reddit_url as source_url, ms.phrases_match_score, ms.accuracy_score
            FROM mood_signals ms
-           LEFT JOIN reddit_posts rp ON rp.id = ms.source_id
            WHERE ms.insight IS NOT NULL
-           ORDER BY ms.emotional_punch DESC, ms.created_at DESC
-           LIMIT 5`
+             AND ms.phrases_match_score >= 0.5
+           ORDER BY ms.accuracy_score DESC NULLS LAST, ms.emotional_punch DESC, ms.created_at DESC
+           LIMIT 15`
+        ),
+        // Pain hallucination stats for dashboard awareness
+        query(
+          `SELECT icp_slug,
+                  COUNT(*) as total,
+                  COUNT(*) FILTER (WHERE quote_match_score = 1.0) as exact,
+                  COUNT(*) FILTER (WHERE quote_match_score >= 0.8 AND quote_match_score < 1.0) as fuzzy_good,
+                  COUNT(*) FILTER (WHERE quote_match_score >= 0.5 AND quote_match_score < 0.8) as fuzzy_partial,
+                  COUNT(*) FILTER (WHERE quote_match_score < 0.5) as hallucinated
+           FROM pain_signals
+           WHERE quote_verified = TRUE
+           GROUP BY icp_slug
+           ORDER BY hallucinated DESC`
+        ),
+        // Mood hallucination stats
+        query(
+          `SELECT icp_slug,
+                  COUNT(*) as total,
+                  COUNT(*) FILTER (WHERE phrases_match_score = 1.0) as exact,
+                  COUNT(*) FILTER (WHERE phrases_match_score >= 0.8 AND phrases_match_score < 1.0) as fuzzy_good,
+                  COUNT(*) FILTER (WHERE phrases_match_score >= 0.5 AND phrases_match_score < 0.8) as fuzzy_partial,
+                  COUNT(*) FILTER (WHERE phrases_match_score < 0.5) as hallucinated
+           FROM mood_signals
+           WHERE phrases_verified = TRUE
+           GROUP BY icp_slug
+           ORDER BY hallucinated DESC`
         ),
       ]);
 
@@ -2491,6 +2691,8 @@ function registerResearchRoutes(app) {
         live_signals: signalsResult.rows,
         enriched_pain: cachedPainResult.rows,
         enriched_mood: cachedMoodResult.rows,
+        hallucination_stats: hallucinationResult.rows,
+        mood_hallucination_stats: moodHallucinationResult.rows,
       });
     } catch(e) { res.status(500).json({ error: e.message }); }
   });
@@ -2505,21 +2707,19 @@ function registerResearchRoutes(app) {
       const [painResult, moodResult, icpResult] = await Promise.all([
         query(
           `SELECT ps.icp_slug, ps.pain_category, ps.severity, ps.verbatim_quote, ps.active_search, ps.aloomii_addressable, ps.context_snippet, ps.insight, ps.tags, ps.action_suggestion, ps.created_at,
-                  COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
+                  ps.reddit_url as source_url, ps.quote_verified, ps.quote_match_score, ps.accuracy_score
            FROM pain_signals ps
-           LEFT JOIN reddit_posts rp ON rp.id = ps.source_id
            WHERE (($1::text IS NULL) OR (COALESCE($1::text, '') = '') OR (ps.icp_slug = $1)) AND ps.created_at > NOW() - ($2 || ' days')::interval
-           ORDER BY ps.severity DESC, ps.created_at DESC
+           ORDER BY ps.accuracy_score DESC NULLS LAST, ps.severity DESC, ps.created_at DESC
            LIMIT $3`,
           [icpSlug, String(days), limit]
         ),
         query(
           `SELECT ms.icp_slug, ms.mood_primary, ms.mood_secondary, ms.verbatim_phrases, ms.emotional_punch, ms.shirt_potential, ms.universality, ms.trigger_context, ms.insight, ms.tags, ms.action_suggestion, ms.created_at,
-                  COALESCE('https://www.reddit.com' || rp.permalink, rp.url) as source_url
+                  ms.reddit_url as source_url, ms.phrases_verified, ms.phrases_match_score, ms.accuracy_score
            FROM mood_signals ms
-           LEFT JOIN reddit_posts rp ON rp.id = ms.source_id
            WHERE (($1::text IS NULL) OR (COALESCE($1::text, '') = '') OR (ms.icp_slug = $1)) AND ms.created_at > NOW() - ($2 || ' days')::interval
-           ORDER BY ms.emotional_punch DESC, ms.created_at DESC
+           ORDER BY ms.accuracy_score DESC NULLS LAST, ms.emotional_punch DESC, ms.created_at DESC
            LIMIT $3`,
           [icpSlug, String(days), limit]
         ),
@@ -2553,5 +2753,147 @@ function registerResearchRoutes(app) {
       res.json({ events: eventsResult.rows, influencers: infResult.rows });
     } catch(e) { res.status(500).json({ error: e.message }); }
   });
+  // GET /api/research/patterns — signal pattern classification + cross-client aggregation
+  app.get('/api/research/patterns', async (req, res) => {
+    try {
+      const days = parseInt(req.query.days, 10) || 30;
+
+      const [patternsRes, summaryRes, byClientRes] = await Promise.all([
+        query(
+          `SELECT sp.pattern_type, sp.confidence, sp.urgency, sp.indicators, sp.detected_at,
+                  s.title, s.body as summary, s.signal_type, s.score,
+                  c.name as contact_name, c.tier as contact_tier,
+                  COALESCE(a.name, c.metadata->>'company') as company
+           FROM signal_patterns sp
+           JOIN signals s ON sp.signal_id = s.id
+           LEFT JOIN entity_signals es ON es.signal_id = s.id
+           LEFT JOIN contacts c ON es.entity_id = c.id
+           LEFT JOIN accounts a ON c.account_id = a.id
+           WHERE sp.detected_at > NOW() - ($1 || ' days')::interval
+           ORDER BY sp.confidence DESC, sp.detected_at DESC
+           LIMIT 30`,
+          [String(days)]
+        ),
+        query(
+          `SELECT pattern_type, COUNT(*) as count, ROUND(AVG(confidence)::numeric, 1) as avg_confidence
+           FROM signal_patterns
+           WHERE detected_at > NOW() - ($1 || ' days')::interval
+           GROUP BY pattern_type
+           ORDER BY count DESC`,
+          [String(days)]
+        ),
+        query(
+          `SELECT sp.pattern_type,
+                  COALESCE(a.name, c.metadata->>'company', 'Unknown') as company,
+                  c.name as contact_name, c.tier,
+                  sp.confidence, sp.urgency, sp.detected_at
+           FROM signal_patterns sp
+           JOIN signals s ON sp.signal_id = s.id
+           JOIN entity_signals es ON es.signal_id = s.id
+           JOIN contacts c ON es.entity_id = c.id
+           LEFT JOIN accounts a ON c.account_id = a.id
+           WHERE sp.detected_at > NOW() - ($1 || ' days')::interval
+           ORDER BY CASE sp.pattern_type
+                    WHEN 'distress' THEN 1 WHEN 'growth' THEN 2 WHEN 'leadership_transition' THEN 3
+                    WHEN 'tech_shift' THEN 4 WHEN 'competitive_risk' THEN 5 ELSE 6 END,
+                    sp.confidence DESC
+           LIMIT 50`,
+          [String(days)]
+        ),
+      ]);
+
+      res.json({
+        patterns: patternsRes.rows,
+        summary: summaryRes.rows,
+        by_client: byClientRes.rows,
+      });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
 }
 module.exports.registerResearchRoutes = registerResearchRoutes;
+// ═══════════════════════════════════════════════════════════════
+// UGC Routes
+// ═══════════════════════════════════════════════════════════════
+function registerUgcRoutes(app) {
+  const { generateUgcScript } = require('../ugc/ugc-generator');
+
+  // GET /api/command/pain-signals — fetch pain signals for UGC dropdown
+  app.get('/api/command/pain-signals', async (req, res) => {
+    try {
+      const days = parseInt(req.query.days, 10) || 30;
+      const severity = parseInt(req.query.severity, 10) || 3;
+      
+      const result = await query(
+        `SELECT id, icp_slug, verbatim_quote, insight, pain_category, severity, context_snippet, created_at
+         FROM pain_signals
+         WHERE severity >= $1
+           AND created_at > NOW() - ($2 || ' days')::interval
+         ORDER BY severity DESC, created_at DESC
+         LIMIT 200`,
+        [severity, String(days)]
+      );
+      
+      // Group by icp_slug
+      const grouped = {};
+      result.rows.forEach(row => {
+        if (!grouped[row.icp_slug]) grouped[row.icp_slug] = [];
+        grouped[row.icp_slug].push(row);
+      });
+      
+      res.json({ signals: result.rows, grouped, count: result.rows.length });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // POST /api/command/ugc/generate — generate UGC script via opus
+  app.post('/api/command/ugc/generate', async (req, res) => {
+    const { pain_signal_id, character, story_angle, call_to_action, script_length } = req.body;
+    
+    if (!pain_signal_id || !character || !story_angle || !call_to_action || !script_length) {
+      return res.status(400).json({ error: 'Missing required fields: pain_signal_id, character, story_angle, call_to_action, script_length' });
+    }
+
+    try {
+      // Load pain signal from DB
+      const painRes = await query(
+        `SELECT id, icp_slug, verbatim_quote, insight, pain_category, severity, context_snippet
+         FROM pain_signals WHERE id = $1`,
+        [pain_signal_id]
+      );
+      
+      if (painRes.rows.length === 0) {
+        return res.status(404).json({ error: 'Pain signal not found' });
+      }
+      
+      const painSignal = painRes.rows[0];
+      
+      // Build form data
+      const formData = {
+        name: character.name,
+        age: character.age,
+        occupation: character.occupation,
+        life_stage: character.life_stage,
+        location: character.location,
+        personality_traits: character.personality_traits,
+        vocabulary_level: character.vocabulary_level,
+        verbal_tics: character.verbal_tics,
+        cadence: character.cadence,
+        emotional_state: character.emotional_state,
+        pov_lens: story_angle.pov_lens,
+        brand_product: story_angle.brand_product,
+        cta_destination: call_to_action.destination,
+        cta_tone: call_to_action.tone,
+        script_length
+      };
+
+      // Call opus
+      const script = await generateUgcScript(painSignal, formData);
+      
+      res.json({ script, pain_signal: painSignal, generated_at: new Date().toISOString() });
+    } catch(e) {
+      console.error('UGC generation error:', e);
+      res.status(500).json({ error: e.message });
+    }
+  });
+}
+module.exports.registerUgcRoutes = registerUgcRoutes;
+

@@ -2,7 +2,7 @@
 /**
  * Build 4: Cross-Client Pattern Matching
  * Runs monthly — 1st of month at 6:00 AM ET
- * Model: ollama/gemma4:31b (local synthesis), $0
+ * Model: kimi-k2.6:cloud (via local Ollama), $0
  *
  * What it does:
  * 1. Aggregates signal, outreach, and outcome data across all clients
@@ -23,7 +23,7 @@ const http = require('http');
 
 const DB = 'postgresql://superhana@localhost:5432/aloomii';
 const psql = '/opt/homebrew/Cellar/postgresql@18/18.2/bin/psql';
-const OLLAMA_HOST = '10.211.55.2';
+const OLLAMA_HOST = 'localhost';
 
 const today = new Date().toISOString().split('T')[0];
 const monthYear = today.slice(0, 7); // YYYY-MM
@@ -44,9 +44,9 @@ function sqlJSON(sql) {
   } finally { unlinkSync(tmp); }
 }
 
-async function callGemma(prompt) {
+async function callKimi(prompt) {
   return new Promise(resolve => {
-    const body = JSON.stringify({ model: 'gemma4:31b', prompt, stream: false, options: { temperature: 0.2, num_predict: 1200 } });
+    const body = JSON.stringify({ model: 'kimi-k2.6:cloud', prompt, stream: false, options: { temperature: 0.2, num_predict: 2000 } });
     const req = http.request({
       hostname: OLLAMA_HOST, port: 11434, path: '/api/generate', method: 'POST',
       headers: { 'Content-Type': 'application/json' }
@@ -188,8 +188,8 @@ Produce a concise monthly intelligence report with:
 
 Keep it under 300 words. Be direct. Avoid generic advice.`;
 
-  console.log('[cross-client] Running Gemma 4 synthesis...');
-  const synthesis = await callGemma(prompt);
+  console.log('[cross-client] Running Kimi K2.6 synthesis...');
+  const synthesis = await callKimi(prompt);
 
   // === 9. STORE PATTERN INSIGHTS ===
   if (synthesis) {
@@ -226,7 +226,7 @@ ${signalStats.map(s => `- **${s.signal_type}**: ${s.total_signals} signals (avg 
 ## Pipeline
 ${opps.map(o => `- ${o.stage}: ${o.count} opportunities`).join('\n') || '- Pipeline building...'}
 
-## AI Synthesis (Gemma 4 31B)
+## AI Synthesis (Kimi K2.6)
 ${synthesis || '_Ollama synthesis not available — data stored for next run_'}
 
 ---
@@ -253,7 +253,7 @@ ${signalStats.slice(0, 4).map(s => `• ${s.signal_type}: ${s.total_signals} (av
 ${synthesis ? `**AI Analysis:**\n${synthesis.slice(0, 400)}${synthesis.length > 400 ? '...' : ''}` : ''}
 
 Full report: \`output/cross-client-insights-${monthYear}.md\`
-_Build 4 | gemma4:31b local | $0_`;
+_Build 4 | kimi-k2.6:cloud local | $0_`;
 
   console.log(discordSummary);
 }

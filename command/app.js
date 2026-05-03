@@ -139,6 +139,7 @@ function showSection(section) {
             renderSnipeDrafts(commandData.snipe_drafts);
             renderPBNBriefs(commandData.content_queue);
             renderAllContent(commandData.content_queue);
+            renderAiUgc();
         } else if (section === 'events') {
             renderEventsSection();
         } else if (section === 'backlog') {
@@ -1623,10 +1624,13 @@ function renderPipeline(data) {
 // === CONTENT SECTION ===
 
 function switchContentTab(idx) {
-  document.querySelectorAll('.content-panel').forEach((p, i) => {
+  // Scope to content section only — prevents collision with other sections' panels
+  const contentSection = document.getElementById('section-content');
+  if (!contentSection) return;
+  contentSection.querySelectorAll('.content-panel').forEach((p, i) => {
     p.classList.toggle('active', i === idx);
   });
-  document.querySelectorAll('.content-tabs .tab-btn').forEach((b, i) => {
+  contentSection.querySelectorAll('.content-tabs .tab-btn').forEach((b, i) => {
     b.classList.toggle('active', i === idx);
   });
 }
@@ -1971,6 +1975,329 @@ function rejectLinkedInDraft(id) {
   });
 }
 
+// === AI UGC SECTION ===
+
+let aiUgcPainSignals = [];
+let aiUgcGenerating = false;
+
+async function loadPainSignals() {
+  try {
+    const res = await fetch('/api/command/pain-signals?severity=3&days=30');
+    const data = await res.json();
+    aiUgcPainSignals = data.signals || [];
+    populatePainSignalDropdown(data.grouped || {});
+  } catch(e) {
+    console.error('Failed to load pain signals:', e);
+    const dropdown = document.getElementById('ugc-pain-dropdown');
+    if (dropdown) dropdown.innerHTML = '<option value="">Failed to load pain signals</option>';
+  }
+}
+
+function populatePainSignalDropdown(grouped) {
+  const dropdown = document.getElementById('ugc-pain-dropdown');
+  if (!dropdown) return;
+  
+  let html = '<option value="">Select a pain signal...</option>';
+  
+  Object.entries(grouped).forEach(([icp, signals]) => {
+    html += `<optgroup label="${icp} (${signals.length})">`;
+    signals.slice(0, 10).forEach(signal => {
+      const preview = (signal.verbatim_quote || '').substring(0, 80);
+      html += `<option value="${signal.id}">${signal.severity}/5 — ${preview}...</option>`;
+    });
+    html += '</optgroup>';
+  });
+  
+  dropdown.innerHTML = html;
+}
+
+async function generateUgcScript() {
+  if (aiUgcGenerating) return;
+  
+  const painId = document.getElementById('ugc-pain-dropdown')?.value;
+  if (!painId) {
+    showToast('Please select a pain signal first', 'error');
+    return;
+  }
+  
+  const character = {
+    name: document.getElementById('ugc-char-name')?.value || 'Alex',
+    age: document.getElementById('ugc-char-age')?.value || '32',
+    occupation: document.getElementById('ugc-char-occupation')?.value || 'Founder',
+    life_stage: document.getElementById('ugc-char-life')?.value || 'Early startup',
+    location: document.getElementById('ugc-char-location')?.value || 'Toronto',
+    personality_traits: document.getElementById('ugc-char-personality')?.value || 'blunt, self-deprecating, warm',
+    vocabulary_level: document.getElementById('ugc-char-vocab')?.value || 'chronically online',
+    verbal_tics: document.getElementById('ugc-char-tics')?.value || 'anyway, I mean',
+    cadence: document.getElementById('ugc-char-cadence')?.value || 'rambly',
+    emotional_state: document.getElementById('ugc-char-emotion')?.value || 'tired of being patient'
+  };
+  
+  const storyAngle = {
+    pov_lens: document.getElementById('ugc-pov')?.value || 'reluctant convert',
+    brand_product: document.getElementById('ugc-brand')?.value || 'Aloomii'
+  };
+  
+  const callToAction = {
+    destination: document.getElementById('ugc-cta-dest')?.value || 'aloomii.com',
+    tone: document.getElementById('ugc-cta-tone')?.value || 'casual aside'
+  };
+  
+  const scriptLength = document.querySelector('input[name="ugc-length"]:checked')?.value || '45';
+  
+  aiUgcGenerating = true;
+  const btn = document.getElementById('ugc-generate-btn');
+  const status = document.getElementById('ugc-status');
+  const result = document.getElementById('ugc-result');
+  
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Crafting dialogue...';
+  }
+  if (status) status.textContent = 'Opus is writing your script — this takes ~60-120 seconds';
+  if (result) result.classList.add('hidden');
+  
+  try {
+    const res = await fetch('/api/command/ugc/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pain_signal_id: parseInt(painId),
+        character,
+        story_angle: storyAngle,
+        call_to_action: callToAction,
+        script_length: scriptLength
+      })
+    });
+    
+    const data = await res.json();
+    
+    if (!res.ok) {
+      throw new Error(data.error || 'Generation failed');
+    }
+    
+    displayUgcResult(data.script);
+    showToast('Script generated', 'success');
+  } catch(e) {
+    console.error('UGC generation error:', e);
+    showToast(e.message || 'Failed to generate script', 'error');
+    if (status) status.textContent = 'Error: ' + (e.message || 'Generation failed');
+  } finally {
+    aiUgcGenerating = false;
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Generate Script';
+    }
+  }
+}
+
+function displayUgcResult(script) {
+  const result = document.getElementById('ugc-result');
+  const mainScript = document.getElementById('ugc-main-script');
+  if (!result || !mainScript) return;
+  
+  mainScript.textContent = script || 'No script generated';
+  result.classList.remove('hidden');
+}
+
+function copyUgcScript() {
+  const mainScript = document.getElementById('ugc-main-script');
+  const text = mainScript ? (mainScript.innerText || mainScript.textContent || '').trim() : '';
+  if (!text) {
+    showToast('No script to copy', 'error');
+    return;
+  }
+
+  // Try modern clipboard API first
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text)
+      .then(() => showToast('Script copied to clipboard', 'success'))
+      .catch((err) => {
+        console.warn('Clipboard API failed, trying fallback:', err);
+        fallbackCopy(text);
+      });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;left:-9999px;opacity:0;';
+  document.body.appendChild(ta);
+  ta.select();
+  ta.setSelectionRange(0, text.length);
+  let success = false;
+  try {
+    success = document.execCommand('copy');
+  } catch (e) {
+    console.error('execCommand copy failed:', e);
+  }
+  document.body.removeChild(ta);
+  if (success) {
+    showToast('Script copied to clipboard', 'success');
+  } else {
+    showToast('Copy failed — please select and copy manually', 'error');
+  }
+}
+
+function renderAiUgc() {
+  const container = document.getElementById('ai-ugc-panel');
+  if (!container) return;
+  
+  container.innerHTML = `
+    <div style="padding:20px;max-width:800px;">
+      <h3 style="margin-bottom:16px;color:var(--text-primary);">🎬 AI UGC Script Generator</h3>
+      <p style="color:var(--text-dim);margin-bottom:20px;font-size:13px;">
+        Generate short-form UGC scripts based on real pain signals from research. 
+        Opus will find the nuance and write dialogue that sounds caught on tape.
+      </p>
+      
+      <div style="display:grid;gap:16px;margin-bottom:20px;">
+        <div>
+          <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Pain Signal</label>
+          <select id="ugc-pain-dropdown" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+            <option value="">Loading pain signals...</option>
+          </select>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Character Name</label>
+            <input id="ugc-char-name" type="text" value="Alex" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Age</label>
+            <input id="ugc-char-age" type="text" value="32" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Occupation</label>
+            <input id="ugc-char-occupation" type="text" value="Founder" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Life Stage</label>
+            <input id="ugc-char-life" type="text" value="Early startup" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+        </div>
+        
+        <div>
+          <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Location</label>
+          <input id="ugc-char-location" type="text" value="Toronto" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+        </div>
+        
+        <div>
+          <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Personality (3 traits + 1 contradiction)</label>
+          <input id="ugc-char-personality" type="text" value="blunt, self-deprecating, warm — but secretly proud of how much research she's done" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Vocabulary</label>
+            <input id="ugc-char-vocab" type="text" value="chronically online" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Verbal Tics</label>
+            <input id="ugc-char-tics" type="text" value="anyway, I mean" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Cadence</label>
+            <input id="ugc-char-cadence" type="text" value="rambly" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+        </div>
+        
+        <div>
+          <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Emotional State (right now)</label>
+          <input id="ugc-char-emotion" type="text" value="tired of being patient" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">POV Lens</label>
+            <select id="ugc-pov" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+              <option value="confession">confession</option>
+              <option value="rant">rant</option>
+              <option value="friend tip-off">friend tip-off</option>
+              <option value="reluctant convert" selected>reluctant convert</option>
+              <option value="you're not gonna believe this">"you're not gonna believe this"</option>
+              <option value="quiet flex">quiet flex</option>
+              <option value="before-and-after">before-and-after</option>
+              <option value="mid-experience">mid-experience</option>
+              <option value="morning-after">morning-after</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Brand / Product</label>
+            <input id="ugc-brand" type="text" value="Aloomii" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">CTA Destination</label>
+            <input id="ugc-cta-dest" type="text" value="aloomii.com" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">CTA Tone</label>
+            <select id="ugc-cta-tone" style="width:100%;padding:8px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:var(--text-primary);font-size:13px;">
+              <option value="casual aside" selected>casual aside</option>
+              <option value="earnest recommendation">earnest recommendation</option>
+              <option value="dare">dare</option>
+              <option value="shrug-and-mention">shrug-and-mention</option>
+            </select>
+          </div>
+        </div>
+        
+        <div>
+          <label style="display:block;color:var(--text-dim);font-size:12px;margin-bottom:6px;">Script Length</label>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="radio" name="ugc-length" value="15" checked style="accent-color:#00e5a0;">
+              <span style="font-size:13px;">15s (~40 words) — Shorts / TikTok</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="radio" name="ugc-length" value="30" style="accent-color:#00e5a0;">
+              <span style="font-size:13px;">30s (~80 words)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="radio" name="ugc-length" value="45" style="accent-color:#00e5a0;">
+              <span style="font-size:13px;">45s (~120 words)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="radio" name="ugc-length" value="60" style="accent-color:#00e5a0;">
+              <span style="font-size:13px;">60s (~160 words)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:20px;">
+        <button id="ugc-generate-btn" onclick="generateUgcScript()" style="background:#00e5a0;color:#0a0a0f;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;">
+          Generate Script
+        </button>
+        <span id="ugc-status" style="color:var(--text-dim);font-size:13px;"></span>
+      </div>
+      
+      <div id="ugc-result" class="hidden" style="border:1px solid #2a2a4a;border-radius:10px;padding:16px;background:#141428;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h4 style="margin:0;color:var(--text-primary);">📝 Main Script</h4>
+          <button onclick="copyUgcScript()" style="background:#2a2a4a;color:#fff;padding:6px 14px;border:none;border-radius:6px;cursor:pointer;font-size:12px;">
+            📋 Copy Script
+          </button>
+        </div>
+        <pre id="ugc-main-script" style="white-space:pre-wrap;font-family:inherit;line-height:1.6;color:var(--text-primary);font-size:14px;margin:0;"></pre>
+      </div>
+    </div>
+  `;
+  
+  // Load pain signals after rendering
+  loadPainSignals();
+}
+
 function toggleBriefExpand(id) {
   const el = document.getElementById('brief-content-' + id);
   if (el) el.classList.toggle('collapsed');
@@ -2148,6 +2475,7 @@ function editContact(id) {
         </div>
 
         <div class="detail-panel-footer">
+            <button onclick="suppressContact('${id}')" class="btn-secondary" style="margin-right:auto;background:#7f1d1d22;color:#fca5a5;border-color:#7f1d1d;">🚫 Suppress from Reconnection</button>
             <button onclick="saveContactDetail('${id}')" class="btn-primary">Save Changes</button>
             <button onclick="closeDetailPanel()" class="btn-secondary">Cancel</button>
         </div>
@@ -2231,6 +2559,47 @@ async function saveContactDetail(id) {
     closeDetailPanel();
     refreshAll();
 }
+
+async function suppressContact(id) {
+    const reason = prompt('Suppress reason (e.g. "PBN guest interviewed"):');
+    if (!reason) return;
+    const days = parseInt(prompt('Suppress for how many days? (default: 90):')) || 90;
+    const until = new Date(Date.now() + days * 86400000).toISOString().split('T')[0];
+    
+    try {
+        const response = await fetch(`/api/contacts/${id}/suppress`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reason, suppress_until: until })
+        });
+        if (response.ok) {
+            showToast(`Contact suppressed for ${days} days`, 'success');
+            closeDetailPanel();
+            refreshAll();
+            return;
+        }
+    } catch(e) {
+        console.log('Suppress API not available, updating local state');
+    }
+    
+    // Fallback: update local state
+    if (commandData && commandData.contacts) {
+        const idx = commandData.contacts.findIndex(c => String(c.id) === String(id));
+        if (idx !== -1) {
+            commandData.contacts[idx].metadata = { 
+                ...(commandData.contacts[idx].metadata || {}), 
+                suppressed_from_reconnection: true,
+                suppressed_reason: reason,
+                suppress_until: until
+            };
+            commandData.contacts[idx].notes = (commandData.contacts[idx].notes || '') + `\n[${new Date().toISOString().split('T')[0]}] Suppressed from reconnection: ${reason} (until ${until})`;
+        }
+    }
+    showToast('Contact suppressed (local)', 'info');
+    closeDetailPanel();
+    refreshAll();
+}
+window.suppressContact = suppressContact;
 
 // === PHASE 4: QUICK OUTREACH FLOW ===
 let outreachDebounceTimer = null;
@@ -3511,10 +3880,11 @@ async function loadInfluencers() {
   const listEl = document.getElementById('influencers-list');
   const countEl = document.getElementById('inf-count');
   const budgetEl = document.getElementById('inf-budget');
+  const infType = window.currentInfluencerType || 'social';
   if (!listEl) return;
   listEl.innerHTML = '<div class="empty-state">Loading...</div>';
   try {
-    let url = `/api/command/influencers?limit=500`;
+    let url = `/api/command/influencers?limit=500&influencer_type=${encodeURIComponent(infType)}`;
     if (!icp && !includeInactive) url += `&active_only=true`;
     if (icp) url += `&icp_target=${encodeURIComponent(icp)}`;
     if (platform) url += `&platform=${encodeURIComponent(platform)}`;
@@ -3523,40 +3893,92 @@ async function loadInfluencers() {
     const [resp, budgetResp] = await Promise.all([fetch(url), fetch('/api/command/influencers/budget')]);
     const influencers = await resp.json();
     const budget = await budgetResp.json().catch(() => null);
-    if (countEl) countEl.textContent = `${influencers.length} influencer${influencers.length !== 1 ? 's' : ''}`;
-    if (budgetEl && budget) budgetEl.textContent = `EnsembleData today: ${budget.units_used}/${budget.total_daily} units used`;
-    if (!influencers.length) { listEl.innerHTML = '<div class="empty-state">No influencers found.</div>'; return; }
-    listEl.innerHTML = influencers.map(p => {
-      const statusBadge = p.last_outreach_status ? getStatusBadge(p.last_outreach_status) : '';
-      const lastTouch = p.last_outreach_at ? new Date(p.last_outreach_at).toLocaleDateString() : '';
-      return `
-      <div style="background:#1a1a2e;border:1px solid #2a2a4e;border-radius:8px;padding:12px;margin-bottom:8px;">
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="flex:1;min-width:0;">
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-              <span style="font-weight:600;font-size:14px;">${safeHtml(p.handle)}</span>
-              <span style="color:#888;font-size:12px;">@${safeHtml(p.platform_primary)}</span>
-              ${statusBadge}
-              ${lastTouch ? `<span style="font-size:11px;color:#666;">${lastTouch}</span>` : ''}
+    if (countEl) countEl.textContent = `${influencers.length} ${infType === 'newsletter' ? 'newsletter' : 'influencer'}${influencers.length !== 1 ? 's' : ''}`;
+    if (budgetEl && budget && infType === 'social') budgetEl.textContent = `EnsembleData today: ${budget.units_used}/${budget.total_daily} units used`;
+    else if (budgetEl) budgetEl.textContent = '';
+    if (!influencers.length) { listEl.innerHTML = `<div class="empty-state">No ${infType === 'newsletter' ? 'newsletters' : 'influencers'} found.</div>`; return; }
+
+    if (infType === 'newsletter') {
+      listEl.innerHTML = influencers.map(p => {
+        const statusBadge = p.last_outreach_status ? getStatusBadge(p.last_outreach_status) : '';
+        const lastTouch = p.last_outreach_at ? new Date(p.last_outreach_at).toLocaleDateString() : '';
+        const offer = p.current_offer || {};
+        const offerLine = offer.status ? `${offer.commission_pct || '-'}% comm / ${offer.discount_pct || '-'}% off / code: ${offer.discount_code || '—'}` : 'No offer yet';
+        const offerStatus = offer.status ? ` · ${offer.status}` : '';
+        const priorityBadge = p.priority_rank ? `<span style="font-size:10px;background:#f59e0b22;color:#f59e0b;padding:2px 6px;border-radius:4px;border:1px solid #f59e0b44;">★ #${p.priority_rank}</span>` : '';
+        const rankColor = p.priority_rank <= 3 ? '#00c8be' : p.priority_rank <= 10 ? '#f59e0b' : '#94a3b8';
+        return `
+        <div style="background:#1a1a2e;border:1px solid #2a2a4e;border-radius:8px;padding:0;margin-bottom:8px;overflow:hidden;display:flex;">
+          <div style="min-width:36px;background:${rankColor}22;border-right:2px solid ${rankColor};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:${rankColor};padding:8px 4px;">${p.priority_rank || '—'}</div>
+          <div style="flex:1;min-width:0;padding:12px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <span style="font-weight:600;font-size:14px;">${safeHtml(p.handle)}</span>
+                  <span style="color:#888;font-size:12px;">${safeHtml(p.frequency || 'newsletter')}</span>
+                  ${priorityBadge}
+                  ${statusBadge}
+                  ${lastTouch ? `<span style="font-size:11px;color:#666;">${lastTouch}</span>` : ''}
+                </div>
+              <div style="font-size:12px;color:#888;margin-top:4px;">${p.icp_target||'?'} · ${(p.subscriber_count||0).toLocaleString()} subs · ICP Fit: ${p.icp_fit_label||'—'}</div>
+              ${p.topic_focus ? `<div style="font-size:11px;color:#94a3b8;margin-top:2px;">${safeHtml(p.topic_focus)}</div>` : ''}
+              ${p.email ? `<div style="font-size:12px;color:#00c8be;margin-top:2px;">&#9993; ${safeHtml(p.email)}</div>` : '<div style="font-size:12px;color:#555;margin-top:2px;">No email</div>'}
+              ${p.contact_info ? `<div style="font-size:11px;color:#666;margin-top:2px;">📋 ${safeHtml(p.contact_info)}</div>` : ''}
+              <div style="font-size:11px;color:#aaa;margin-top:4px;padding:4px 8px;background:#0d1117;border-radius:4px;">
+                💰 ${offerLine}${offerStatus}
+              </div>
             </div>
-            <div style="font-size:12px;color:#888;margin-top:4px;">ICP: ${p.icp_target||'?'} &middot; ${(p.followers||0).toLocaleString()} followers &middot; ${p.engagement_rate||'-'}% engagement</div>
-            ${p.email ? `<div style="font-size:12px;color:#00c8be;margin-top:2px;">&#9993; ${safeHtml(p.email)} (${p.email_source||'?'})</div>` : '<div style="font-size:12px;color:#555;margin-top:2px;">No email</div>'}
+            <div style="text-align:center;min-width:48px;flex-shrink:0;">
+              <div style="font-size:20px;font-weight:700;color:${p.lead_tier==='tier_1'?'#00c8be':p.lead_tier==='tier_2'?'#f5a623':'#555'}">${p.lead_score||'-'}</div>
+              <div style="font-size:10px;color:#666;">${p.lead_tier||'unscored'}</div>
+            </div>
+            ${p.profile_url ? `<a href="${safeHtml(p.profile_url)}" target="_blank" style="color:#888;font-size:12px;flex-shrink:0;">↗</a>` : ''}
           </div>
-          <div style="text-align:center;min-width:48px;flex-shrink:0;">
-            <div style="font-size:20px;font-weight:700;color:${p.lead_tier==='tier_1'?'#00c8be':p.lead_tier==='tier_2'?'#f5a623':'#555'}">${p.lead_score||'-'}</div>
-            <div style="font-size:10px;color:#666;">${p.lead_tier||'unscored'}</div>
+          <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+            <button onclick="openOfferEditor(${p.id}, '${safeHtml(p.handle)}')" style="padding:4px 10px;background:#2a2a4e;border:none;border-radius:4px;color:#fff;font-size:11px;cursor:pointer;">Edit Offer</button>
+            <button onclick="openInfluencerLogModal(${p.id})" style="padding:4px 10px;background:#2a2a4e;border:none;border-radius:4px;color:#fff;font-size:11px;cursor:pointer;">Log</button>
+            <button onclick="quickLogInfluencer(${p.id},'sent')" style="padding:4px 10px;background:#3b82f622;border:1px solid #3b82f644;border-radius:4px;color:#3b82f6;font-size:11px;cursor:pointer;">Mark Sent</button>
+            <button onclick="quickLogInfluencer(${p.id},'replied')" style="padding:4px 10px;background:#00c8be22;border:1px solid #00c8be44;border-radius:4px;color:#00c8be;font-size:11px;cursor:pointer;">Replied</button>
+            <button onclick="quickLogInfluencer(${p.id},'declined')" style="padding:4px 10px;background:#ef444422;border:1px solid #ef444444;border-radius:4px;color:#ef4444;font-size:11px;cursor:pointer;">Declined</button>
           </div>
-          ${p.profile_url ? `<a href="${safeHtml(p.profile_url)}" target="_blank" style="color:#888;font-size:12px;flex-shrink:0;">&#8599;</a>` : ''}
-        </div>
-        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
-          <button onclick="openInfluencerLogModal(${p.id})" style="padding:4px 10px;background:#2a2a4e;border:none;border-radius:4px;color:#fff;font-size:11px;cursor:pointer;">Log</button>
-          <button onclick="quickLogInfluencer(${p.id},'sent')" style="padding:4px 10px;background:#3b82f622;border:1px solid #3b82f644;border-radius:4px;color:#3b82f6;font-size:11px;cursor:pointer;">Mark Sent</button>
-          <button onclick="quickLogInfluencer(${p.id},'replied')" style="padding:4px 10px;background:#00c8be22;border:1px solid #00c8be44;border-radius:4px;color:#00c8be;font-size:11px;cursor:pointer;">Replied</button>
-          <button onclick="quickLogInfluencer(${p.id},'ghosted')" style="padding:4px 10px;background:#7f1d1d22;border:1px solid #7f1d1d44;border-radius:4px;color:#7f1d1d;font-size:11px;cursor:pointer;">Ghosted</button>
-          <button onclick="quickLogInfluencer(${p.id},'declined')" style="padding:4px 10px;background:#ef444422;border:1px solid #ef444444;border-radius:4px;color:#ef4444;font-size:11px;cursor:pointer;">Declined</button>
         </div>
       </div>`;
-    }).join('');
+      }).join('');
+    } else {
+      listEl.innerHTML = influencers.map(p => {
+        const statusBadge = p.last_outreach_status ? getStatusBadge(p.last_outreach_status) : '';
+        const lastTouch = p.last_outreach_at ? new Date(p.last_outreach_at).toLocaleDateString() : '';
+        const offer = p.current_offer || {};
+        return `
+        <div style="background:#1a1a2e;border:1px solid #2a2a4e;border-radius:8px;padding:12px;margin-bottom:8px;">
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span style="font-weight:600;font-size:14px;">${safeHtml(p.handle)}</span>
+                <span style="color:#888;font-size:12px;">@${safeHtml(p.platform_primary)}</span>
+                ${statusBadge}
+                ${lastTouch ? `<span style="font-size:11px;color:#666;">${lastTouch}</span>` : ''}
+              </div>
+              <div style="font-size:12px;color:#888;margin-top:4px;">ICP: ${p.icp_target||'?'} · ${(p.followers||0).toLocaleString()} followers · ${p.engagement_rate||'-'}% engagement</div>
+              ${p.email ? `<div style="font-size:12px;color:#00c8be;margin-top:2px;">&#9993; ${safeHtml(p.email)} (${p.email_source||'?'})</div>` : '<div style="font-size:12px;color:#555;margin-top:2px;">No email</div>'}
+              ${offer.status ? `<div style="font-size:11px;color:#aaa;margin-top:4px;padding:4px 8px;background:#0d1117;border-radius:4px;">💰 ${offer.commission_pct || '-'}% comm / ${offer.discount_pct || '-'}% off${offer.discount_code ? ' / code: ' + offer.discount_code : ''} · ${offer.status}</div>` : ''}
+            </div>
+            <div style="text-align:center;min-width:48px;flex-shrink:0;">
+              <div style="font-size:20px;font-weight:700;color:${p.lead_tier==='tier_1'?'#00c8be':p.lead_tier==='tier_2'?'#f5a623':'#555'}">${p.lead_score||'-'}</div>
+              <div style="font-size:10px;color:#666;">${p.lead_tier||'unscored'}</div>
+            </div>
+            ${p.profile_url ? `<a href="${safeHtml(p.profile_url)}" target="_blank" style="color:#888;font-size:12px;flex-shrink:0;">↗</a>` : ''}
+          </div>
+          <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+            <button onclick="openInfluencerLogModal(${p.id})" style="padding:4px 10px;background:#2a2a4e;border:none;border-radius:4px;color:#fff;font-size:11px;cursor:pointer;">Log</button>
+            <button onclick="quickLogInfluencer(${p.id},'sent')" style="padding:4px 10px;background:#3b82f622;border:1px solid #3b82f644;border-radius:4px;color:#3b82f6;font-size:11px;cursor:pointer;">Mark Sent</button>
+            <button onclick="quickLogInfluencer(${p.id},'replied')" style="padding:4px 10px;background:#00c8be22;border:1px solid #00c8be44;border-radius:4px;color:#00c8be;font-size:11px;cursor:pointer;">Replied</button>
+            <button onclick="quickLogInfluencer(${p.id},'ghosted')" style="padding:4px 10px;background:#7f1d1d22;border:1px solid #7f1d1d44;border-radius:4px;color:#7f1d1d;font-size:11px;cursor:pointer;">Ghosted</button>
+            <button onclick="quickLogInfluencer(${p.id},'declined')" style="padding:4px 10px;background:#ef444422;border:1px solid #ef444444;border-radius:4px;color:#ef4444;font-size:11px;cursor:pointer;">Declined</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
   } catch(e) { listEl.innerHTML = `<div class="empty-state">Error: ${safeHtml(e.message)}</div>`; }
 }
 
@@ -3624,6 +4046,134 @@ window.loadInfluencerConfig = loadInfluencerConfig;
 window.toggleInactiveIcps = toggleInactiveIcps;
 window.exportInfluencers = exportInfluencers;
 
+// ── Influencer Type Toggle ─────────────────────────────────────────────────
+window.currentInfluencerType = 'social';
+
+function setInfluencerType(type) {
+  window.currentInfluencerType = type;
+  const socialBtn = document.getElementById('inf-type-social');
+  const newsBtn = document.getElementById('inf-type-newsletter');
+  const importBtn = document.getElementById('btn-import-newsletters');
+  
+  if (type === 'social') {
+    socialBtn.style.background = '#2a2a4e';
+    socialBtn.style.color = '#fff';
+    socialBtn.style.fontWeight = '600';
+    newsBtn.style.background = '#1a1a2e';
+    newsBtn.style.color = '#888';
+    newsBtn.style.fontWeight = 'normal';
+  } else {
+    newsBtn.style.background = '#2a2a4e';
+    newsBtn.style.color = '#fff';
+    newsBtn.style.fontWeight = '600';
+    socialBtn.style.background = '#1a1a2e';
+    socialBtn.style.color = '#888';
+    socialBtn.style.fontWeight = 'normal';
+  }
+  loadInfluencers();
+}
+window.setInfluencerType = setInfluencerType;
+
+// ── Offer Editor ────────────────────────────────────────────────────────────
+async function openOfferEditor(influencerId, handle) {
+  // Fetch existing offer and defaults
+  const [offersRes, defaultsRes] = await Promise.all([
+    fetch(`/api/command/influencers/${influencerId}/offers`),
+    fetch('/api/command/offer-defaults')
+  ]);
+  const offers = await offersRes.json();
+  const defaults = await defaultsRes.json();
+  const existing = offers[0] || {};
+  const def = defaults.find(d => d.offer_type === (existing.offer_type || 'newsletter')) || {};
+
+  const editions = (existing.free_editions || def.free_editions || ['Operator']).join(', ');
+  
+  const html = `
+  <div id="offer-editor-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;">
+    <div style="background:#1a1a2e;border:1px solid #2a2a4e;border-radius:12px;padding:24px;max-width:480px;width:90%;max-height:90vh;overflow-y:auto;">
+      <h3 style="margin:0 0 16px;color:#fff;">💰 Offer: ${safeHtml(handle)}</h3>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Commission %</label>
+        <input id="oe-commission" type="number" value="${existing.commission_pct ?? def.commission_pct ?? 25}" style="width:100%;background:#0d1117;border:1px solid #333;color:#fff;padding:8px;border-radius:6px;">
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Discount %</label>
+        <input id="oe-discount" type="number" value="${existing.discount_pct ?? def.discount_pct ?? 20}" style="width:100%;background:#0d1117;border:1px solid #333;color:#fff;padding:8px;border-radius:6px;">
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Discount Code</label>
+        <input id="oe-code" type="text" value="${safeHtml(existing.discount_code || '')}" placeholder="e.g. ITL20" style="width:100%;background:#0d1117;border:1px solid #333;color:#fff;padding:8px;border-radius:6px;">
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Free Editions</label>
+        <input id="oe-editions" type="text" value="${safeHtml(editions)}" style="width:100%;background:#0d1117;border:1px solid #333;color:#fff;padding:8px;border-radius:6px;">
+      </div>
+      
+      <div style="display:flex;gap:12px;margin-bottom:16px;">
+        <label style="font-size:12px;"><input type="checkbox" id="oe-studio" ${existing.studio_membership ?? def.studio_membership ?? true ? 'checked' : ''}> Studio Membership</label>
+        <label style="font-size:12px;"><input type="checkbox" id="oe-comarketing" ${existing.co_marketing ?? def.co_marketing ?? false ? 'checked' : ''}> Co-marketing</label>
+        <label style="font-size:12px;"><input type="checkbox" id="oe-sponsored" ${existing.sponsored_placement ?? def.sponsored_placement ?? false ? 'checked' : ''}> Sponsored Placement</label>
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:4px;">Custom Notes</label>
+        <textarea id="oe-notes" rows="3" style="width:100%;background:#0d1117;border:1px solid #333;color:#fff;padding:8px;border-radius:6px;">${safeHtml(existing.custom_notes || '')}</textarea>
+      </div>
+      
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onclick="closeOfferEditor()" style="padding:8px 16px;background:#2a2a4e;border:none;border-radius:6px;color:#fff;cursor:pointer;">Cancel</button>
+        <button onclick="saveOffer(${influencerId})" style="padding:8px 16px;background:#00c8be;border:none;border-radius:6px;color:#0a0a0a;cursor:pointer;font-weight:600;">Save Offer</button>
+      </div>
+    </div>
+  </div>`;
+  
+  const overlay = document.createElement('div');
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay);
+}
+
+function closeOfferEditor() {
+  const el = document.getElementById('offer-editor-overlay');
+  if (el) el.remove();
+}
+
+async function saveOffer(influencerId) {
+  const body = {
+    commission_pct: parseInt(document.getElementById('oe-commission').value) || null,
+    discount_pct: parseInt(document.getElementById('oe-discount').value) || null,
+    discount_code: document.getElementById('oe-code').value || null,
+    free_editions: document.getElementById('oe-editions').value.split(',').map(s => s.trim()).filter(Boolean),
+    studio_membership: document.getElementById('oe-studio').checked,
+    co_marketing: document.getElementById('oe-comarketing').checked,
+    sponsored_placement: document.getElementById('oe-sponsored').checked,
+    custom_notes: document.getElementById('oe-notes').value || null,
+  };
+  
+  const res = await fetch(`/api/command/influencers/${influencerId}/offers`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  
+  if (res.ok) {
+    closeOfferEditor();
+    loadInfluencers();
+  } else {
+    alert('Failed to save offer');
+  }
+}
+
+window.openOfferEditor = openOfferEditor;
+window.closeOfferEditor = closeOfferEditor;
+window.saveOffer = saveOffer;
+
+
+
+
 // ── Research Section ──────────────────────────────────────────────────────────
 async function loadResearch() {
   const icp = document.getElementById('research-icp-filter')?.value || '';
@@ -3631,15 +4181,17 @@ async function loadResearch() {
   document.getElementById('research-last-updated').textContent = 'Loading...';
 
   try {
-    const [pulseRes, radarRes, targetsRes] = await Promise.all([
+    const [pulseRes, radarRes, targetsRes, patternsRes] = await Promise.all([
       fetch('/api/research/pulse').then(r => r.json()),
       fetch(`/api/research/radar?icp_slug=${encodeURIComponent(icp)}&days=${days}&limit=50`).then(r => r.json()),
       fetch('/api/research/targets').then(r => r.json()),
+      fetch(`/api/research/patterns?days=${days}`).then(r => r.json()),
     ]);
 
     renderResearchPulse(pulseRes);
     renderResearchRadar(radarRes);
     renderResearchTargets(targetsRes);
+    renderResearchPatterns(patternsRes);
 
     // Populate ICP filter dropdown from icps list
     const sel = document.getElementById('research-icp-filter');
@@ -3663,18 +4215,59 @@ function renderResearchPulse(data) {
   const signals = data.live_signals || [];
   const enrichedPain = data.enriched_pain || [];
   const enrichedMood = data.enriched_mood || [];
+  const hallucinationStats = data.hallucination_stats || [];
+  const moodHallucinationStats = data.mood_hallucination_stats || [];
 
   let html = '';
 
-  // Enriched pain signals (top priority — actionable)
+  // ─── Hallucination Health Banner ───
+  if (hallucinationStats.length) {
+    const totalHallucinated = hallucinationStats.reduce((s, icp) => s + (icp.hallucinated || 0), 0);
+    const totalSignals = hallucinationStats.reduce((s, icp) => s + (icp.total || 0), 0);
+    const pct = totalSignals > 0 ? Math.round(totalHallucinated / totalSignals * 100) : 0;
+    const color = pct > 30 ? '#e74c3c' : pct > 15 ? '#f39c12' : '#10b981';
+
+    const moodTotalHallucinated = moodHallucinationStats.reduce((s, icp) => s + (icp.hallucinated || 0), 0);
+    const moodTotalSignals = moodHallucinationStats.reduce((s, icp) => s + (icp.total || 0), 0);
+    const moodPct = moodTotalSignals > 0 ? Math.round(moodTotalHallucinated / moodTotalSignals * 100) : 0;
+    const moodColor = moodPct > 30 ? '#e74c3c' : moodPct > 15 ? '#f39c12' : '#10b981';
+
+    html += `<div style="margin-bottom:14px;padding:12px 16px;background:#0d1117;border-radius:8px;border:1px solid ${color}44;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-weight:700;color:${color};">🧪 Hallucination Audit</span>
+        <span style="font-size:11px;color:#888;">Pain: ${totalHallucinated}/${totalSignals} (${pct}%) | Mood: ${moodTotalHallucinated}/${moodTotalSignals} (${moodPct}%)</span>
+      </div>
+      <div style="margin-top:4px;font-size:10px;color:#94a3b8;">Pain ICPs:</div>
+      <div style="margin-top:2px;display:flex;flex-wrap:wrap;gap:4px;">
+        ${hallucinationStats.map(icp => `<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:3px 8px;border-radius:4px;">${safeHtml(icp.icp_slug)}: ${icp.exact}✅ ${icp.hallucinated}❌</span>`).join('')}
+      </div>
+      ${moodHallucinationStats.length ? `<div style="margin-top:4px;font-size:10px;color:#94a3b8;">Mood ICPs:</div>
+      <div style="margin-top:2px;display:flex;flex-wrap:wrap;gap:4px;">
+        ${moodHallucinationStats.map(icp => `<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:3px 8px;border-radius:4px;">${safeHtml(icp.icp_slug)}: ${icp.exact}✅ ${icp.hallucinated}❌</span>`).join('')}
+      </div>` : ''}
+    </div>`;
+  }
+
+  // Enriched pain signals (top priority — actionable, verified only)
   if (enrichedPain.length) {
     html += `<div style="margin-bottom:16px;">
-      <div style="font-size:12px;font-weight:700;color:#e74c3c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🔴 Pain Signals — Actionable (${enrichedPain.length})</div>`;
+      <div style="font-size:12px;font-weight:700;color:#e74c3c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🔴 Pain Signals — Verified, Actionable (${enrichedPain.length})</div>`;
     enrichedPain.forEach(p => {
+      const accuracy = p.accuracy_score != null ? (p.accuracy_score * 100).toFixed(0) : null;
+      const matchScore = p.quote_match_score != null ? (p.quote_match_score * 100).toFixed(0) : null;
+      const verifiedBadge = p.quote_match_score >= 0.8
+        ? '<span style="font-size:9px;background:#064e3b;color:#34d399;padding:2px 5px;border-radius:3px;">✅ VERIFIED</span>'
+        : p.quote_match_score >= 0.5
+        ? '<span style="font-size:9px;background:#78350f;color:#fbbf24;padding:2px 5px;border-radius:3px;">⚠️ PARTIAL</span>'
+        : '';
       html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${p.severity>=8?'#e74c3c':p.severity>=5?'#f39c12':'#555'};">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;">
           <span style="font-size:11px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(p.pain_category)}</span>
-          <span style="font-size:11px;color:#888;">${safeHtml(p.icp_slug)} · sev ${p.severity}</span>
+          <span style="display:flex;align-items:center;gap:6px;">
+            ${verifiedBadge || ''}
+            ${accuracy != null ? `<span style="font-size:10px;background:#1e293b;color:#00c8be;padding:2px 6px;border-radius:4px;">Acc ${accuracy}%</span>` : ''}
+            <span style="font-size:11px;color:#888;">${safeHtml(p.icp_slug)} · sev ${p.severity}</span>
+          </span>
         </div>
         <div style="font-size:12px;color:#ddd;font-style:italic;line-height:1.5;">&quot;${safeHtml((p.verbatim_quote||'').substring(0,200))}&quot;</div>
         <div style="font-size:11px;color:#00c8be;margin-top:6px;padding:6px;background:#0a1f1a;border-radius:4px;">💡 ${safeHtml(p.insight)}</div>
@@ -3686,15 +4279,27 @@ function renderResearchPulse(data) {
     html += '</div>';
   }
 
-  // Enriched mood signals
+  // Enriched mood signals (verified, actionable)
   if (enrichedMood.length) {
     html += `<div style="margin-bottom:16px;">
-      <div style="font-size:12px;font-weight:700;color:#9b59b6;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🌡️ Mood Signals — Actionable (${enrichedMood.length})</div>`;
+      <div style="font-size:12px;font-weight:700;color:#9b59b6;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🌡️ Mood Signals — Verified, Actionable (${enrichedMood.length})</div>`;
     enrichedMood.forEach(m => {
       const phrases = Array.isArray(m.verbatim_phrases) ? m.verbatim_phrases : [];
+      const accuracy = m.accuracy_score != null ? (m.accuracy_score * 100).toFixed(0) : null;
+      const isVerified = m.phrases_match_score >= 0.8;
+      const isPartial = m.phrases_match_score >= 0.5 && m.phrases_match_score < 0.8;
+      const verifyBadge = isVerified
+        ? '<span style="font-size:9px;background:#064e3b;color:#34d399;padding:2px 5px;border-radius:3px;">✅ VERIFIED</span>'
+        : isPartial
+        ? '<span style="font-size:9px;background:#78350f;color:#fbbf24;padding:2px 5px;border-radius:3px;">⚠️ PARTIAL</span>'
+        : '';
       html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${m.emotional_punch>=8?'#9b59b6':m.emotional_punch>=5?'#3498db':'#555'};">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-          <span style="font-size:11px;background:#1e293b;color:#c084fc;padding:2px 6px;border-radius:4px;">${safeHtml(m.mood_primary)}</span>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;">
+          <span style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:11px;background:#1e293b;color:#c084fc;padding:2px 6px;border-radius:4px;">${safeHtml(m.mood_primary)}</span>
+            ${verifyBadge}
+            ${accuracy != null ? `<span style="font-size:10px;background:#1e293b;color:#00c8be;padding:2px 6px;border-radius:4px;">Acc ${accuracy}%</span>` : ''}
+          </span>
           <span style="font-size:11px;color:#888;">${safeHtml(m.icp_slug)} · punch ${m.emotional_punch}</span>
         </div>
         ${phrases.slice(0,2).map(q=>`<div style="font-size:12px;color:#ddd;font-style:italic;">&quot;${safeHtml(String(q).substring(0,150))}&quot;</div>`).join('')}
@@ -3707,17 +4312,21 @@ function renderResearchPulse(data) {
     html += '</div>';
   }
 
-  // Live prospect signals
+  // Live prospect signals (non-stale, actionable)
   if (signals.length) {
+    const staleCount = signals.filter(s => s.stale).length;
     html += `<div style="margin-bottom:16px;">
-      <div style="font-size:12px;font-weight:700;color:#00c8be;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">📡 Live Signals (${signals.length})</div>`;
+      <div style="font-size:12px;font-weight:700;color:#00c8be;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">📡 Live Signals — Active, Non-Stale (${signals.length - staleCount})${staleCount > 0 ? `<span style="color:#f59e0b;margin-left:6px;">(${staleCount} stale hidden)</span>` : ''}</div>`;
     signals.forEach(s => {
       const _sc = parseFloat(s.relevance_score||s.score||0);
+      const daysAgo = s.captured_at ? Math.round((Date.now() - new Date(s.captured_at).getTime()) / 86400000) : null;
+      const ageStyle = daysAgo > 30 ? 'color:#f59e0b;' : daysAgo > 14 ? 'color:#fbbf24;' : 'color:#888;';
       html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${_sc>=0.7?'#e74c3c':_sc>=0.5?'#f39c12':'#555'};">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
           <div>
             <span style="font-weight:600;font-size:13px;">${safeHtml(s.company||'Unknown')}</span>
             <span style="background:#1e293b;color:#94a3b8;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;">${safeHtml(s.signal_type||s.signal_source||'')}</span>
+            ${daysAgo != null ? `<span style="font-size:9px;${ageStyle}margin-left:4px;">${daysAgo}d ago</span>` : ''}
           </div>
           <span style="font-size:18px;font-weight:700;color:${_sc>=0.7?'#e74c3c':_sc>=0.5?'#f39c12':'#aaa'};">${(_sc*100).toFixed(0)}%</span>
         </div>
@@ -3730,7 +4339,7 @@ function renderResearchPulse(data) {
 
   // Daily briefs
   if (briefs.length) {
-    html += `<div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">📋 Daily Briefs</div>`;
+    html += `<div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">📋 Daily Briefs${briefs.some(b => b.accuracy_era === false) ? '<span style="color:#f59e0b;font-size:10px;margin-left:6px;">⚠️ Pre-accuracy era briefs — quotes may be unverified</span>' : ''}</div>`;
     briefs.forEach(b => {
       // Strip YAML frontmatter (---...---) and parse
       const stripped = (b.markdown_body||'').replace(/^---[\s\S]*?---\s*/,'').trim();
@@ -3742,10 +4351,14 @@ function renderResearchPulse(data) {
       const dateStr = d && !isNaN(d) ? d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : b.brief_date || '';
       // Brand color
       const brandColor = b.brand === 'aloomii' ? '#00c8be' : b.brand === 'vibrnt' ? '#f59e0b' : '#94a3b8';
+      const eraBadge = b.accuracy_era
+        ? '<span style="font-size:9px;background:#064e3b;color:#34d399;padding:2px 5px;border-radius:3px;margin-left:4px;">✅ VERIFIED ERA</span>'
+        : '<span style="font-size:9px;background:#78350f;color:#fbbf24;padding:2px 5px;border-radius:3px;margin-left:4px;">⚠️ PRE-ACCURACY (may contain hallucinated quotes)</span>';
       html += `<div style="padding:14px;background:#0d1117;border-radius:8px;margin-bottom:10px;border:1px solid #1e293b;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
             <span style="font-size:11px;font-weight:700;background:${brandColor}22;color:${brandColor};padding:3px 8px;border-radius:12px;border:1px solid ${brandColor}44;letter-spacing:.05em;">${safeHtml(b.brand.toUpperCase())}</span>
+            ${eraBadge}
           </div>
           <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
             <span style="font-size:11px;color:#555;white-space:nowrap;">${dateStr}</span>
@@ -3773,12 +4386,25 @@ function renderResearchRadar(data) {
 
   if (painEl) {
     if (!pain.length) {
-      painEl.innerHTML = '<div class="empty-state">No pain signals yet — Reddit pipeline running nightly.</div>';
+      painEl.innerHTML = '<div class="empty-state">No verified pain signals — Reddit pipeline running nightly.</div>';
     } else {
-      painEl.innerHTML = pain.map(p => `
+      painEl.innerHTML = pain.map(p => {
+        const accuracy = p.accuracy_score != null ? (p.accuracy_score * 100).toFixed(0) : null;
+        const isVerified = p.quote_match_score >= 0.8;
+        const isPartial = p.quote_match_score >= 0.5 && p.quote_match_score < 0.8;
+        const verifyBadge = isVerified
+          ? '<span style="font-size:9px;background:#064e3b;color:#34d399;padding:2px 5px;border-radius:3px;margin-left:4px;">✅ VERIFIED</span>'
+          : isPartial
+          ? '<span style="font-size:9px;background:#78350f;color:#fbbf24;padding:2px 5px;border-radius:3px;margin-left:4px;">⚠️ PARTIAL</span>'
+          : '<span style="font-size:9px;background:#7f1d1d;color:#fca5a5;padding:2px 5px;border-radius:3px;margin-left:4px;">❌ UNVERIFIED</span>';
+        return `
         <div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${p.severity>=8?'#e74c3c':p.severity>=5?'#f39c12':'#555'};">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:11px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(p.pain_category)}</span>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;">
+            <span style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:11px;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;">${safeHtml(p.pain_category)}</span>
+              ${verifyBadge}
+              ${accuracy != null ? `<span style="font-size:10px;background:#1e293b;color:#00c8be;padding:2px 6px;border-radius:4px;">Acc ${accuracy}%</span>` : ''}
+            </span>
             <span style="font-size:11px;color:#888;">${safeHtml(p.icp_slug)} · sev ${p.severity}</span>
           </div>
           <div style="font-size:12px;color:#ddd;font-style:italic;line-height:1.5;">&quot;${safeHtml((p.verbatim_quote||'').substring(0,200))}&quot;</div>
@@ -3789,7 +4415,8 @@ function renderResearchRadar(data) {
             ${p.active_search?'<span style="font-size:10px;color:#00c8be;">🔍 Actively searching</span>':''}
             ${p.source_url?`<a href="${safeHtml(p.source_url)}" target="_blank" rel="noopener" style="font-size:10px;color:#00c8be;text-decoration:none;">🔗 View post →</a>`:''}
           </div>
-        </div>`).join('');
+        </div>`;
+      }).join('');
     }
   }
 
@@ -3799,10 +4426,22 @@ function renderResearchRadar(data) {
     } else {
       moodEl.innerHTML = mood.map(m => {
         const phrases = Array.isArray(m.verbatim_phrases) ? m.verbatim_phrases : [];
+        const accuracy = m.accuracy_score != null ? (m.accuracy_score * 100).toFixed(0) : null;
+        const isVerified = m.phrases_match_score >= 0.8;
+        const isPartial = m.phrases_match_score >= 0.5 && m.phrases_match_score < 0.8;
+        const verifyBadge = isVerified
+          ? '<span style="font-size:9px;background:#064e3b;color:#34d399;padding:2px 5px;border-radius:3px;margin-left:4px;">✅ VERIFIED</span>'
+          : isPartial
+          ? '<span style="font-size:9px;background:#78350f;color:#fbbf24;padding:2px 5px;border-radius:3px;margin-left:4px;">⚠️ PARTIAL</span>'
+          : '<span style="font-size:9px;background:#7f1d1d;color:#fca5a5;padding:2px 5px;border-radius:3px;margin-left:4px;">❌ UNVERIFIED</span>';
         return `
         <div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;border-left:3px solid ${m.emotional_punch>=8?'#9b59b6':m.emotional_punch>=5?'#3498db':'#555'};">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:11px;background:#1e293b;color:#c084fc;padding:2px 6px;border-radius:4px;">${safeHtml(m.mood_primary)}</span>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;">
+            <span style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:11px;background:#1e293b;color:#c084fc;padding:2px 6px;border-radius:4px;">${safeHtml(m.mood_primary)}</span>
+              ${verifyBadge}
+              ${accuracy != null ? `<span style="font-size:10px;background:#1e293b;color:#00c8be;padding:2px 6px;border-radius:4px;">Acc ${accuracy}%</span>` : ''}
+            </span>
             <span style="font-size:11px;color:#888;">${safeHtml(m.icp_slug)} · punch ${m.emotional_punch}</span>
           </div>
           ${phrases.slice(0,2).map(q=>`<div style="font-size:12px;color:#ddd;font-style:italic;">&quot;${safeHtml(String(q).substring(0,150))}&quot;</div>`).join('')}
@@ -3842,6 +4481,84 @@ function renderResearchTargets(data) {
         </div>`).join('');
     }
   }
+}
+
+function renderResearchPatterns(data) {
+  const el = document.getElementById('research-patterns-container');
+  if (!el) return;
+  data = data || {};
+
+  const summary = data.summary || [];
+  const byClient = data.by_client || [];
+
+  if (!summary.length && !byClient.length) {
+    el.innerHTML = '<div class="empty-state">No signal patterns classified yet — daily classifier runs at 4:00 AM ET.</div>';
+    return;
+  }
+
+  const patternColors = {
+    distress: '#e74c3c',
+    growth: '#10b981',
+    leadership_transition: '#f59e0b',
+    tech_shift: '#3b82f6',
+    competitive_risk: '#ec4899'
+  };
+  const patternLabels = {
+    distress: 'Distress',
+    growth: 'Growth',
+    leadership_transition: 'Leadership',
+    tech_shift: 'Tech Shift',
+    competitive_risk: 'Competitive'
+  };
+
+  let html = '';
+
+  // Distribution bar
+  if (summary.length) {
+    const maxCount = Math.max(...summary.map(s => s.count), 1);
+    html += `<div style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Pattern Distribution (${summary.reduce((s,p) => s+parseInt(p.count),0)} total)</div>
+      <div style="display:flex;height:28px;border-radius:6px;overflow:hidden;">`;
+    summary.forEach(s => {
+      const pct = Math.max(3, Math.round(s.count / maxCount * 100));
+      html += `<div style="flex:${pct};background:${patternColors[s.pattern_type] || '#555'};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;" title="${patternLabels[s.pattern_type]}: ${s.count} (avg conf ${s.avg_confidence})">${s.count}</div>`;
+    });
+    html += `</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">`;
+    summary.forEach(s => {
+      html += `<span style="font-size:10px;background:#1e293b;color:${patternColors[s.pattern_type]};padding:3px 8px;border-radius:4px;border:1px solid ${patternColors[s.pattern_type]}44;">${patternLabels[s.pattern_type]}: ${s.count} (avg ${s.avg_confidence}/10)</span>`;
+    });
+    html += '</div></div>';
+  }
+
+  // By client/contact
+  if (byClient.length) {
+    // Group by company for cleaner display
+    const grouped = {};
+    byClient.forEach(p => {
+      const key = p.company || 'Unknown';
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push(p);
+    });
+
+    html += `<div style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">By Company / Contact</div>`;
+    Object.entries(grouped).forEach(([company, items]) => {
+      html += `<div style="padding:10px;background:#0d1117;border-radius:6px;margin-bottom:6px;">
+        <div style="font-weight:600;font-size:13px;color:#ddd;margin-bottom:6px;">${safeHtml(company)}</div>`;
+      items.forEach(p => {
+        html += `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:11px;flex-wrap:wrap;">
+          <span style="background:${patternColors[p.pattern_type]}22;color:${patternColors[p.pattern_type]};padding:2px 7px;border-radius:10px;border:1px solid ${patternColors[p.pattern_type]}44;font-size:10px;">${patternLabels[p.pattern_type]}</span>
+          <span style="color:#ccc;">${safeHtml(p.contact_name || 'Unknown')}</span>
+          <span style="font-size:10px;color:#888;">conf ${p.confidence}/10</span>
+          ${p.urgency ? `<span style="font-size:10px;background:#1e293b;color:#aaa;padding:2px 6px;border-radius:4px;">${safeHtml(p.urgency)}</span>` : ''}
+          ${p.tier ? `<span style="font-size:9px;background:#1e293b;color:#00c8be;padding:2px 6px;border-radius:4px;">T${p.tier}</span>` : ''}
+        </div>`;
+      });
+      html += '</div>';
+    });
+  }
+
+  el.innerHTML = html;
 }
 
 window.loadResearch = loadResearch;

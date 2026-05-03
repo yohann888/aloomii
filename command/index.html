@@ -439,12 +439,14 @@
                     <button class="tab-btn" onclick="switchContentTab(1)">Snipes</button>
                     <button class="tab-btn" onclick="switchContentTab(2)">PBN Briefs</button>
                     <button class="tab-btn" onclick="switchContentTab(3)">All Content</button>
+                    <button class="tab-btn" onclick="switchContentTab(4)">AI UGC</button>
                     <button onclick="newLinkedInDraft()" class="new-draft-btn">+ New Draft</button>
                 </div>
                 <div id="linkedin-drafts-panel" class="content-panel active"></div>
                 <div id="snipe-drafts-panel" class="content-panel"></div>
                 <div id="pbn-briefs-panel" class="content-panel"></div>
                 <div id="all-content-panel" class="content-panel"></div>
+                <div id="ai-ugc-panel" class="content-panel"></div>
             </section>
 
             <!-- Signals Section (top-level) -->
@@ -496,6 +498,11 @@
             <section id="section-influencers" class="content-section">
               <h2>Influencer Pipeline</h2>
               <div class="card" style="padding:16px;margin-bottom:16px;">
+                <!-- Type Toggle -->
+                <div style="display:flex;gap:0;margin-bottom:16px;border-radius:6px;overflow:hidden;border:1px solid #2a2a4e;">
+                  <button id="inf-type-social" onclick="setInfluencerType('social')" style="flex:1;padding:8px 16px;background:#2a2a4e;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:600;">Social Creators</button>
+                  <button id="inf-type-newsletter" onclick="setInfluencerType('newsletter')" style="flex:1;padding:8px 16px;background:#1a1a2e;border:none;color:#888;font-size:13px;cursor:pointer;">Newsletter Owners</button>
+                </div>
                 <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
                   <label style="font-size:13px;">ICP
                     <select id="inf-icp" onchange="loadInfluencers()" style="margin-left:6px;">
@@ -514,6 +521,7 @@
                       <option value="youtube">YouTube</option>
                       <option value="twitter">X/Twitter</option>
                       <option value="linkedin">LinkedIn</option>
+                      <option value="newsletter">Newsletter</option>
                     </select>
                   </label>
                   <label style="font-size:13px;">Tier
@@ -552,7 +560,13 @@
                     <span id="research-last-updated" style="font-size:11px;color:#555;margin-left:auto;"></span>
                 </div>
 
-                <!-- Panel 1: Daily Pulse -->
+                <!-- Panel 1: Signal Patterns -->
+                <div class="card" style="margin-bottom:16px;padding:16px;">
+                    <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">🔍 Signal Patterns</h3>
+                    <div id="research-patterns-container"><div class="empty-state">Loading...</div></div>
+                </div>
+
+                <!-- Panel 2: Daily Pulse -->
                 <div class="card" style="margin-bottom:16px;padding:16px;">
                     <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">📡 Daily Pulse</h3>
                     <div id="research-pulse-container">
@@ -560,7 +574,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 2: Pain & Mood Radar -->
+                <!-- Panel 3: Pain & Mood Radar -->
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
                     <div class="card" style="padding:16px;">
                         <h3 style="margin:0 0 12px;font-size:15px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;">🔥 Pain Signals</h3>
@@ -572,7 +586,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 3: Top Influencers (REMOVED — see dedicated Influencers tab) -->
+                <!-- Panel 4: Top Influencers (REMOVED — see dedicated Influencers tab) -->
             </section>
 
         </div>

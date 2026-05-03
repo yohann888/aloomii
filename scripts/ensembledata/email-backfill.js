@@ -6,6 +6,7 @@
 
 const https = require('https');
 const { Pool } = require('pg');
+const budgetTracker = require('./budget-tracker');
 
 const TOKEN = process.env.ENSEMBLEDATA_TOKEN || 'mYhi8PoTRudPx31j';
 const DB_URL = process.env.DATABASE_URL || 'postgresql://superhana@localhost:5432/aloomii';

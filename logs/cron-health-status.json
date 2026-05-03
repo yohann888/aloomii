@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-05-03T13:20:55.898Z",
+  "totalCronSessions": 0,
+  "stuck": 0,
+  "warning": 0,
+  "healthy": 0,
+  "stuckSessions": [],
+  "note": "No cron sessions found in OpenClaw session store or gateway. The sessions.json file does not exist, indicating no active sessions are tracked in the store."
+}

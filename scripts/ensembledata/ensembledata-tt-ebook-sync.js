@@ -160,7 +160,7 @@ async function processKeywordResults(data, icpBase, budgetKey) {
     const followers = author.follower_count || 0;
 
     // Skip mega-creators (unlikely to collab) and sub-1K (too small)
-    if (followers > 1000000 || followers < 1000) continue;
+    if (followers > 5000 || followers < 1000) continue;
 
     // Check dedup
     if (await isDuplicate(handle)) continue;
@@ -215,7 +215,7 @@ async function processHashtagResults(data, icpBase, budgetKey) {
 
     const handle = author.unique_id || author.nickname;
     const followers = author.follower_count || 0;
-    if (followers > 1000000 || followers < 1000) continue;
+    if (followers > 5000 || followers < 1000) continue;
     if (await isDuplicate(handle)) continue;
 
     const desc = post?.desc || '';

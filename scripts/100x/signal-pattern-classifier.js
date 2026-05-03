@@ -2,7 +2,7 @@
 /**
  * Build 3: Signal Pattern Classifier
  * Runs daily at 4:00 AM ET — before trajectory prediction at 5:30 AM
- * Model: ollama/gemma4:31b (runtime), $0 cost
+ * Model: kimi-k2.6:cloud (via local Ollama), $0 cost
  * 
  * Classifies new signals from the signals table into 5 pattern types:
  * distress | growth | leadership_transition | tech_shift | competitive_risk
@@ -16,7 +16,7 @@ const http = require('http');
 
 const DB = 'postgresql://superhana@localhost:5432/aloomii';
 const psql = '/opt/homebrew/Cellar/postgresql@18/18.2/bin/psql';
-const OLLAMA_HOST = '10.211.55.2';
+const OLLAMA_HOST = 'localhost';
 const OLLAMA_PORT = 11434;
 
 function sqlFile(sql) {
@@ -36,13 +36,13 @@ function sqlJSON(sql) {
   } finally { unlinkSync(tmp); }
 }
 
-async function callGemma(prompt) {
+async function callKimi(prompt) {
   return new Promise((resolve) => {
     const body = JSON.stringify({
-      model: 'gemma4:31b',
+      model: 'kimi-k2.6:cloud',
       prompt,
       stream: false,
-      options: { temperature: 0.1, num_predict: 512 }
+      options: { temperature: 0.1, num_predict: 1024 }
     });
     const req = http.request({
       hostname: OLLAMA_HOST, port: OLLAMA_PORT,
@@ -54,13 +54,13 @@ async function callGemma(prompt) {
       res.on('end', () => {
         try {
           const parsed = JSON.parse(data);
-          resolve({ ok: true, response: parsed.response || null, model: 'gemma4:31b', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` });
+          resolve({ ok: true, response: parsed.response || null, model: 'kimi-k2.6:cloud', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` });
         } catch {
-          resolve({ ok: false, response: null, model: 'gemma4:31b', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` });
+          resolve({ ok: false, response: null, model: 'kimi-k2.6:cloud', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` });
         }
       });
     });
-    req.on('error', () => resolve({ ok: false, response: null, model: 'gemma4:31b', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` }));
+    req.on('error', () => resolve({ ok: false, response: null, model: 'kimi-k2.6:cloud', host: `${OLLAMA_HOST}:${OLLAMA_PORT}` }));
     req.write(body);
     req.end();
   });
@@ -122,14 +122,14 @@ async function main() {
   let classified = 0;
   let skipped = 0;
   let ruleCount = 0;
-  let gemmaCount = 0;
-  let gemmaReachable = false;
+  let kimiCount = 0;
+  let kimiReachable = false;
 
   for (const signal of signals) {
     // Try rule-based first (fast, $0)
     let result = ruleBasedClassify(signal);
 
-    // If ambiguous, use Gemma 4 (still $0, but slower)
+    // If ambiguous, use Kimi K2.6 (local Ollama, $0)
     if (!result) {
       const prompt = `Classify this signal into exactly ONE category. Reply with JSON only.
 
@@ -147,12 +147,12 @@ Categories:
 
 Reply with exactly: {"pattern_type":"<category>","confidence":<1-10>,"urgency":"<today|this_week|this_month|monitor>"}`;
 
-      const gemma = await callGemma(prompt);
-      if (gemma.ok) gemmaReachable = true;
-      if (gemma.response) {
+      const kimi = await callKimi(prompt);
+      if (kimi.ok) kimiReachable = true;
+      if (kimi.response) {
         try {
-          const match = gemma.response.match(/\{[^}]+\}/);
-          if (match) result = { ...JSON.parse(match[0]), method: 'gemma4', model: gemma.model, host: gemma.host };
+          const match = kimi.response.match(/\{[^}]+\}/);
+          if (match) result = { ...JSON.parse(match[0]), method: 'kimi', model: kimi.model, host: kimi.host };
         } catch {}
       }
     }
@@ -175,7 +175,7 @@ Reply with exactly: {"pattern_type":"<category>","confidence":<1-10>,"urgency":"
 
     console.log(`[signal-classifier] ✓ ${signal.contact_name || 'unknown'} — ${result.pattern_type} (${result.confidence}/10) via ${result.method || 'unknown'}`);
     if (result.method === 'rules') ruleCount++;
-    if (result.method === 'gemma4') gemmaCount++;
+    if (result.method === 'kimi') kimiCount++;
     classified++;
   }
 
@@ -195,8 +195,8 @@ Reply with exactly: {"pattern_type":"<category>","confidence":<1-10>,"urgency":"
     summary += `No patterns classified today.\n`;
   }
   summary += `Classified: ${classified} | Skipped: ${skipped}\n`;
-  summary += `Methods: rules=${ruleCount} | gemma4=${gemmaCount}\n`;
-  summary += `_Build 3 | classifier path: ${gemmaCount > 0 ? 'gemma4:31b + rules' : ruleCount > 0 ? 'rules-only' : 'no classifications'} | gemma reachable: ${gemmaReachable ? 'yes' : 'no'} | $0_`;
+  summary += `Methods: rules=${ruleCount} | kimi=${kimiCount}\n`;
+  summary += `_Build 3 | classifier path: ${kimiCount > 0 ? 'kimi-k2.6 + rules' : ruleCount > 0 ? 'rules-only' : 'no classifications'} | kimi reachable: ${kimiReachable ? 'yes' : 'no'} | $0_`;
 
   console.log(summary);
 }
