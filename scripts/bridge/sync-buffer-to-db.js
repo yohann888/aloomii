@@ -45,7 +45,7 @@ async function fetchBufferDrafts(channelId, label) {
           organizationId: $organizationId,
           filter: {
             channelIds: [$channelId],
-            status: ["draft"]
+            status: [draft]
           }
         }) {
           edges {

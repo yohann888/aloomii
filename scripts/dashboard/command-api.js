@@ -670,6 +670,107 @@ function registerCommandAPI(app, pool = null) {
                   roi_multiplier:    weeklyCost > 0 ? Math.round(humanEquiv / weeklyCost) : (humanEquiv > 0 ? Math.round(humanEquiv / Math.max((healthy + attention) * 1.8, 1)) : 104),
                   delta_pct:         parseInt(delta),
                 };
+
+                // Tier 1: Enrich economics with sparkline + token breakdown
+                try {
+                  const sparkRes = await query(`
+                    SELECT date, cost_usd, input_tokens, output_tokens, cache_read_tokens, cache_write_tokens
+                    FROM economics_daily
+                    WHERE date >= CURRENT_DATE - INTERVAL '7 days'
+                    ORDER BY date ASC
+                  `);
+                  economicsData.sparkline = sparkRes.rows.map(r => ({
+                    date: r.date,
+                    cost: parseFloat(r.cost_usd),
+                    input_tokens: parseInt(r.input_tokens) || 0,
+                    output_tokens: parseInt(r.output_tokens) || 0,
+                    cache_read: parseInt(r.cache_read_tokens) || 0,
+                    cache_write: parseInt(r.cache_write_tokens) || 0
+                  }));
+
+                  // Today's token breakdown (ET timezone)
+                  const fmtET = d => d.toLocaleDateString('en-CA', { timeZone: 'America/Toronto', year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/-/g, '-');
+                  const todayStr = fmtET(new Date());
+                  const todayRow = sparkRes.rows.find(r => {
+                    const rd = r.date instanceof Date ? r.date : new Date(r.date);
+                    return fmtET(rd) === todayStr;
+                  }) || sparkRes.rows[sparkRes.rows.length - 1];
+                  if (todayRow) {
+                    economicsData.today_cost = parseFloat(todayRow.cost_usd);
+                    economicsData.today_tokens = {
+                      input:       parseInt(todayRow.input_tokens) || 0,
+                      output:      parseInt(todayRow.output_tokens) || 0,
+                      cache_read:  parseInt(todayRow.cache_read_tokens) || 0,
+                      cache_write: parseInt(todayRow.cache_write_tokens) || 0
+                    };
+                  }
+                } catch(e) {
+                  console.warn('[api] Sparkline query failed:', e.message);
+                }
+
+                // Tier 1: Estimated model cost split from cron registry
+                try {
+                  const cronPath2 = path.join(process.env.HOME, '.openclaw', 'cron', 'jobs.json');
+                  const cronJobs = JSON.parse(fs.readFileSync(cronPath2, 'utf8')).jobs || [];
+                  // Known per-1M-token costs (input): estimate only
+                  const MODEL_COST = {
+                    'google/gemini-3-flash-preview':   0.075,
+                    'google/gemini-3.1-pro-preview':   1.25,
+                    'google/gemini-3-pro-preview':     1.25,
+                    'google/gemini-3-pro':             1.25,
+                    'ollama/kimi-k2.6:cloud':          0.15,
+                    'kimi':                            0.15,
+                    'anthropic/claude-opus-4-7':       15.0,
+                    'anthropic/claude-sonnet-4-6':     3.0,
+                    'openai/gpt-5.5':                  7.5,
+                    'openai/gpt-5':                    7.5,
+                    'zai/glm-4.7-flash':               0.05,
+                    'zai-flash':                       0.05,
+                    'minimax/MiniMax-M2.5-Lightning':  0.10,
+                    'minimax/MiniMax-M2.7-Lightning':  0.10,
+                    'xai/grok-4-2-fast':               0.10,
+                    'ollama/qwen3.5:397b-cloud':       0.15,
+                  };
+                  const modelRunCount = {};
+                  const now = Date.now();
+                  const week = 7 * 24 * 60 * 60 * 1000;
+                  cronJobs.filter(j => j.enabled).forEach(j => {
+                    const m = j.payload?.model || 'unknown';
+                    modelRunCount[m] = (modelRunCount[m] || 0) + 1;
+                  });
+                  // Weight by relative cost with fuzzy matching
+                  let total = 0;
+                  const modelWeights = {};
+                  for (const [m, cnt] of Object.entries(modelRunCount)) {
+                    let rate = MODEL_COST[m];
+                    if (!rate) {
+                      // Fuzzy match: try each known key
+                      const key = Object.keys(MODEL_COST).find(k => {
+                        const km = k.toLowerCase();
+                        const mm = m.toLowerCase();
+                        // Exact match or partial match on model family
+                        return mm === km ||
+                               (km.includes('/') && mm.includes(km.split('/')[1])) ||
+                               (km.includes('-') && mm.includes(km.split('-').pop()));
+                      });
+                      rate = MODEL_COST[key] || 0.1;
+                    }
+                    modelWeights[m] = cnt * rate;
+                    total += cnt * rate;
+                  }
+                  if (total > 0) {
+                    economicsData.model_split = Object.entries(modelWeights)
+                      .map(([model, w]) => ({
+                        model: model.split('/').pop(),
+                        pct: Math.round((w / total) * 100),
+                        runs: modelRunCount[model]
+                      }))
+                      .sort((a, b) => b.pct - a.pct)
+                      .slice(0, 6);
+                  }
+                } catch(e) {
+                  console.warn('[api] Model split failed:', e.message);
+                }
               } catch (e) {
                 console.warn('[api] Economics query failed:', e.message);
                 economicsData = {
@@ -2849,45 +2950,66 @@ function registerBufferRoutes(app) {
     });
   }
 
-  // GET /api/command/buffer/drafts — fetch drafts from both channels
+  // GET /api/command/buffer/drafts — fetch ALL drafts from both channels (paginated)
   app.get('/api/command/buffer/drafts', async (req, res) => {
     try {
       const allDrafts = [];
 
       for (const [adapter, channelId] of Object.entries(CHANNELS)) {
-        const result = await bufferGraphQL(`
-          query GetDrafts($organizationId: ID!, $channelId: ID!) {
-            posts(input: {
-              organizationId: $organizationId,
-              filter: {
-                channelIds: [$channelId],
-                status: ["draft"]
-              }
-            }) {
-              edges {
-                node {
-                  id
-                  text
-                  createdAt
-                  updatedAt
-                  status
+        let hasNextPage = true;
+        let afterCursor = null;
+        const channelDrafts = [];
+
+        // Paginate through all draft pages (10 per page)
+        while (hasNextPage) {
+          const variables = { organizationId: ORG_ID, channelId };
+          if (afterCursor) variables.after = afterCursor;
+
+          const result = await bufferGraphQL(`
+            query GetDrafts($organizationId: OrganizationId!, $channelId: ChannelId!, $after: String) {
+              posts(input: {
+                organizationId: $organizationId,
+                filter: {
+                  channelIds: [$channelId],
+                  status: [draft]
+                }
+              }, after: $after) {
+                edges {
+                  node {
+                    id
+                    text
+                    createdAt
+                    updatedAt
+                    status
+                  }
+                }
+                pageInfo {
+                  hasNextPage
+                  endCursor
                 }
               }
             }
-          }
-        `, { organizationId: ORG_ID, channelId });
+          `, variables);
 
-        const nodes = result?.data?.posts?.edges?.map(e => e.node) || [];
-        nodes.forEach(n => {
-          allDrafts.push({
-            id: n.id,
-            text: n.text,
-            createdAt: n.createdAt,
-            updatedAt: n.updatedAt,
-            status: n.status,
-            adapter
+          const edges = result?.data?.posts?.edges || [];
+          const pageInfo = result?.data?.posts?.pageInfo || {};
+
+          edges.forEach(e => {
+            channelDrafts.push({
+              id: e.node.id,
+              text: e.node.text,
+              createdAt: e.node.createdAt,
+              updatedAt: e.node.updatedAt,
+              status: e.node.status,
+              adapter
+            });
           });
-        });
+
+          hasNextPage = pageInfo.hasNextPage || false;
+          afterCursor = pageInfo.endCursor || null;
+        }
+
+        allDrafts.push(...channelDrafts);
       }
 
       // Sort by updatedAt desc

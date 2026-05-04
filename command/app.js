@@ -275,11 +275,11 @@ function animateDonut(fleet = null) {
 // Economics updater
 function updateEconomics(economics) {
     if (!economics) return;
-    
+
     const costEl = document.querySelector('.bar-value');
     const humanValueEl = document.querySelectorAll('.bar-value')[1];
     const roiBig = document.querySelector('.roi-big');
-    
+
     if (costEl && economics.weekly_cost_usd !== undefined) {
         costEl.textContent = `$${economics.weekly_cost_usd.toFixed(2)}`;
     }
@@ -288,6 +288,171 @@ function updateEconomics(economics) {
     }
     if (roiBig && economics.roi_multiplier !== undefined) {
         roiBig.innerHTML = `${economics.roi_multiplier}x <span class="gradient-text">ROI</span>`;
+    }
+
+    // ── Budget indicator ──
+    const budgetBar = document.getElementById('budget-bar');
+    const budgetToday = document.getElementById('budget-today-label');
+    if (budgetBar && budgetToday && economics.today_cost !== undefined) {
+        const cost = economics.today_cost;
+        const limit = 40; // daily limit
+        const pct = Math.min((cost / limit) * 100, 100);
+        budgetBar.style.width = `${pct}%`;
+        budgetToday.textContent = `$${cost.toFixed(2)}`;
+        if (cost < 15)      budgetBar.style.background = '#00e5a0';
+        else if (cost <= 40) budgetBar.style.background = '#f4a261';
+        else                 budgetBar.style.background = '#e63946';
+    }
+
+    // ── Token breakdown ──
+    const todayTok = economics.today_tokens;
+    if (todayTok) {
+        const fmt = n => n ? (n >= 1e6 ? `${(n/1e6).toFixed(1)}M` : n >= 1e3 ? `${(n/1e3).toFixed(0)}k` : `${n}`) : '0';
+        const rows = {
+            'tok-row-input':       todayTok.input,
+            'tok-row-output':      todayTok.output,
+            'tok-row-cache-read':  todayTok.cache_read,
+            'tok-row-cache-write': todayTok.cache_write
+        };
+        for (const [id, val] of Object.entries(rows)) {
+            const el = document.getElementById(id);
+            if (el) {
+                const td = el.querySelector('td:last-child');
+                if (td) td.textContent = fmt(val);
+            }
+        }
+    }
+
+    // ── 7-day sparkline ──
+    if (economics.sparkline && economics.sparkline.length > 0) {
+        drawSparkline(economics.sparkline);
+    }
+
+    // ── Model spend from backend ──
+    if (economics.model_split && economics.model_split.length > 0) {
+        renderModelSplit(economics.model_split, economics.weekly_cost_usd);
+    }
+}
+
+// ── Sparkline ──
+function drawSparkline(data) {
+    const canvas = document.getElementById('spend-sparkline');
+    if (!canvas || data.length < 2) return;
+
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    const w = rect.width;
+    const h = rect.height;
+    const pad = 6;
+    const costs = data.map(d => d.cost);
+    const max = Math.max(...costs, 0.01);
+    const min = Math.min(...costs, 0);
+    const range = max - min || 1;
+
+    const x = i => pad + (i / (data.length - 1)) * (w - 2 * pad);
+    const y = v => h - pad - ((v - min) / range) * (h - 2 * pad);
+
+    // Gradient fill
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, 'rgba(0, 158, 150, 0.25)');
+    grad.addColorStop(1, 'rgba(0, 158, 150, 0)');
+    ctx.beginPath();
+    ctx.moveTo(x(0), y(costs[0]));
+    for (let i = 1; i < costs.length; i++) ctx.lineTo(x(i), y(costs[i]));
+    ctx.lineTo(x(costs.length - 1), h);
+    ctx.lineTo(x(0), h);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    ctx.moveTo(x(0), y(costs[0]));
+    for (let i = 1; i < costs.length; i++) ctx.lineTo(x(i), y(costs[i]));
+    ctx.strokeStyle = '#009e96';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+
+    // Dots + labels on hover (static: just last point)
+    data.forEach((d, i) => {
+        const cx = x(i), cy = y(d.cost);
+        ctx.beginPath();
+        ctx.arc(cx, cy, i === data.length - 1 ? 4 : 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = i === data.length - 1 ? '#00e5a0' : '#009e96';
+        ctx.fill();
+    });
+
+    // Date labels under sparkline
+    ctx.fillStyle = 'var(--text-dim)';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'center';
+    const showLabels = Math.min(data.length, 4);
+    for (let i = 0; i < showLabels; i++) {
+        const idx = Math.round(i * (data.length - 1) / (showLabels - 1));
+        if (data[idx] && data[idx].date) {
+            const dateStr = String(data[idx].date).slice(5); // MM-DD
+            ctx.fillText(dateStr, x(idx), h - 1);
+        }
+    }
+}
+
+// ── Model split from backend ──
+function renderModelSplit(split, weeklyCost) {
+    const container = document.getElementById('model-spend-bars');
+    const totalEl   = document.getElementById('model-spend-total');
+    if (!container || !split) return;
+
+    const PALETTE = {
+        'gemini-3-flash-preview':  '#4285f4',
+        'gemini-3-flash':          '#4285f4',
+        'gemini-3.1-pro-preview':  '#8ab4f8',
+        'gemini-3-pro-preview':    '#8ab4f8',
+        'kimi':                    '#ff6b6b',
+        'claude-opus':             '#cc785c',
+        'claude-sonnet':           '#f4a261',
+        'gpt-5':                   '#19c37d',
+        'gpt-5.5':                 '#19c37d',
+        'glm':                     '#10b981',
+        'minimax':                 '#a78bfa',
+        'xai':                     '#ffffff',
+        'grok':                    '#ffffff',
+    };
+
+    function getColor(modelName) {
+        const m = String(modelName).toLowerCase();
+        for (const [key, col] of Object.entries(PALETTE)) {
+            if (m.includes(key)) return col;
+        }
+        return '#888';
+    }
+
+    const maxPct = split[0]?.pct || 1;
+    container.innerHTML = split.map(s => {
+        const color = getColor(s.model);
+        const barW = Math.round((s.pct / maxPct) * 100);
+        return `
+        <div class="model-spend-bar-row">
+            <div class="model-spend-bar-label">
+                <span class="model-spend-dot" style="background:${color}"></span>
+                <span class="model-spend-name">${s.model}</span>
+                <span class="model-spend-runs">${s.runs} runs</span>
+            </div>
+            <div class="model-spend-bar-track">
+                <div class="model-spend-bar-fill" style="width:${barW}%;background:${color}"></div>
+            </div>
+            <span class="model-spend-cost">${s.pct}%</span>
+        </div>`;
+    }).join('');
+
+    if (totalEl) {
+        const wk = weeklyCost !== undefined ? `$${weeklyCost.toFixed(2)}` : '--';
+        totalEl.textContent = `Est. weekly total: ${wk}`;
     }
 }
 
@@ -739,9 +904,8 @@ function updateHQFromData(data) {
         }
     }
     
-    // 3. Update economics section
+    // 3. Update economics section (includes model_split from backend)
     updateEconomics(data.economics);
-    if (data.fleet && data.fleet.agents) renderModelSpend(data.fleet.agents);
     
     // 4. Update metrics row
     updateMetricsRow(data);

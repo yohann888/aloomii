@@ -182,6 +182,22 @@
                     <!-- System Economics -->
                     <div class="card economics-card">
                         <h2>System Economics</h2>
+
+                        <!-- Budget indicator bar -->
+                        <div id="budget-indicator" style="margin-bottom:14px;">
+                          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                            <span style="font-size:12px;color:var(--text-dim);">Today's spend</span>
+                            <span id="budget-today-label" style="font-size:13px;font-weight:600;">$0.00</span>
+                          </div>
+                          <div style="background:#1a1a2e;border-radius:4px;height:8px;overflow:hidden;">
+                            <div id="budget-bar" style="height:100%;border-radius:4px;width:0%;background:#00e5a0;transition:width 0.6s ease,background 0.4s;"></div>
+                          </div>
+                          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                            <span style="font-size:10px;color:var(--text-dim);">$0</span>
+                            <span id="budget-threshold-label" style="font-size:10px;color:var(--text-dim);">limit: $40/day</span>
+                          </div>
+                        </div>
+
                         <div class="economics-bars">
                             <div class="bar-group">
                                 <div class="bar-label">Weekly AI Cost</div>
@@ -196,6 +212,29 @@
                         </div>
                         
                         <div class="roi-big">108x <span class="gradient-text">ROI</span></div>
+
+                        <!-- Token breakdown table -->
+                        <div id="token-breakdown" style="margin:16px 0;background:#0f0f1e;border-radius:8px;padding:12px;font-size:12px;">
+                          <div style="color:var(--text-dim);font-weight:600;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Today's Tokens</div>
+                          <table style="width:100%;border-collapse:collapse;">
+                            <tr id="tok-row-input">
+                              <td style="padding:3px 0;color:var(--text-dim);">Input</td>
+                              <td style="text-align:right;color:var(--text-primary);font-family:monospace;">—</td>
+                            </tr>
+                            <tr id="tok-row-output">
+                              <td style="padding:3px 0;color:var(--text-dim);">Output</td>
+                              <td style="text-align:right;color:var(--text-primary);font-family:monospace;">—</td>
+                            </tr>
+                            <tr id="tok-row-cache-read">
+                              <td style="padding:3px 0;color:var(--text-dim);">Cache read</td>
+                              <td style="text-align:right;color:#00b4d8;font-family:monospace;">—</td>
+                            </tr>
+                            <tr id="tok-row-cache-write">
+                              <td style="padding:3px 0;color:var(--text-dim);">Cache write</td>
+                              <td style="text-align:right;color:#a8dadc;font-family:monospace;">—</td>
+                            </tr>
+                          </table>
+                        </div>
 
                         <!-- Model Spend Breakdown -->
                         <div class="model-spend-section">
@@ -212,9 +251,11 @@
                             </div>
                         </div>
 
-                        <svg width="100%" height="80" class="sparkline">
-                            <polyline points="10,65 35,45 60,55 85,25" fill="none" stroke="#009e96" stroke-width="3"></polyline>
-                        </svg>
+                        <!-- 7-day sparkline -->
+                        <div style="margin-top:12px;">
+                          <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;">7-Day Spend</div>
+                          <canvas id="spend-sparkline" width="100%" height="80" style="width:100%;display:block;"></canvas>
+                        </div>
                     </div>
                 </div>
 
