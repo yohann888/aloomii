@@ -578,8 +578,7 @@ function registerCommandAPI(app, pool = null) {
             let fleetData = { healthy: 21, attention: 9, offline: 3 };
             let economicsData = {
               weekly_cost_usd: 12.10,
-              human_value_usd: 1258,
-              roi_multiplier: 104
+              budget_utilization_pct: 50
             };
             
             if (fs.existsSync(cronPath)) {
@@ -660,16 +659,42 @@ function registerCommandAPI(app, pool = null) {
                   ? ((weeklyCost - prevCost) / prevCost * 100).toFixed(0)
                   : 0;
 
-                // Human equivalent: active agents × 2 hrs/week × $75/hr
-                const activeAgents  = healthy + attention;
-                const humanEquiv    = Math.round(activeAgents * 2 * 75);
+                const weeklyCostFloat = parseFloat(weekRes.rows[0]?.weekly_cost || 0);
+                const monthlyCost = weeklyCostFloat * 4.33;
+                const budgetUtilization = Math.round((monthlyCost / 500) * 100);
 
                 economicsData = {
-                  weekly_cost_usd:  weeklyCost > 0 ? Math.round(weeklyCost * 100) / 100 : Math.round((healthy + attention) * 1.8 * 10) / 10,
-                  human_value_usd:  humanEquiv,
-                  roi_multiplier:    weeklyCost > 0 ? Math.round(humanEquiv / weeklyCost) : (humanEquiv > 0 ? Math.round(humanEquiv / Math.max((healthy + attention) * 1.8, 1)) : 104),
+                  weekly_cost_usd:  Math.round(weeklyCostFloat * 100) / 100,
                   delta_pct:         parseInt(delta),
+                  budget_utilization_pct: budgetUtilization > 0 ? budgetUtilization : Math.round((weeklyCostFloat * 2) / 5),
                 };
+
+                // Tier 2: Per-agent cost from agent_usage_log
+                try {
+                  const agentRes = await query(`
+                    SELECT agent_name, model,
+                           SUM(cost_usd)::numeric(10,4) as total_cost,
+                           COUNT(*) as runs
+                    FROM agent_usage_log
+                    WHERE run_at >= CURRENT_DATE - INTERVAL '7 days'
+                    GROUP BY agent_name, model
+                    ORDER BY total_cost DESC
+                    LIMIT 10
+                  `);
+                  economicsData.agent_costs = agentRes.rows.map(r => ({
+                    agent: r.agent_name,
+                    model: r.model,
+                    cost: parseFloat(r.total_cost),
+                    runs: parseInt(r.runs)
+                  }));
+                  if (agentRes.rows.length > 0) {
+                    economicsData.top_agent = agentRes.rows[0].agent_name;
+                    economicsData.top_agent_cost = parseFloat(agentRes.rows[0].total_cost).toFixed(2);
+                  }
+                } catch(e) {
+                  console.warn('[api] Per-agent query failed:', e.message);
+                  economicsData.agent_costs = [];
+                }
 
                 // Tier 1: Enrich economics with sparkline + token breakdown
                 try {
@@ -775,8 +800,7 @@ function registerCommandAPI(app, pool = null) {
                 console.warn('[api] Economics query failed:', e.message);
                 economicsData = {
                   weekly_cost_usd: Math.round((healthy + attention) * 1.8 * 10) / 10,
-                  human_value_usd: Math.round((healthy + attention) * 150),
-                  roi_multiplier:   83,
+                  budget_utilization_pct: 40,
                   delta_pct:        0,
                 };
               }
@@ -791,8 +815,7 @@ function registerCommandAPI(app, pool = null) {
             data.fleet = { healthy: 21, attention: 9, offline: 3 };
             data.economics = {
               weekly_cost_usd: 12.10,
-              human_value_usd: 1258,
-              roi_multiplier: 104
+              budget_utilization_pct: 40
             };
           }
         },

@@ -205,13 +205,13 @@
                                 <div class="bar-value">$12.10</div>
                             </div>
                             <div class="bar-group">
-                                <div class="bar-label">Human-Equivalent Value</div>
-                                <div class="bar-container"><div class="bar bar-large" style="width: 100%"></div></div>
-                                <div class="bar-value">$1,258</div>
+                                <div class="bar-label">Daily Budget Utilization</div>
+                                <div class="bar-container"><div class="bar bar-large" style="width: 50%"></div></div>
+                                <div id="budget-pct-label" class="bar-value">50%</div>
                             </div>
                         </div>
                         
-                        <div class="roi-big">108x <span class="gradient-text">ROI</span></div>
+                        <div id="top-agent-row" style="font-size:12px;color:var(--text-dim);margin-bottom:4px;">Top agent: —</div>
 
                         <!-- Token breakdown table -->
                         <div id="token-breakdown" style="margin:16px 0;background:#0f0f1e;border-radius:8px;padding:12px;font-size:12px;">
@@ -249,6 +249,12 @@
                                 <span id="model-spend-total">Loading…</span>
                                 <span class="model-spend-note">est. · <a href="https://console.anthropic.com/settings/usage" target="_blank" class="model-spend-link">Anthropic Console ↗</a></span>
                             </div>
+                        </div>
+
+                        <!-- Per-Agent Cost Breakdown (Tier 2) -->
+                        <div style="margin-top:12px;">
+                          <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;">Per-Agent Costs (7 days)</div>
+                          <div id="agent-cost-list" style="font-size:12px;color:var(--text-dim);">No data yet</div>
                         </div>
 
                         <!-- 7-day sparkline -->

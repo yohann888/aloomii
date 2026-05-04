@@ -277,17 +277,19 @@ function updateEconomics(economics) {
     if (!economics) return;
 
     const costEl = document.querySelector('.bar-value');
-    const humanValueEl = document.querySelectorAll('.bar-value')[1];
-    const roiBig = document.querySelector('.roi-big');
+    const budgetPctEl = document.getElementById('budget-pct-label');
+    const topAgent = document.getElementById('top-agent-row');
 
     if (costEl && economics.weekly_cost_usd !== undefined) {
         costEl.textContent = `$${economics.weekly_cost_usd.toFixed(2)}`;
     }
-    if (humanValueEl && economics.human_value_usd !== undefined) {
-        humanValueEl.textContent = `$${(economics.human_value_usd).toLocaleString()}`;
+    if (budgetPctEl && economics.budget_utilization_pct !== undefined) {
+        budgetPctEl.textContent = `${economics.budget_utilization_pct}%`;
+        const budgetBars = document.querySelectorAll('.bar-large');
+        if (budgetBars.length > 0) budgetBars[0].style.width = `${economics.budget_utilization_pct}%`;
     }
-    if (roiBig && economics.roi_multiplier !== undefined) {
-        roiBig.innerHTML = `${economics.roi_multiplier}x <span class="gradient-text">ROI</span>`;
+    if (topAgent && economics.top_agent) {
+        topAgent.textContent = `Top agent: ${economics.top_agent} — $${economics.top_agent_cost || '—'}`;
     }
 
     // ── Budget indicator ──
@@ -331,6 +333,26 @@ function updateEconomics(economics) {
     // ── Model spend from backend ──
     if (economics.model_split && economics.model_split.length > 0) {
         renderModelSplit(economics.model_split, economics.weekly_cost_usd);
+    }
+
+    // ── Per-agent cost list (Tier 2) ──
+    const agentList = document.getElementById('agent-cost-list');
+    if (agentList && economics.agent_costs && economics.agent_costs.length > 0) {
+        const maxCost = economics.agent_costs[0]?.cost || 1;
+        agentList.innerHTML = economics.agent_costs.map(a => {
+            const pctW = Math.round((a.cost / maxCost) * 100);
+            const modelShort = (a.model || '').split('/').pop();
+            return `<div style="display:flex;justify-content:space-between;align-items:center;margin:3px 0;gap:8px;">
+              <span style="flex:0 0 auto;min-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${a.agent}</span>
+              <div style="flex:1;background:#1a1a2e;border-radius:2px;height:6px;">
+                <div style="height:100%;border-radius:2px;width:${pctW}%;background:#009e96;"></div>
+              </div>
+              <span style="font-family:monospace;font-size:11px;text-align:right;min-width:70px;">$${a.cost.toFixed(2)}</span>
+              <span style="font-size:10px;color:var(--text-dim);text-align:right;min-width:50px;">${modelShort}</span>
+            </div>`;
+        }).join('');
+    } else if (agentList && (!economics.agent_costs || economics.agent_costs.length === 0)) {
+        agentList.textContent = 'No data yet — will populate on next spend-alert run';
     }
 }
 
