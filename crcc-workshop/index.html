@@ -1029,6 +1029,49 @@ em, .italic { font-style: italic; }
 /* ════════════════════════════════════════
    CTA SLIDE
    ════════════════════════════════════════ */
+.slide-graphic {
+  background: var(--bg-warm);
+  padding: 5rem 2rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+.slide-graphic .container {
+  max-width: 1100px;
+  width: 100%;
+  text-align: center;
+}
+.slide-graphic h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 0.5rem;
+}
+.slide-graphic .lede {
+  font-size: 1.15rem;
+  color: var(--ink-muted);
+  max-width: 680px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+.graphic-frame {
+  margin: 0 auto;
+  max-width: 920px;
+}
+.graphic-frame img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+.graphic-caption {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 1.25rem;
+}
+
 .slide-cta { background: var(--bg); }
 
 .cta-box {
@@ -1206,6 +1249,8 @@ em, .italic { font-style: italic; }
   <button class="progress-dot" data-target="#slide-4" data-label="Thing 1"></button>
   <button class="progress-dot" data-target="#slide-5" data-label="Thing 2"></button>
   <button class="progress-dot" data-target="#slide-6" data-label="Thing 3"></button>
+  <button class="progress-dot" data-target="#slide-7a" data-label="Fluency"></button>
+  <button class="progress-dot" data-target="#slide-7b" data-label="YC Types"></button>
   <button class="progress-dot" data-target="#slide-7" data-label="Reality"></button>
   <button class="progress-dot" data-target="#slide-8" data-label="The Story"></button>
   <button class="progress-dot" data-target="#slide-9" data-label="Framework"></button>
@@ -1591,6 +1636,52 @@ Don't give me a strategy document. Give me one decision and one action."</div>
   </div>
 </section>
 <!-- ── /UGC Showcase ─────────────────────────────────────────────────────── -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     NEW: AI Fluency Rubric (Zapier)
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section id="slide-7a" class="slide slide-graphic">
+  <div class="container">
+    <div class="slide-num reveal" style="color: var(--text-dim);">07a / Where do you sit</div>
+
+    <h2 class="reveal">Three levels of AI fluency. <em class="brand-text">Most teams are still at level one.</em></h2>
+    <p class="reveal lede">
+      This rubric from Zapier maps exactly to what we just covered: drafting (Capable), signal monitoring (Adoptive), and workflow restructuring (Transformative). It is the same arc. The same progression.
+    </p>
+
+    <div class="graphic-frame reveal">
+      <img src="images/zapier-ai-fluency.jpg" alt="Zapier AI Fluency Rubric showing three levels: Capable, Adoptive, and Transformative, with specific behaviors at each stage">
+    </div>
+    <div class="graphic-caption reveal">Source: Zapier AI Fluency Rubric</div>
+
+    <p class="reveal" style="margin-top: 2.5rem; font-family: var(--serif); font-style: italic; font-size: 1.35rem; color: var(--ink); max-width: 720px; margin-left: auto; margin-right: auto; line-height: 1.45;">
+      The gap between Capable and Transformative is where the real leverage lives. Most advice stops at level one. That is why most teams stall.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     NEW: YC Company Types
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section id="slide-7b" class="slide slide-graphic">
+  <div class="container">
+    <div class="slide-num reveal" style="color: var(--text-dim);">07b / What YC sees</div>
+
+    <h2 class="reveal">YC buckets every company into four types. <em class="brand-text">Only one type wins.</em></h2>
+    <p class="reveal lede">
+      Y Combinator has seen thousands of pitches. They have a simple taxonomy: AI wrappers, AI-augmented products, AI-native companies, and AI infrastructure. The pattern is the same in every industry: the augmented layer adds speed; the native layer changes the game.
+    </p>
+
+    <div class="graphic-frame reveal">
+      <img src="images/yc-company-types.jpg" alt="Y Combinator company type taxonomy showing four categories: AI wrappers, AI-augmented products, AI-native companies, and AI infrastructure">
+    </div>
+    <div class="graphic-caption reveal">Source: Y Combinator Company Types</div>
+
+    <p class="reveal" style="margin-top: 2.5rem; font-family: var(--serif); font-style: italic; font-size: 1.35rem; color: var(--ink); max-width: 720px; margin-left: auto; margin-right: auto; line-height: 1.45;">
+      The question is not whether AI fits your business. It is which type you are building toward. Augmented gets you efficiency. Native gets you leverage.
+    </p>
+  </div>
+</section>
 
 <section id="slide-7" class="slide slide-transition">
   <div class="container">
