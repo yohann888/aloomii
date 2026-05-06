@@ -598,29 +598,37 @@
   /* ==================== GTM BANNER ==================== */
   .gtm-banner {
     background: var(--accent-dark);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
     padding: 12px 20px;
     font-size: 14px;
     font-weight: 500;
     color: #fff;
-    z-index: 101;
-    position: relative;
+    text-decoration: none;
+    text-align: center;
+    z-index: 99;
+    position: sticky;
+    top: 72px;
+    transition: filter 0.2s ease;
   }
-  .gtm-banner a {
-    color: #fff;
+  .gtm-banner:hover { filter: brightness(0.95); }
+  .gtm-banner-eyebrow {
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  .gtm-banner-sep {
+    opacity: 0.7;
+  }
+  .gtm-banner-arrow {
     font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 2px;
-    margin-left: 6px;
-    transition: opacity 0.2s;
   }
-  .gtm-banner a:hover { opacity: 0.85; }
-  .gtm-banner .close-banner {
-    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer;
-    font-size: 18px; line-height: 1; padding: 4px 8px; transition: color 0.2s;
-  }
-  .gtm-banner .close-banner:hover { color: #fff; }
 
   /* ==================== GTM AUDIT SECTION ==================== */
   .gtm-audit { padding: 80px var(--section-pad-h); }
@@ -747,7 +755,7 @@
     .ticker-wrap { width: 100% !important; max-width: 100vw !important; overflow: hidden !important; }
     
     /* GTM Banner */
-    .gtm-banner { font-size: 12px !important; padding: 10px 40px 10px 16px !important; }
+    .gtm-banner { font-size: 12px !important; padding: 10px 16px !important; top: 56px !important; }
     
     /* Global Overrides for Inline Styles */
     [style*="max-width"] { max-width: 100% !important; }
@@ -771,12 +779,6 @@
 <!-- ==================== PAGE CONTENT ==================== -->
 <div class="page-content">
 
-<!-- GTM BANNER -->
-<div class="gtm-banner" id="gtmBanner">
-  Teams are shrinking. Relationships still drive revenue.<a href="#offerings">See how we help &rarr;</a>
-  <button class="close-banner" onclick="document.getElementById('gtmBanner').style.display='none'" aria-label="Close">&times;</button>
-</div>
-
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
@@ -788,6 +790,15 @@
   </ul>
   <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
 </nav>
+
+<!-- TOP BANNER -->
+<a href="/playbook" class="gtm-banner" id="gtmBanner">
+  <span class="gtm-banner-eyebrow">NEW</span>
+  <span class="gtm-banner-sep">·</span>
+  <span>The Aloomii Playbook V1. Three editions. Lock in lifetime portal access before it goes to subscription.</span>
+  <span class="gtm-banner-arrow">&rarr; Read it</span>
+</a>
+
 <div class="mobile-menu" id="mobileMenu">
   <a href="#offerings" onclick="closeMenu()">Services</a>
   <a href="#how" onclick="closeMenu()">How It Works</a>
