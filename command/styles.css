@@ -985,12 +985,16 @@ body {
 /* Follow-up badge */
 .badge.followup {
     display: inline-block;
-    padding: 2px 8px;
-    background: rgba(255,255,255,0.08);
+    padding: 3px 10px;
+    background: rgba(77,217,217,0.12);
+    border: 1px solid rgba(77,217,217,0.25);
     border-radius: 6px;
     font-size: 11px;
-    font-weight: 500;
-    color: var(--text-muted, rgba(255,255,255,0.6));
+    font-weight: 600;
+    color: var(--cyan, #4DD9D9);
+    font-family: var(--mono);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
 }
 
 /* === QUEUE CARDS === */

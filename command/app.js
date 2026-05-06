@@ -1325,9 +1325,13 @@ function renderHeatmap(contacts) {
     createCrmContent();
     return;
   }
-  
+
+  // Sync contact count in header
+  const countEl = document.getElementById('crm-contact-count');
+  if (countEl) countEl.textContent = contacts.length;
+
   tbody.innerHTML = '';
-  
+
   contacts.forEach(contact => {
     const temp = computeTemperature(contact);
     
@@ -1335,7 +1339,7 @@ function renderHeatmap(contacts) {
       `${contact.last_touch_days}d ago` : 'Never';
     
     const followupBadge = contact.follow_up_date ? 
-      `<span class="badge followup">📅 ${contact.follow_up_date}</span>` : '';
+      `<span class="badge followup" title="Follow-up scheduled for ${contact.follow_up_date}">FU ${contact.follow_up_date}</span>` : '';
     
     const rhsVal = parseFloat(contact.rhs_current) || 0;
     const rhsBadge = rhsVal > 0
@@ -2231,19 +2235,21 @@ async function generateUgcScript() {
   };
   
   const scriptLength = document.querySelector('input[name="ugc-length"]:checked')?.value || '45';
-  
+  const modelId = document.getElementById('ugc-model-select')?.value || 'anthropic/claude-opus-4-7';
+  const modelLabel = document.getElementById('ugc-model-select')?.selectedOptions[0]?.text || 'Opus';
+
   aiUgcGenerating = true;
   const btn = document.getElementById('ugc-generate-btn');
   const status = document.getElementById('ugc-status');
   const result = document.getElementById('ugc-result');
-  
+
   if (btn) {
     btn.disabled = true;
     btn.textContent = 'Crafting dialogue...';
   }
-  if (status) status.textContent = 'Opus is writing your script — this takes ~60-120 seconds';
+  if (status) status.textContent = `${modelLabel} is writing your script — this takes ~60-120 seconds`;
   if (result) result.classList.add('hidden');
-  
+
   try {
     const res = await fetch('/api/command/ugc/generate', {
       method: 'POST',
@@ -2253,7 +2259,8 @@ async function generateUgcScript() {
         character,
         story_angle: storyAngle,
         call_to_action: callToAction,
-        script_length: scriptLength
+        script_length: scriptLength,
+        model_id: modelId
       })
     });
     
@@ -2263,8 +2270,8 @@ async function generateUgcScript() {
       throw new Error(data.error || 'Generation failed');
     }
     
-    displayUgcResult(data.script);
-    showToast('Script generated', 'success');
+    displayUgcResult(data);
+    showToast('Script generated — saved to DB', 'success');
   } catch(e) {
     console.error('UGC generation error:', e);
     showToast(e.message || 'Failed to generate script', 'error');
@@ -2278,13 +2285,126 @@ async function generateUgcScript() {
   }
 }
 
-function displayUgcResult(script) {
-  const result = document.getElementById('ugc-result');
+// ─── UGC helpers ────────────────────────────────────────────────────
+
+function ugcEscapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function displayUgcResult(data) {
+  const result     = document.getElementById('ugc-result');
   const mainScript = document.getElementById('ugc-main-script');
   if (!result || !mainScript) return;
-  
-  mainScript.textContent = script || 'No script generated';
+
+  const isObj   = data && typeof data === 'object';
+  const scriptId = isObj ? data.script_id : null;
+
+  mainScript.textContent = isObj ? (data.script || 'No script generated') : (data || 'No script generated');
+
+  // Hooks — FIX: use textContent via safe DOM building, not innerHTML with LLM text
+  const hooksEl = document.getElementById('ugc-hooks');
+  if (hooksEl) {
+    if (isObj && data.hooks && data.hooks.length) {
+      hooksEl.innerHTML = '<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:600;">ALT HOOKS</div>';
+      data.hooks.forEach((h,i) => {
+        const d = document.createElement('div');
+        d.style.cssText = 'margin-bottom:6px;padding:8px 10px;background:#1a1a2e;border-radius:6px;font-size:13px;';
+        d.textContent = `${i+1}. ${h}`;
+        hooksEl.appendChild(d);
+      });
+      hooksEl.style.display = 'block';
+    } else { hooksEl.style.display = 'none'; }
+  }
+
+  // CTAs — same safe pattern
+  const ctasEl = document.getElementById('ugc-ctas');
+  if (ctasEl) {
+    if (isObj && data.ctas && data.ctas.length) {
+      ctasEl.innerHTML = '<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:600;">ALT CTAS</div>';
+      data.ctas.forEach((c,i) => {
+        const d = document.createElement('div');
+        d.style.cssText = 'margin-bottom:6px;padding:8px 10px;background:#1a1a2e;border-radius:6px;font-size:13px;';
+        d.textContent = `${i+1}. ${c}`;
+        ctasEl.appendChild(d);
+      });
+      ctasEl.style.display = 'block';
+    } else { ctasEl.style.display = 'none'; }
+  }
+
+  // Subtext — same
+  const subtextEl = document.getElementById('ugc-subtext');
+  if (subtextEl) {
+    if (isObj && data.subtext_line) {
+      subtextEl.innerHTML = '<div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-weight:600;">SUBTEXT</div>';
+      const d = document.createElement('div');
+      d.style.cssText = 'font-style:italic;color:#a78bfa;font-size:13px;';
+      d.textContent = data.subtext_line;
+      subtextEl.appendChild(d);
+      subtextEl.style.display = 'block';
+    } else { subtextEl.style.display = 'none'; }
+  }
+
+  // Feedback panel — FIX: store script_id on DOM element, not global var
+  const feedbackEl = document.getElementById('ugc-feedback-panel');
+  if (feedbackEl) {
+    feedbackEl.dataset.scriptId = scriptId || '';
+    feedbackEl.style.display    = scriptId ? 'block' : 'none';
+    feedbackEl.style.opacity    = '1';
+  }
+  const feedbackText = document.getElementById('ugc-feedback-text');
+  if (feedbackText) feedbackText.value = '';
+
+  // Meta
+  const metaEl = document.getElementById('ugc-meta');
+  if (metaEl && isObj) {
+    const latency  = data.latency_ms ? `${(data.latency_ms/1000).toFixed(1)}s` : '—';
+    const modelLabel = {
+      'anthropic/claude-opus-4-7':    'Opus',
+      'ollama/kimi-k2.6:cloud':       'Kimi K2.6',
+      'ollama/deepseek-v4-pro:cloud': 'DeepSeek V4 Pro'
+    }[data.model_used] || data.model_used || 'Opus';
+    let metaText = `ID: ${ugcEscapeHtml(scriptId || 'unsaved')} · ${ugcEscapeHtml(modelLabel)} · Prompt v${data.prompt_version || 1} · ${latency}`;
+    if (data.parse_warnings && data.parse_warnings.length) {
+      metaText += ` · ⚠️ ${ugcEscapeHtml(data.parse_warnings[0])}`;
+    }
+    metaEl.innerHTML = metaText;
+    metaEl.style.display = 'block';
+  }
+
   result.classList.remove('hidden');
+}
+
+async function submitUgcFeedback(decision) {
+  // FIX: read script_id from DOM, not a stale global — prevents cross-script contamination
+  const feedbackEl = document.getElementById('ugc-feedback-panel');
+  const scriptId   = feedbackEl?.dataset?.scriptId;
+  if (!scriptId) { showToast('No script to rate', 'error'); return; }
+
+  const would_publish = decision === 'ship' || decision === 'test';
+  const rated_by = 'yohann';
+
+  try {
+    const r = await fetch('/api/command/ugc/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        script_id: scriptId,
+        rated_by,
+        would_publish,
+        publish_decision: decision,
+        feedback_text: document.getElementById('ugc-feedback-text')?.value || null
+      })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Feedback failed');
+    showToast(`Marked as: ${decision}`, 'success');
+    if (feedbackEl) feedbackEl.style.opacity = '0.5';
+  } catch(e) {
+    showToast('Feedback failed: ' + e.message, 'error');
+  }
 }
 
 function copyUgcScript() {
@@ -2462,25 +2582,55 @@ function renderAiUgc() {
         </div>
       </div>
       
-      <div style="display:flex;gap:12px;align-items:center;margin-bottom:20px;">
-        <button id="ugc-generate-btn" onclick="generateUgcScript()" style="background:#00e5a0;color:#0a0a0f;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;">
-          Generate Script
-        </button>
-        <span id="ugc-status" style="color:var(--text-dim);font-size:13px;"></span>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px;">
+        <div>
+          <label style="display:block;color:var(--text-dim);font-size:11px;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Model</label>
+          <select id="ugc-model-select" style="padding:9px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:8px;color:var(--text-primary);font-size:13px;cursor:pointer;min-width:160px;">
+            <option value="anthropic/claude-opus-4-7" selected>Claude Opus</option>
+            <option value="ollama/kimi-k2.6:cloud">Kimi K2.6</option>
+            <option value="ollama/deepseek-v4-pro:cloud">DeepSeek V4 Pro</option>
+          </select>
+        </div>
+        <div style="margin-top:18px;">
+          <button id="ugc-generate-btn" onclick="generateUgcScript()" style="background:#00e5a0;color:#0a0a0f;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;">
+            Generate Script
+          </button>
+        </div>
+        <span id="ugc-status" style="color:var(--text-dim);font-size:13px;margin-top:18px;"></span>
       </div>
       
-      <div id="ugc-result" class="hidden" style="border:1px solid #2a2a4a;border-radius:10px;padding:16px;background:#141428;">
+      <div id="ugc-result" class="hidden" style="border:1px solid #2a2a4a;border-radius:10px;padding:16px;background:#141428;margin-top:4px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
           <h4 style="margin:0;color:var(--text-primary);">📝 Main Script</h4>
           <button onclick="copyUgcScript()" style="background:#2a2a4a;color:#fff;padding:6px 14px;border:none;border-radius:6px;cursor:pointer;font-size:12px;">
-            📋 Copy Script
+            📋 Copy
           </button>
         </div>
-        <pre id="ugc-main-script" style="white-space:pre-wrap;font-family:inherit;line-height:1.6;color:var(--text-primary);font-size:14px;margin:0;"></pre>
+        <pre id="ugc-main-script" style="white-space:pre-wrap;font-family:inherit;line-height:1.6;color:var(--text-primary);font-size:14px;margin:0 0 12px 0;"></pre>
+
+        <div id="ugc-subtext" style="display:none;margin-bottom:12px;padding:10px 12px;background:#1a1020;border-left:3px solid #a78bfa;border-radius:4px;"></div>
+
+        <div id="ugc-hooks" style="display:none;margin-bottom:12px;"></div>
+
+        <div id="ugc-ctas" style="display:none;margin-bottom:12px;"></div>
+
+        <div id="ugc-meta" style="display:none;font-size:11px;color:#4a4a6a;margin-bottom:12px;"></div>
+
+        <!-- Feedback panel -->
+        <div id="ugc-feedback-panel" style="display:none;border-top:1px solid #2a2a4a;padding-top:12px;margin-top:4px;">
+          <div style="font-size:12px;color:var(--text-dim);font-weight:600;margin-bottom:8px;">QUICK FEEDBACK</div>
+          <div style="display:flex;gap:8px;margin-bottom:8px;">
+            <button onclick="submitUgcFeedback('ship')" style="background:#065f46;color:#6ee7b7;padding:5px 12px;border:none;border-radius:5px;cursor:pointer;font-size:12px;">✅ Ship</button>
+            <button onclick="submitUgcFeedback('edit')" style="background:#1e3a5f;color:#60a5fa;padding:5px 12px;border:none;border-radius:5px;cursor:pointer;font-size:12px;">✏️ Edit</button>
+            <button onclick="submitUgcFeedback('test')" style="background:#451a03;color:#f59e0b;padding:5px 12px;border:none;border-radius:5px;cursor:pointer;font-size:12px;">🧪 Test</button>
+            <button onclick="submitUgcFeedback('kill')" style="background:#7f1d1d;color:#fca5a5;padding:5px 12px;border:none;border-radius:5px;cursor:pointer;font-size:12px;">🗑 Kill</button>
+          </div>
+          <textarea id="ugc-feedback-text" placeholder="Notes (optional)" style="width:100%;padding:6px 10px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:5px;color:var(--text-primary);font-size:12px;resize:vertical;min-height:48px;"></textarea>
+        </div>
       </div>
     </div>
   `;
-  
+
   // Load pain signals after rendering
   loadPainSignals();
 }
@@ -2638,7 +2788,9 @@ function createCrmContent() {
   console.log('Creating dynamic CRM interface...');
   const crmSection = document.getElementById('section-crm');
   if (!crmSection) return;
-  
+
+  const totalContacts = commandData && commandData.contacts ? commandData.contacts.length : 0;
+
   crmSection.innerHTML = `
     <h2>CRM & Outreach</h2>
     <div class="crm-tabs">
@@ -2647,6 +2799,12 @@ function createCrmContent() {
       <button onclick="switchCrmTab(2)" class="tab-btn">Sprint Shortlist</button>
     </div>
     <div id="crm-heatmap" class="crm-panel active">
+      <div id="crm-header" style="display:flex;justify-content:space-between;align-items:center;margin:0.5rem 0 0.75rem;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">
+          <span id="crm-contact-count">${totalContacts}</span> contacts
+        </span>
+        <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text-dim);">📅 = follow-up scheduled</span>
+      </div>
       <table class="crm-table">
         <thead>
           <tr>
