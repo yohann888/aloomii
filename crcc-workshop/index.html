@@ -285,7 +285,7 @@ em, .italic { font-style: italic; }
 
 .hero-title {
   font-size: clamp(2.5rem, 7vw, 6.5rem);
-  line-height: 1;
+  line-height: 1.15;
   margin-bottom: 1.5rem;
   position: relative;
   font-weight: 400;
@@ -298,6 +298,8 @@ em, .italic { font-style: italic; }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  /* Extra bottom padding so descenders (f, y) aren't clipped by background-clip */
+  padding-bottom: 0.12em;
 }
 .hero-title .line-3 { 
   display: block; 
