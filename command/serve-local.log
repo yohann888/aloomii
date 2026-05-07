@@ -5,169 +5,456 @@
   Health: http://localhost:3200/health
   CORS:   all origins (dev)
 
-GET     /api/research/pulse                      200  8ms
-GET     /api/research/radar                      200  0ms
-GET     /api/command                             200  181ms
-GET     /api/command                             200  14ms
-GET     /api/command                             200  13ms
+GET     /                                        404  4ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  21ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
 GET     /api/command                             200  10ms
-GET     /api/command                             200  57ms
-GET     /api/command                             200  7ms
-GET     /api/command                             200  81ms
-GET     /api/command                             200  18ms
-GET     /api/command                             200  24ms
-GET     /api/command                             200  13ms
-GET     /api/command                             200  13ms
-GET     /api/command                             200  35ms
-GET     /api/command                             200  17ms
-GET     /api/command                             200  17ms
-GET     /api/command                             200  10ms
-GET     /api/command                             200  23ms
-GET     /api/command                             200  34ms
-GET     /api/command                             200  19ms
-GET     /api/command                             200  38ms
-GET     /api/command                             200  21ms
-GET     /api/command                             200  27ms
-GET     /api/command                             200  16ms
-GET     /api/command                             200  21ms
-GET     /api/command                             200  36ms
-GET     /api/command                             200  37ms
-GET     /api/command                             200  37ms
-GET     /api/command                             200  16ms
-GET     /api/command                             200  13ms
-GET     /api/command                             200  12ms
-GET     /api/command                             200  14ms
-GET     /api/command                             200  19ms
-GET     /api/command                             200  18ms
-GET     /api/command                             200  21ms
-GET     /api/command                             200  12ms
-GET     /api/command                             200  13ms
-GET     /api/command                             200  18ms
-GET     /api/command                             200  22ms
-GET     /api/command                             200  36ms
-GET     /api/command                             200  68ms
-GET     /api/command                             200  13ms
-GET     /api/command                             200  12ms
-GET     /api/command                             200  13ms
-GET     /api/command                             200  84ms
-GET     /api/command                             200  23ms
-GET     /api/command                             200  8ms
-GET     /api/command                             200  5ms
-GET     /api/command                             200  22ms
-GET     /api/command                             200  13ms
-GET     /api/command                             200  12ms
-GET     /api/command                             200  22ms
-GET     /api/command                             200  16ms
-GET     /api/command                             200  11ms
-GET     /api/command                             200  16ms
-GET     /api/command                             200  12ms
-GET     /api/command                             200  15ms
-GET     /api/command                             200  79ms
-GET     /api/command                             200  16ms
-GET     /api/command                             200  19ms
-GET     /api/command                             200  14ms
-GET     /api/command                             200  59ms
-GET     /api/command                             200  34ms
-GET     /api/command                             200  19ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
 GET     /api/command                             200  20ms
-GET     /api/command                             200  21ms
-GET     /api/command                             200  34ms
-GET     /api/command                             200  18ms
-GET     /api/command                             200  13ms
-GET     /api/command                             200  23ms
-GET     /api/command                             200  19ms
-GET     /api/command                             200  5ms
-GET     /api/command                             200  35ms
-GET     /api/command                             200  32ms
-GET     /api/command                             200  17ms
-GET     /api/command                             200  15ms
-GET     /api/command                             200  20ms
-GET     /api/command                             200  10ms
-GET     /                                        404  7ms
-GET     /styles.css                              404  3ms
-GET     /images/logos/brand-logo.png             404  1ms
-GET     /app.js                                  404  6ms
-GET     /api/command                             200  3ms
-GET     /api/command/outreach/recent             200  1ms
-GET     /api/command                             200  95ms
-GET     /api/command/influencers                 200  4ms
-GET     /api/command/influencers/config          200  1ms
-GET     /api/command/influencers/budget          200  2ms
-GET     /api/command/influencers/budget          200  1ms
-GET     /api/command/influencers                 200  0ms
-GET     /api/research/pulse                      200  0ms
-GET     /api/research/radar                      200  1ms
-GET     /api/research/targets                    200  0ms
-GET     /api/command                             200  36ms
-GET     /api/command/influencers                 200  1ms
-GET     /api/command/influencers/budget          200  0ms
-GET     /api/command/influencers/config          200  1ms
-GET     /api/command/influencers/budget          200  0ms
-GET     /api/command/influencers                 200  0ms
-GET     /api/command/influencers                 200  0ms
-GET     /api/command/influencers/budget          200  0ms
-GET     /api/command/influencers                 200  0ms
-GET     /api/command/influencers/budget          200  1ms
-GET     /api/command                             200  23ms
-GET     /api/command                             200  26ms
-GET     /api/command                             200  39ms
-GET     /api/command                             200  22ms
-GET     /api/command                             200  9ms
-GET     /api/command                             200  38ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
 GET     /api/command                             200  11ms
-GET     /api/command                             200  19ms
-GET     /api/command                             200  13ms
 GET     /api/command                             200  70ms
-GET     /api/command                             200  22ms
-GET     /api/command                             200  16ms
-GET     /api/command                             200  22ms
-GET     /api/command                             200  12ms
-GET     /api/command                             200  18ms
-GET     /api/command                             200  15ms
-GET     /api/command                             200  32ms
-GET     /api/command                             200  22ms
-GET     /api/command                             200  10ms
-GET     /api/command                             200  34ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
 GET     /api/command                             200  20ms
-GET     /api/command                             200  17ms
-GET     /api/command                             200  18ms
-GET     /api/command                             200  17ms
-GET     /api/command                             200  19ms
-GET     /api/command                             200  19ms
-GET     /api/command                             200  72ms
-GET     /api/command                             200  25ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  27ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  16ms
+GET     /api/command                             200  66ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  11ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
 GET     /api/command                             200  21ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  14ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  16ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  19ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  35ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  20ms
+GET     /api/command                             200  73ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  20ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  20ms
+GET     /api/command                             200  73ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  14ms
+GET     /api/command                             200  78ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  16ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  13ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  18ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  15ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  16ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  15ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  19ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  19ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
 GET     /api/command                             200  23ms
-GET     /api/command                             200  102ms
-GET     /                                        404  7ms
-GET     /styles.css                              404  4ms
-GET     /app.js                                  404  7ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  13ms
+GET     /api/command                             200  79ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  23ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  5ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  23ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  34ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
 GET     /api/command                             200  18ms
-GET     /api/command/outreach/recent             200  0ms
-GET     /api/command                             200  67ms
-GET     /api/research/pulse                      200  0ms
-GET     /api/research/radar                      200  0ms
-GET     /api/research/targets                    200  0ms
-GET     /api/research/patterns                   404  1ms
-GET     /api/research/pulse                      200  0ms
-GET     /api/research/radar                      200  0ms
-GET     /api/research/targets                    200  0ms
-GET     /api/research/patterns                   404  0ms
-GET     /                                        404  18ms
-GET     /styles.css                              404  14ms
-GET     /app.js                                  404  17ms
-GET     /api/command                             200  170ms
-GET     /api/command/outreach/recent             200  0ms
-GET     /api/command                             200  209ms
-GET     /api/research/pulse                      200  0ms
-GET     /api/research/radar                      200  0ms
-GET     /api/research/targets                    200  0ms
-GET     /api/research/patterns                   404  1ms
-GET     /api/research/pulse                      200  1ms
-GET     /api/research/radar                      200  0ms
-GET     /api/research/targets                    200  0ms
-GET     /api/research/patterns                   404  1ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  42ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  11ms
+GET     /api/command                             200  82ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  14ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  11ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  11ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  31ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
 GET     /api/command                             200  21ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  16ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  36ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  11ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  2ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  7ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  5ms
+GET     /api/command                             200  64ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  9ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+LinkedIn drafts query failed: Connection terminated due to connection timeout
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  8ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  8ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+LinkedIn drafts query failed: Connection terminated due to connection timeout
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  5ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+LinkedIn drafts query failed: Connection terminated due to connection timeout
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  5ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  4ms
+Pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+LinkedIn drafts query failed: Connection terminated due to connection timeout
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  6ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  8ms
+Pipeline query failed: timeout exceeded when trying to connect
+Win/loss query failed: timeout exceeded when trying to connect
+Events query failed: timeout exceeded when trying to connect
+Snipe drafts query failed: timeout exceeded when trying to connect
+Content query failed: timeout exceeded when trying to connect
+Client pilots query failed: timeout exceeded when trying to connect
+Webhooks query failed: timeout exceeded when trying to connect
+Tasks query failed: timeout exceeded when trying to connect
+Influencer pipeline query failed: timeout exceeded when trying to connect
+Drafts query failed: Connection terminated due to connection timeout
+Relationship health query failed: Connection terminated due to connection timeout
+Outreach queue query failed: Connection terminated due to connection timeout
+Signals query failed: Connection terminated due to connection timeout
+Contacts query failed: Connection terminated due to connection timeout
+Briefing query failed: Connection terminated due to connection timeout
+LinkedIn drafts query failed: timeout exceeded when trying to connect
+GET     /api/command                             200  2ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  16ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  12ms
+Fleet/economics failed: Unexpected token 'D', "Disabled: "... is not valid JSON
+GET     /api/command                             200  32ms
 
   SIGTERM received — shutting down gracefully...
   HTTP server closed.

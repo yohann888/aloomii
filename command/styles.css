@@ -684,6 +684,7 @@ body {
     padding: 16px 12px;
     border-bottom: 1px solid var(--border);
     font-size: 15px;
+    vertical-align: middle;
 }
 
 .crm-table tr:hover {
@@ -984,7 +985,10 @@ body {
 
 /* Follow-up badge */
 .badge.followup {
-    display: inline-block;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 3px 10px;
     background: rgba(77,217,217,0.12);
     border: 1px solid rgba(77,217,217,0.25);
@@ -995,6 +999,8 @@ body {
     font-family: var(--mono);
     letter-spacing: 0.02em;
     white-space: nowrap;
+    line-height: 1;
+    vertical-align: middle;
 }
 
 /* === QUEUE CARDS === */

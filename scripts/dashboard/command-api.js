@@ -3051,14 +3051,42 @@ module.exports.registerBufferRoutes = registerBufferRoutes;
 // UGC Routes
 // ═══════════════════════════════════════════════════════════════
 function registerUgcRoutes(app) {
-  const { generateUgcScript } = require('../ugc/ugc-generator');
+  const { generateUgcScript, SUPPORTED_MODELS, DEFAULT_MODEL } = require('../ugc/ugc-generator');
+  const { buildUgcPrompt } = require('../ugc/ugc-prompt-builder');
 
-  // GET /api/command/pain-signals — fetch pain signals for UGC dropdown
+  // ─────────────────────────────────────────────────────────────────────────
+  // Helper: parse structured sections from model output
+  // Expected: ---SCRIPT--- ... ---HOOKS--- ... ---CTAS--- ... ---SUBTEXT---
+  // ─────────────────────────────────────────────────────────────────────────
+  function parseUgcOutput(raw) {
+    const hasHeaders = /---(?:SCRIPT|HOOKS|CTAS|SUBTEXT)---/i.test(raw);
+    const scriptMatch  = raw.match(/---SCRIPT---\s*([\s\S]*?)(?=---HOOKS---|---CTAS---|---SUBTEXT---|$)/i);
+    const hooksMatch   = raw.match(/---HOOKS---\s*([\s\S]*?)(?=---CTAS---|---SUBTEXT---|$)/i);
+    const ctasMatch    = raw.match(/---CTAS---\s*([\s\S]*?)(?=---SUBTEXT---|$)/i);
+    const subtextMatch = raw.match(/---SUBTEXT---\s*([\s\S]*?)$/i);
+
+    const parseLines = (block) =>
+      (block || '').split('\n')
+        .map(l => l.replace(/^\d+\.\s*/, '').trim())
+        .filter(l => l.length > 5);
+
+    return {
+      script_body:    (scriptMatch?.[1] || raw).trim(),
+      hooks:          parseLines(hooksMatch?.[1]),
+      ctas:           parseLines(ctasMatch?.[1]),
+      subtext_line:   (subtextMatch?.[1] || '').trim(),
+      parse_warnings: hasHeaders ? [] : ['No section headers found in output — full text used as script_body']
+    };
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // GET /api/command/pain-signals — pain signals dropdown
+  // ─────────────────────────────────────────────────────────────────────────
   app.get('/api/command/pain-signals', async (req, res) => {
     try {
-      const days = parseInt(req.query.days, 10) || 30;
+      const days     = parseInt(req.query.days, 10) || 30;
       const severity = parseInt(req.query.severity, 10) || 3;
-      
+
       const result = await query(
         `SELECT id, icp_slug, verbatim_quote, insight, pain_category, severity, context_snippet, created_at
          FROM pain_signals
@@ -3068,67 +3096,308 @@ function registerUgcRoutes(app) {
          LIMIT 200`,
         [severity, String(days)]
       );
-      
-      // Group by icp_slug
+
       const grouped = {};
       result.rows.forEach(row => {
         if (!grouped[row.icp_slug]) grouped[row.icp_slug] = [];
         grouped[row.icp_slug].push(row);
       });
-      
+
       res.json({ signals: result.rows, grouped, count: result.rows.length });
     } catch(e) { res.status(500).json({ error: e.message }); }
   });
 
-  // POST /api/command/ugc/generate — generate UGC script via opus
+  // ─────────────────────────────────────────────────────────────────────────
+  // GET /api/command/ugc/prompts — list available prompt templates
+  // ─────────────────────────────────────────────────────────────────────────
+  app.get('/api/command/ugc/prompts', async (req, res) => {
+    try {
+      const result = await query(
+        `SELECT id, slug, name, description, model, version, is_active, created_at
+         FROM ugc_prompts WHERE is_active = true ORDER BY name`
+      );
+      res.json({ prompts: result.rows });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // POST /api/command/ugc/generate — generate + persist to ugc_scripts
+  // ─────────────────────────────────────────────────────────────────────────
   app.post('/api/command/ugc/generate', async (req, res) => {
-    const { pain_signal_id, character, story_angle, call_to_action, script_length } = req.body;
-    
+    const { pain_signal_id, character, story_angle, call_to_action,
+            script_length, prompt_slug, campaign_id, model_id } = req.body;
+
     if (!pain_signal_id || !character || !story_angle || !call_to_action || !script_length) {
       return res.status(400).json({ error: 'Missing required fields: pain_signal_id, character, story_angle, call_to_action, script_length' });
     }
 
+    // Validate model_id if provided
+    const chosenModel = model_id || DEFAULT_MODEL;
+    if (!SUPPORTED_MODELS[chosenModel]) {
+      return res.status(400).json({
+        error: `Unsupported model: ${chosenModel}`,
+        allowed: Object.keys(SUPPORTED_MODELS)
+      });
+    }
+
+    let scriptId = null;
+    const startTime = Date.now();
+
     try {
-      // Load pain signal from DB
+      // 1. Load pain signal
       const painRes = await query(
         `SELECT id, icp_slug, verbatim_quote, insight, pain_category, severity, context_snippet
          FROM pain_signals WHERE id = $1`,
         [pain_signal_id]
       );
-      
-      if (painRes.rows.length === 0) {
-        return res.status(404).json({ error: 'Pain signal not found' });
-      }
-      
+      if (!painRes.rows.length) return res.status(404).json({ error: 'Pain signal not found' });
       const painSignal = painRes.rows[0];
-      
-      // Build form data
+
+      // 2. Load prompt template from DB (fallback to built-in ugc-prompt-builder)
+      const promptSlug = prompt_slug || 'screenwriter_v1';
+      const promptRes = await query(
+        `SELECT id, version, template_body, model, max_tokens, temperature
+         FROM ugc_prompts WHERE slug = $1 AND is_active = true`,
+        [promptSlug]
+      ).catch(() => ({ rows: [] }));
+      const promptRow = promptRes.rows[0] || null;
+
+      // 3. Build form_data
       const formData = {
-        name: character.name,
-        age: character.age,
-        occupation: character.occupation,
-        life_stage: character.life_stage,
-        location: character.location,
+        name:               character.name,
+        age:                character.age,
+        occupation:         character.occupation,
+        life_stage:         character.life_stage,
+        location:           character.location,
         personality_traits: character.personality_traits,
-        vocabulary_level: character.vocabulary_level,
-        verbal_tics: character.verbal_tics,
-        cadence: character.cadence,
-        emotional_state: character.emotional_state,
-        pov_lens: story_angle.pov_lens,
-        brand_product: story_angle.brand_product,
-        cta_destination: call_to_action.destination,
-        cta_tone: call_to_action.tone,
+        vocabulary_level:   character.vocabulary_level,
+        verbal_tics:        character.verbal_tics,
+        cadence:            character.cadence,
+        emotional_state:    character.emotional_state,
+        pov_lens:           story_angle.pov_lens,
+        brand_product:      story_angle.brand_product,
+        cta_destination:    call_to_action.destination,
+        cta_tone:           call_to_action.tone,
         script_length
       };
 
-      // Call opus
-      const script = await generateUgcScript(painSignal, formData);
-      
-      res.json({ script, pain_signal: painSignal, generated_at: new Date().toISOString() });
+      // 4. Render prompt from DB template (FIX: this is the prompt that ACTUALLY goes to the model)
+      let renderedPrompt;
+      const unresolved = [];
+      if (promptRow) {
+        const vars = { ...formData, ...painSignal,
+          word_count: script_length === '15' ? 40 : script_length === '30' ? 80 : script_length === '45' ? 120 : 160
+        };
+        renderedPrompt = promptRow.template_body.replace(/\{\{(\w+)\}\}/g, (match, k) => {
+          if (vars[k] != null) return String(vars[k]);
+          unresolved.push(k);
+          return match; // keep literal for visibility
+        });
+        if (unresolved.length) console.warn(`UGC: unresolved template vars: ${unresolved.join(', ')}`);
+      } else {
+        renderedPrompt = buildUgcPrompt(painSignal, formData);
+      }
+
+      // 5. Create ugc_scripts row (status: running, model_used set to chosen model)
+      const insertRes = await query(
+        `INSERT INTO ugc_scripts
+           (prompt_id, prompt_version, pain_signal_id, form_data, rendered_prompt,
+            status, model_used, campaign_id, created_by, started_at)
+         VALUES ($1, $2, $3, $4, $5, 'running', $6, $7, 'cc-dashboard', NOW())
+         RETURNING id`,
+        [
+          promptRow?.id || null,
+          promptRow?.version || 1,
+          pain_signal_id,
+          JSON.stringify(formData),
+          renderedPrompt,
+          chosenModel,              // FIX: use the model the USER chose, not prompt default
+          campaign_id || null
+        ]
+      );
+      scriptId = insertRes.rows[0].id;
+
+      // 6. Call model — pass renderedPrompt so generator doesn't rebuild it (FIX: bug #3)
+      const { text: rawOutput, model_used: actualModel } = await generateUgcScript(
+        painSignal,
+        formData,
+        { renderedPrompt, model_id: chosenModel, max_tokens: promptRow?.max_tokens || 2000 }
+      );
+      const latencyMs = Date.now() - startTime;
+
+      // 7. Parse structured output
+      const parsed = parseUgcOutput(rawOutput);
+      if (parsed.parse_warnings.length) {
+        console.warn(`UGC parse warnings for script ${scriptId}:`, parsed.parse_warnings);
+      }
+
+      // 8. Update DB with result (FIX: now includes model_used with actual model)
+      await query(
+        `UPDATE ugc_scripts SET
+           status = 'completed',
+           script_body = $1,
+           hooks = $2,
+           ctas = $3,
+           subtext_line = $4,
+           latency_ms = $5,
+           model_used = $6,
+           completed_at = NOW()
+         WHERE id = $7`,
+        [
+          parsed.script_body,
+          parsed.hooks,
+          parsed.ctas,
+          parsed.subtext_line,
+          latencyMs,
+          actualModel,              // FIX: write confirmed model, not just what was requested
+          scriptId
+        ]
+      );
+
+      res.json({
+        script_id:      scriptId,
+        script:         parsed.script_body,
+        hooks:          parsed.hooks,
+        ctas:           parsed.ctas,
+        subtext_line:   parsed.subtext_line,
+        parse_warnings: parsed.parse_warnings,
+        model_used:     actualModel,
+        prompt_version: promptRow?.version || 1,
+        latency_ms:     latencyMs,
+        generated_at:   new Date().toISOString()
+      });
     } catch(e) {
       console.error('UGC generation error:', e);
+      if (scriptId) {
+        await query(
+          `UPDATE ugc_scripts SET status = 'failed', error_message = $1, completed_at = NOW() WHERE id = $2`,
+          [e.message, scriptId]
+        ).catch(() => {});
+      }
       res.status(500).json({ error: e.message });
     }
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // GET /api/command/ugc/scripts — list generated scripts (history)
+  // ─────────────────────────────────────────────────────────────────────────
+  app.get('/api/command/ugc/scripts', async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit, 10) || 20, 100);
+      const result = await query(
+        `SELECT
+           s.id, s.status, s.created_at, s.completed_at, s.latency_ms,
+           s.script_body, s.hooks, s.ctas, s.subtext_line,
+           s.form_data->>'brand_product' AS brand_product,
+           s.form_data->>'pov_lens' AS pov_lens,
+           s.form_data->>'script_length' AS script_length,
+           ps.pain_category, ps.severity, ps.verbatim_quote,
+           p.views, p.engagement_rate,
+           AVG(f.overall_score) AS avg_score,
+           COUNT(f.id) AS feedback_count,
+           BOOL_OR(f.would_publish) AS any_approved
+         FROM ugc_scripts s
+         LEFT JOIN pain_signals ps ON ps.id = s.pain_signal_id
+         LEFT JOIN LATERAL (
+           SELECT views, engagement_rate FROM ugc_performance
+           WHERE script_id = s.id ORDER BY recorded_at DESC LIMIT 1
+         ) p ON true
+         LEFT JOIN ugc_feedback f ON f.script_id = s.id
+         WHERE s.status = 'completed'
+         GROUP BY s.id, ps.pain_category, ps.severity, ps.verbatim_quote, p.views, p.engagement_rate
+         ORDER BY s.created_at DESC
+         LIMIT $1`,
+        [limit]
+      );
+      res.json({ scripts: result.rows, count: result.rows.length });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // POST /api/command/ugc/feedback — save human rating on a script
+  // ─────────────────────────────────────────────────────────────────────────
+  app.post('/api/command/ugc/feedback', async (req, res) => {
+    const { script_id, rated_by, hook_strength, authenticity, pain_accuracy,
+            cta_clarity, overall_score, would_publish, publish_decision,
+            feedback_text, suggested_edit } = req.body;
+
+    if (!script_id || !rated_by) {
+      return res.status(400).json({ error: 'script_id and rated_by are required' });
+    }
+
+    try {
+      await query(
+        `INSERT INTO ugc_feedback
+           (script_id, rated_by, hook_strength, authenticity, pain_accuracy,
+            cta_clarity, overall_score, would_publish, publish_decision,
+            feedback_text, suggested_edit, feedback_type)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'human_review')
+         ON CONFLICT (script_id, rated_by, feedback_type) WHERE version_id IS NULL
+         DO UPDATE SET
+           hook_strength    = EXCLUDED.hook_strength,
+           authenticity     = EXCLUDED.authenticity,
+           pain_accuracy    = EXCLUDED.pain_accuracy,
+           cta_clarity      = EXCLUDED.cta_clarity,
+           overall_score    = EXCLUDED.overall_score,
+           would_publish    = EXCLUDED.would_publish,
+           publish_decision = EXCLUDED.publish_decision,
+           feedback_text    = EXCLUDED.feedback_text,
+           suggested_edit   = EXCLUDED.suggested_edit`,
+        [script_id, rated_by, hook_strength||null, authenticity||null, pain_accuracy||null,
+         cta_clarity||null, overall_score||null, would_publish||null, publish_decision||null,
+         feedback_text||null, suggested_edit||null]
+      );
+      res.json({ ok: true });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // POST /api/command/ugc/performance — record performance snapshot
+  // ─────────────────────────────────────────────────────────────────────────
+  app.post('/api/command/ugc/performance', async (req, res) => {
+    const { script_id, platform, post_url, views, likes, comments,
+            shares, saves, watch_time_sec, ctr, clicks_to_site,
+            signups, revenue_usd, snapshot_type, hours_since_post,
+            data_source, notes } = req.body;
+
+    if (!script_id || !platform) {
+      return res.status(400).json({ error: 'script_id and platform are required' });
+    }
+
+    try {
+      await query(
+        `INSERT INTO ugc_performance
+           (script_id, platform, post_url, views, likes, comments, shares, saves,
+            watch_time_sec, ctr, clicks_to_site, signups, revenue_usd,
+            snapshot_type, hours_since_post, data_source, notes)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+         ON CONFLICT (script_id, platform, hours_since_post)
+         DO UPDATE SET
+           views = EXCLUDED.views, likes = EXCLUDED.likes, comments = EXCLUDED.comments,
+           shares = EXCLUDED.shares, saves = EXCLUDED.saves,
+           watch_time_sec = EXCLUDED.watch_time_sec, ctr = EXCLUDED.ctr,
+           clicks_to_site = EXCLUDED.clicks_to_site, signups = EXCLUDED.signups,
+           revenue_usd = EXCLUDED.revenue_usd, post_url = EXCLUDED.post_url,
+           recorded_at = NOW(), notes = EXCLUDED.notes`,
+        [script_id, platform, post_url||null, views||null, likes||null, comments||null,
+         shares||null, saves||null, watch_time_sec||null, ctr||null, clicks_to_site||null,
+         signups||null, revenue_usd||null, snapshot_type||'manual',
+         hours_since_post||null, data_source||'manual', notes||null]
+      );
+      res.json({ ok: true });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // GET /api/command/ugc/top-performers — leaderboard view
+  // ─────────────────────────────────────────────────────────────────────────
+  app.get('/api/command/ugc/top-performers', async (req, res) => {
+    try {
+      const result = await query(
+        `SELECT * FROM v_ugc_top_performers LIMIT 20`
+      );
+      res.json({ scripts: result.rows });
+    } catch(e) { res.status(500).json({ error: e.message }); }
   });
 }
 module.exports.registerUgcRoutes = registerUgcRoutes;

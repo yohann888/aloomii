@@ -1338,8 +1338,11 @@ function renderHeatmap(contacts) {
     const lastTouch = contact.last_touch_days ? 
       `${contact.last_touch_days}d ago` : 'Never';
     
+    // Format follow-up date compactly: "May 6" instead of "2026-05-06"
+    const followupDateStr = contact.follow_up_date ? 
+      new Date(contact.follow_up_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
     const followupBadge = contact.follow_up_date ? 
-      `<span class="badge followup" title="Follow-up scheduled for ${contact.follow_up_date}">FU ${contact.follow_up_date}</span>` : '';
+      `<span class="badge followup" title="Follow-up scheduled for ${contact.follow_up_date}">FU ${followupDateStr}</span>` : '';
     
     const rhsVal = parseFloat(contact.rhs_current) || 0;
     const rhsBadge = rhsVal > 0
@@ -2808,12 +2811,15 @@ function createCrmContent() {
       <table class="crm-table">
         <thead>
           <tr>
-            <th>Temperature</th>
+            <th style="width:100px">Temperature</th>
             <th>Contact</th>
-            <th>Company</th>
-            <th>Tier</th>
-            <th>Last Touch</th>
-            <th>Actions</th>
+            <th style="width:220px">Company</th>
+            <th style="width:50px">Tier</th>
+            <th style="width:130px">Last Touch</th>
+            <th style="width:50px">Sigs</th>
+            <th style="width:55px">RHS</th>
+            <th style="width:85px">Follow-up</th>
+            <th style="width:180px">Actions</th>
           </tr>
         </thead>
         <tbody id="heatmap-tbody"></tbody>

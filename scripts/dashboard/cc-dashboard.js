@@ -2,9 +2,16 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
+const { registerCommandAPI } = require('./command-api.js');
+const tagManager = require('./tag-manager');
 
 const app = express();
+app.use(express.json());
+registerCommandAPI(app);
 const pool = new Pool({ connectionString: 'postgresql://superhana@localhost:5432/aloomii' });
+
+// Share pool with tag-manager (avoid duplicate connections)
+tagManager.setPool(pool);
 
 app.use(express.static(path.join(__dirname, 'static')));
 
@@ -111,7 +118,21 @@ app.get('/', async (req, res) => {
     pool.query("SELECT COUNT(*) FROM signals WHERE score >= 4 AND planning IN ('active', NULL)"),
     pool.query('SELECT name, date, city, notes FROM events WHERE date >= CURRENT_DATE ORDER BY date ASC LIMIT 8'),
     pool.query("SELECT name, role, tier, last_signal, tags FROM contacts WHERE tier IN (1,2) AND (last_signal < NOW() - INTERVAL '14 days' OR last_signal IS NULL) ORDER BY tier ASC, last_signal ASC NULLS LAST LIMIT 8"),
-    pool.query("SELECT name, role, lead_status, tier, mutual_connection, tags FROM contacts WHERE lead_status = 'hot' ORDER BY tier ASC LIMIT 10"),
+    pool.query(`
+      SELECT c.name, c.role, c.lead_status, c.tier, c.mutual_connection, c.tags,
+             warm.warm_name, warm.warm_rel, warm.warm_strength
+      FROM contacts c
+      LEFT JOIN LATERAL (
+        SELECT rc.name AS warm_name, cr.relationship AS warm_rel, cr.strength AS warm_strength
+        FROM contact_relationships cr
+        JOIN contacts rc ON rc.id = CASE WHEN cr.contact_id_a = c.id THEN cr.contact_id_b ELSE cr.contact_id_a END
+        WHERE cr.contact_id_a = c.id OR cr.contact_id_b = c.id
+        ORDER BY cr.strength DESC NULLS LAST, cr.created_at DESC
+        LIMIT 1
+      ) warm ON true
+      WHERE c.lead_status = 'hot'
+      ORDER BY c.tier ASC LIMIT 10
+    `),
     pool.query("SELECT clip_id, episode_id, guest_name, proposed_caption, predicted_score, youtube_url FROM pbn_clips WHERE predicted_score >= 3.5 ORDER BY predicted_score DESC LIMIT 6"),
     pool.query("SELECT time, type, source, score, COALESCE(payload->>'context', payload->>'note', payload->>'notes', payload->>'signal_text', substring(payload::text from 1 for 150)) as details, payload->>'source_url' as url FROM activity_log ORDER BY time DESC LIMIT 20"),
     pool.query("SELECT title, score, source_bu, created_at, SUBSTRING(body FROM 1 FOR 120) as snippet FROM signals WHERE planning IN ('active', NULL) ORDER BY created_at DESC LIMIT 15"),
@@ -190,7 +211,7 @@ app.get('/', async (req, res) => {
 </head>
 <body>
 <h1>🛡️ Aloomii Command & Control</h1>
-<p style="margin:0 0 6px 0">Powered by <b style="color:${accent}">Aloomii AI Workforce</b> &nbsp;·&nbsp; <a href="?mode=${isDark ? 'light' : 'dark'}">Toggle ${isDark ? 'Light' : 'Dark'} Mode</a></p>
+<p style="margin:0 0 6px 0">Powered by <b style="color:${accent}">Aloomii AI Workforce</b> &nbsp;·&nbsp; <a href="?mode=${isDark ? 'light' : 'dark'}">Toggle ${isDark ? 'Light' : 'Dark'} Mode</a> &nbsp;·&nbsp; <a href="/tags" style="color:#f59e0b">🏷️ Tag Manager</a></p>
 
 <h2>System Status</h2>
 <table style="max-width:600px">
@@ -224,8 +245,16 @@ app.get('/', async (req, res) => {
   <div class="card span-2">
     <h3>🔥 Talk To Now (Hot)</h3>
     <table>
-      <tr><th>Name/Tags</th><th>Role</th><th>Via</th></tr>
-      ${warmContacts.rows.map(c => '<tr><td><span class="badge badge-hot">HOT</span> <b>' + c.name + '</b>' + renderTags(c.tags) + '</td><td class="meta">' + (c.role || '—') + '</td><td class="meta">' + (c.mutual_connection || '—') + '</td></tr>').join('') || '<tr><td colspan="3">No hot contacts.</td></tr>'}
+      <tr><th>Name/Tags</th><th>Role</th><th>Warm Path</th></tr>
+      ${warmContacts.rows.map(c => {
+        let via = '—';
+        if (c.warm_name) {
+          via = '<span style="color:#4ade80">🤝 ' + c.warm_name + '</span>' + (c.warm_rel ? ' (' + c.warm_rel + ')' : '');
+        } else if (c.mutual_connection) {
+          via = '<span style="color:#9ca3af">💬 ' + c.mutual_connection + '</span>';
+        }
+        return '<tr><td><span class="badge badge-hot">HOT</span> <b>' + c.name + '</b>' + renderTags(c.tags) + '</td><td class="meta">' + (c.role || '—') + '</td><td class="meta">' + via + '</td></tr>';
+      }).join('') || '<tr><td colspan="3">No hot contacts.</td></tr>'}
     </table>
   </div>
 
@@ -380,4 +409,13 @@ app.get('/', async (req, res) => {
 </html>`);
 });
 
-app.listen(3002, () => console.log('Aloomii C&C: http://localhost:3002'));
+// ─── Tag Manager routes ─────────────────────────────────────────────────────
+app.get('/tags', tagManager.renderTagsPage);
+app.get('/tags/contacts', tagManager.renderContactList);
+app.get('/tags/contact-detail', tagManager.renderContactDetail);
+app.post('/tags/request', tagManager.handleTagRequest);
+
+app.listen(3002, () => {
+  console.log('Aloomii C&C:     http://localhost:3002');
+  console.log('Tag Manager:     http://localhost:3002/tags');
+});
