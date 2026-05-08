@@ -185,26 +185,20 @@ WHERE created_at BETWEEN NOW() - INTERVAL '14 days' AND NOW() - INTERVAL '7 days
 
 ### Status: NEEDS SECURITY REVIEW
 
-**Issue 4A: `!contact` command — no rate limiting**
-A malicious or accidental rapid-fire use could exhaust Village.do API quota or DB connection pool.
+**Issue 4A: `!contact` command — wrong interface**
+A chat command parsing LinkedIn URLs and doing Village lookups is fragile. Discord is a conversation interface, not a form interface. The Command Center already has forms, validation, and direct DB access.
 
-**Fix:** Add per-user rate limiting in the command handler:
-```javascript
-const rateLimits = new Map(); // userId -> lastRequestTime
-const COOLDOWN_MS = 30000; // 30 seconds between !contact calls
+**Fix:** Remove `!contact` from Discord. Add "Add Contact" form to Command Center → Contacts panel. Direct DB write, Village lookup, memory update — all in one UI.
 
-if (rateLimits.has(userId) && Date.now() - rateLimits.get(userId) < COOLDOWN_MS) {
-    return "Rate limited. Wait 30 seconds between contact captures.";
-}
-```
+**Issue 4B: Auto-capture Reddit URLs — Discord is correct for capture, CC is correct for review**
+URLs arrive in conversation. One paste, zero context switching. But the review/scoring should happen in CC, not Discord.
 
-**Issue 4B: Auto-log decisions — no confidence threshold**
-Pattern matching "decided to..." on every Discord message will produce false positives. Casual conversation ("I decided to get coffee") will create spurious decision rows.
+**Fix:** Discord captures the URL → CC shows it in pending signals for review. User approves/rejects in CC.
 
-**Fix:** Add confidence scoring:
-1. Only trigger in threads where business context is detected (contains company names, project terms, or is in a work channel).
-2. Require a minimum of 3 context messages before the trigger word.
-3. Use a lightweight classifier (zai-flash) to score decision-likelihood. Only log if score > 0.7.
+**Issue 4C: Auto-log decisions — Discord is correct**
+Decisions happen in conversation. The context is the thread. Moving to CC means: hear decision → open CC → find form → re-type → submit. That's friction.
+
+**Fix:** Keep in Discord. But add confidence threshold (see below).
 
 **Issue 4C: Browser bookmarklet — auth token exposure**
 Embedding a Bearer token in a bookmarklet exposes it to any JavaScript on the page. Cross-site scripting on any visited page could steal the token.
