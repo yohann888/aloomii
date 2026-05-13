@@ -2,11 +2,10 @@
 /**
  * cron-health-monitor.js
  *
- * Runs every 30 minutes. Checks the OpenClaw session store for stuck
- * cron sessions (age > 300s in "processing" state) and alerts Discord.
+ * Runs every 30 minutes. Checks for stuck cron sessions by looking at
+ * session metadata + .jsonl file modification times.
  *
- * Stuck sessions hold references to large object graphs and block GC,
- * which was a contributing factor in the 2026-04-29 OOM crash.
+ * Stuck = session .jsonl still being written to (>5 min since start).
  *
  * Usage: node scripts/cron-health-monitor.js
  * Cron:  0,30 * * * * (every 30 min)
@@ -16,26 +15,15 @@
 
 const fs   = require('fs');
 const path = require('path');
-const https = require('https');
 
-const SESSIONS_FILE = path.join(process.env.HOME, '.openclaw/sessions.json');
-const GATEWAY_URL   = process.env.OPENCLAW_GATEWAY_URL || 'http://127.0.0.1:18789';
-const DISCORD_ID    = '824304330340827198';
+const SESSIONS_FILE = path.join(process.env.HOME, '.openclaw/agents/main/sessions/sessions.json');
+const SESSIONS_DIR  = path.join(process.env.HOME, '.openclaw/agents/main/sessions');
+const LOG_DIR       = path.join(process.env.HOME, '.openclaw/workspace/logs');
 
 const STUCK_THRESHOLD_MS = 300000; // 5 minutes
-const HEALTHY_THRESHOLD_MS = 60000; // 1 minute — warn if approaching
+const WARN_THRESHOLD_MS  = 120000; // 2 minutes
 
 /* ── helpers ──────────────────────────────────────────────────────────────── */
-
-function loadSessions() {
-  try {
-    const raw = fs.readFileSync(SESSIONS_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error('Failed to load sessions:', err.message);
-    return [];
-  }
-}
 
 function formatAge(ms) {
   const s = Math.floor(ms / 1000);
@@ -46,117 +34,100 @@ function formatAge(ms) {
   return `${h}h ${m%60}m`;
 }
 
-function sendDiscord(message) {
-  // If running inside OpenClaw cron, the announce mechanism handles this.
-  // Also try direct message tool via local gateway.
-  const payload = JSON.stringify({
-    action: 'send',
-    channel: 'discord',
-    target: DISCORD_ID,
-    message,
-  });
-
-  const url = new URL('/message', GATEWAY_URL);
-  const req = https.request({
-    hostname: url.hostname,
-    port: url.port,
-    path: url.pathname,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(payload),
-    },
-  }, (res) => {
-    let data = '';
-    res.on('data', chunk => data += chunk);
-    res.on('end', () => {
-      if (res.statusCode >= 200 && res.statusCode < 300) {
-        console.log('Discord alert sent');
-      } else {
-        console.error('Discord alert failed:', data);
-      }
-    });
-  });
-
-  req.on('error', err => console.error('Discord send error:', err.message));
-  req.write(payload);
-  req.end();
+function loadSessions() {
+  try {
+    const raw = fs.readFileSync(SESSIONS_FILE, 'utf-8');
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error('Failed to load sessions:', err.message);
+    return {};
+  }
 }
 
-/* ── main ──────────────────────────────────────────────────────────────────── */
+function getJsonlMtime(sessionFile) {
+  try {
+    if (!sessionFile) return 0;
+    const fullPath = sessionFile.startsWith('/')
+      ? sessionFile
+      : path.join(SESSIONS_DIR, path.basename(sessionFile));
+    const stat = fs.statSync(fullPath);
+    return stat.mtimeMs;
+  } catch {
+    return 0;
+  }
+}
+
+/* ── main ─────────────────────────────────────────────────────────────────── */
 
 async function main() {
   const now = Date.now();
   const sessions = loadSessions();
-
-  // sessions.json is an array of session objects with: key, state, createdAt, updatedAt
   const stuck = [];
   const warning = [];
-  const healthy = [];
 
-  for (const sess of sessions) {
-    if (!sess.key || !sess.key.includes('cron')) continue;
+  for (const [key, sess] of Object.entries(sessions)) {
+    if (!key.includes('cron')) continue;
 
-    const state = sess.state || 'unknown';
-    const updatedAt = sess.updatedAt ? new Date(sess.updatedAt).getTime() : (sess.createdAt ? new Date(sess.createdAt).getTime() : now);
-    const ageMs = now - updatedAt;
+    const started = sess.sessionStartedAt || 0;
+    const updated = sess.updatedAt || 0;
+    const jsonlMtime = getJsonlMtime(sess.sessionFile);
 
-    if (state === 'processing') {
-      if (ageMs > STUCK_THRESHOLD_MS) {
-        stuck.push({ key: sess.key, ageMs, state });
-      } else if (ageMs > HEALTHY_THRESHOLD_MS) {
-        warning.push({ key: sess.key, ageMs, state });
-      } else {
-        healthy.push({ key: sess.key, ageMs, state });
-      }
+    // A cron session is "active" if its .jsonl was touched recently
+    const isActive = jsonlMtime > (now - 60000); // modified in last 60s
+    const runtime = now - started;
+
+    if (isActive && runtime > STUCK_THRESHOLD_MS) {
+      stuck.push({
+        key,
+        label: sess.label || 'unknown',
+        runtimeMs: runtime,
+        model: sess.model || 'unknown',
+      });
+    } else if (isActive && runtime > WARN_THRESHOLD_MS) {
+      warning.push({
+        key,
+        label: sess.label || 'unknown',
+        runtimeMs: runtime,
+        model: sess.model || 'unknown',
+      });
     }
   }
 
-  const totalCron = stuck.length + warning.length + healthy.length;
-  if (totalCron === 0) {
-    console.log(`${new Date().toISOString()} | No cron sessions found in session store.`);
-    return;
-  }
-
-  console.log(`${new Date().toISOString()} | Cron health check: ${totalCron} cron sessions`);
+  const total = stuck.length + warning.length;
+  console.log(`${new Date().toISOString()} | Cron health check`);
   console.log(`  Stuck (>5m): ${stuck.length}`);
-  console.log(`  Warning (>1m): ${warning.length}`);
-  console.log(`  Healthy (<1m): ${healthy.length}`);
+  console.log(`  Warning (>2m): ${warning.length}`);
 
-  stuck.forEach(s => console.log(`  🚨 STUCK: ${s.key} (${formatAge(s.ageMs)})`));
-  warning.forEach(w => console.log(`  ⚠️  WARNING: ${w.key} (${formatAge(w.ageMs)})`));
+  stuck.forEach(s => console.log(`  🚨 STUCK: ${s.label} (${formatAge(s.runtimeMs)}) [${s.model}]`));
+  warning.forEach(w => console.log(`  ⚠️  WARN: ${w.label} (${formatAge(w.runtimeMs)}) [${w.model}]`));
 
-  // Alert if stuck sessions found
+  // Write status for dashboards
+  if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
+
+  const statusFile = path.join(LOG_DIR, 'cron-health-status.json');
+  fs.writeFileSync(statusFile, JSON.stringify({
+    timestamp: new Date().toISOString(),
+    stuck: stuck.length,
+    warning: warning.length,
+    stuckSessions: stuck.map(s => ({ label: s.label, runtimeSec: Math.floor(s.runtimeMs/1000), model: s.model })),
+  }, null, 2));
+
   if (stuck.length > 0) {
     const alert = [
       `[CoS] 🚨 Stuck Cron Session Alert`,
       ``,
-      ...stuck.map(s => `- **${s.key}** — ${formatAge(s.ageMs)} in processing state`),
+      ...stuck.map(s => `- **${s.label}** — ${formatAge(s.runtimeMs)} [${s.model}]`),
       ``,
       `These sessions may hold large object graphs and block GC.`,
-      `Consider restarting the gateway if multiple sessions are stuck.`,
-      `Threshold: >${STUCK_THRESHOLD_MS/1000}s`,
     ].join('\n');
 
-    // Log locally
-    const logFile = path.join(process.env.HOME, '.openclaw/workspace/logs/cron-health-monitor.log');
-    if (!fs.existsSync(path.dirname(logFile))) fs.mkdirSync(path.dirname(logFile), { recursive: true });
-    fs.appendFileSync(logFile, `${new Date().toISOString()} | STUCK: ${stuck.map(s=>s.key).join(', ')}\n`);
+    const logFile = path.join(LOG_DIR, 'cron-health-monitor.log');
+    fs.appendFileSync(logFile, `${new Date().toISOString()} | STUCK: ${stuck.map(s=>s.label).join(', ')}\n`);
 
-    // Try gateway message send
-    sendDiscord(alert);
+    // When running inside OpenClaw cron, announce handles Discord delivery.
+    // Also echo to stdout so it appears in cron logs.
+    console.log('\n' + alert);
   }
-
-  // Also write a lightweight status for health dashboards
-  const statusFile = path.join(process.env.HOME, '.openclaw/workspace/logs/cron-health-status.json');
-  fs.writeFileSync(statusFile, JSON.stringify({
-    timestamp: new Date().toISOString(),
-    totalCronSessions: totalCron,
-    stuck: stuck.length,
-    warning: warning.length,
-    healthy: healthy.length,
-    stuckSessions: stuck.map(s => ({ key: s.key, ageSec: Math.floor(s.ageMs/1000) })),
-  }, null, 2));
 }
 
 main().catch(err => {

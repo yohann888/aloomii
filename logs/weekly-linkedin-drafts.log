@@ -170,3 +170,36 @@ Most founders don't have a qualification...
 [2026-04-22T15:09:29.590Z] Generating Jenny Calpu post: Behind the Work
 [2026-04-22T15:12:30.427Z] Post generated for Jenny Calpu (gemini-3.1-pro-preview).
 [2026-04-22T15:12:30.429Z] [DRY RUN] Skipping Buffer push and state update.
+[2026-05-11T11:00:01.076Z] === weekly-linkedin-drafts START ===
+[2026-05-11T11:00:01.122Z] Signal Scout context: 0 score-4+ signals loaded
+[2026-05-11T11:00:01.122Z] Pulling trending GTM/founder topic via Sonnet 4.6...
+[2026-05-11T11:00:10.041Z] Trending topic retrieved via claude-sonnet-4-6.
+[2026-05-11T11:00:10.042Z] Yohann Post 1: Contrarian Teardown | anecdote: undefined
+[2026-05-11T11:00:10.043Z] Yohann Post 2: Saveable List | anecdote: undefined
+[2026-05-11T11:00:10.044Z] Yohann Post 3: Founder Confession | anecdote: undefined
+[2026-05-11T11:00:10.044Z] Jenny Post 1:  Curious Creator | anecdote: brand story
+[2026-05-11T11:00:10.045Z] Jenny Post 2:  Before/After Craft | anecdote: brand story
+[2026-05-11T11:00:10.045Z] Jenny Post 3:  Behind the Work | anecdote: brand story
+[2026-05-11T11:00:10.046Z] Generating Yohann Calpu post: Contrarian Teardown
+[2026-05-11T11:00:20.376Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-05-11T11:00:20.377Z] Generating Yohann Calpu post: Saveable List
+[2026-05-11T11:00:31.335Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-05-11T11:00:31.336Z] Generating Yohann Calpu post: Founder Confession
+[2026-05-11T11:00:40.242Z] Post generated for Yohann Calpu (claude-sonnet-4-6).
+[2026-05-11T11:00:40.243Z] Generating Jenny Calpu post: Curious Creator
+[2026-05-11T11:00:48.742Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-05-11T11:00:48.743Z] Generating Jenny Calpu post: Before/After Craft
+[2026-05-11T11:00:58.013Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-05-11T11:00:58.014Z] Generating Jenny Calpu post: Behind the Work
+[2026-05-11T11:01:08.514Z] Post generated for Jenny Calpu (claude-sonnet-4-6).
+[2026-05-11T11:01:08.515Z] [INFO] Skipping Buffer push — drafts saved to Command Center for review/approval
+[2026-05-11T11:01:08.517Z] DISCORD_ALERT: 📝 **Weekly LinkedIn drafts ready** (5/11/2026)
+
+**Post 1 — Yohann Calpu** (Contrarian Teardown)
+AI didn't break your pipeline. You did.
+
+Most teams went all-in on AI outbound in late 2024. Meetings f...
+[2026-05-11T11:01:08.538Z] [DB] Bridge failed (non-fatal): Command failed: node /Users/superhana/Desktop/aloomii/scripts/bridge/ingest-content.js '{"platform":"linkedin","post_type":"draft","topic":"Contrarian Teardown","content_text":"AI didn'\''t break your pipeline. You did.\n\nMost teams went all-in on AI outbound in late 2024. Meetings flooded in. Dashboards looked healthy. Then 18 months passed and someone had to explain why CAC looked fine but payback periods quietly stretched. The deals were stalling late. Champions were weak. ICP fit was loose.\n\nThe AI didn'\''t cause that. It just stopped hiding it.\n\nHere'\''s what we learned building Aloomii. We have 15 AI agents running GTM work. Named the company after our cats, Aloo and Mittens, which tells you something about how seriously we take ourselves. But since day one, we built it for operators, not dashboards. And the honest answer is: volume made us lazy too. Early on, the agents were booking conversations we never would have taken manually. We felt momentum. We were busy. Busy isn'\''t closed.\n\nWhat actually works is the filtering discipline humans used to do invisibly. AI removed scarcity. Scarcity used to force you to be selective. When every slot fills, you stop asking if it should.\n\nThe lesson: AI handles the 80%. The last 20% is still yours.\n\nHere'\''s the framework we use now:\n\n. AI qualifies on firmographic fit before any meeting gets booked\n. Reps score champion strength before any demo gets run\n. No proposal without a documented internal advocate\n. Late-stage stall is a symptom. Weak discovery is the cause\n. AI scans. Humans judge. You act.\n\nWhat'\''s your current process for catching bad fit before it hits your forecast?\n\n---\n\n✉️ Want the last 20% that makes the difference? Subscribe to The Last 20%:\nhttps://www.linkedin.com/newsletters/the-last-20-7445126674708451328","adapter":"yohann","brand_profile_id":"51ff7e82-7b3a-49ce-b67c-bb88dccab492","external_id":null}'
+/bin/sh: node: command not found
+
+[2026-05-11T11:01:08.538Z] === weekly-linkedin-drafts COMPLETE — 6 posts generated (3 Yohann, 3 Jenny) ===
