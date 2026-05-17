@@ -56,7 +56,7 @@ async function runLearnLoop(client) {
   await ensureTables(client);
 
   const res = await client.query(`
-    SELECT id, edit_distance, edit_categories, adapter
+    SELECT id, edit_distance, edit_categories, adapter, original_text, edited_text
     FROM content_posts
     WHERE platform = 'linkedin'
       AND status IN ('approved', 'published')
@@ -79,9 +79,9 @@ async function runLearnLoop(client) {
       totalDist += Number(rec.edit_distance || 0);
 
       if (rec.edit_categories) {
-        if (rec.edit_categories.includes('personalization')) personalizations++;
-        if (rec.edit_categories.includes('cta_change')) ctaChanges++;
-        if (rec.edit_categories.includes('newsletter_cta')) newsletterCTAs++;
+        if (rec.edit_categories.personalization_added) personalizations++;
+        if (rec.edit_categories.cta_changed) ctaChanges++;
+        if (rec.edit_categories.newsletter_cta_present) newsletterCTAs++;
       }
 
       const origLen = (rec.original_text || '').length;
@@ -100,7 +100,14 @@ async function runLearnLoop(client) {
       cta_change_rate: n > 0 ? (ctaChanges / n * 100).toFixed(2) : '0',
       newsletter_cta_rate: n > 0 ? (newsletterCTAs / n * 100).toFixed(2) : '0',
       adapter: adapterName,
-      pattern_summary: `Processed ${n} records. Shorter: ${shorter}, Longer: ${longer}, Personalizations: ${personalizations}, CTA changes: ${ctaChanges}, Newsletter CTAs: ${newsletterCTAs}`
+      pattern_summary: JSON.stringify({
+        records: n,
+        shorter: shorter,
+        longer: longer,
+        personalizations: personalizations,
+        cta_changes: ctaChanges,
+        newsletter_ctas: newsletterCTAs
+      })
     };
   };
 
@@ -172,7 +179,7 @@ async function runLearnLoop(client) {
 
         for (const hint of hintsToInsert) {
           await client.query(`
-            INSERT INTO content_engine_hints (hint_type, adapter, hint_text, confidence, sample_size)
+            INSERT INTO content_engine_hints (hint_type, adapter, hint_text, confidence, records_based_on)
             VALUES ($1, $2, $3, $4, $5)
           `, hint);
           totalHintsGenerated++;

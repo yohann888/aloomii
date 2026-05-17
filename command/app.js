@@ -2176,7 +2176,8 @@ let aiUgcGenerating = false;
 
 async function loadPainSignals() {
   try {
-    const res = await fetch('/api/command/pain-signals?severity=3&days=30');
+    // CC-BUG-011: Use verified-only endpoint so dropdown shows real, vetted pain signals
+    const res = await fetch('/api/command/pain-signals/verified?severity=3&days=60');
     const data = await res.json();
     aiUgcPainSignals = data.signals || [];
     populatePainSignalDropdown(data.grouped || {});
@@ -2239,7 +2240,7 @@ async function generateUgcScript() {
   
   const scriptLength = document.querySelector('input[name="ugc-length"]:checked')?.value || '45';
   const modelId = document.getElementById('ugc-model-select')?.value || 'anthropic/claude-opus-4-7';
-  const modelLabel = document.getElementById('ugc-model-select')?.selectedOptions[0]?.text || 'Opus';
+  const modelLabel = document.getElementById('ugc-model-select')?.selectedOptions[0]?.text || 'Kimi K2.6';
 
   aiUgcGenerating = true;
   const btn = document.getElementById('ugc-generate-btn');
@@ -2365,10 +2366,9 @@ function displayUgcResult(data) {
   if (metaEl && isObj) {
     const latency  = data.latency_ms ? `${(data.latency_ms/1000).toFixed(1)}s` : '—';
     const modelLabel = {
-      'anthropic/claude-opus-4-7':    'Opus',
       'ollama/kimi-k2.6:cloud':       'Kimi K2.6',
       'ollama/deepseek-v4-pro:cloud': 'DeepSeek V4 Pro'
-    }[data.model_used] || data.model_used || 'Opus';
+    }[data.model_used] || data.model_used || 'Kimi K2.6';
     let metaText = `ID: ${ugcEscapeHtml(scriptId || 'unsaved')} · ${ugcEscapeHtml(modelLabel)} · Prompt v${data.prompt_version || 1} · ${latency}`;
     if (data.parse_warnings && data.parse_warnings.length) {
       metaText += ` · ⚠️ ${ugcEscapeHtml(data.parse_warnings[0])}`;
@@ -2462,7 +2462,7 @@ function renderAiUgc() {
       <h3 style="margin-bottom:16px;color:var(--text-primary);">🎬 AI UGC Script Generator</h3>
       <p style="color:var(--text-dim);margin-bottom:20px;font-size:13px;">
         Generate short-form UGC scripts based on real pain signals from research. 
-        Opus will find the nuance and write dialogue that sounds caught on tape.
+        Local models write authentic dialogue grounded in real customer pain.
       </p>
       
       <div style="display:grid;gap:16px;margin-bottom:20px;">
@@ -2589,7 +2589,7 @@ function renderAiUgc() {
         <div>
           <label style="display:block;color:var(--text-dim);font-size:11px;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Model</label>
           <select id="ugc-model-select" style="padding:9px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:8px;color:var(--text-primary);font-size:13px;cursor:pointer;min-width:160px;">
-            <option value="anthropic/claude-opus-4-7" selected>Claude Opus</option>
+            <option value="ollama/kimi-k2.6:cloud" selected>Kimi K2.6</option>
             <option value="ollama/kimi-k2.6:cloud">Kimi K2.6</option>
             <option value="ollama/deepseek-v4-pro:cloud">DeepSeek V4 Pro</option>
           </select>
@@ -3396,6 +3396,10 @@ function renderRelationshipHealth(data = {}) {
         <div><strong>Human attention</strong> ${summary.human_attention_count || 0}</div>
         <div style="font-size:12px;color:#888;">Overdue: ${bucketCounts.overdue} · Due soon: ${bucketCounts.due_soon} · Decay risk: ${bucketCounts.decay_risk}</div>
         <div style="font-size:12px;color:#888;">Declining: ${summary.declining_count || 0} · Decay alerts: ${summary.decay_alert_count || 0} · Avg RHS: ${summary.avg_rhs || 'n/a'}</div>
+      </div>
+      <div class="task-item" style="display:block;">
+        <div style="font-weight:600;margin-bottom:6px;">🔥 Smart reconnect suggestions</div>
+        ${(data.suggestions || []).length ? (data.suggestions || []).slice(0,5).map(c => `<div style="margin-bottom:6px;">• <strong>${c.name}</strong> <span style="color:#888;">(${c.company || 'no company'})</span> <span style="font-size:11px;background:#333;padding:1px 6px;border-radius:4px;color:#ddd;">${String(c.suggestion_reason || '').replaceAll('_',' ')}</span></div>`).join('') : '<div style="color:#888;">No high-priority reconnections this week</div>'}
       </div>
       <div class="task-item" style="display:block;">
         <div style="font-weight:600;margin-bottom:6px;">Human attention required</div>
@@ -4353,9 +4357,14 @@ async function loadInfluencers() {
     if (tier) url += `&tier=${encodeURIComponent(tier)}`;
     if (emailOnly) url += `&has_email=true`;
     const [resp, budgetResp] = await Promise.all([fetch(url), fetch('/api/command/influencers/budget')]);
-    const influencers = await resp.json();
+    const data = await resp.json();
+    const influencers = data.influencers || data; // Support both new {influencers,total_count} and old bare array
+    const totalCount = data.total_count;
     const budget = await budgetResp.json().catch(() => null);
-    if (countEl) countEl.textContent = `${influencers.length} ${infType === 'newsletter' ? 'newsletter' : 'influencer'}${influencers.length !== 1 ? 's' : ''}`;
+    if (countEl) {
+      const displayCount = totalCount ?? (Array.isArray(influencers) ? influencers.length : 0);
+      countEl.textContent = `${displayCount} ${infType === 'newsletter' ? 'newsletter' : 'influencer'}${displayCount !== 1 ? 's' : ''}`;
+    }
     if (budgetEl && budget && infType === 'social') budgetEl.textContent = `EnsembleData today: ${budget.units_used}/${budget.total_daily} units used`;
     else if (budgetEl) budgetEl.textContent = '';
     if (!influencers.length) { listEl.innerHTML = `<div class="empty-state">No ${infType === 'newsletter' ? 'newsletters' : 'influencers'} found.</div>`; return; }

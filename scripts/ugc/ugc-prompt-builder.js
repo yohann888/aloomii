@@ -1,6 +1,6 @@
 /**
  * ugc-prompt-builder.js — Builds the screenwriter prompt from pain signal + form data
- * Passes verbatim_quote + insight + context_snippet to opus, letting it find the nuance
+ * Passes verbatim_quote + insight + context_snippet to the model, letting it find the nuance
  * and map to the screenwriter template's expectations (surface pain, deeper pain,
  * duration, attempts, cost, shame).
  */

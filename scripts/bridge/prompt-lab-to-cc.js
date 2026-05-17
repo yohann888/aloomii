@@ -18,10 +18,15 @@ const DAYS = parseInt(process.env.DAYS || '7', 10);
 
 if (!PORTAL_URL || !MAIN_URL) {
   console.error('Both PORTAL_DATABASE_URL and DATABASE_URL required');
-  process.exit(1);
+  // DO NOT call process.exit(1) here — this module is require()d by the server
+  // and calling exit would crash the entire Node process (CC-BUG-002).
+  // Let the caller handle the missing env by checking the thrown error.
 }
 
 async function main() {
+  if (!PORTAL_URL || !MAIN_URL) {
+    throw new Error('Both PORTAL_DATABASE_URL and DATABASE_URL required');
+  }
   const portalPool = new Pool({ connectionString: PORTAL_URL });
   const mainPool = new Pool({ connectionString: MAIN_URL });
 

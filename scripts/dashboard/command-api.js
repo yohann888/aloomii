@@ -39,6 +39,23 @@ function getPool() {
   return poolInstance;
 }
 
+// ─── JSON sanitization (CC-BUG-001) ───────────────────────────────────────
+function sanitizeForJson(obj) {
+  if (typeof obj === 'string') {
+    // Remove control characters (0x00-0x1F) except tab, newline, carriage return
+    return obj.replace(/[\x00-\x08\x0b-\x0c\x0e-\x1f]/g, '');
+  }
+  if (Array.isArray(obj)) return obj.map(sanitizeForJson);
+  if (obj !== null && typeof obj === 'object') {
+    const out = {};
+    for (const [k, v] of Object.entries(obj)) {
+      out[k] = sanitizeForJson(v);
+    }
+    return out;
+  }
+  return obj;
+}
+
 async function rewriteSnipeToBrandVoice(post, adapter, editedText) {
   if (post.post_origin !== 'snipe') {
     return editedText || post.edited_text || post.content_text || post.draft_text;
@@ -395,7 +412,7 @@ function registerCommandAPI(app, pool = null) {
         // 4.5 Relationship health
         async () => {
           try {
-            const [humanRes, decliningRes, reconnectionRes, summaryRes, voiceRes] = await Promise.all([
+            const [humanRes, decliningRes, reconnectionRes, summaryRes, voiceRes, suggestionsRes] = await Promise.all([
               query(`
                 SELECT id, name, tier, human_outreach_reason, follow_up_date, rhs_trend, rhs_velocity
                 FROM contacts
@@ -433,12 +450,71 @@ function registerCommandAPI(app, pool = null) {
                 WHERE type = 'relationship_monitor_run'
                 ORDER BY time DESC
                 LIMIT 1
+              `),
+              query(`
+                WITH dormant AS (
+                  SELECT
+                    c.id,
+                    c.name,
+                    c.tier,
+                    c.status,
+                    c.notes,
+                    c.metadata,
+                    c.last_outreach_date,
+                    c.follow_up_date,
+                    c.rhs_current,
+                    c.rhs_trend,
+                    c.rhs_velocity,
+                    c.metadata->>'company' AS company,
+                    c.handle,
+                    c.role,
+                    EXTRACT(DAY FROM NOW() - COALESCE(c.last_outreach_date, c.created_at)) AS days_since_touch
+                  FROM contacts c
+                  WHERE c.status NOT IN ('do_not_contact', 'paused', 'asked_to_wait', 'client')
+                    AND c.tier <= 2
+                    AND c.human_outreach_flag = false
+                    AND (c.last_outreach_date IS NULL OR c.last_outreach_date < NOW() - INTERVAL '30 days')
+                ),
+                with_signals AS (
+                  SELECT d.*, COUNT(s.id) AS signal_count_30d
+                  FROM dormant d
+                  LEFT JOIN signals s ON s.contact_id = d.id AND s.created_at > NOW() - INTERVAL '30 days'
+                  GROUP BY d.id, d.name, d.tier, d.status, d.notes, d.metadata,
+                           d.last_outreach_date, d.follow_up_date, d.rhs_current,
+                           d.rhs_trend, d.rhs_velocity, d.company, d.handle, d.role, d.days_since_touch
+                )
+                SELECT
+                  id, name, tier, company, role, handle,
+                  rhs_current, rhs_trend, rhs_velocity,
+                  days_since_touch,
+                  signal_count_30d,
+                  notes,
+                  metadata,
+                  CASE
+                    WHEN rhs_trend = 'rising' AND signal_count_30d > 0 THEN 'hot_reconnect'
+                    WHEN rhs_trend = 'rising' THEN 'warming_up'
+                    WHEN tier = 1 THEN 'tier_1_dormant'
+                    ELSE 'standard_dormant'
+                  END AS suggestion_reason
+                FROM with_signals
+                ORDER BY
+                  CASE
+                    WHEN rhs_trend = 'rising' AND signal_count_30d > 0 THEN 1
+                    WHEN rhs_trend = 'rising' THEN 2
+                    WHEN tier = 1 THEN 3
+                    ELSE 4
+                  END ASC,
+                  rhs_velocity ASC NULLS LAST,
+                  tier ASC,
+                  days_since_touch DESC
+                LIMIT 10
               `)
             ]);
             data.relationship_health = {
               human_attention: humanRes.rows,
               declining: decliningRes.rows,
               reconnection_queue: reconnectionRes.rows,
+              suggestions: suggestionsRes.rows,
               summary: summaryRes.rows[0] || {},
               voice_brief: voiceRes.rows[0]?.payload?.voice_brief || [],
               watchlist: voiceRes.rows[0]?.payload?.watchlist || []
@@ -1024,7 +1100,9 @@ function registerCommandAPI(app, pool = null) {
       cachedResponse = data;
       cacheTimestamp = Date.now();
 
-      res.json(data);
+      // Sanitize control characters before JSON serialization (CC-BUG-001)
+      const sanitized = sanitizeForJson(data);
+      res.json(sanitized);
       
     } catch (error) {
       console.error('Command API error:', error);
@@ -1542,11 +1620,15 @@ function registerCommandAPI(app, pool = null) {
     try {
       if (!content_text) return res.status(400).json({ error: 'content_text required' });
       const resolvedBrandProfileId = brand_profile_id || (await query('SELECT id FROM brand_profiles WHERE owner = $1 LIMIT 1', [adapter])).rows[0]?.id || null;
+      // CC-BUG-007: Ensure post_origin is valid for the DB check constraint
+      const validOrigins = ['pillar', 'snipe', 'manual', 'approved'];
+      const resolvedPostOrigin = validOrigins.includes(post_origin) ? post_origin : 'manual';
+      
       const result = await query(`
         INSERT INTO content_posts (platform, post_type, topic, content_text, draft_text, adapter, brand_profile_id, status, post_origin)
         VALUES ($1, $2, $3, $4, $4, $5, $6, 'draft', $7)
         RETURNING *
-      `, [platform, post_type, topic, content_text, adapter, resolvedBrandProfileId, post_origin]);
+      `, [platform, post_type, topic, content_text, adapter, resolvedBrandProfileId, resolvedPostOrigin]);
 
       // If this draft came from an influencer, update the influencer_pipeline status
       if (influencer_id && post_origin === 'vibrnt_influencer') {
@@ -2250,6 +2332,14 @@ function registerInfluencerRoutes(app) {
       }
       
       const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
+
+      // Get total count (before LIMIT) so the frontend shows accurate numbers
+      const countResult = await query(
+        `SELECT COUNT(*) FROM influencer_pipeline ${where}`,
+        params
+      );
+      const totalCount = parseInt(countResult.rows[0].count, 10);
+
       const result = await query(
         `SELECT id, handle, platform_primary, icp_target, followers, engagement_rate,
                 lead_score, lead_tier, email, email_source, profile_url, status, created_at,
@@ -2264,7 +2354,7 @@ function registerInfluencerRoutes(app) {
          LIMIT $${idx}`,
         [...params, lim]
       );
-      res.json(result.rows);
+      res.json({ influencers: result.rows, total_count: totalCount });
     } catch(e) { res.status(500).json({ error: e.message }); }
   });
 
@@ -2540,7 +2630,7 @@ function registerInfluencerRoutes(app) {
       const vals = [status];
       if (timestampCol) { setParts.push(`${timestampCol} = NOW()`); }
       const result = await query(`
-        UPDATE partner_offers SET ${setParts.join(', ')} WHERE id = $${setParts.length + 1} RETURNING *
+        UPDATE partner_offers SET ${setParts.join(', ')} WHERE id = $${vals.length + 1}::uuid RETURNING *
       `, [...vals, offerId]);
       res.json(result.rows[0] || { error: 'Offer not found' });
     } catch(e) { res.status(500).json({ error: e.message }); }
@@ -2591,9 +2681,9 @@ function registerInfluencerRoutes(app) {
       
       const result = await query(`
         UPDATE contacts
-        SET metadata = jsonb_set(COALESCE(metadata, '{}'), '{suppressed_from_reconnection}', 'true') || jsonb_build_object('suppressed_reason', $2, 'suppress_until', $3),
-            notes = COALESCE(notes || E'\n', '') || '[' || NOW()::date || '] Suppressed from reconnection: ' || $2 || ' (until ' || $3 || ')'
-        WHERE id = $1
+        SET metadata = jsonb_set(COALESCE(metadata, '{}'), '{suppressed_from_reconnection}', 'true') || jsonb_build_object('suppressed_reason', $2::text, 'suppress_until', $3::text),
+            notes = COALESCE(notes || E'\n', '') || '[' || NOW()::date || '] Suppressed from reconnection: ' || $2::text || ' (until ' || $3::text || ')'
+        WHERE id = $1::uuid
         RETURNING id, name
       `, [id, reason || 'Manual suppression', suppress_until || (new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0])]);
       
@@ -3091,6 +3181,34 @@ function registerUgcRoutes(app) {
         `SELECT id, icp_slug, verbatim_quote, insight, pain_category, severity, context_snippet, created_at
          FROM pain_signals
          WHERE severity >= $1
+           AND created_at > NOW() - ($2 || ' days')::interval
+         ORDER BY severity DESC, created_at DESC
+         LIMIT 200`,
+        [severity, String(days)]
+      );
+
+      const grouped = {};
+      result.rows.forEach(row => {
+        if (!grouped[row.icp_slug]) grouped[row.icp_slug] = [];
+        grouped[row.icp_slug].push(row);
+      });
+
+      res.json({ signals: result.rows, grouped, count: result.rows.length });
+    } catch(e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // GET /api/command/pain-signals/verified — verified-only pain signals for UGC dropdown
+  // (CC-BUG-011: separate endpoint to avoid showing unverified signals)
+  app.get('/api/command/pain-signals/verified', async (req, res) => {
+    try {
+      const days     = parseInt(req.query.days, 10) || 60;
+      const severity = parseInt(req.query.severity, 10) || 3;
+
+      const result = await query(
+        `SELECT id, icp_slug, verbatim_quote, insight, pain_category, severity, context_snippet, created_at, quote_verified
+         FROM pain_signals
+         WHERE quote_verified = true
+           AND severity >= $1
            AND created_at > NOW() - ($2 || ' days')::interval
          ORDER BY severity DESC, created_at DESC
          LIMIT 200`,

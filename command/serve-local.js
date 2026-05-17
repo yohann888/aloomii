@@ -207,6 +207,22 @@ const server = http.createServer(async (req, res) => {
   if (route) {
     const { handler, params } = route;
 
+    // Validate UUID params (CC-BUG-004)
+    // Only validate if the value looks like a UUID attempt (contains dashes)
+    const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    let badUUID = null;
+    for (const [k, v] of Object.entries(params)) {
+      if ((k.endsWith('Id') || k === 'id') && v.includes('-') && !UUID_REGEX.test(v)) {
+        badUUID = { key: k, val: v };
+        break;
+      }
+    }
+    if (badUUID) {
+      res.writeHead(400, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': allowedOrigin });
+      res.end(JSON.stringify({ error: `Invalid ${badUUID.key} format` }));
+      return;
+    }
+
     // Build Express-like req/res objects first (needed for auth middleware)
     const fakeReq = {
       method,
@@ -242,6 +258,16 @@ const server = http.createServer(async (req, res) => {
         const body = JSON.stringify(data);
         res.writeHead(this._status, this._headers);
         res.end(body);
+      },
+      send(data) {
+        this._sent = true;
+        if (typeof data === 'string') {
+          if (!this._headers['Content-Type']) {
+            this._headers['Content-Type'] = 'text/plain';
+          }
+        }
+        res.writeHead(this._status, this._headers);
+        res.end(data);
       }
     };
 
