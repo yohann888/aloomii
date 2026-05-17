@@ -1,5 +1,6 @@
 .DS_Store
 .wrangler/
+node_modules/
 
 # VibrntVault — large binary files excluded, text files tracked
 vibrntvault/Influencers/
