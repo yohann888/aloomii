@@ -38,7 +38,13 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts (85 articles — auto-generated 2026-05-22) -->
+  <!-- Blog Posts (87 articles — auto-generated 2026-05-22) -->
+  <url>
+    <loc>https://aloomii.com/blog/100x-company-main-street-local-business/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
   <url>
     <loc>https://aloomii.com/blog/2026-gtm-tech-stack-b2b-founders/</loc>
     <lastmod>2026-05-22</lastmod>
@@ -185,6 +191,12 @@
   </url>
   <url>
     <loc>https://aloomii.com/blog/customers-love-you-nobody-else-knows-you-exist/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/blog/doing-the-work-to-directing-it-100x-operator/</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
