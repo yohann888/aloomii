@@ -3,6 +3,11 @@
 
   <!-- Core Pages -->
   <url>
+    <loc>https://aloomii.com/studio/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://aloomii.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>

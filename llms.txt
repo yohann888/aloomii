@@ -1,72 +1,30 @@
-# Aloomii — AI-Powered Customer Success
+# Aloomii
 
-> Aloomii is an AI-powered customer success and sales intelligence system built for B2B founders at $0–5M ARR who need pipeline and relationship infrastructure without a full-time sales team.
+> Forward Deployed AI for relationship-driven business. Aloomii embeds with your team, ships the AI system, and operates it alongside you until it is actually running your workflow. Founded and run by two formally trained software engineers with backgrounds at IBM, JP Morgan, and the Ontario Government. Based in Caledonia, Ontario, serving the Greater Toronto Area and the Golden Horseshoe.
 
-## What Aloomii Does
+Aloomii builds and operates Agentic Micro Companies (AMCs): businesses run by tiny teams with a shared Company Brain and fleets of AI agents handling the operational work, while humans handle judgment and relationships. Aloomii works on top of existing CRMs such as Salesforce, HubSpot, Attio, Wealthbox, and Bullhorn, and specializes in relationship-driven businesses where the next contract depends on the last conversation. The engagement model runs in four stages: diagnose (The Audit), amplify your voice (Studio), get into market (The Table), and install the Company Brain (Relationship Intelligence).
 
-Aloomii replaces the SDR function and upgrades the AE function for relationship-intensive B2B businesses. It monitors markets for buying signals, keeps every client relationship warm, maps warm introduction paths, and delivers daily intelligence briefs — 24/7, autonomously.
+## Core pages
+- [Home](https://aloomii.com/): What Aloomii does, who it serves, and the four-stage engagement model.
+- [The Table](https://aloomii.com/table): A 90-day founder-led go-to-market engagement that keeps your voice in market and delivers 12 qualified conversations in 90 days.
+- [Studio](https://aloomii.com/studio/): Podcast and short-form video production powered by Velocity, an AI content multiplication engine, optimized for AI search visibility.
+- [The Aloomii Playbook](https://aloomii.com/playbook): Three editions (Founder, Solopreneur, Operator Leader) on running an Agentic Micro Company.
+- [GTM Audit](https://aloomii.com/gtm-audit/): A free two-minute self-assessment that scores what is broken in your go-to-market and what to fix first.
 
-**Core capabilities:**
-- Signal Scout: monitors Reddit, X, Hacker News, LinkedIn, and Product Hunt for B2B buying intent signals, scored 1–5
-- Relationship Monitor: tracks all contacts, surfaces follow-up opportunities at the right moment
-- Reconnection Engine: prevents warm leads and clients from going cold
-- Network Enrichment: maps warm introduction paths through existing relationships
-- Event Scanner: identifies founder meetups, accelerator deadlines, and ICP-relevant events
-- Senior PM: delivers daily strategy briefs and weekly pipeline reviews
-- Content Engine: drafts and distributes brand content at scale
+## Services
+- [The Audit](https://aloomii.com/#offerings): A 1,199 dollar one-time process-mapping diagnosis that identifies the three to five workflows burning the most time and the order to automate them.
+- [Studio and Velocity](https://aloomii.com/studio/): Three tiers. Clips at 699 dollars per month, Show at 1,299 dollars per month, Velocity Pro at 1,899 dollars per month.
+- [Relationship Intelligence](https://aloomii.com/#offerings): The Company Brain installed on your existing CRM. Three tiers. Foundation at 3,500 dollars per month, Operator at 6,500 dollars per month, Enterprise at 9,500 dollars per month.
+- AI Search Visibility (AEO and GEO): Making relationship-driven and local businesses the answer that AI engines recommend.
 
-## Who It's For
+## Articles
+- [The Client You're About to Lose](https://aloomii.com/blog/the-client-youre-about-to-lose/): How to read the early silence signals that precede client churn.
+- [What Is a Fractional GTM Team](https://aloomii.com/blog/fractional-gtm-team-startups-what-it-actually-costs/): What a fractional GTM team does, what it costs, and how it compares to a hire or an agency.
+- [Business Development 2.0: The AI Agent Manager](https://aloomii.com/blog/bus-dev-2-0/): How the business development role evolves into managing a fleet of AI agents.
 
-**Ideal Customer Profile:**
-- B2B founders at $0–5M ARR
-- No dedicated sales team or SDR
-- Relationship-intensive industries (fintech, professional services, SaaS, consulting)
-- Founders doing their own outreach and losing deals in the follow-up
-
-## Pricing
-
-- Done-With-You: $2,000–3,500/mo + 5–10% performance layer
-- Human equivalent: replaces $60,000–90,000/yr SDR + $90,000–110,000/yr AE = $145,000/yr in salaries
-
-## Key Differentiators
-
-- Not a tool — a fully autonomous AI workforce (15 agents)
-- Relationship-first, not just lead volume
-- Warm intro mapping via existing network
-- Daily intelligence, not just alerts
-- Proprietary Aloomii Score (1–5) for signal qualification
+## About
+- [Team](https://aloomii.com/#team): Yohann Calpu, Co-Founder, Strategy and Judgment. Jenny Calpu, Co-Founder, Creative Director. Both are trained software engineers with more than 15 years shipping production systems.
+- [Pale Blue Nexus](https://palebluenexus.com): Aloomii's flagship podcast. Episode 1 features billionaire investor Jim Rogers.
 
 ## Contact
-
-- Website: https://aloomii.com
-- Dashboard: https://aloomii.com/aloomii-os.html
-
-## Blog
-
-Aloomii publishes deep-dive articles for B2B founders on three content pillars:
-
-1. **AI Sales System** — How to deploy AI agents to replace SDR workflows, automate prospecting, and manage pipeline intelligence autonomously.
-2. **Industry Playbooks** — Sector-specific guides for fintech, professional services, SaaS, and consulting founders on regulatory exposure, relationship infrastructure, and CRM compliance.
-3. **Comparisons** — Honest breakdowns of AI sales tools, CRMs, and automation stacks — what they cost, what they hide, and when to use them.
-
-**Blog index:** https://aloomii.com/blog
-**Author:** Yohann Calpu — Co-founder, Aloomii. Background: JP Morgan Chase, IBM, 8 years Ontario Government.
-**Content schema:** BlogPosting + FAQPage + BreadcrumbList JSON-LD per article
-
-### Published Articles
-
-- **Your CRM Is a Regulatory Liability: What FSRA and SEC Auditors Actually Look For**
-  URL: https://aloomii.com/blog/crm-regulatory-liability
-  Pillar: Industry Playbooks
-  Summary: Most financial services firms unknowingly create audit exposure through their CRM. This article explains what FSRA and SEC examiners look for, and how self-hosted AI infrastructure eliminates the risk.
-
-- **The Real Cost of an SDR in 2026: A Founder's Honest Breakdown**
-  URL: https://aloomii.com/blog/the-real-cost-of-an-sdr-in-2026
-  Pillar: AI Sales System
-  Summary: A data-driven breakdown of the true fully-loaded cost of an SDR ($145,000+/yr) versus deploying an AI sales system at $4,500+/month. Includes the compounding asset argument for AI-first pipeline.
-
-## Legal
-
-- Privacy Policy: https://aloomii.com/privacy
-- Terms of Service: https://aloomii.com/terms
-- Client Terms: https://aloomii.com/client-terms
+- [Start a Conversation](https://aloomii.com/#contact): Discovery call request form.
