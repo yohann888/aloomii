@@ -7,12 +7,12 @@
 
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/bash</string>
-        <string>/Users/superhana/Desktop/aloomii/command/deploy.sh</string>
+        <string>/opt/homebrew/bin/node</string>
+        <string>/Users/superhana/Desktop/aloomii/command/serve-local.js</string>
     </array>
 
     <key>WorkingDirectory</key>
-    <string>/Users/superhana/Desktop/aloomii/command</string>
+    <string>/Users/superhana/Desktop/aloomii</string>
 
     <key>EnvironmentVariables</key>
     <dict>
@@ -28,10 +28,7 @@
     <true/>
 
     <key>KeepAlive</key>
-    <dict>
-        <key>SuccessfulExit</key>
-        <false/>
-    </dict>
+    <true/>
 
     <key>StandardOutPath</key>
     <string>/tmp/com.aloomii.command-center.log</string>
