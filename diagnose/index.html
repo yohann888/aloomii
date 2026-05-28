@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2SVEC5EM36"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2SVEC5EM36');
+</script>
+<title>Diagnose — Find the 3 to 5 workflows quietly eating your week | Aloomii</title>
+<meta name="description" content="Before you spend a dollar building automation, know exactly what to automate, what it will cost to run each month, and what to build first. One call with Yohann, a written roadmap in five business days. $1,199, one-time.">
+<link rel="canonical" href="https://aloomii.com/diagnose/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Diagnose — Find the 3 to 5 workflows quietly eating your week | Aloomii">
+<meta property="og:description" content="Before you spend a dollar building automation, know exactly what to automate, what it will cost to run each month, and what to build first. One call with Yohann, a written roadmap in five business days. $1,199, one-time.">
+<meta property="og:url" content="https://aloomii.com/diagnose/">
+<meta property="og:site_name" content="Aloomii">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Diagnose — Find the 3 to 5 workflows quietly eating your week | Aloomii">
+<meta name="twitter:description" content="Before you spend a dollar building automation, know exactly what to automate, what it will cost to run each month, and what to build first. $1,199, one-time.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<!-- Fonts: Inter (global) + Bricolage Grotesque + Hanken Grotesk (diagnose page) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ===== GLOBAL SITE TOKENS (matches index.html) ===== */
+  :root {
+    --bg: #0b0b14;
+    --bg-card: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.12);
+    --border-hover: rgba(0,200,190,0.35);
+    --text: #f0f0f0;
+    --text-body: rgba(255,255,255,0.75);
+    --text-muted: rgba(255,255,255,0.4);
+    --accent: #00c8be;
+    --nav-height: 72px;
+    --section-pad-h: 48px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== NAV (identical to homepage) ===== */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 48px;
+    background: #0b0b14;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { text-decoration: none; }
+  .nav-logo img { height: 36px; width: auto; }
+  .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--text-body); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: #fff; }
+  .nav-links .nav-cta {
+    background: var(--accent); color: #000; padding: 10px 22px;
+    border-radius: 10px; font-weight: 600; font-size: 13px; transition: all 0.25s;
+  }
+  .nav-links .nav-cta:hover { background: #00e0d5; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,200,190,0.3); }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 8px; background: none; border: none;
+  }
+  .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: all 0.3s; }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+  .mobile-menu {
+    display: none; position: fixed; top: var(--nav-height); left: 0; right: 0;
+    background: rgba(11,11,20,0.95); backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px); padding: 24px 40px;
+    border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  .mobile-menu.active { display: block; }
+  .mobile-menu a { display: block; padding: 14px 0; color: var(--text-body); text-decoration: none; font-size: 1rem; border-bottom: 1px solid var(--border); }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: #fff; }
+
+  /* ===== FOOTER (identical to homepage) ===== */
+  .site-footer { color: var(--text-muted); padding: 64px 48px 40px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
+  .footer-brand .footer-logo img { height: 28px; width: auto; margin-bottom: 16px; }
+  .footer-brand p { font-size: 14px; line-height: 1.6; color: var(--text-muted); max-width: 280px; }
+  .footer-col h4 { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+  .footer-col a { display: block; font-size: 14px; color: var(--text-muted); text-decoration: none; padding: 4px 0; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    max-width: 1200px; margin: 40px auto 0; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px;
+  }
+  .footer-bottom a { color: var(--text-muted); text-decoration: none; }
+  .footer-bottom a:hover { color: var(--accent); }
+  .footer-social { display: flex; gap: 20px; }
+  .libutton { display:flex; flex-direction:column; justify-content:center; padding:7px; text-align:center; outline:none; text-decoration:none !important; color:#ffffff !important; width:200px; height:32px; border-radius:16px; background-color:#0A66C2; font-family:"SF Pro Text", Helvetica, sans-serif; }
+
+  /* ===== DIAGNOSE PAGE — scoped under .dp- prefix or .diagnose-page wrapper ===== */
+  /* Starfield (page-level, not fixed so it doesn't bleed) */
+  .diagnose-page {
+    position: relative;
+  }
+  .diagnose-page::before {
+    content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 28% 62%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1px 1px at 47% 12%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1.4px 1.4px at 68% 78%, rgba(52,227,176,.45), transparent),
+      radial-gradient(1px 1px at 82% 28%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1px 1px at 92% 66%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 58% 88%, rgba(255,255,255,.3), transparent),
+      radial-gradient(900px 600px at 70% 8%, rgba(52,227,176,.07), transparent),
+      radial-gradient(700px 500px at 10% 90%, rgba(45,212,191,.05), transparent);
+  }
+
+  /* All diagnose sections sit above the starfield */
+  .diagnose-page > * { position: relative; z-index: 1; }
+
+  /* Type tokens scoped to diagnose page */
+  .diagnose-page h1,
+  .diagnose-page h2,
+  .diagnose-page h3 {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-weight: 700; line-height: 1.04; letter-spacing: -.02em;
+  }
+  .dp-body-font { font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+
+  .dp-wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+  .dp-eyebrow { font-size: 12.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: #34e3b0; }
+
+  /* Eyes mascot */
+  .dp-eyes { display: inline-flex; gap: 11px; align-items: center; }
+  .dp-eye {
+    width: 13px; height: 13px; border-radius: 50%;
+    background: #34e3b0; box-shadow: 0 0 14px 2px rgba(52,227,176,.7);
+    animation: dp-blink 5.5s infinite;
+  }
+  .dp-eye:nth-child(2) { animation-delay: .12s; }
+  @keyframes dp-blink { 0%,92%,100%{transform:scaleY(1)} 95%{transform:scaleY(.1)} }
+
+  /* Buttons */
+  .dp-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+    font-weight: 600; font-size: 16px; border: none; cursor: pointer;
+    text-decoration: none; padding: 17px 30px; border-radius: 999px;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .dp-btn-primary {
+    background: #fff; color: #0a0a0f;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 18px 50px -18px rgba(52,227,176,.5);
+  }
+  .dp-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(52,227,176,.4), 0 26px 60px -16px rgba(52,227,176,.65); }
+  .dp-btn-primary .dp-price { color: #0a0a0f; opacity: .55; font-weight: 500; }
+
+  /* Reveal animation */
+  @keyframes dp-fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .dp-reveal { opacity: 0; animation: dp-fadeUp .7s ease forwards; }
+  .dp-d1{animation-delay:.05s} .dp-d2{animation-delay:.16s} .dp-d3{animation-delay:.27s}
+  .dp-d4{animation-delay:.38s} .dp-d5{animation-delay:.49s}
+
+  /* Hero */
+  .dp-hero { padding: 72px 0 64px; text-align: center; }
+  .dp-hero .dp-eyes { margin: 0 auto 22px; }
+  .dp-hero .dp-eyebrow { display: block; margin-bottom: 18px; }
+  .dp-hero h1 { font-size: clamp(38px,6vw,68px); font-weight: 800; max-width: 15ch; margin: 0 auto; }
+  .dp-hero h1 .dp-hl { color: #34e3b0; }
+  .dp-hero .dp-sub {
+    font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+    font-size: clamp(17px,2.1vw,20px); color: #9aa0ad;
+    max-width: 60ch; margin: 24px auto 0; line-height: 1.55;
+  }
+  .dp-hero .dp-sub b { color: #f5f6f8; font-weight: 600; }
+  .dp-cta-row { margin-top: 36px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .dp-microtrust { font-size: 13.5px; color: #6b7280; letter-spacing: .01em; }
+  .dp-microtrust span { color: #2dd4bf; }
+
+  /* Proof */
+  .dp-proof { padding: 30px 0 8px; text-align: center; }
+  .dp-proof .dp-label { font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase; color: #6b7280; margin-bottom: 18px; }
+  .dp-proof .dp-marks { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 34px; }
+  .dp-proof .dp-marks span { font-family: 'Bricolage Grotesque', Georgia, serif; font-weight: 600; font-size: 16px; color: #c4c8d2; opacity: .78; letter-spacing: .01em; white-space: nowrap; }
+
+  /* Generic section */
+  .dp-sec { padding: 66px 0; }
+  .dp-sec-head { max-width: 62ch; }
+  .dp-sec-head h2 { font-size: clamp(28px,4vw,42px); font-weight: 700; }
+  .dp-sec-head p { color: #9aa0ad; font-size: 18px; margin-top: 14px; font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+
+  /* Problem */
+  .dp-problem { border-top: 1px solid rgba(255,255,255,.08); }
+  .dp-qlist { list-style: none; margin-top: 30px; display: grid; gap: 14px; max-width: 760px; }
+  .dp-qlist li {
+    display: flex; gap: 16px; align-items: flex-start;
+    font-size: clamp(18px,2.3vw,22px);
+    font-family: 'Bricolage Grotesque', Georgia, serif; font-weight: 500; color: #f5f6f8;
+  }
+  .dp-qlist li::before { content: ""; flex: none; width: 9px; height: 9px; margin-top: 13px; border-radius: 50%; background: #34e3b0; box-shadow: 0 0 10px 1px rgba(52,227,176,.6); }
+  .dp-problem .dp-kicker { margin-top: 30px; color: #9aa0ad; font-size: 18px; max-width: 60ch; font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+  .dp-problem .dp-kicker b { color: #f5f6f8; font-weight: 600; }
+
+  /* Steps */
+  .dp-steps-grid { margin-top: 40px; display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+  .dp-step {
+    background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px; padding: 30px 28px;
+    transition: border-color .2s ease, transform .2s ease, background .2s ease;
+  }
+  .dp-step:hover { border-color: rgba(255,255,255,.14); transform: translateY(-3px); background: rgba(255,255,255,.04); }
+  .dp-step .dp-n { font-family: 'Bricolage Grotesque', Georgia, serif; font-weight: 700; font-size: 13px; letter-spacing: .18em; color: #34e3b0; text-transform: uppercase; }
+  .dp-step h3 { font-size: 23px; font-weight: 700; margin: 14px 0 9px; }
+  .dp-step p { color: #9aa0ad; font-size: 15.5px; line-height: 1.6; font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+
+  /* Deliverables */
+  .dp-deliver { border-top: 1px solid rgba(255,255,255,.08); }
+  .dp-dlist { margin-top: 34px; display: grid; grid-template-columns: repeat(2,1fr); gap: 16px 40px; }
+  .dp-dlist li { list-style: none; display: flex; gap: 14px; align-items: flex-start; font-size: 16.5px; color: #f5f6f8; font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+  .dp-dlist svg { flex: none; margin-top: 3px; }
+  .dp-price-tag {
+    margin-top: 40px; display: inline-flex; align-items: baseline; gap: 12px;
+    border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.025);
+    border-radius: 999px; padding: 12px 24px;
+  }
+  .dp-price-tag .dp-amt { font-family: 'Bricolage Grotesque', Georgia, serif; font-weight: 700; font-size: 28px; }
+  .dp-price-tag .dp-meta { color: #9aa0ad; font-size: 14.5px; font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+
+  /* Risk band */
+  .dp-risk { border-top: 1px solid rgba(255,255,255,.08); text-align: center; }
+  .dp-risk p { font-family: 'Bricolage Grotesque', Georgia, serif; font-weight: 500; font-size: clamp(22px,3.2vw,32px); line-height: 1.3; max-width: 22ch; margin: 0 auto; color: #f5f6f8; }
+  .dp-risk p b { color: #34e3b0; }
+  .dp-risk .dp-small { font-family: 'Hanken Grotesk', -apple-system, sans-serif; font-weight: 400; font-size: 16px; color: #9aa0ad; max-width: 54ch; margin: 20px auto 0; }
+
+  /* Book / form section */
+  .dp-book { border-top: 1px solid rgba(255,255,255,.08); scroll-margin-top: 30px; }
+  .dp-book-head { text-align: center; max-width: 60ch; margin: 0 auto; }
+  .dp-book-head .dp-eyes { margin: 0 auto 18px; }
+  .dp-book-head h2 { font-size: clamp(30px,4.5vw,46px); font-weight: 800; }
+  .dp-book-head p { color: #9aa0ad; font-size: 18px; margin-top: 14px; font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+  .dp-service-chip {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin: 26px auto 0; border: 1px solid rgba(52,227,176,.35);
+    background: rgba(52,227,176,.08); color: #34e3b0;
+    border-radius: 999px; padding: 9px 18px; font-size: 14px; font-weight: 600;
+    font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+  }
+
+  /* Form */
+  .dp-form { margin: 34px auto 0; max-width: 920px; }
+  .dp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 30px; }
+  .dp-field { display: flex; flex-direction: column; gap: 9px; }
+  .dp-field.dp-full { grid-column: 1 / -1; }
+  .dp-form label {
+    font-size: 12.5px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
+    color: #dfe2e8; font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+  }
+  .dp-form label .dp-req { color: #ff6a45; }
+  .dp-form input,
+  .dp-form select,
+  .dp-form textarea {
+    font-family: 'Hanken Grotesk', -apple-system, sans-serif; font-size: 16px; color: #f5f6f8;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px; padding: 15px 17px; outline: none;
+    transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    width: 100%;
+  }
+  .dp-form input::placeholder,
+  .dp-form textarea::placeholder { color: #5d626d; }
+  .dp-form select { color: #5d626d; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239aa0ad' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; background-color: rgba(255,255,255,.04); }
+  .dp-form select.dp-filled { color: #f5f6f8; }
+  .dp-form input:focus,
+  .dp-form select:focus,
+  .dp-form textarea:focus { border-color: #34e3b0; background: rgba(52,227,176,.04); box-shadow: 0 0 0 3px rgba(52,227,176,.12); }
+  .dp-form input[aria-invalid="true"],
+  .dp-form input.dp-error { border-color: #ff6a45; }
+  .dp-form textarea { resize: vertical; min-height: 120px; }
+  .dp-submit-row { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .dp-submit-row .dp-btn-primary { font-size: 17px; padding: 18px 38px; }
+  .dp-form-note { font-size: 13px; color: #6b7280; font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+
+  /* Success panel */
+  .dp-success {
+    display: none; text-align: center;
+    background: rgba(255,255,255,.025); border: 1px solid rgba(52,227,176,.3);
+    border-radius: 14px; padding: 46px 30px; margin: 34px auto 0; max-width: 640px;
+  }
+  .dp-success.dp-show { display: block; animation: dp-fadeUp .5s ease both; }
+  .dp-success h3 { font-family: 'Bricolage Grotesque', Georgia, serif; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+  .dp-success p { color: #9aa0ad; font-size: 16px; font-family: 'Hanken Grotesk', -apple-system, sans-serif; }
+
+  /* Responsive */
+  @media (max-width: 760px) {
+    .dp-steps-grid, .dp-dlist, .dp-grid2 { grid-template-columns: 1fr; }
+    .dp-hero { padding: 54px 0 48px; }
+    .dp-sec { padding: 52px 0; }
+    nav { padding: 18px 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .site-footer { padding: 48px 20px 32px; }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .dp-wrap { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
+  <ul class="nav-links">
+    <li><a href="/#offerings">Services</a></li>
+    <li><a href="/#how">How It Works</a></li>
+    <li><a href="/#team">Team</a></li>
+    <li><a href="#book" class="nav-cta">Book My Audit</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/#offerings" onclick="closeMenu()">Services</a>
+  <a href="/#how" onclick="closeMenu()">How It Works</a>
+  <a href="/#team" onclick="closeMenu()">Team</a>
+  <a href="#book" onclick="closeMenu()">Book My Audit</a>
+</div>
+
+<!-- DIAGNOSE PAGE CONTENT -->
+<div class="diagnose-page">
+
+<!-- HERO -->
+<section class="dp-hero">
+  <div class="dp-wrap">
+    <span class="dp-eyes dp-reveal dp-d1"><span class="dp-eye"></span><span class="dp-eye"></span></span>
+    <span class="dp-eyebrow dp-reveal dp-d1">Stage 1 · Diagnose</span>
+    <h1 class="dp-reveal dp-d2">Find the 3 to 5 workflows <span class="dp-hl">quietly eating your week.</span></h1>
+    <p class="dp-sub dp-reveal dp-d3">Before you spend a dollar building automation, know exactly what to automate, what it will cost to run each month, and what to build first. One call with Yohann, a written roadmap in five business days. <b>$1,199, one-time. Yours to keep.</b></p>
+    <div class="dp-cta-row dp-reveal dp-d4">
+      <a href="#book" class="dp-btn dp-btn-primary" data-event="diagnose_cta_click" data-location="hero">Book my audit <span class="dp-price">$1,199</span></a>
+      <div class="dp-microtrust">60-minute call <span>·</span> report in 5 business days <span>·</span> no retainer, no commitment</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="dp-proof">
+  <div class="dp-wrap">
+    <div class="dp-label dp-reveal dp-d5">Trusted by operators across</div>
+    <div class="dp-marks dp-reveal dp-d5">
+      <span>JPMorgan</span>
+      <span>IBM</span>
+      <span>Government of Ontario</span>
+      <span>Hamilton Chamber of Commerce</span>
+      <span>Burlington Chamber of Commerce</span>
+      <span>Caledonia Chamber of Commerce</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="dp-sec dp-problem">
+  <div class="dp-wrap">
+    <div class="dp-sec-head">
+      <h2>You already know something is leaking.</h2>
+      <p>You just can't point to which three things, out of everything you do, are actually worth fixing first. So nothing gets fixed.</p>
+    </div>
+    <ul class="dp-qlist">
+      <li>Where is work piling up week after week?</li>
+      <li>What have you tried to automate before and quietly dropped?</li>
+      <li>What are you still doing by hand that you know you shouldn't be?</li>
+    </ul>
+    <p class="dp-kicker">The Diagnose answers those three questions with evidence, not vibes. <b>You walk out knowing the few fixes that move the needle, the tools and model routing that run them, and what it costs before you build anything.</b></p>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="dp-sec">
+  <div class="dp-wrap">
+    <div class="dp-sec-head">
+      <span class="dp-eyebrow">How it works</span>
+      <h2 style="margin-top:14px">Four parts. Five business days.</h2>
+    </div>
+    <div class="dp-steps-grid">
+      <div class="dp-step">
+        <div class="dp-n">01 · Map</div>
+        <h3>The process call</h3>
+        <p>A 60-minute call where Yohann walks through your daily operations and finds where the time actually goes, recorded so nothing gets lost.</p>
+      </div>
+      <div class="dp-step">
+        <div class="dp-n">02 · Analyze</div>
+        <h3>Synthesis</h3>
+        <p>We turn that call into a clear picture and pinpoint the 3 to 5 workflows burning the most time, each matched to the right tools and the right model to run it.</p>
+      </div>
+      <div class="dp-step">
+        <div class="dp-n">03 · Report</div>
+        <h3>The written roadmap</h3>
+        <p>A report delivered in five business days: every pain point, the exact tools and automations that solve it, model routing per workflow, the monthly run-cost, and a build order ranked by ROI.</p>
+      </div>
+      <div class="dp-step">
+        <div class="dp-n">04 · Review</div>
+        <h3>The walkthrough</h3>
+        <p>A 30-minute call where Yohann walks you through it line by line, so you leave knowing exactly what to build, in what order, and what it will cost to run.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="dp-sec dp-deliver">
+  <div class="dp-wrap">
+    <div class="dp-sec-head">
+      <span class="dp-eyebrow">What you get</span>
+      <h2 style="margin-top:14px">A roadmap specific to your stack, your team, your budget.</h2>
+    </div>
+    <ul class="dp-dlist">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34e3b0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>A 60-minute process mapping call with Yohann</li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34e3b0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>The 3 to 5 workflows burning the most time, identified</li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34e3b0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>A written automation report in 5 business days</li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34e3b0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Recommended model routing by workflow</li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34e3b0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>A monthly run-cost estimate before you build</li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34e3b0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>A clear build order based on ROI and complexity</li>
+    </ul>
+    <div class="dp-price-tag"><span class="dp-amt">$1,199</span><span class="dp-meta">one-time · no retainer · delivered in 5 business days</span></div>
+  </div>
+</section>
+
+<!-- RISK REVERSAL -->
+<section class="dp-sec dp-risk">
+  <div class="dp-wrap">
+    <p>You leave with a roadmap you <b>own</b>, whether you build it with us or not.</p>
+    <p class="dp-small">No retainer. No commitment. A one-time diagnosis for founders ready to see what their business could become, and exactly what it takes to get there.</p>
+  </div>
+</section>
+
+<!-- BOOK FORM -->
+<section class="dp-sec dp-book" id="book">
+  <div class="dp-wrap">
+    <div class="dp-book-head">
+      <span class="dp-eyes"><span class="dp-eye"></span><span class="dp-eye"></span></span>
+      <h2>Book your Diagnose.</h2>
+      <p>Tell us where you are and where you want to go. We'll tell you honestly if it's the right fit before you book.</p>
+      <div class="dp-service-chip">Service: Stage 1 · Diagnose — $1,199</div>
+    </div>
+
+    <form id="diagnoseForm" class="dp-form" novalidate>
+      <input type="hidden" name="service" value="Stage 1 - Diagnose ($1,199)">
+      <div class="dp-grid2">
+        <div class="dp-field">
+          <label for="dp-name">Full name <span class="dp-req" aria-hidden="true">*</span></label>
+          <input id="dp-name" name="name" type="text" placeholder="Jane Smith" required aria-required="true" autocomplete="name">
+        </div>
+        <div class="dp-field">
+          <label for="dp-email">Business email <span class="dp-req" aria-hidden="true">*</span></label>
+          <input id="dp-email" name="email" type="email" placeholder="jane@company.com" required aria-required="true" autocomplete="email">
+        </div>
+        <div class="dp-field">
+          <label for="dp-company">Company or website</label>
+          <input id="dp-company" name="company" type="text" placeholder="acme.com" autocomplete="organization">
+        </div>
+        <div class="dp-field">
+          <label for="dp-timeline">Timeline</label>
+          <select id="dp-timeline" name="timeline" aria-label="When do you want to start?">
+            <option value="" disabled selected>When do you want to start?</option>
+            <option>As soon as possible</option>
+            <option>Within the next month</option>
+            <option>This quarter</option>
+            <option>Just exploring</option>
+          </select>
+        </div>
+        <div class="dp-field dp-full">
+          <label for="dp-bottleneck">Biggest bottleneck right now</label>
+          <textarea id="dp-bottleneck" name="details" placeholder="Where is work piling up? What are you still doing by hand that you know you shouldn't be?"></textarea>
+        </div>
+      </div>
+      <div class="dp-submit-row">
+        <button type="submit" class="dp-btn dp-btn-primary" id="dp-submit-btn" data-event="diagnose_form_submit">Book my audit <span class="dp-price">$1,199</span></button>
+        <div class="dp-form-note">60-minute call · written report in 5 business days · yours to keep</div>
+      </div>
+    </form>
+
+    <div class="dp-success" id="dp-successPanel" role="alert" aria-live="polite">
+      <h3>Got it. Talk soon.</h3>
+      <p>Your request is in. We'll reach out within one business day to lock the time for your process mapping call.</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- /diagnose-page -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></div>
+      <p>Relationship intelligence for businesses becoming Agentic Micro Companies. AI scans. Humans judge. You act.</p>
+      <div style="margin-top:16px;">
+        <a class="libutton" href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7445126674708451328" target="_blank">Subscribe on LinkedIn</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="https://aloomii.com/diagnose/">Diagnose</a>
+      <a href="https://aloomii.com/table">The Table</a>
+      <a href="https://aloomii.com/studio/">Studio</a>
+      <a href="/#offerings">Relationship Intelligence</a>
+    </div>
+    <div class="footer-col"><h4>Company</h4><a href="/#team">About</a><a href="https://aloomii.com/blog/">Blog</a><a href="/#contact">Contact</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="/client-terms.html">Client Terms</a></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Aloomii &middot; <a href="https://palebluenexus.com" target="_blank">Pale Blue Nexus</a></span>
+    <div class="footer-social"><a href="https://linkedin.com" target="_blank">LinkedIn</a><a href="mailto:yohann@aloomii.com">Email</a></div>
+  </div>
+</footer>
+
+<script>
+  /* ===== NAV MOBILE ===== */
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('active');
+    document.querySelector('.hamburger').classList.toggle('active');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('active');
+    document.querySelector('.hamburger').classList.remove('active');
+  }
+
+  /* ===== SELECT FILLED STATE ===== */
+  document.querySelectorAll('.dp-form select').forEach(function(s) {
+    s.addEventListener('change', function() { if (s.value) s.classList.add('dp-filled'); });
+  });
+
+  /* GA4 (G-2SVEC5EM36) is loaded in <head>. trackEvent wraps gtag for named events. */
+  function trackEvent(name, params) {
+    if (typeof gtag === 'function') { gtag('event', name, params || {}); }
+  }
+
+  /* Track all "Book my audit" / "Get your AI audit" CTA clicks */
+  document.querySelectorAll('[data-event="diagnose_cta_click"]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      trackEvent('diagnose_cta_click', { location: el.dataset.location || 'unknown' });
+    });
+  });
+
+  /* ===== FORM SUBMISSION — wired to /api/contact ===== */
+  var form = document.getElementById('diagnoseForm');
+  var submitBtn = document.getElementById('dp-submit-btn');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    var nameEl  = document.getElementById('dp-name');
+    var emailEl = document.getElementById('dp-email');
+    var valid = true;
+
+    [nameEl, emailEl].forEach(function(f) {
+      if (!f.value.trim()) {
+        f.classList.add('dp-error');
+        f.setAttribute('aria-invalid', 'true');
+        valid = false;
+      } else {
+        f.classList.remove('dp-error');
+        f.removeAttribute('aria-invalid');
+      }
+    });
+    if (!valid) { nameEl.focus(); return; }
+
+    var originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = 'Sending&hellip;';
+    submitBtn.disabled = true;
+
+    var formData = {
+      name:     nameEl.value.trim(),
+      email:    emailEl.value.trim(),
+      company:  document.getElementById('dp-company').value.trim(),
+      timeline: document.getElementById('dp-timeline').value,
+      details:  document.getElementById('dp-bottleneck').value.trim(),
+      service:  'Stage 1 - Diagnose ($1,199)',
+      budget:   ''
+    };
+
+    /* Fire analytics before network call */
+    trackEvent('diagnose_form_submit', { service: formData.service });
+
+    try {
+      var res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (res.ok) {
+        window.location.href = 'https://calendly.com/yohann8/15min';
+      } else {
+        submitBtn.innerHTML = 'Something went wrong — try again';
+        submitBtn.disabled = false;
+      }
+    } catch (err) {
+      submitBtn.innerHTML = 'Something went wrong — try again';
+      submitBtn.disabled = false;
+    }
+  });
+
+  /* Clear error state on input */
+  ['dp-name','dp-email'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', function() {
+      this.classList.remove('dp-error');
+      this.removeAttribute('aria-invalid');
+    });
+  });
+</script>
+</body>
+</html>

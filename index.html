@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2SVEC5EM36"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2SVEC5EM36');
+</script>
 <title>Aloomii | Forward Deployed AI for Relationship-Driven Business</title>
 <meta name="description" content="We embed with your team, ship the AI system, and operate it alongside you. Forward Deployed AI for relationship-driven business, based in Caledonia, Ontario.">
 <link rel="canonical" href="https://aloomii.com/">
@@ -142,7 +150,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <style>
@@ -907,6 +915,66 @@
     .receipt-number { font-size: 38px !important; }
   }
 
+  /* ==================== DIAGNOSE HERO BAND (scoped) ==================== */
+  .diagnose-hero {
+    position: relative; overflow: hidden; color: #f5f6f8;
+    padding: 96px 28px 104px; text-align: center;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background:
+      radial-gradient(820px 520px at 72% 6%, rgba(52,227,176,.10), transparent),
+      radial-gradient(680px 480px at 12% 96%, rgba(45,212,191,.07), transparent),
+      #0b0b14;
+  }
+  .diagnose-hero::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 16% 26%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 34% 70%, rgba(255,255,255,.32), transparent),
+      radial-gradient(1.4px 1.4px at 66% 30%, rgba(52,227,176,.5), transparent),
+      radial-gradient(1px 1px at 84% 64%, rgba(255,255,255,.34), transparent),
+      radial-gradient(1px 1px at 52% 16%, rgba(255,255,255,.3), transparent);
+  }
+  .dh-inner { position: relative; max-width: 880px; margin: 0 auto; }
+  .dh-eyes { display: inline-flex; gap: 11px; margin-bottom: 22px; }
+  .dh-eyes i {
+    display: block; width: 13px; height: 13px; border-radius: 50%;
+    background: #34e3b0; box-shadow: 0 0 14px 2px rgba(52,227,176,.7);
+    animation: dhblink 5.5s infinite;
+  }
+  .dh-eyes i:nth-child(2) { animation-delay: .12s; }
+  @keyframes dhblink { 0%,92%,100%{transform:scaleY(1)} 95%{transform:scaleY(.1)} }
+  .dh-eyebrow { display: block; font-size: 12.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: #34e3b0; margin-bottom: 18px; }
+  .diagnose-hero h1 {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-weight: 800; line-height: 1.04; letter-spacing: -.02em;
+    font-size: clamp(34px,5.6vw,60px); max-width: 16ch; margin: 0 auto;
+    color: #f5f6f8;
+  }
+  .diagnose-hero h1 .dh-hl { color: #34e3b0; }
+  .dh-sub {
+    font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+    font-size: clamp(16px,2vw,19px); color: #9aa0ad;
+    max-width: 54ch; margin: 22px auto 0; line-height: 1.55;
+  }
+  .dh-sub b { color: #f5f6f8; font-weight: 600; }
+  .dh-cta { margin-top: 34px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .dh-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #fff; color: #0a0a0f;
+    font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+    font-weight: 600; font-size: 17px; text-decoration: none;
+    padding: 18px 36px; border-radius: 999px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 18px 50px -18px rgba(52,227,176,.5);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .dh-btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(52,227,176,.4), 0 26px 60px -16px rgba(52,227,176,.65); }
+  .dh-btn .dh-price { opacity: .5; font-weight: 500; }
+  .dh-micro { font-size: 13.5px; color: #6b7280; }
+  .dh-micro span { color: #2dd4bf; }
+  .dh-proof { margin-top: 46px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px; opacity: .72; }
+  .dh-proof span { font-family: 'Bricolage Grotesque', Georgia, serif; font-weight: 600; font-size: 14.5px; color: #c4c8d2; white-space: nowrap; }
+  .dh-proof .dh-lbl { width: 100%; font-family: 'Hanken Grotesk', -apple-system, sans-serif; font-weight: 400; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #6b7280; margin-bottom: 4px; }
+
   </style>
 </head>
 <body>
@@ -954,6 +1022,25 @@
   </div>
   <div class="trust-strip" style="margin-top:32px;font-family:'SF Mono', 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;font-size:13px;color:rgba(255,255,255,0.35);letter-spacing:0.02em;line-height:1.8;">
     Trained software engineers shipping production code at JP Morgan, IBM, Ontario Government &middot; Produced the EOS launch ($4B ICO) &middot; Running a 7-agent AI fleet on $25/month compute &middot; Pale Blue Nexus podcast, 23K+ views
+  </div>
+</section>
+
+<!-- DIAGNOSE BAND -->
+<section class="diagnose-hero">
+  <div class="dh-inner">
+    <span class="dh-eyes"><i></i><i></i></span>
+    <span class="dh-eyebrow">Stage 1 · Diagnose · $1,199</span>
+    <h1>Not sure what to <span class="dh-hl">automate first?</span></h1>
+    <p class="dh-sub">In one call, we map your operation and hand you a written roadmap in five business days: the 3 to 5 workflows worth fixing, what they cost to run, and what to build first. <b>Yours to keep.</b></p>
+    <div class="dh-cta">
+      <a href="/diagnose/" class="dh-btn" data-event="diagnose_cta_click" data-location="homepage_band">Get your AI audit <span class="dh-price">$1,199</span></a>
+      <div class="dh-micro">60-minute call <span>·</span> report in 5 business days <span>·</span> no retainer</div>
+    </div>
+    <div class="dh-proof">
+      <span class="dh-lbl">Trusted by operators across</span>
+      <span>JPMorgan</span><span>IBM</span><span>Government of Ontario</span>
+      <span>Hamilton, Burlington &amp; Caledonia Chambers of Commerce</span>
+    </div>
   </div>
 </section>
 
@@ -1886,6 +1973,16 @@ document.querySelectorAll('.faq-question').forEach(function(btn) {
 <script>
   function toggleMenu() { document.querySelector('.hamburger').classList.toggle('active'); document.getElementById('mobileMenu').classList.toggle('active'); }
   function closeMenu() { document.querySelector('.hamburger').classList.remove('active'); document.getElementById('mobileMenu').classList.remove('active'); }
+
+  /* GA4 (G-2SVEC5EM36) is loaded in <head>. trackEvent wraps gtag for named events. */
+  function trackEvent(name, params) {
+    if (typeof gtag === 'function') { gtag('event', name, params || {}); }
+  }
+  document.querySelectorAll('[data-event="diagnose_cta_click"]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      trackEvent('diagnose_cta_click', { location: el.dataset.location || 'unknown' });
+    });
+  });
 
   // ==================== SCROLL REVEAL ====================
   // Observe all reveal elements for entrance animation
