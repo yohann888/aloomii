@@ -55,6 +55,17 @@
   }
 
   /* ===== NAV (identical to homepage) ===== */
+  .proof-bar { padding: 48px; text-align: center; border-top: 1px solid var(--border); }
+  .proof-bar .label { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 28px; }
+  .proof-logos { display: flex; justify-content: center; align-items: center; gap: 48px; flex-wrap: wrap; }
+  .proof-logos img {
+    height: 75px; width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.45;
+    transition: opacity 0.3s;
+  }
+  .proof-logos img:hover { opacity: 0.75; }
+
   nav {
     position: sticky; top: 0; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
