@@ -56,7 +56,7 @@
 
   /* ===== NAV (identical to homepage) ===== */
   .proof-bar { padding: 48px; text-align: center; border-top: 1px solid var(--border); }
-  .proof-bar .label { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 28px; }
+  .proof-bar .label, .label { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 28px; text-align: center; display: block; width: 100%; }
   .proof-logos { display: flex; justify-content: center; align-items: center; gap: 48px; flex-wrap: wrap; }
   .proof-logos img {
     height: 75px; width: auto;
@@ -498,6 +498,7 @@
         <button type="submit" class="dp-btn dp-btn-primary" id="dp-submit-btn" data-event="diagnose_form_submit">Book my audit <span class="dp-price">$1,199</span></button>
         <div class="dp-form-note">60-minute call · written report in 5 business days · yours to keep</div>
       </div>
+      <div class="label" style="margin-top: 32px; margin-bottom: 0;">Built by operators from</div>
     </form>
 
     <div class="dp-success" id="dp-successPanel" role="alert" aria-live="polite">
