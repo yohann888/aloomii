@@ -958,6 +958,18 @@ Rejected for current scale. Strongest isolation, highest operational cost. Schem
 
 Rejected as the default but available as an option. Two operational models doubles the engineering surface area. Better to standardize on schema-per-tenant and elevate specific customers to database-per-tenant only when contractually required.
 
+**Deployment decision (CRCC).**
+
+CRCC is deployed on a **dedicated Neon project** (named `crcc`), not as a schema in a shared database. This invokes the database-per-tenant exception above because the CRCC contract guarantees, in writing: the chamber owns its data outright; a chamber-owned Neon project; full export on request (Postgres dump, JSON archive, CSV bundle) within 10 business days; point-in-time recovery and encrypted backups; and the chamber as the legal account holder on every system (the "bus factor" guarantee), with Aloomii operating as a delegated administrator. A shared-schema model cannot satisfy these promises, since Aloomii would own the single project containing all tenants.
+
+- **Interim ownership (build phase).** During delivery, the `crcc` project is provisioned under Aloomii's Neon account so Aloomii can build and operate it. The chamber's own Neon account/org has not been provisioned yet.
+- **Handover to chamber ownership.** When the chamber's Neon org is created, ownership moves there by one of two paths, both of which honor the contract:
+  - *Neon project transfer (preferred).* Transfer the `crcc` project org-to-org. This preserves the project, its history, and point-in-time recovery, and leaves Aloomii on as delegated administrator. Two Neon constraints to plan around: a project can only be transferred to an organization (not a personal Neon account), and a project bound to a GitHub or Vercel integration cannot be transferred — so `crcc` must not be wired directly to those integrations if transfer is the intended path.
+  - *Clone (pg_dump → pg_restore).* Dump `crcc` and restore into a fresh project in the chamber's account. This works regardless of integrations and is the same Postgres-dump deliverable the contract already promises, but does not carry over point-in-time-recovery history.
+- **Aloomii's own data.** Aloomii's platform/control-plane and portal data live in the separate `aloomii-portal` Neon project, which also hosts the cross-tenant patterns layer (Section 5.3). `aloomii-portal` is never a tenant schema; it is the operator's project.
+- **Cross-tenant learning across projects.** Because CRCC is a separate project rather than a schema, the pattern-extraction pipeline (Section 5.3) performs a cross-*project* read (extract → anonymize → write aggregates into the patterns database in `aloomii-portal`) instead of a cross-*schema* read. The one-way, k-anonymous guarantees are unchanged.
+- **Future tenants.** Default to schema-per-tenant unless a customer contracts for the same ownership guarantees CRCC has, in which case the dedicated-project pattern documented here is reused.
+
 ## 5.3 Cross-tenant learning pipeline
 
 The hardest architectural challenge is allowing cross-tenant pattern learning (Moat 1) while preserving the structural privacy guarantees of schema-per-tenant isolation. The solution is a one-way pipeline with strict anonymization at the boundary.
@@ -1225,6 +1237,10 @@ Several open questions from v1.0 were resolved during peer review and are docume
 # 9. Change log
 
 This document evolves deliberately. Every revision captures both what changed and why, so future contributors can understand the reasoning rather than relitigating settled decisions.
+
+**Addendum (June 2026) - CRCC deployment decision**
+
+Recorded an explicit deployment decision in Section 5.2: CRCC runs on a dedicated, chamber-owned Neon project (`crcc`) under the database-per-tenant exception, driven by the CRCC contract's data-ownership, export, point-in-time-recovery, and legal-account-holder ("bus factor") guarantees. Documents the interim state (project provisioned under Aloomii's Neon account during the build phase) and the handover paths to the chamber's own Neon org (Neon project transfer, preferred; or pg_dump/pg_restore clone), plus the Neon transfer constraints (org-only destination; no GitHub/Vercel-integration-bound projects). Confirms Aloomii's own platform/portal data and the cross-tenant patterns layer live in the separate `aloomii-portal` project, and that cross-tenant learning becomes a cross-project read. No change to the canonical entity model or the default isolation strategy for future tenants.
 
 **v1.2 (May 2026) - CRM-completeness revision**
 
