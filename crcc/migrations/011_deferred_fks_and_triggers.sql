@@ -45,8 +45,14 @@ CREATE OR REPLACE FUNCTION refresh_membership_status_cache()
 RETURNS TRIGGER AS $$
 BEGIN
   UPDATE membership
-  SET current_status_cache = NEW.to_state,
+  SET current_status_cache = (
+        SELECT to_state FROM state_event
+        WHERE membership_id = NEW.membership_id
+        ORDER BY effective_at DESC
+        LIMIT 1
+      ),
       updated_at = now(),
+      updated_by = NEW.created_by,
       version = version + 1
   WHERE id = NEW.membership_id;
   RETURN NEW;
