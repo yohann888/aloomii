@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2SVEC5EM36"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2SVEC5EM36');
+</script>
+<title>Events | Aloomii</title>
+<meta name="description" content="Aloomii events: builder meetups, private dinners, and salons for operators shipping with AI. See what's coming up and join us.">
+<link rel="canonical" href="https://aloomii.com/events">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Events | Aloomii">
+<meta property="og:description" content="Builder meetups, private dinners, and salons for operators shipping with AI.">
+<meta property="og:url" content="https://aloomii.com/events">
+<meta property="og:site_name" content="Aloomii">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Events | Aloomii">
+<meta name="twitter:description" content="Builder meetups, private dinners, and salons for operators shipping with AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<style>
+  :root {
+    --bg: #0b0b14;
+    --bg-card: rgba(255,255,255,0.07);
+    --bg-card-hover: rgba(255,255,255,0.11);
+    --border: rgba(255,255,255,0.12);
+    --border-hover: rgba(0,200,190,0.35);
+    --text: #f0f0f0;
+    --text-body: rgba(255,255,255,0.75);
+    --text-muted: rgba(255,255,255,0.4);
+    --accent: #00c8be;
+    --accent-dark: #009e96;
+    --purple: #663399;
+    --purple-light: #a87fdb;
+    --nav-height: 72px;
+    --section-pad-h: 48px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+  body { overflow-x: hidden; width: 100%; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==================== NAV ==================== */
+  nav {
+    position: sticky;
+    top: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 48px;
+    background: #0b0b14;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { text-decoration: none; }
+  .nav-logo img { height: 36px; width: auto; }
+  .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--text-body); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: #fff; }
+  .nav-links .nav-cta {
+    background: var(--accent); color: #000; padding: 10px 22px;
+    border-radius: 10px; font-weight: 600; font-size: 13px; transition: all 0.25s;
+  }
+  .nav-links .nav-cta:hover { background: #00e0d5; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,200,190,0.3); }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 8px; background: none; border: none;
+  }
+  .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: all 0.3s; }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+  .mobile-menu {
+    display: none; position: fixed; top: var(--nav-height); left: 0; right: 0;
+    background: rgba(11,11,20,0.95); backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px); padding: 24px 40px;
+    border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  .mobile-menu.active { display: block; }
+  .mobile-menu a { display: block; padding: 14px 0; color: var(--text-body); text-decoration: none; font-size: 1rem; border-bottom: 1px solid var(--border); }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: #fff; }
+
+  /* ==================== GLASS ==================== */
+  .glass {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    transition: all 0.35s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+  .glass:hover { background: rgba(255,255,255,0.12); border-color: rgba(0,200,190,0.45); }
+
+  /* ==================== PAGE HERO ==================== */
+  .events-hero {
+    padding: 100px 48px 60px;
+    max-width: 900px; margin: 0 auto; text-align: center;
+  }
+  .events-hero .eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+  }
+  .events-hero h1 {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-size: clamp(34px, 5vw, 54px); font-weight: 800; line-height: 1.08;
+    letter-spacing: -2px; color: #fff; margin-bottom: 20px;
+  }
+  .events-hero p {
+    font-size: 17px; color: var(--text-body); max-width: 600px;
+    margin: 0 auto; line-height: 1.7;
+  }
+
+  /* ==================== SECTIONS ==================== */
+  .events-section {
+    max-width: 900px; margin: 0 auto;
+    padding: 60px 48px;
+  }
+  .section-label {
+    font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+  }
+  .section-heading {
+    font-size: clamp(26px, 3.5vw, 36px); font-weight: 800;
+    letter-spacing: -1px; color: #fff; margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--text-body); max-width: 600px;
+    line-height: 1.7; margin-bottom: 40px;
+  }
+
+  /* ==================== EVENT CARDS ==================== */
+  .event-card {
+    padding: 36px 40px; margin-bottom: 24px;
+  }
+  .event-card .event-meta {
+    display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 16px;
+    font-size: 13px; font-weight: 600; color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+  .event-card .event-meta span {
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .event-card h3 {
+    font-size: 24px; font-weight: 800; color: #fff;
+    margin-bottom: 8px; letter-spacing: -0.5px;
+  }
+  .event-card .event-partner {
+    font-size: 13px; color: var(--text-muted); margin-bottom: 14px;
+  }
+  .event-card p {
+    font-size: 15px; color: var(--text-body); line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .event-card .event-capacity {
+    font-size: 13px; color: var(--text-muted); margin-bottom: 20px;
+  }
+  .event-cta {
+    display: inline-block; background: var(--accent); color: #000;
+    padding: 12px 28px; border-radius: 10px; font-size: 14px;
+    font-weight: 600; text-decoration: none; transition: all 0.3s;
+    box-shadow: 0 4px 16px rgba(0,200,190,0.2);
+  }
+  .event-cta:hover { background: #00e0d5; transform: translateY(-1px); }
+
+  /* ==================== EMPTY STATE ==================== */
+  .empty-state {
+    padding: 48px; text-align: center;
+    border: 1px dashed rgba(255,255,255,0.15); border-radius: 16px;
+  }
+  .empty-state p {
+    font-size: 15px; color: var(--text-muted); line-height: 1.6;
+  }
+
+  /* ==================== HOST WITH US ==================== */
+  .host-card {
+    padding: 48px; text-align: center;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 20px 20px 0;
+    max-width: 700px; margin: 0 auto;
+  }
+  .host-card h3 {
+    font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 12px;
+  }
+  .host-card p {
+    font-size: 15px; color: var(--text-body); line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  /* ==================== FORMATS ==================== */
+  .format-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;
+  }
+  .format-card {
+    padding: 32px 28px;
+  }
+  .format-card .format-icon {
+    font-size: 28px; margin-bottom: 14px;
+  }
+  .format-card h4 {
+    font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;
+  }
+  .format-card p {
+    font-size: 14px; color: var(--text-body); line-height: 1.6;
+  }
+
+  /* ==================== FOOTER ==================== */
+  .site-footer { color: var(--text-muted); padding: 64px 48px 40px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
+  .footer-brand .footer-logo img { height: 28px; width: auto; margin-bottom: 16px; }
+  .footer-brand p { font-size: 14px; line-height: 1.6; color: var(--text-muted); max-width: 280px; }
+  .footer-col h4 { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+  .footer-col a { display: block; font-size: 14px; color: var(--text-muted); text-decoration: none; padding: 4px 0; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    max-width: 1200px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; font-size: 13px;
+  }
+  .footer-bottom a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .footer-bottom a:hover { color: var(--accent); }
+  .footer-social { display: flex; gap: 16px; }
+
+  /* ==================== RESPONSIVE ==================== */
+  @media (max-width: 768px) {
+    :root { --nav-height: 64px; }
+    nav { padding: 14px 20px !important; }
+    .nav-logo img { height: 28px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+
+    .events-hero { padding: 60px 20px 40px; }
+    .events-hero h1 { font-size: 30px !important; letter-spacing: -1px; }
+    .events-section { padding: 40px 20px; }
+    .event-card { padding: 28px 24px !important; }
+    .format-grid { grid-template-columns: 1fr !important; }
+    .footer-inner { grid-template-columns: 1fr !important; gap: 32px; }
+    .host-card { padding: 32px 24px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
+  <ul class="nav-links">
+    <li><a href="/#offerings">Services</a></li>
+    <li><a href="/events">Events</a></li>
+    <li><a href="/#how">How It Works</a></li>
+    <li><a href="/#team">Team</a></li>
+    <li><a href="/#contact" class="nav-cta">Start a Conversation</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/#offerings" onclick="closeMenu()">Services</a>
+  <a href="/events" onclick="closeMenu()">Events</a>
+  <a href="/#how" onclick="closeMenu()">How It Works</a>
+  <a href="/#team" onclick="closeMenu()">Team</a>
+  <a href="/#contact" onclick="closeMenu()">Start a Conversation</a>
+</div>
+
+<!-- HERO -->
+<section class="events-hero">
+  <div class="eyebrow">Events</div>
+  <h1>Where builders meet.</h1>
+  <p>We convene the communities our software serves. Meetups, dinners, and roundtables for operators building with AI.</p>
+</section>
+
+<!-- UPCOMING EVENTS -->
+<section class="events-section">
+  <div class="section-label">Upcoming</div>
+  <div id="upcomingEvents"></div>
+</section>
+
+<!-- PAST EVENTS -->
+<section class="events-section">
+  <div class="section-label">Past Events</div>
+  <div class="empty-state">
+    <p>No past events yet. This is just the beginning.</p>
+  </div>
+</section>
+
+<!-- HOST WITH US -->
+<section class="events-section">
+  <div class="host-card glass">
+    <h3>Host with us.</h3>
+    <p>We partner with companies that want to put builders in the same room. If you have a venue, a community, or a reason to gather, let's talk.</p>
+    <a href="/#contact" class="event-cta">Get in Touch</a>
+  </div>
+</section>
+
+<!-- WHAT WE'RE BUILDING -->
+<section class="events-section">
+  <div class="section-label">What we're building</div>
+  <h2 class="section-heading">Three formats. One principle: small rooms, high trust.</h2>
+  <div class="format-grid">
+    <div class="format-card glass">
+      <div class="format-icon">&#128736;</div>
+      <h4>Builder Meetups</h4>
+      <p>Informal, technical, demo-driven. Show what you're shipping. Meet others doing the same. 40-80 people, always free.</p>
+    </div>
+    <div class="format-card glass">
+      <div class="format-icon">&#127860;</div>
+      <h4>Private Dinners</h4>
+      <p>Curated tables of 8-12 operators. No pitches, no slides. One topic, one evening, real conversation.</p>
+    </div>
+    <div class="format-card glass">
+      <div class="format-icon">&#128172;</div>
+      <h4>Salons &amp; Roundtables</h4>
+      <p>Structured discussion on a single question. Moderated, off-the-record, designed to surface ideas that don't survive a conference stage.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></div>
+      <p>We build software and convene the communities it serves.</p>
+    </div>
+    <div class="footer-col"><h4>Services</h4><a href="/#offerings">Relationship Intelligence</a><a href="/events">Events</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="/#team">About</a><a href="https://aloomii.com/blog/">Blog</a><a href="/#contact">Contact</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="/client-terms.html">Client Terms</a></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Aloomii &middot; <a href="https://palebluenexus.com" target="_blank">Pale Blue Nexus</a></span>
+    <div class="footer-social"><a href="https://linkedin.com" target="_blank">LinkedIn</a><a href="mailto:yohann@aloomii.com">Email</a></div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu() { document.querySelector('.hamburger').classList.toggle('active'); document.getElementById('mobileMenu').classList.toggle('active'); }
+function closeMenu() { document.querySelector('.hamburger').classList.remove('active'); document.getElementById('mobileMenu').classList.remove('active'); }
+
+// Render upcoming events from events.json
+(async function() {
+  const container = document.getElementById('upcomingEvents');
+  try {
+    const res = await fetch('/events.json');
+    const events = await res.json();
+    const upcoming = events.filter(function(e) { return e.status === 'upcoming'; });
+
+    if (upcoming.length === 0) {
+      container.innerHTML = '<div class="empty-state"><p>No upcoming events right now. Check back soon.</p></div>';
+      return;
+    }
+
+    upcoming.forEach(function(ev) {
+      var dateObj = new Date(ev.date + 'T12:00:00');
+      var formatted = dateObj.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+      var card = document.createElement('div');
+      card.className = 'event-card glass';
+      card.innerHTML =
+        '<div class="event-meta">' +
+          '<span>' + formatted + '</span>' +
+          '<span>' + ev.time + '</span>' +
+          '<span>' + ev.location + '</span>' +
+        '</div>' +
+        '<h3>' + ev.title + '</h3>' +
+        (ev.partner ? '<div class="event-partner">Partner: ' + ev.partner + '</div>' : '') +
+        '<p>' + ev.description + '</p>' +
+        '<div class="event-capacity">' + ev.capacity + ' spots</div>' +
+        '<a href="' + ev.rsvpUrl + '" class="event-cta">RSVP</a>';
+      container.appendChild(card);
+    });
+  } catch(err) {
+    container.innerHTML = '<div class="empty-state"><p>Unable to load events. Please try again later.</p></div>';
+  }
+})();
+</script>
+
+</body>
+</html>
