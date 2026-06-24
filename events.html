@@ -370,14 +370,18 @@ function closeMenu() { document.querySelector('.hamburger').classList.remove('ac
       var card = document.createElement('div');
       card.className = 'event-card glass';
       card.innerHTML =
+        (ev.image ? '<div style="margin-bottom:24px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);"><img src="' + ev.image + '" alt="' + ev.title + '" style="width:100%;height:auto;display:block;"></div>' : '') +
         '<div class="event-meta">' +
           '<span>' + formatted + '</span>' +
           '<span>' + ev.time + '</span>' +
           '<span>' + ev.location + '</span>' +
         '</div>' +
         '<h3>' + ev.title + '</h3>' +
+        (ev.subtitle ? '<div style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:10px;">' + ev.subtitle + '</div>' : '') +
         (ev.partner ? '<div class="event-partner">Partner: ' + ev.partner + '</div>' : '') +
         '<p>' + ev.description + '</p>' +
+        (ev.venue ? '<div style="font-size:13px;color:var(--accent);margin-bottom:6px;">' + ev.venue + '</div>' : '') +
+        (ev.venueNote ? '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">' + ev.venueNote + '</div>' : '') +
         '<div class="event-capacity">' + ev.capacity + ' spots</div>' +
         '<a href="' + ev.rsvpUrl + '" class="event-cta">RSVP</a>';
       container.appendChild(card);
