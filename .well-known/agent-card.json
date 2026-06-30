@@ -8,7 +8,7 @@
     "agent_name": "Aloomii_Procurement_Node_v1",
     "naics_primary": "541511",
     "naics_secondary": "541810",
-    "year_founded": 2024,
+    "year_founded": 2025,
     "headquarters": {
       "city": "Caledonia",
       "province": "Ontario",
@@ -38,6 +38,7 @@
         "service_id": "the_audit",
         "name": "The Audit",
         "type": "one_time_diagnosis",
+        "price_usd_one_time": 1199,
         "duration_days": 5,
         "deliverables": [
           "60-minute process mapping call with Yohann Calpu",
