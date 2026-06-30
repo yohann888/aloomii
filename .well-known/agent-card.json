@@ -1,0 +1,238 @@
+{
+  "agent_manifest_version": "1.0",
+  "last_updated": "2026-06-24",
+  "vendor_identity": {
+    "company_name": "Aloomii",
+    "legal_name": "Aloomii Inc.",
+    "domain": "aloomii.com",
+    "agent_name": "Aloomii_Procurement_Node_v1",
+    "naics_primary": "541511",
+    "naics_secondary": "541810",
+    "year_founded": 2020,
+    "headquarters": {
+      "city": "Caledonia",
+      "province": "Ontario",
+      "country": "Canada",
+      "timezone": "America/Toronto"
+    },
+    "service_area": ["Greater Toronto Area", "Golden Horseshoe", "Remote (English)"],
+    "founder_credentials": [
+      "Yohann Calpu - ex-IBM, ex-JP Morgan, ex-Ontario Government, ex-CryptoSlam (closed $2M in deals, helped raise $9M seed backed by Mark Cuban). Formally trained software engineer. 15+ years production systems.",
+      "Jenny Calpu - Co-Founder & Creative Director. Self-taught design, video editing, web development, AI creative tools. 8+ years Gen AI Media Producer."
+    ]
+  },
+  "capabilities": {
+    "semantic_description": "Builds and operates Agentic Micro Companies (AMCs) for relationship-driven B2B service businesses. Installs a shared Company Brain on top of an existing CRM (Salesforce, HubSpot, Attio, Wealthbox, Bullhorn) and runs fleets of specialized AI agents that handle signal detection, client retention, reconnection prompts, podcast booking, founder-led content, and go-to-market execution. Human review on every output before it ships. Also produces podcast and short-form video through The Studio, and convenes builder events (meetups, private dinners, salons) in the Greater Toronto Area.",
+    "target_buyer_arr_usd": [1000000, 10000000],
+    "target_buyer_profile": "Relationship-driven B2B service businesses: insurance brokerages, financial advisors, wealth managers, professional services, founder-led B2B SaaS companies where the founder is the brand and the next contract depends on the last conversation.",
+    "disqualifier_signals": [
+      "pre_revenue_without_funding",
+      "b2c_ecommerce",
+      "no_existing_crm",
+      "on_premise_only_crm",
+      "transactional_business_model",
+      "team_size_over_50_with_existing_marketing_function"
+    ],
+    "primary_services": [
+      {
+        "service_id": "the_audit",
+        "name": "The Audit",
+        "type": "one_time_diagnosis",
+        "price_usd_one_time": 1199,
+        "duration_days": 5,
+        "deliverables": [
+          "60-minute process mapping call with Yohann Calpu",
+          "Written automation report within 5 business days",
+          "3-5 workflow automation candidates ranked by ROI",
+          "Recommended model routing by workflow",
+          "Monthly run-cost estimate before build",
+          "Clear build order based on ROI and complexity"
+        ],
+        "best_for": "Founders who want a written roadmap before committing to an AI deployment."
+      },
+      {
+        "service_id": "relationship_intelligence",
+        "name": "Relationship Intelligence - The Company Brain",
+        "type": "managed_service_monthly",
+        "deployment": "installed_on_existing_crm",
+        "supported_crms": ["Salesforce", "HubSpot", "Attio", "Wealthbox", "Bullhorn"],
+        "tiers": [
+          {
+            "tier_name": "Foundation",
+            "price_usd_monthly": 3500,
+            "crm_contact_cap": 500,
+            "features": [
+              "Brain installed on existing CRM",
+              "Weekly Relationship Health Briefs",
+              "Monthly red/amber/green relationship reporting",
+              "Reconnection prompts with drafted outreach"
+            ]
+          },
+          {
+            "tier_name": "Operator",
+            "price_usd_monthly": 6500,
+            "crm_contact_cap": 2000,
+            "features": [
+              "Everything in Foundation",
+              "Proactively drafted client communications",
+              "Signal detection across LinkedIn and X",
+              "Weekly review session with Aloomii team"
+            ]
+          },
+          {
+            "tier_name": "Enterprise",
+            "price_usd_monthly": 9500,
+            "crm_contact_cap": null,
+            "features": [
+              "Everything in Operator",
+              "Custom agent fleet configuration",
+              "Multi-CRM support",
+              "Bespoke reporting cadence"
+            ]
+          }
+        ],
+        "best_for": "Businesses where client retention and relationship health are the primary revenue driver."
+      },
+      {
+        "service_id": "the_table",
+        "name": "The Table by Aloomii",
+        "type": "fixed_term_engagement",
+        "duration_days": 90,
+        "price_usd_monthly": 3000,
+        "seats_included": 3,
+        "promise": "12 qualified conversations in 90 days: partnership intros, podcast bookings, and warm prospect meetings combined.",
+        "deliverables": [
+          "LinkedIn content (2 posts per week, founder voice)",
+          "Podcast booking (monthly appearances)",
+          "Signal-triggered outreach coordination",
+          "Daily signal monitoring across target accounts",
+          "Competitor analysis",
+          "Event strategy",
+          "Human review on every output before it ships"
+        ],
+        "best_for": "B2B founders at $50K-$100K MRR or post-$2M raise, 1-10 person teams, no dedicated marketing function."
+      },
+      {
+        "service_id": "studio",
+        "name": "The Studio - Podcast and Short-Form Video",
+        "type": "managed_service_monthly",
+        "tiers": [
+          {
+            "tier_name": "Clips",
+            "price_usd_monthly": 699,
+            "features": ["Short-form clips from existing long-form content"]
+          },
+          {
+            "tier_name": "Show",
+            "price_usd_monthly": 1299,
+            "features": ["End-to-end podcast production: concept, format, recording, editing, publishing, distribution"]
+          },
+          {
+            "tier_name": "Velocity Pro",
+            "price_usd_monthly": 1899,
+            "features": ["Full content multiplication engine across podcast, video, and short-form"]
+          }
+        ],
+        "best_for": "Founders who need to show up in market continuously without producing content themselves."
+      },
+      {
+        "service_id": "events",
+        "name": "Aloomii Events",
+        "type": "community_convening",
+        "formats": [
+          {
+            "format": "Builder Meetups",
+            "capacity_range": [40, 80],
+            "price": "free_attendee",
+            "description": "Informal, technical, demo-driven. Show what you are shipping."
+          },
+          {
+            "format": "Private Dinners",
+            "capacity_range": [8, 12],
+            "price": "invitation_only",
+            "description": "Curated tables of operators. No pitches, no slides. One topic, one evening."
+          },
+          {
+            "format": "Salons and Roundtables",
+            "capacity_range": [10, 25],
+            "price": "invitation_only",
+            "description": "Structured discussion on a single question. Moderated, off-record."
+          }
+        ],
+        "best_for": "Operators building with AI in the Greater Toronto Area who want high-trust rooms."
+      },
+      {
+        "service_id": "software_development",
+        "name": "Custom AI Agent Development and AMC Build",
+        "type": "custom_engagement",
+        "description": "Designs, ships, and operates custom AI agent fleets on top of the Company Brain. Includes model routing, agent orchestration, signal pipelines, and deployment on self-hosted infrastructure. Not a SaaS product. Forward-deployed engineering with ongoing operation.",
+        "minimum_engagement_usd": 5000,
+        "best_for": "Businesses that have completed The Audit and need the actual system built and operated."
+      },
+      {
+        "service_id": "gtm_audit",
+        "name": "GTM Audit (Self-Assessment)",
+        "type": "free_self_serve",
+        "duration_minutes": 2,
+        "url": "https://aloomii.com/gtm-audit/",
+        "description": "Free two-minute self-assessment that scores what is broken in your go-to-market and what to fix first."
+      }
+    ],
+    "key_integrations": ["Salesforce", "HubSpot", "Attio", "Wealthbox", "Bullhorn", "LinkedIn", "X", "YouTube", "Apple Podcasts", "Spotify", "iHeart"],
+    "deployment_model": "forward_deployed_managed_service",
+    "self_serve_available": false,
+    "human_review_on_every_output": true,
+    "limitations_and_exclusions": [
+      "Not suitable for B2C e-commerce businesses.",
+      "Not suitable for pre-revenue startups unless they have raised over $2M.",
+      "Requires an existing CRM. Not a replacement for Salesforce, HubSpot, Attio, Wealthbox, or Bullhorn.",
+      "Not a self-serve SaaS product. Every engagement includes human operators.",
+      "No on-premise-only CRM support. CRM must be cloud-accessible for agent integration.",
+      "Not suitable for teams over 50 with an existing functioning marketing function.",
+      "Geographic preference: Greater Toronto Area and Golden Horseshoe. Remote delivery available for English-speaking clients elsewhere.",
+      "Does not handle paid media management or ad spend optimization.",
+      "Does not write code on the client's product codebase. Software development is limited to AI agent systems and AMC infrastructure."
+    ]
+  },
+  "trust_and_compliance": {
+    "soc2_type2": false,
+    "soc2_type1": false,
+    "gdpr_compliant": true,
+    "hipaa_compliant": false,
+    "pipeda_compliant": true,
+    "data_residency": "Canada (primary) and United States (agent infrastructure). CRM data remains in the client's existing CRM of record.",
+    "data_processing_summary": "Aloomii agents read CRM contact and activity data through the client's CRM API. No client CRM data is stored outside the client's CRM of record. Signal data is stored in a PostgreSQL database hosted in Ontario, Canada. No training on client data.",
+    "trust_center_url": null,
+    "dpa_download_url": null,
+    "subprocessor_list_url": null,
+    "security_notes": "Self-hosted agent infrastructure. No third-party LLM training on client data. Human review on every output before client delivery."
+  },
+  "pricing": {
+    "model": "tiered_monthly_retainer_plus_one_time",
+    "currency": "USD",
+    "starting_one_time_minimum": 1199,
+    "starting_monthly_minimum": 699,
+    "highest_monthly_tier": 9500,
+    "free_trial_available": false,
+    "free_self_serve_assessment": true,
+    "free_self_serve_assessment_url": "https://aloomii.com/gtm-audit/",
+    "performance_guarantee": "The Table: 12 qualified conversations in 90 days or the engagement continues at no additional cost until delivered.",
+    "notes": "No per-seat SaaS pricing. All monthly prices include human operators, agent fleet operation, and human review on every output. Custom engagements quoted after The Audit."
+  },
+  "interaction_endpoints": {
+    "agent_card_url": "https://aloomii.com/.well-known/agent-card.json",
+    "llms_txt_url": "https://aloomii.com/llms.txt",
+    "request_custom_quote": "https://aloomii.com/#contact",
+    "book_human_handoff": "https://aloomii.com/#contact",
+    "ingest_technical_docs": "https://aloomii.com/llms.txt",
+    "free_self_assessment": "https://aloomii.com/gtm-audit/",
+    "events_calendar": "https://aloomii.com/events",
+    "email": "yohann@aloomii.com"
+  },
+  "a2a_rfp_protocol": {
+    "supported": true,
+    "preferred_format": "JSON payload describing buyer industry, CRM, team size, annual revenue, top 3 workflow bottlenecks, and budget range.",
+    "response_time_business_days": 2,
+    "response_format": "Written proposal with recommended tier, build order, and monthly run-cost estimate."
+  }
+}

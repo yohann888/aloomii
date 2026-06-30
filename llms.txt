@@ -26,5 +26,8 @@ Aloomii builds and operates Agentic Micro Companies (AMCs): businesses run by ti
 - [Team](https://aloomii.com/#team): Yohann Calpu, Co-Founder, Strategy and Judgment. Jenny Calpu, Co-Founder, Creative Director. Both are trained software engineers with more than 15 years shipping production systems.
 - [Pale Blue Nexus](https://palebluenexus.com): Aloomii's flagship podcast. Episode 1 features billionaire investor Jim Rogers.
 
+## Machine-readable
+- [Agent Card](https://aloomii.com/.well-known/agent-card.json): Structured JSON manifest for AI procurement agents. Contains capabilities, pricing, compliance, and interaction endpoints.
+
 ## Contact
 - [Start a Conversation](https://aloomii.com/#contact): Discovery call request form.
