@@ -909,6 +909,11 @@
   .team-member-info { width: 100%; }
   .newsletter-inline { padding-top: 24px !important; padding-bottom: 24px !important; }
 }
+@media (min-width: 769px) and (max-width: 1100px) {
+  nav { padding-left: 24px; padding-right: 24px; }
+  .nav-links { gap: 20px; }
+  .nav-links .nav-cta { white-space: nowrap; }
+}
 .hero-support { max-width: 660px; margin: 18px auto 0; color: rgba(255,255,255,0.72); font-size: 16px; line-height: 1.7; }
 .devkick-events { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; max-width: 1000px; margin: 0 auto; }
 .devkick-event { padding: 24px; text-align: left; }
@@ -933,6 +938,7 @@
     <li><a href="/studio/">Studio</a></li>
     <li><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a></li>
     <li><a href="#builds">Builds</a></li>
+    <li><a href="/agent-adoption/">Agent Adoption</a></li>
     <li><a href="/playbook/">Playbook</a></li>
     <li><a href="/events">Events</a></li>
     <li><a href="#team">Team</a></li>
@@ -945,6 +951,7 @@
   <a href="/studio/" onclick="closeMenu()">Studio</a>
   <a href="https://devkick.com" onclick="closeMenu()">DevKick</a>
   <a href="#builds" onclick="closeMenu()">Builds</a>
+  <a href="/agent-adoption/" onclick="closeMenu()">Agent Adoption</a>
   <a href="/playbook/" onclick="closeMenu()">Playbook</a>
   <a href="/events" onclick="closeMenu()">Events</a>
   <a href="#team" onclick="closeMenu()">Team</a>
@@ -996,13 +1003,12 @@
         <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Websites for small businesses, plus a small number of larger platform builds. From a one-page site to the system that runs an organization.</p>
         <span style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent);">Both founders</span>
       </a>
-      <div class="offering-card founders glass reveal-scale" style="display:block;">
+      <a href="/agent-adoption/" class="offering-card founders glass reveal-scale" style="display:block;text-decoration:none;">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Training</div>
-        <h3 style="font-size:20px;margin-bottom:10px;color:#fff;">Coming soon</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Playbooks, prompts and workflows from the systems we actually run.</p>
-        <a href="/playbook/" class="card-link">The Aloomii Playbook &rarr;</a>
-        <span style="display:block;margin-top:8px;font-size:13px;color:rgba(255,255,255,0.55);">Available now: the Playbook</span>
-      </div>
+        <h3 style="font-size:20px;margin-bottom:10px;color:#fff;">Agent Adoption Program</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Assessment, pilot and team enablement for engineering teams adopting agentic coding tools.</p>
+        <span style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent);">Explore the program &rarr;</span>
+      </a>
     </div>
     <div class="glass" style="max-width:800px;margin:40px auto 0;padding:32px 40px;border-left:3px solid var(--accent);border-radius:0 20px 20px 0;">
       <p style="font-size:17px;color:#fff;line-height:1.7;font-weight:500;margin:0;">The properties feed each other. The community surfaces the builders. The shows open the doors. The software ships the work. <a href="https://palebluenexus.com" class="inline-link" target="_blank" rel="noopener">Pale Blue Nexus</a> is the media proof running through all of it.</p>
@@ -1335,7 +1341,7 @@ document.querySelectorAll('.faq-question').forEach(function(btn) {
         <a class="libutton" href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7445126674708451328" target="_blank">Subscribe on LinkedIn</a>
       </div>
     </div>
-    <div class="footer-col"><h4>The Studio</h4><a href="/studio/">Studio</a><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a><a href="#builds">Builds</a><a href="/playbook/">Playbook</a><a href="https://palebluenexus.com" target="_blank" rel="noopener">Pale Blue Nexus</a><a href="/events">Events</a></div>
+    <div class="footer-col"><h4>The Studio</h4><a href="/studio/">Studio</a><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a><a href="#builds">Builds</a><a href="/playbook/">Playbook</a><a href="/agent-adoption/">Agent Adoption</a><a href="https://palebluenexus.com" target="_blank" rel="noopener">Pale Blue Nexus</a><a href="/events">Events</a></div>
     <div class="footer-col"><h4>Company</h4><a href="#team">About</a><a href="https://aloomii.com/blog/">Blog</a><a href="#contact">Contact</a></div>
     <div class="footer-col"><h4>Legal</h4><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="/client-terms.html">Client Terms</a></div>
   </div>
