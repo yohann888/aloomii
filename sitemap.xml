@@ -28,6 +28,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://aloomii.com/table</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://aloomii.com/jenny/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

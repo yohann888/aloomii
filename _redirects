@@ -8,6 +8,9 @@
 # Keep the legacy slashed Studio URL pointed at the root-level canonical page.
 /studio/ /studio 301
 
+# Keep both Table event URLs on the canonical page.
+/founders /table 301
+
 # Redirect Clerk auth flows from apex to app subdomain.
 # Required because Clerk's proxy URL is on the apex (https://aloomii.com/__clerk),
 # so OAuth callbacks land on aloomii.com after sign-in. The portal lives on
