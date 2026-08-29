@@ -21,7 +21,7 @@
   <meta name="twitter:description" content="Two invite-only tables for founders and operators building in Canada. Toronto on October 1 and Waterloo on October 2, 2026. Seats are approved, not sold.">
   <meta name="twitter:image" content="https://aloomii.com/images/table/private-boardroom-table.jpeg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Inter:wght@300;400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="/snippets/ghost-background.css">
   <style>
     :root {
@@ -102,14 +102,12 @@
       background: transparent;
       color: var(--text);
     }
-    .hero { padding: 96px 0 104px; }
+    .hero { padding: 96px 0 104px; text-align: center; }
     .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, .86fr);
-      gap: 72px;
-      align-items: center;
+      display: block;
     }
-    .hero-copy { max-width: 650px; }
+    .hero-copy { max-width: 760px; margin: 0 auto; }
+    .table-logo { display: block; width: min(300px, 84vw); height: auto; margin: 0 auto 30px; }
     h1, h2, h3, p { margin-top: 0; }
     h1 {
       max-width: 700px;
@@ -121,7 +119,7 @@
     h1 span, h2 span { color: var(--accent-soft); }
     .hero-sub {
       max-width: 640px;
-      margin-bottom: 30px;
+      margin: 0 auto 30px;
       color: var(--body);
       font-size: clamp(19px, 2.2vw, 25px);
       line-height: 1.5;
@@ -134,12 +132,6 @@
     }
     .hero-actions { margin-bottom: 14px; }
     .pending-note { margin: 0; color: var(--muted); font-size: 13px; }
-    .venue-photo {
-      overflow: hidden;
-      aspect-ratio: 4 / 5;
-      min-height: 280px;
-    }
-    .venue-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .closing .section-heading { margin: 0 auto 18px; }
     .section { padding: 92px 0; }
     .section-heading {
@@ -159,8 +151,18 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
+      align-items: stretch;
     }
-    .event-card { padding: 32px; }
+    .event-card { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 32px; }
+    .event-card > * { width: 100%; }
+    .event-card > .button { width: auto; }
+    .event-photo {
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      margin-bottom: 26px;
+      border-radius: 14px;
+    }
+    .event-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .event-card h2 {
       margin: 10px 0 18px;
       font-size: clamp(30px, 4vw, 44px);
@@ -224,8 +226,7 @@
       nav { padding: 14px 20px; }
       .nav-logo img { height: 28px; }
       .hero { padding: 72px 0 80px; }
-      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-      .venue-photo { min-height: 220px; }
+      .hero-grid { width: 100%; }
       .section { padding: 72px 0; }
       .event-grid, .steps { grid-template-columns: 1fr; }
       .event-card, .step { padding: 26px 22px; }
@@ -259,6 +260,29 @@
       <header class="hero">
         <div class="container hero-grid">
           <div class="hero-copy">
+            <svg class="table-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" role="img" aria-labelledby="table-logo-title">
+              <title id="table-logo-title">The Table</title>
+              <defs>
+                <mask id="dot-a"><rect width="100" height="100" fill="#fff"/><circle cx="13" cy="24" r="8.1" fill="#000"/></mask>
+                <mask id="dot-b"><rect width="100" height="100" fill="#fff"/><circle cx="24" cy="24" r="7.1" fill="#000"/></mask>
+                <mask id="dot-c"><rect width="100" height="100" fill="#fff"/><circle cx="87" cy="24" r="8.1" fill="#000"/></mask>
+                <mask id="dot-d"><rect width="100" height="100" fill="#fff"/><circle cx="76" cy="24" r="7.1" fill="#000"/></mask>
+              </defs>
+              <g fill="#3DD9E5">
+                <circle cx="35" cy="24" r="6" mask="url(#dot-b)"/>
+                <circle cx="24" cy="24" r="6" mask="url(#dot-a)"/>
+                <circle cx="13" cy="24" r="7"/>
+                <circle cx="65" cy="24" r="6" mask="url(#dot-d)"/>
+                <circle cx="76" cy="24" r="6" mask="url(#dot-c)"/>
+                <circle cx="87" cy="24" r="7"/>
+              </g>
+              <g fill="#fff">
+                <rect x="7" y="44" width="86" height="10.5" rx="1.5"/>
+                <rect x="19" y="54.5" width="9.5" height="30"/>
+                <rect x="71.5" y="54.5" width="9.5" height="30"/>
+              </g>
+              <text x="112" y="84.5" font-family="'Big Shoulders Display', 'Arial Narrow', Arial, sans-serif" font-size="52" font-weight="800" letter-spacing="1"><tspan fill="none" stroke="#fff" stroke-width="1.6">THE</tspan><tspan dx="9" fill="#fff">TABLE</tspan></text>
+            </svg>
             <div class="eyebrow">Invite only</div>
             <h1>Canada's builders, at one table.</h1>
             <p class="hero-sub">One table. Founders and investors. No name tags, no pitching from the floor, just the people building Canada's next companies, talking honestly.</p>
@@ -268,9 +292,6 @@
             </div>
             <p class="pending-note">Luma links pending.</p>
           </div>
-          <div class="venue-photo glass reveal">
-            <img src="/images/table/private-boardroom-table.jpeg" alt="Blu Ristorante private room with a long table set for dinner and upholstered chairs">
-          </div>
         </div>
       </header>
 
@@ -278,6 +299,9 @@
         <div class="container">
           <div class="event-grid">
             <article class="event-card glass reveal">
+              <div class="event-photo">
+                <img src="/images/table/private-boardroom-table.jpeg" alt="Blu Ristorante private room with a long table set for dinner and upholstered chairs">
+              </div>
               <div class="eyebrow">Toronto</div>
               <h2>Table 001</h2>
               <p>Thursday, October 1, 2026. Evening.</p>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" role="img" aria-labelledby="table-logo-title">
+  <title id="table-logo-title">The Table</title>
+  <defs>
+    <mask id="dot-a"><rect width="100" height="100" fill="#fff"/><circle cx="13" cy="24" r="8.1" fill="#000"/></mask>
+    <mask id="dot-b"><rect width="100" height="100" fill="#fff"/><circle cx="24" cy="24" r="7.1" fill="#000"/></mask>
+    <mask id="dot-c"><rect width="100" height="100" fill="#fff"/><circle cx="87" cy="24" r="8.1" fill="#000"/></mask>
+    <mask id="dot-d"><rect width="100" height="100" fill="#fff"/><circle cx="76" cy="24" r="7.1" fill="#000"/></mask>
+  </defs>
+  <g fill="#3DD9E5">
+    <circle cx="35" cy="24" r="6" mask="url(#dot-b)"/>
+    <circle cx="24" cy="24" r="6" mask="url(#dot-a)"/>
+    <circle cx="13" cy="24" r="7"/>
+    <circle cx="65" cy="24" r="6" mask="url(#dot-d)"/>
+    <circle cx="76" cy="24" r="6" mask="url(#dot-c)"/>
+    <circle cx="87" cy="24" r="7"/>
+  </g>
+  <g fill="#fff">
+    <rect x="7" y="44" width="86" height="10.5" rx="1.5"/>
+    <rect x="19" y="54.5" width="9.5" height="30"/>
+    <rect x="71.5" y="54.5" width="9.5" height="30"/>
+  </g>
+  <text x="112" y="84.5" font-family="'Big Shoulders Display', 'Arial Narrow', Arial, sans-serif" font-size="52" font-weight="800" letter-spacing="1">
+    <tspan fill="none" stroke="#fff" stroke-width="1.6">THE</tspan><tspan dx="9" fill="#fff">TABLE</tspan>
+  </text>
+</svg>
