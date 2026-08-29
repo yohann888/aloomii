@@ -110,11 +110,11 @@
     .table-logo { display: block; width: min(300px, 84vw); height: auto; margin: 0 auto 30px; }
     h1, h2, h3, p { margin-top: 0; }
     h1 {
-      max-width: 700px;
-      margin: 16px 0 24px;
-      font-size: clamp(48px, 7vw, 88px);
-      line-height: 1;
-      letter-spacing: -4px;
+      max-width: 640px;
+      margin: 16px auto 24px;
+      font-size: clamp(36px, 4.6vw, 62px);
+      line-height: 1.04;
+      letter-spacing: -2px;
     }
     h1 span, h2 span { color: var(--accent-soft); }
     .hero-sub {
@@ -130,7 +130,7 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    .hero-actions { margin-bottom: 14px; }
+    .hero-actions { justify-content: center; margin-bottom: 14px; }
     .pending-note { margin: 0; color: var(--muted); font-size: 13px; }
     .closing .section-heading { margin: 0 auto 18px; }
     .section { padding: 92px 0; }
@@ -156,10 +156,16 @@
     .event-card { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 32px; }
     .event-card > * { width: 100%; }
     .event-card > .button { width: auto; }
+    .event-body {
+      display: flex;
+      gap: 22px;
+      align-items: flex-start;
+    }
+    .event-text { flex: 1 1 auto; min-width: 0; }
     .event-photo {
+      flex: 0 0 34%;
       overflow: hidden;
-      aspect-ratio: 16 / 10;
-      margin-bottom: 26px;
+      aspect-ratio: 3 / 4;
       border-radius: 14px;
     }
     .event-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -235,8 +241,12 @@
       .footer-inner { align-items: flex-start; flex-direction: column; }
       .footer-contact { white-space: normal; }
     }
+    @media (max-width: 540px) {
+      .event-body { flex-direction: column-reverse; }
+      .event-photo { flex: 0 0 auto; width: 100%; margin-bottom: 20px; aspect-ratio: 4 / 3; }
+    }
     @media (max-width: 420px) {
-      h1 { letter-spacing: -2px; }
+      h1 { letter-spacing: -1px; }
       .hero-actions, .closing-actions { flex-direction: column; width: 100%; }
       .hero-actions .button, .closing-actions .button { width: 100%; }
       .nav-cta { padding-right: 14px; padding-left: 14px; font-size: 12px; }
@@ -299,16 +309,20 @@
         <div class="container">
           <div class="event-grid">
             <article class="event-card glass reveal">
-              <div class="event-photo">
-                <img src="/images/table/private-boardroom-table.jpeg" alt="Blu Ristorante private room with a long table set for dinner and upholstered chairs">
-              </div>
               <div class="eyebrow">Toronto</div>
               <h2>Table 001</h2>
-              <p>Thursday, October 1, 2026. Evening.</p>
-              <p>A larger room, with a founder panel.</p>
-              <p class="venue-line"><a href="https://www.bluristorante.com" target="_blank" rel="noopener">Blu Ristorante</a><br>214 King Street W, Toronto, ON</p>
-              <!-- LUMA URL SPOT: replace the Toronto destination in the lumaLinks map below. -->
-              <a class="button luma-link" href="#" aria-disabled="true" data-luma="toronto">Request a seat, Toronto</a>
+              <div class="event-body">
+                <div class="event-text">
+                  <p>Thursday, October 1, 2026. Evening.</p>
+                  <p>A larger room, with a founder panel.</p>
+                  <p class="venue-line"><a href="https://www.bluristorante.com" target="_blank" rel="noopener">Blu Ristorante</a><br>214 King Street W, Toronto, ON</p>
+                  <!-- LUMA URL SPOT: replace the Toronto destination in the lumaLinks map below. -->
+                  <a class="button luma-link" href="#" aria-disabled="true" data-luma="toronto">Request a seat, Toronto</a>
+                </div>
+                <div class="event-photo">
+                  <img src="/images/table/private-boardroom-table.jpeg" alt="Blu Ristorante private room with a long table set for dinner and upholstered chairs">
+                </div>
+              </div>
             </article>
             <article class="event-card glass reveal">
               <div class="eyebrow">Waterloo</div>
