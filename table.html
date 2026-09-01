@@ -161,7 +161,7 @@
       gap: 18px;
       align-items: stretch;
     }
-    .event-card { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; padding: 32px; }
+    .event-card { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 32px; }
     .event-card > * { width: 100%; }
     .event-card > .button { width: auto; }
     .event-cover {
@@ -172,7 +172,13 @@
       border: 1px solid var(--border);
       border-radius: 14px;
     }
-    .event-date { margin-bottom: 18px; }
+    .event-card p.event-date {
+      margin-bottom: 18px;
+      text-align: center;
+      font-size: clamp(19px, 2.2vw, 24px);
+      font-weight: 700;
+      color: #fff;
+    }
     .event-card h2 {
       margin: 10px 0 18px;
       font-size: clamp(30px, 4vw, 44px);
