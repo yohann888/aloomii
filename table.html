@@ -180,6 +180,32 @@
     .event-card .venue-line a { color: var(--accent-soft); text-decoration: none; border-bottom: 1px solid rgba(114,227,220,.4); }
     .event-card .venue-line a:hover { border-bottom-color: var(--accent-soft); }
     .info-section { border-top: 1px solid var(--border); }
+    .stat-number {
+      margin: 0 0 12px;
+      color: var(--accent-soft);
+      font-size: clamp(34px, 4vw, 48px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+    .detail-rows { max-width: 820px; margin-top: 36px; }
+    .detail-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+    }
+    .detail-row:last-child { border-bottom: 1px solid var(--border); }
+    .detail-label {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding-top: 4px;
+    }
+    .detail-row p { margin: 0; color: var(--body); font-size: 17px; }
     .info-copy { max-width: 760px; color: var(--body); font-size: 20px; }
     .room-section { padding-top: 0; }
     .steps {
@@ -235,6 +261,7 @@
       .hero-grid { width: 100%; }
       .section { padding: 72px 0; }
       .event-grid, .steps { grid-template-columns: 1fr; }
+      .detail-row { grid-template-columns: 1fr; gap: 6px; }
       .event-card, .step { padding: 26px 22px; }
       .room-section { padding-top: 0; }
       .closing { padding: 88px 0 96px; }
@@ -295,12 +322,11 @@
             </svg>
             <div class="eyebrow">Invite only</div>
             <h1>Canada's builders, at one table.</h1>
-            <p class="hero-sub">One table. Founders and investors. No name tags, no pitching from the floor, just the people building Canada's next companies, talking honestly.</p>
+            <p class="hero-sub">20 founders building Canada's next companies. One dinner in Toronto, one lunch in Waterloo. A seat beside them.</p>
             <div class="hero-actions">
               <a class="button luma-link" href="#" aria-disabled="true" data-luma="toronto">Request a seat, Toronto</a>
               <a class="button secondary luma-link" href="#" aria-disabled="true" data-luma="waterloo">Request a seat, Waterloo</a>
             </div>
-            <p class="pending-note">Luma links pending.</p>
           </div>
         </div>
       </header>
@@ -314,7 +340,9 @@
               <div class="event-body">
                 <div class="event-text">
                   <p>Thursday, October 1, 2026. Evening.</p>
-                  <p>A larger room, with a founder panel.</p>
+                  <p>Building in Canada on purpose. An evening of fine dining in a private, invite-only room in the Theatre District, Downtown Toronto, on King St W.</p>
+                  <p>Hosted by Aloomii, with Amiral VC joining as co-host for the evening. Barn VC hosts the next day at Table 002.</p>
+                  <p>Your $100 covers the room, a four course dinner and drinks. We take care of the rest so the table stays small and the mix stays right.</p>
                   <p class="venue-line"><a href="https://www.bluristorante.com" target="_blank" rel="noopener">Blu Ristorante</a><br>214 King Street W, Toronto, ON</p>
                   <!-- LUMA URL SPOT: replace the Toronto destination in the lumaLinks map below. -->
                   <a class="button luma-link" href="#" aria-disabled="true" data-luma="toronto">Request a seat, Toronto</a>
@@ -328,7 +356,9 @@
               <div class="eyebrow">Waterloo</div>
               <h2>Table 002</h2>
               <p>Friday, October 2, 2026. Lunch.</p>
-              <p>About fifteen founders, one table, one conversation.</p>
+              <p>Founders and investors, invite only, in the middle of a working day in Waterloo. Table 002 is the counterpart to the night before in Toronto.</p>
+              <p>Hosted by Aloomii, with Amiral VC and Barn VC co-hosting.</p>
+              <p>Your $20 covers the lunch and drinks. Come with the problem you are stuck on. That is the whole agenda.</p>
               <p class="venue-line">Builders Club<br>165 King St W, Kitchener, ON N2G 1A7</p>
               <!-- LUMA URL SPOT: replace the Waterloo destination in the lumaLinks map below. -->
               <a class="button luma-link" href="#" aria-disabled="true" data-luma="waterloo">Request a seat, Waterloo</a>
@@ -337,19 +367,49 @@
         </div>
       </section>
 
-      <section class="section info-section reveal" aria-labelledby="for-heading">
+      <section class="section info-section" aria-labelledby="why-heading">
         <div class="container">
-          <div class="eyebrow">Who it is for</div>
-          <h2 class="section-heading" id="for-heading">Founders and operators, <span>building here.</span></h2>
-          <p class="info-copy">Seed to Series B founders and operators building in Canada. Seats are approved, not sold. A ticket price applies on approval, $100 plus HST, to hold your seat. These events are subsidized and are not run for profit.</p>
+          <div class="eyebrow reveal">Why this room</div>
+          <h2 class="section-heading reveal" id="why-heading">A series, <span>not a night.</span></h2>
+          <div class="steps">
+            <article class="step glass reveal">
+              <div class="stat-number">15-20</div>
+              <p>Approved seats. Pre-seed to Series B founders building in Canada, in curated, private rooms.</p>
+            </article>
+            <article class="step glass reveal">
+              <div class="stat-number">2</div>
+              <p>Venture investors co-hosting each event: <a href="https://amiral.vc" target="_blank" rel="noopener">Amiral VC</a>, <a href="https://barnvc.com" target="_blank" rel="noopener">Barn VC</a>.</p>
+            </article>
+            <article class="step glass reveal">
+              <div class="stat-number">4x</div>
+              <p>Quarterly. Table 001 Toronto, Table 002 Waterloo, Table 003 [city, Q1 2027]. A series, not a night.</p>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section class="section room-section reveal" aria-labelledby="room-heading">
+      <section class="section room-section reveal" aria-labelledby="event-heading">
         <div class="container">
-          <div class="eyebrow">Who is in the room</div>
-          <h2 class="section-heading" id="room-heading">Hosted, and <span>co-hosted.</span></h2>
-          <p class="info-copy">Hosted by Aloomii, with a visiting venture investor as co-host.</p>
+          <div class="eyebrow">The event</div>
+          <h2 class="section-heading" id="event-heading">Two tables, <span>back to back.</span></h2>
+          <div class="detail-rows">
+            <div class="detail-row">
+              <div class="detail-label">Date</div>
+              <p>Thu Oct 1, 2026, Table 001, Blu Ristorante (Theatre District), Toronto</p>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Format</div>
+              <p>A private room for founders and investors. No stage, no name tags, no pitching from the floor.</p>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Then</div>
+              <p>Fri Oct 2, Table 002, Builders Club, Waterloo, a founders' lunch</p>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Audience</div>
+              <p>Founders and operators, pre-seed to Series B, screened for the mix. Seats are approved, then paid to hold. The ticket is a commitment device.</p>
+            </div>
+          </div>
         </div>
       </section>
 
