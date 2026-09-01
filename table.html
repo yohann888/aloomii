@@ -400,13 +400,15 @@
 
   <script>
     const lumaLinks = {
-      toronto: '#',
-      waterloo: '#'
+      toronto: 'https://luma.com/9bjf5taa',
+      waterloo: 'https://luma.com/table-m6je'
     };
     document.querySelectorAll('.luma-link').forEach(function(link) {
       const destination = lumaLinks[link.dataset.luma];
       if (destination && destination !== '#') {
         link.href = destination;
+        link.target = '_blank';
+        link.rel = 'noopener';
         link.removeAttribute('aria-disabled');
       } else {
         link.addEventListener('click', function(event) { event.preventDefault(); });
