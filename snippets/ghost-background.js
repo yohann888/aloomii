@@ -264,7 +264,12 @@
     requestAnimationFrame(animate);
   }
 
-  window.addEventListener('resize', () => { resize(); init(); });
+  window.addEventListener('resize', () => {
+    const widthChanged = window.innerWidth !== w;
+    const heightDelta = Math.abs(window.innerHeight - h);
+    if (!widthChanged && heightDelta < 160) return;
+    resize(); init();
+  });
   window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
   window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
   window.addEventListener('touchmove', e => { if(e.touches.length) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; } }, { passive: true });
