@@ -270,10 +270,11 @@
     if (!widthChanged && heightDelta < 160) return;
     resize(); init();
   });
-  window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-  window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
-  window.addEventListener('touchmove', e => { if(e.touches.length) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; } }, { passive: true });
-  window.addEventListener('touchend', () => { mouse.x = -9999; mouse.y = -9999; });
+  const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (hasFinePointer) {
+    window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+  }
 
   resize(); init(); requestAnimationFrame(animate);
 })();

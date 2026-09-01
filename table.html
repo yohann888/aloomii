@@ -109,9 +109,9 @@
     .hero-copy { max-width: 760px; margin: 0 auto; }
     .table-banner {
       display: block;
-      width: min(880px, 100%);
+      width: min(1100px, 100%);
       height: auto;
-      margin: 0 auto 36px;
+      margin: 0 auto 44px;
       border: 1px solid var(--border);
       border-radius: 18px;
       box-shadow: 0 0 70px rgba(0,200,190,.16), 0 18px 60px rgba(0,0,0,.35);
@@ -288,6 +288,10 @@
       .hero-actions .button, .closing-actions .button { width: 100%; }
       .nav-cta { padding-right: 14px; padding-left: 14px; font-size: 12px; }
     }
+    @media (hover: none) and (pointer: coarse) {
+      .glass, nav { backdrop-filter: none; }
+      .glass { background: rgba(18,18,30,.82); }
+    }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .reveal, .nav-cta, .button { transition: none; }
@@ -306,8 +310,8 @@
     <main>
       <header class="hero">
         <div class="container hero-grid">
+          <img class="table-banner" src="/images/table/table-banner.png" alt="The Table, produced by Aloomii">
           <div class="hero-copy">
-            <img class="table-banner" src="/images/table/table-banner.png" alt="The Table, produced by Aloomii">
             <div class="eyebrow">Invite only</div>
             <h1>Building in Canada on purpose.</h1>
             <p class="hero-sub">Founders building Canada's next companies. One dinner in Toronto, one lunch in Waterloo. A seat beside them.</p>
