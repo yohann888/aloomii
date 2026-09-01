@@ -107,7 +107,15 @@
       display: block;
     }
     .hero-copy { max-width: 760px; margin: 0 auto; }
-    .table-logo { display: block; width: min(300px, 84vw); height: auto; margin: 0 auto 30px; }
+    .table-banner {
+      display: block;
+      width: min(880px, 100%);
+      height: auto;
+      margin: 0 auto 36px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 0 70px rgba(0,200,190,.16), 0 18px 60px rgba(0,0,0,.35);
+    }
     h1, h2, h3, p { margin-top: 0; }
     h1 {
       max-width: 640px;
@@ -153,22 +161,18 @@
       gap: 18px;
       align-items: stretch;
     }
-    .event-card { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 32px; }
+    .event-card { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; padding: 32px; }
     .event-card > * { width: 100%; }
     .event-card > .button { width: auto; }
-    .event-body {
-      display: flex;
-      gap: 22px;
-      align-items: flex-start;
-    }
-    .event-text { flex: 1 1 auto; min-width: 0; }
-    .event-photo {
-      flex: 0 0 34%;
-      overflow: hidden;
-      aspect-ratio: 3 / 4;
+    .event-cover {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
       border-radius: 14px;
     }
-    .event-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .event-date { margin-bottom: 18px; }
     .event-card h2 {
       margin: 10px 0 18px;
       font-size: clamp(30px, 4vw, 44px);
@@ -297,32 +301,10 @@
       <header class="hero">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <svg class="table-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" role="img" aria-labelledby="table-logo-title">
-              <title id="table-logo-title">The Table</title>
-              <defs>
-                <mask id="dot-a"><rect width="100" height="100" fill="#fff"/><circle cx="13" cy="24" r="8.1" fill="#000"/></mask>
-                <mask id="dot-b"><rect width="100" height="100" fill="#fff"/><circle cx="24" cy="24" r="7.1" fill="#000"/></mask>
-                <mask id="dot-c"><rect width="100" height="100" fill="#fff"/><circle cx="87" cy="24" r="8.1" fill="#000"/></mask>
-                <mask id="dot-d"><rect width="100" height="100" fill="#fff"/><circle cx="76" cy="24" r="7.1" fill="#000"/></mask>
-              </defs>
-              <g fill="#3DD9E5">
-                <circle cx="35" cy="24" r="6" mask="url(#dot-b)"/>
-                <circle cx="24" cy="24" r="6" mask="url(#dot-a)"/>
-                <circle cx="13" cy="24" r="7"/>
-                <circle cx="65" cy="24" r="6" mask="url(#dot-d)"/>
-                <circle cx="76" cy="24" r="6" mask="url(#dot-c)"/>
-                <circle cx="87" cy="24" r="7"/>
-              </g>
-              <g fill="#fff">
-                <rect x="7" y="44" width="86" height="10.5" rx="1.5"/>
-                <rect x="19" y="54.5" width="9.5" height="30"/>
-                <rect x="71.5" y="54.5" width="9.5" height="30"/>
-              </g>
-              <text x="112" y="84.5" font-family="'Big Shoulders Display', 'Arial Narrow', Arial, sans-serif" font-size="52" font-weight="800" letter-spacing="1"><tspan fill="none" stroke="#fff" stroke-width="1.6">THE</tspan><tspan dx="9" fill="#fff">TABLE</tspan></text>
-            </svg>
+            <img class="table-banner" src="/images/table/table-banner.png" alt="The Table, produced by Aloomii">
             <div class="eyebrow">Invite only</div>
-            <h1>Canada's builders, at one table.</h1>
-            <p class="hero-sub">20 founders building Canada's next companies. One dinner in Toronto, one lunch in Waterloo. A seat beside them.</p>
+            <h1>Building in Canada on purpose.</h1>
+            <p class="hero-sub">Founders building Canada's next companies. One dinner in Toronto, one lunch in Waterloo. A seat beside them.</p>
             <div class="hero-actions">
               <a class="button luma-link" href="#" aria-disabled="true" data-luma="toronto">Request a seat, Toronto</a>
               <a class="button secondary luma-link" href="#" aria-disabled="true" data-luma="waterloo">Request a seat, Waterloo</a>
@@ -335,32 +317,13 @@
         <div class="container">
           <div class="event-grid">
             <article class="event-card glass reveal">
-              <div class="eyebrow">Toronto</div>
-              <h2>Table 001</h2>
-              <div class="event-body">
-                <div class="event-text">
-                  <p>Thursday, October 1, 2026. Evening.</p>
-                  <p>Building in Canada on purpose. An evening of fine dining in a private, invite-only room in the Theatre District, Downtown Toronto, on King St W.</p>
-                  <p>Hosted by Aloomii, with Amiral VC joining as co-host for the evening. Barn VC hosts the next day at Table 002.</p>
-                  <p>Your $100 covers the room, a four course dinner and drinks. We take care of the rest so the table stays small and the mix stays right.</p>
-                  <p class="venue-line"><a href="https://www.bluristorante.com" target="_blank" rel="noopener">Blu Ristorante</a><br>214 King Street W, Toronto, ON</p>
-                  <!-- LUMA URL SPOT: replace the Toronto destination in the lumaLinks map below. -->
-                  <a class="button luma-link" href="#" aria-disabled="true" data-luma="toronto">Request a seat, Toronto</a>
-                </div>
-                <div class="event-photo">
-                  <img src="/images/table/private-boardroom-table.jpeg" alt="Blu Ristorante private room with a long table set for dinner and upholstered chairs">
-                </div>
-              </div>
+              <img class="event-cover" src="/images/table/table-001-cover.png" alt="The Table 001. Toronto, a private dinner for founders and investors. Co-hosted with Amiral and Barn VC.">
+              <p class="event-date">Thursday, October 1, 2026. Evening.</p>
+              <a class="button luma-link" href="#" aria-disabled="true" data-luma="toronto">Request a seat, Toronto</a>
             </article>
             <article class="event-card glass reveal">
-              <div class="eyebrow">Waterloo</div>
-              <h2>Table 002</h2>
-              <p>Friday, October 2, 2026. Lunch.</p>
-              <p>Founders and investors, invite only, in the middle of a working day in Waterloo. Table 002 is the counterpart to the night before in Toronto.</p>
-              <p>Hosted by Aloomii, with Amiral VC and Barn VC co-hosting.</p>
-              <p>Your $20 covers the lunch and drinks. Come with the problem you are stuck on. That is the whole agenda.</p>
-              <p class="venue-line">Builders Club<br>165 King St W, Kitchener, ON N2G 1A7</p>
-              <!-- LUMA URL SPOT: replace the Waterloo destination in the lumaLinks map below. -->
+              <img class="event-cover" src="/images/table/table-002-cover.png" alt="The Table 002. Waterloo, a private founder and investor lunch. Co-hosted with Amiral and Barn VC.">
+              <p class="event-date">Friday, October 2, 2026. Lunch.</p>
               <a class="button luma-link" href="#" aria-disabled="true" data-luma="waterloo">Request a seat, Waterloo</a>
             </article>
           </div>
@@ -395,7 +358,7 @@
           <div class="detail-rows">
             <div class="detail-row">
               <div class="detail-label">Date</div>
-              <p>Thu Oct 1, 2026, Table 001, Blu Ristorante (Theatre District), Toronto</p>
+              <p>Thu Oct 1, 2026, Table 001, Toronto, an evening dinner</p>
             </div>
             <div class="detail-row">
               <div class="detail-label">Format</div>
@@ -403,7 +366,7 @@
             </div>
             <div class="detail-row">
               <div class="detail-label">Then</div>
-              <p>Fri Oct 2, Table 002, Builders Club, Waterloo, a founders' lunch</p>
+              <p>Fri Oct 2, 2026, Table 002, Waterloo, a founders' lunch</p>
             </div>
             <div class="detail-row">
               <div class="detail-label">Audience</div>
