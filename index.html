@@ -777,6 +777,32 @@
 .card-note { display: block; margin-top: 8px; font-size: 13px; color: rgba(255,255,255,0.55); }
 .form-col { min-width: 0; }
 .form-group--full { grid-column: 1 / -1; }
+#services .pillars-inner { max-width: 1180px; }
+#services .section-sub { max-width: 820px; margin-bottom: 28px; }
+.svc-intro { max-width: 820px; margin: 0 auto 48px; text-align: center; }
+.svc-intro p { font-size: 16px; color: var(--text-body); line-height: 1.75; margin-bottom: 12px; }
+.svc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+.svc-card { padding: 36px 34px 30px; display: flex; flex-direction: column; min-width: 0; }
+.svc-card-number { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.16em; margin-bottom: 12px; }
+.svc-card h3 { color: #fff; font-size: 23px; line-height: 1.2; letter-spacing: -0.6px; margin-bottom: 10px; }
+.svc-for { color: var(--text-muted); font-size: 14px; font-style: italic; line-height: 1.55; margin-bottom: 18px; }
+.svc-description { color: var(--text-body); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+.svc-features { list-style: none; margin: 0 0 28px; }
+.svc-features li { position: relative; padding: 9px 0 9px 22px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 13px; line-height: 1.6; }
+.svc-features li::before { content: "\2713"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+.svc-engagement { border-top: 1px solid rgba(0,200,190,0.2); padding-top: 18px; margin-top: auto; }
+.svc-engagement > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 4px 0; }
+.svc-engagement span { color: var(--text-muted); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.svc-engagement strong { color: #fff; font-size: 13px; font-weight: 500; line-height: 1.5; }
+.svc-why { margin: 64px auto 0; max-width: 1040px; }
+.svc-why h3 { color: #fff; font-size: 24px; text-align: center; margin-bottom: 26px; }
+.svc-why-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.svc-why-item { color: var(--text-body); font-size: 14px; line-height: 1.7; }
+.svc-why-item strong { color: #fff; }
+.svc-cta { max-width: 760px; margin: 64px auto 0; text-align: center; }
+.svc-cta p { color: #fff; font-size: 21px; font-weight: 600; margin-bottom: 22px; }
+.svc-cta .btn-secondary { margin-bottom: 14px; }
+.svc-cta small { display: block; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
 @media (max-width: 768px) {
   .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; }
   .footer-col { min-width: 0; }
@@ -784,6 +810,9 @@
   .team-member { flex-direction: column; }
   .team-member-info { width: 100%; }
   .newsletter-inline { padding-top: 24px !important; padding-bottom: 24px !important; }
+  .svc-grid, .svc-why-grid { grid-template-columns: 1fr; }
+  .svc-intro { margin-bottom: 36px; }
+  .svc-why, .svc-cta { margin-top: 48px; }
 }
 @media (min-width: 769px) and (max-width: 1100px) {
   nav { padding-left: 24px; padding-right: 24px; }
@@ -808,6 +837,7 @@
     <li><a href="/studio">Studio</a></li>
     <li><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a></li>
     <li><a href="/builds">Builds</a></li>
+    <li><a href="#services">Services</a></li>
     <li><a href="/agent-adoption/">Agent Adoption</a></li>
     <li><a href="/playbook/">Playbook</a></li>
     <li><a href="/events">Events</a></li>
@@ -821,6 +851,7 @@
   <a href="/studio" onclick="closeMenu()">Studio</a>
   <a href="https://devkick.com" onclick="closeMenu()">DevKick</a>
   <a href="/builds" onclick="closeMenu()">Builds</a>
+  <a href="#services" onclick="closeMenu()">Services</a>
   <a href="/agent-adoption/" onclick="closeMenu()">Agent Adoption</a>
   <a href="/playbook/" onclick="closeMenu()">Playbook</a>
   <a href="/events" onclick="closeMenu()">Events</a>
@@ -905,6 +936,98 @@
   <span style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent);">aloomii.com/table &rarr;</span>
 </a>
 -->
+
+<!-- SERVICES -->
+<section class="pillars reveal" id="services">
+  <div class="pillars-inner">
+    <div class="section-label reveal">Services</div>
+    <h2 class="section-heading reveal">Enterprise AI Engineering &amp; Agent Enablement</h2>
+    <p class="section-sub reveal">Stop paying for AI shelfware. Turn autonomous agents into deployed, tested Pull Requests without risking your IP.</p>
+    <div class="svc-intro reveal">
+      <p>Enterprises are spending millions on licenses for autonomous coding platforms like Cognition (Devin) and interactive AI environments like Cursor, only to hit two immediate walls: strict corporate security boundaries and backlogs that agents can't parse.</p>
+      <p>We bridge the gap between frontier agent capabilities and enterprise infrastructure. As an active ecosystem practitioner and community ambassador, we deliver hardened execution sandboxes, automated ticket triage pipelines, and team enablement that cut backlog cycle times by over 40%.</p>
+    </div>
+    <div class="svc-grid">
+      <article class="svc-card glass reveal-scale">
+        <div class="svc-card-number">01</div>
+        <h3>Hardened Agent Sandboxing &amp; Private VPC Deployment</h3>
+        <p class="svc-for">For organizations blocked by InfoSec, SOC 2, or data-governance mandates.</p>
+        <p class="svc-description">Autonomous agents cannot touch production code or proprietary data without strict isolation. We architect, deploy, and verify private, isolated worker nodes (including Devin Outposts and containerized runners) inside your secure VPC or on-premise hardware.</p>
+        <ul class="svc-features">
+          <li>Air-gapped execution: Agent planning remains in the cloud, while all repo cloning, shell commands, and builds run inside your perimeter via outbound-only WebSockets.</li>
+          <li>Least-privilege credential vaults: Zero plain-text secrets. Integrations with HashiCorp Vault, AWS Secrets Manager, and Databricks Unity Catalog service principals.</li>
+          <li>Internal registry whitelisting: Network egress controls that enforce package installations exclusively from internal artifact registries (Nexus/Artifactory).</li>
+        </ul>
+        <div class="svc-engagement">
+          <div><span>Timeline</span><strong>2 to 3 weeks</strong></div>
+          <div><span>Model</span><strong>Fixed-scope deployment &amp; security audit</strong></div>
+          <div><span>Investment</span><strong>$35,000 – $55,000</strong></div>
+        </div>
+      </article>
+      <article class="svc-card glass reveal-scale">
+        <div class="svc-card-number">02</div>
+        <h3>Autonomous &ldquo;Ticket-to-PR&rdquo; CI/CD Harness</h3>
+        <p class="svc-for">For engineering teams buried under maintenance, tech debt, and bug backlogs.</p>
+        <p class="svc-description">Agents fail when Jira or Linear tickets lack context, stack traces, and deterministic verification. We build the workflow middleware that enriches incoming issues, hands them off to autonomous agent swarms, and validates results against your test suites before opening a Pull Request.</p>
+        <ul class="svc-features">
+          <li>Context-enrichment triggers: Webhook engines that automatically pull relevant schema definitions, logs, and acceptance criteria into the agent's task prompt.</li>
+          <li>Self-healing test loops: Runtimes that execute unit, integration, and headless browser tests (Playwright/Jest/PyTest) inside the sandbox, forcing the agent to iterate until all checks pass.</li>
+          <li>Human-in-the-loop review gates: Automated PR tagging, detailed diff summaries, and synthetic test proof for rapid review by your senior engineers.</li>
+        </ul>
+        <div class="svc-engagement">
+          <div><span>Timeline</span><strong>3 to 4 weeks</strong></div>
+          <div><span>Model</span><strong>Pipeline build + first 5 repos</strong></div>
+          <div><span>Investment</span><strong>$28,000 flat fee · then $12,500 / month retainer (prompt tuning, model routing, CI maintenance)</strong></div>
+        </div>
+      </article>
+      <article class="svc-card glass reveal-scale">
+        <div class="svc-card-number">03</div>
+        <h3>High-Friction Technical Debt &amp; Lakehouse Modernization Sprints</h3>
+        <p class="svc-for">For data and platform teams with quarters of delayed migrations.</p>
+        <p class="svc-description">Manual framework upgrades, SQL optimization, and batch-to-streaming pipeline migrations drain your senior developers' focus. We run supervised agent swarms against your legacy repos to execute high-friction migrations in days rather than quarters.</p>
+        <ul class="svc-features">
+          <li>Legacy code refactoring: Upgrades for deprecated libraries, Python version modernizations, and React hook migrations.</li>
+          <li>Governed lakehouse refactoring: Converting legacy PySpark batch scripts into optimized Delta Lake and Unity Catalog-compliant streaming pipelines.</li>
+          <li>Automated test suite generation: Backfilling integration test coverage across undocumented legacy services to lock in behavioral stability.</li>
+        </ul>
+        <div class="svc-engagement">
+          <div><span>Timeline</span><strong>2-week sprints</strong></div>
+          <div><span>Model</span><strong>Outcome-based modernization package</strong></div>
+          <div><span>Investment</span><strong>$45,000 – $85,000 / sprint</strong></div>
+        </div>
+      </article>
+      <article class="svc-card glass reveal-scale">
+        <div class="svc-card-number">04</div>
+        <h3>Developer Velocity &amp; Team Enablement Cohort</h3>
+        <p class="svc-for">For engineering orgs where 80% of staff still treat modern AI tools like basic autocomplete.</p>
+        <p class="svc-description">Buying seats does not equal adoption. We run a 3-week immersive enablement cohort for your software engineering teams to transform developers from manual typists into systems architects who orchestrate agents.</p>
+        <ul class="svc-features">
+          <li>Repository rule sets: Custom .cursorrules and Devin system prompts tuned to your internal architectures, API contracts, and linting standards.</li>
+          <li>Agentic workflow playbooks: Practical training on context pinning, multi-file editing, and prompt debugging for staff and principal engineers.</li>
+          <li>Executive ROI scorecard: Quantifiable tracking of PR cycle time, deployment frequency, and review latency before and after rollout.</li>
+        </ul>
+        <div class="svc-engagement">
+          <div><span>Timeline</span><strong>3 weeks</strong></div>
+          <div><span>Model</span><strong>Cohort program (up to 50 engineers)</strong></div>
+          <div><span>Investment</span><strong>$25,000 flat fee</strong></div>
+        </div>
+      </article>
+    </div>
+    <div class="svc-why reveal">
+      <h3>Why work with us</h3>
+      <div class="svc-why-grid">
+        <p class="svc-why-item"><strong>Practitioner-led, vendor-agnostic:</strong> We don't sell software licenses. We implement the optimal combination of tools (Cognition, Cursor, Databricks, custom LLM pipelines) based on what actually runs cleanly in your production stack.</p>
+        <p class="svc-why-item"><strong>Zero security compromises:</strong> We specialize in air-gapped runtimes and governed data environments, ensuring your code and enterprise data never train public models or bypass your firewall.</p>
+        <p class="svc-why-item"><strong>Outcome guarantees:</strong> We don't bill endless T&amp;M hours. Our core offerings are delivered under fixed-scope, outcome-based milestone agreements.</p>
+      </div>
+    </div>
+    <div class="svc-cta reveal">
+      <p>Ready to operationalize autonomous engineering?</p>
+      <a href="#contact" class="btn-secondary">Book a 30-Minute Architecture Audit</a>
+      <small>We'll review your current repo topologies, security constraints, and CI/CD pipelines to map your highest-ROI deployment path.</small>
+    </div>
+  </div>
+</section>
 
 <!-- BUILDS -->
 <section class="pillars reveal" id="builds">
