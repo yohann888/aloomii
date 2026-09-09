@@ -145,11 +145,9 @@
     .person-card { padding: 30px; }
     .person-card h3 { margin: 10px 0; font-size: 26px; }
     .person-card p { margin: 0; color: var(--body); }
-    .person-badge { margin-top: 20px; }
-    .person-badge img { height: 160px; width: auto; border-radius: 12px; }
-    .partner-strip { margin-top: 48px; text-align: center; }
-    .partner-strip img { height: 140px; width: auto; filter: grayscale(1) brightness(1.5); opacity: 0.55; transition: opacity .3s; }
-    .partner-strip img:hover { opacity: 0.85; }
+    .hero-credentials { margin-top: 36px; display: flex; justify-content: center; align-items: center; gap: clamp(24px, 4vw, 56px); flex-wrap: wrap; }
+    .hero-credentials img { height: 150px; width: auto; border-radius: 12px; }
+    .hero-credentials .databricks-badge { filter: grayscale(1) brightness(1.5); opacity: 0.7; }
     .closing { padding: 96px 0 120px; text-align: center; }
     .closing h2 { max-width: 760px; margin: 0 auto 18px; font-size: clamp(38px, 6vw, 70px); line-height: 1.02; letter-spacing: -3px; }
     .closing p { max-width: 580px; margin: 0 auto 28px; color: var(--body); font-size: 18px; }
@@ -243,9 +241,13 @@
         <div class="container hero-grid">
           <div>
             <div class="eyebrow">Aloomii Builds</div>
-            <h1>We each <span>build.</span></h1>
+            <h1>We <span>build.</span></h1>
             <p class="hero-copy">Right now that means platforms and internal tools. We build the thing that needs to exist, then leave it clear enough to use.</p>
             <a class="button" href="/#contact">Start a Conversation</a>
+            <div class="hero-credentials">
+              <img src="/images/logos/devin-ambassador-dark.png" alt="Devin Ambassador — Cognition">
+              <img class="databricks-badge" src="/images/logos/databricks-brickbuilder-bronze.png" alt="Databricks Brickbuilder Partner Network, Bronze">
+            </div>
           </div>
         </div>
       </header>
@@ -316,25 +318,15 @@
 
       <section class="section" aria-labelledby="builders-heading">
         <div class="container">
-          <div class="eyebrow reveal">Two builders</div>
+          <div class="eyebrow reveal">How we build</div>
           <h2 class="section-heading reveal" id="builders-heading">The work is <span>shared.</span></h2>
-          <p class="section-intro reveal">Both of us build. The software we ship is public proof. Internal tools stay behind the work until there is something useful to show.</p>
+          <p class="section-intro reveal">We build together. The software we ship is public proof. Internal tools stay behind the work until there is something useful to show.</p>
           <div class="people-grid">
-            <article class="person-card glass reveal">
-              <div class="eyebrow">Yohann</div>
-              <h3>Software and internal tools.</h3>
-              <p>Yohann is a formally trained software engineer who shipped production code at JP Morgan, IBM and the Ontario Government. He builds the software underneath the work.</p>
-              <div class="person-badge"><img src="/images/logos/devin-ambassador-dark.png" alt="Devin Ambassador — Cognition"></div>
+            <article class="person-card glass reveal" style="grid-column: 1 / -1;">
+              <div class="eyebrow">One team</div>
+              <h3>Software, websites and internal tools.</h3>
+              <p>Formally trained engineering, production code shipped at JP Morgan, IBM and the Ontario Government, and sites like aloomii.com, vibrnt.ai and palebluenexus.com built from scratch. Everything here is built in-house, together.</p>
             </article>
-            <article class="person-card glass reveal">
-              <div class="eyebrow">Jenny</div>
-              <h3>Websites and her own tools.</h3>
-              <p>Jenny builds her own tools, built aloomii.com and vibrnt.ai from scratch, then started palebluenexus.com and built it out with Yohann.</p>
-            </article>
-          </div>
-          <div class="partner-strip reveal">
-            <div class="eyebrow">Partner networks</div>
-            <img src="/images/logos/databricks-brickbuilder-bronze.png" alt="Databricks Brickbuilder Partner Network, Bronze">
           </div>
         </div>
       </section>
