@@ -395,7 +395,8 @@ function closeMenu() { document.querySelector('.hamburger').classList.remove('ac
   try {
     const res = await fetch('/events.json');
     const events = await res.json();
-    const upcoming = events.filter(function(e) { return e.status === 'upcoming'; });
+    const today = new Date(); today.setHours(0,0,0,0);
+    const upcoming = events.filter(function(e) { return e.status === 'upcoming' && new Date(e.date + 'T23:59:59') >= today; });
 
     const eventSchema = upcoming.map(function(ev) {
       const item = {

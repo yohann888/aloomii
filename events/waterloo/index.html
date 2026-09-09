@@ -197,9 +197,10 @@
     try {
       var res = await fetch('/events.json');
       var events = await res.json();
+      var today = new Date(); today.setHours(0,0,0,0);
       var upcoming = events.filter(function(ev) {
         var location = ev.location || '';
-        return ev.status === 'upcoming' && (location.includes('Kitchener') || location.includes('Waterloo'));
+        return ev.status === 'upcoming' && new Date(ev.date + 'T23:59:59') >= today && (location.includes('Kitchener') || location.includes('Waterloo'));
       });
       var eventSchema = upcoming.map(function(ev) {
         var item = {

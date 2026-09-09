@@ -197,7 +197,8 @@
     try {
       var res = await fetch('/events.json');
       var events = await res.json();
-      var upcoming = events.filter(function(ev) { return ev.status === 'upcoming' && (ev.location || '').includes('Toronto'); });
+      var today = new Date(); today.setHours(0,0,0,0);
+      var upcoming = events.filter(function(ev) { return ev.status === 'upcoming' && new Date(ev.date + 'T23:59:59') >= today && (ev.location || '').includes('Toronto'); });
       var eventSchema = upcoming.map(function(ev) {
         var item = {
           '@context': 'https://schema.org',
