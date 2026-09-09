@@ -331,8 +331,10 @@
 <!-- PAST EVENTS -->
 <section class="events-section">
   <div class="section-label">Past Events</div>
-  <div class="empty-state">
-    <p>No past events yet. This is just the beginning.</p>
+  <div id="pastEvents">
+    <div class="empty-state">
+      <p>No past events yet. This is just the beginning.</p>
+    </div>
   </div>
 </section>
 
@@ -426,6 +428,26 @@ function closeMenu() { document.querySelector('.hamburger').classList.remove('ac
     eventSchemaScript.type = 'application/ld+json';
     eventSchemaScript.textContent = JSON.stringify(eventSchema);
     document.head.appendChild(eventSchemaScript);
+
+    var pastContainer = document.getElementById('pastEvents');
+    var past = events.filter(function(e) { return e.status === 'past' || new Date(e.date + 'T23:59:59') < today; })
+      .sort(function(a, b) { return b.date.localeCompare(a.date); });
+    if (past.length) {
+      pastContainer.innerHTML = '';
+      past.forEach(function(ev) {
+        var dateObj = new Date(ev.date + 'T12:00:00');
+        var formatted = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        var card = document.createElement('div');
+        card.className = 'event-card glass';
+        card.innerHTML =
+          (ev.image ? '<div style="margin-bottom:24px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);opacity:0.75;"><img src="' + ev.image + '" alt="' + ev.title + '" style="width:100%;height:auto;display:block;"></div>' : '') +
+          '<div class="event-meta"><span>' + formatted + '</span><span>' + ev.location + '</span></div>' +
+          '<h3>' + ev.title + '</h3>' +
+          (ev.subtitle ? '<div style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:10px;">' + ev.subtitle + '</div>' : '') +
+          (ev.venue ? '<div style="font-size:13px;color:var(--text-muted);">' + ev.venue + '</div>' : '');
+        pastContainer.appendChild(card);
+      });
+    }
 
     if (upcoming.length === 0) {
       container.innerHTML = '<div class="empty-state"><p>No upcoming events right now. Check back soon.</p></div>';
