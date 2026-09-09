@@ -180,15 +180,16 @@
   .proof-logos img:hover { opacity: 0.75; }
   .proof-groups { display: flex; justify-content: center; align-items: flex-start; gap: clamp(48px, 8vw, 120px); flex-wrap: wrap; }
   .proof-group { text-align: center; }
+  .proof-group.partner { flex-basis: 100%; }
   .partner-badge img {
-    height: 85px; width: auto;
+    height: 170px; width: auto;
     filter: grayscale(1) brightness(1.5);
     opacity: 0.5;
     transition: opacity 0.3s;
   }
   .partner-badge img:hover { opacity: 0.8; }
   @media (max-width: 768px) {
-    .partner-badge img { height: 106px; }
+    .partner-badge img { height: 212px; max-width: 100%; }
   }
 
   /* ==================== SECTION UTILITIES ==================== */
@@ -875,7 +876,7 @@
           <img src="/images/logos/ibm.png" alt="IBM">
         </div>
       </div>
-      <div class="proof-group">
+      <div class="proof-group partner">
         <div class="label">Partner Networks</div>
         <div class="proof-logos partner-badge">
           <img src="/images/logos/databricks-brickbuilder-bronze.png" alt="Databricks Brickbuilder Partner Network, Bronze">
@@ -899,11 +900,11 @@
     <h2 class="section-heading reveal">The Ecosystem</h2>
     <p class="section-sub reveal" style="text-align:center;max-width:700px;margin:0 auto 40px;">Communities on one side, software and media on the other. Each one feeds the next.</p>
     <div class="offering-grid">
-      <a href="/studio" class="offering-card founders glass reveal-scale">
-        <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Production</div>
-        <h3 style="font-size:20px;margin-bottom:10px;color:#fff;">Studio</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">You tape the show. We handle editing, clips, show notes, publishing and distribution. Nine years of production, five shows, one pipeline built in-house.</p>
-        <span style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent);">Led by Jenny</span>
+      <a href="/builds" class="offering-card founders glass reveal-scale">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Software</div>
+        <h3 style="font-size:20px;margin-bottom:10px;color:#fff;">Enterprise AI Engineering &amp; Agent Enablement</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Stop paying for AI shelfware. Turn autonomous agents into deployed, tested Pull Requests without risking your IP.</p>
+        <span style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent);">Both founders</span>
       </a>
       <a href="https://devkick.com" target="_blank" rel="noopener" class="offering-card founders glass reveal-scale">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Community</div>
@@ -911,11 +912,11 @@
         <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">The builders' room. Build nights, live teardowns and demos for people shipping AI agents, robotics and quantum in the KW to GTA corridor. Demo or it didn't happen.</p>
         <span style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent);">Led by Yohann</span>
       </a>
-      <a href="/builds" class="offering-card founders glass reveal-scale">
-        <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Software</div>
-        <h3 style="font-size:20px;margin-bottom:10px;color:#fff;">Builds</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">Platforms that run organizations, plus internal tools for our own and client work. Both make the work easier to run.</p>
-        <span style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent);">Both founders</span>
+      <a href="/studio" class="offering-card founders glass reveal-scale">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Production</div>
+        <h3 style="font-size:20px;margin-bottom:10px;color:#fff;">Studio</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;">You tape the show. We handle editing, clips, show notes, publishing and distribution. Nine years of production, five shows, one pipeline built in-house.</p>
+        <span style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent);">Led by Jenny</span>
       </a>
       <a href="/agent-adoption/" class="offering-card founders glass reveal-scale" style="display:block;text-decoration:none;">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Training</div>
@@ -961,7 +962,6 @@
         <div class="svc-engagement">
           <div><span>Timeline</span><strong>2 to 3 weeks</strong></div>
           <div><span>Model</span><strong>Fixed-scope deployment &amp; security audit</strong></div>
-          <div><span>Investment</span><strong>$35,000 – $55,000</strong></div>
         </div>
       </article>
       <article class="svc-card glass reveal-scale">
@@ -977,7 +977,6 @@
         <div class="svc-engagement">
           <div><span>Timeline</span><strong>3 to 4 weeks</strong></div>
           <div><span>Model</span><strong>Pipeline build + first 5 repos</strong></div>
-          <div><span>Investment</span><strong>$28,000 flat fee · then $12,500 / month retainer (prompt tuning, model routing, CI maintenance)</strong></div>
         </div>
       </article>
       <article class="svc-card glass reveal-scale">
@@ -993,7 +992,6 @@
         <div class="svc-engagement">
           <div><span>Timeline</span><strong>2-week sprints</strong></div>
           <div><span>Model</span><strong>Outcome-based modernization package</strong></div>
-          <div><span>Investment</span><strong>$45,000 – $85,000 / sprint</strong></div>
         </div>
       </article>
       <article class="svc-card glass reveal-scale">
@@ -1009,7 +1007,6 @@
         <div class="svc-engagement">
           <div><span>Timeline</span><strong>3 weeks</strong></div>
           <div><span>Model</span><strong>Cohort program (up to 50 engineers)</strong></div>
-          <div><span>Investment</span><strong>$25,000 flat fee</strong></div>
         </div>
       </article>
     </div>
