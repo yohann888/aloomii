@@ -23,6 +23,60 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Inter:wght@300;400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="/snippets/ghost-background.css">
+  <link rel="stylesheet" href="/snippets/breadcrumbs.css">
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "The Table 001 — Toronto Dinner",
+      "startDate": "2026-10-01",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Toronto",
+          "addressRegion": "ON",
+          "addressCountry": "CA"
+        }
+      },
+      "organizer": {"@type": "Organization", "name": "Aloomii", "url": "https://aloomii.com"},
+      "url": "https://luma.com/9bjf5taa"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "The Table 002 — Waterloo Lunch",
+      "startDate": "2026-10-02",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Waterloo",
+          "addressRegion": "ON",
+          "addressCountry": "CA"
+        }
+      },
+      "organizer": {"@type": "Organization", "name": "Aloomii", "url": "https://aloomii.com"},
+      "url": "https://luma.com/table-m6je"
+    }
+  ]
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://aloomii.com/"},
+      {"@type":"ListItem","position":2,"name":"Events","item":"https://aloomii.com/events"},
+      {"@type":"ListItem","position":3,"name":"The Table","item":"https://aloomii.com/table"}
+    ]
+  }
+  </script>
   <style>
     :root {
       --bg: #0b0b14;
@@ -299,6 +353,14 @@
     <nav aria-label="Event navigation">
       <a href="/" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
       <a class="nav-cta" href="#events">Request a seat</a>
+    </nav>
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/events">Events</a></li>
+        <li>The Table</li>
+      </ol>
     </nav>
 
     <main>

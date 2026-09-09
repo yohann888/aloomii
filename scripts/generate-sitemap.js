@@ -32,6 +32,12 @@ const STATIC_PAGES = [
   { loc: '/terms.html',          changefreq: 'yearly',  priority: '0.3' },
   { loc: '/client-terms.html',   changefreq: 'yearly',  priority: '0.3' },
   { loc: '/agent-adoption',      changefreq: 'monthly', priority: '0.8' },
+  { loc: '/table',               changefreq: 'monthly', priority: '0.8' },
+  { loc: '/ai-agency-toronto/',  changefreq: 'monthly', priority: '0.8' },
+  { loc: '/agent-adoption/workshop/', changefreq: 'monthly', priority: '0.8' },
+  { loc: '/agent-adoption/devin/', changefreq: 'monthly', priority: '0.8' },
+  { loc: '/partners/databricks/', changefreq: 'monthly', priority: '0.8' },
+  { loc: '/playbook/',           changefreq: 'monthly', priority: '0.8' },
 ];
 
 // Blog directories to skip (not real article slugs)

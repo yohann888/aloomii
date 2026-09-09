@@ -17,7 +17,18 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <link rel="stylesheet" href="/assets/css/aloomii-tokens.css">
+  <link rel="stylesheet" href="/snippets/breadcrumbs.css">
   <link rel="stylesheet" href="/snippets/ghost-background.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://aloomii.com/"},
+      {"@type":"ListItem","position":2,"name":"AI Agent Adoption","item":"https://aloomii.com/agent-adoption/"}
+    ]
+  }
+  </script>
   <style>
     .agent-page { position: relative; z-index: 2; }
     .agent-hero { padding: 100px 48px 72px; text-align: center; }
@@ -81,6 +92,13 @@
   <a href="/#contact" onclick="closeMenu()">Start a Conversation</a>
 </div>
 <!-- CANONICAL_NAV_END -->
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li>AI Agent Adoption</li>
+      </ol>
+    </nav>
 
     <main>
       <section class="agent-hero">

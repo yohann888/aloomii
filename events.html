@@ -27,6 +27,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet" />
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/snippets/breadcrumbs.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://aloomii.com/"},
+    {"@type":"ListItem","position":2,"name":"Events","item":"https://aloomii.com/events"}
+  ]
+}
+</script>
 <style>
   :root {
     --bg: #0b0b14;
@@ -285,6 +296,13 @@
 </div>
 <!-- CANONICAL_NAV_END -->
 
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li>Events</li>
+  </ol>
+</nav>
+
 <!-- HERO -->
 <section class="events-hero">
   <div class="eyebrow">Events</div>
@@ -367,6 +385,35 @@ function closeMenu() { document.querySelector('.hamburger').classList.remove('ac
     const events = await res.json();
     const upcoming = events.filter(function(e) { return e.status === 'upcoming'; });
 
+    const eventSchema = upcoming.map(function(ev) {
+      const item = {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: ev.title,
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        organizer: {
+          '@type': 'Organization',
+          name: 'Aloomii',
+          url: 'https://aloomii.com'
+        }
+      };
+      if (ev.date) item.startDate = ev.date;
+      if (ev.city) {
+        item.location = {
+          '@type': 'Place',
+          address: { '@type': 'PostalAddress', addressLocality: ev.city }
+        };
+      }
+      if (ev.rsvpUrl) item.url = ev.rsvpUrl;
+      if (ev.description || ev.subtitle) item.description = ev.description || ev.subtitle;
+      return item;
+    });
+    const eventSchemaScript = document.createElement('script');
+    eventSchemaScript.type = 'application/ld+json';
+    eventSchemaScript.textContent = JSON.stringify(eventSchema);
+    document.head.appendChild(eventSchemaScript);
+
     if (upcoming.length === 0) {
       container.innerHTML = '<div class="empty-state"><p>No upcoming events right now. Check back soon.</p></div>';
       return;
@@ -388,11 +435,11 @@ function closeMenu() { document.querySelector('.hamburger').classList.remove('ac
         '<h3>' + ev.title + '</h3>' +
         (ev.subtitle ? '<div style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:10px;">' + ev.subtitle + '</div>' : '') +
         (ev.partner ? '<div class="event-partner">Partner: ' + ev.partner + '</div>' : '') +
-        '<p>' + ev.description + '</p>' +
+        '<p>' + (ev.description || ev.subtitle || '') + '</p>' +
         (ev.venue ? '<div style="font-size:13px;color:var(--accent);margin-bottom:6px;">' + ev.venue + '</div>' : '') +
         (ev.venueNote ? '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">' + ev.venueNote + '</div>' : '') +
-        '<div class="event-capacity">' + ev.capacity + ' spots</div>' +
-        '<a href="' + ev.rsvpUrl + '" class="event-cta">RSVP</a>';
+        (ev.capacity ? '<div class="event-capacity">' + ev.capacity + ' spots</div>' : '') +
+        (ev.rsvpUrl ? '<a href="' + ev.rsvpUrl + '" class="event-cta">RSVP</a>' : '');
       container.appendChild(card);
     });
   } catch(err) {

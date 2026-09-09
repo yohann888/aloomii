@@ -28,11 +28,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://aloomii.com/table</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://aloomii.com/jenny/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -64,6 +59,36 @@
   </url>
   <url>
     <loc>https://aloomii.com/agent-adoption</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/table</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/ai-agency-toronto/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/agent-adoption/workshop/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/agent-adoption/devin/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/partners/databricks/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aloomii.com/playbook/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -592,16 +617,4 @@
     <priority>0.7</priority>
   </url>
 
-  <url>
-    <loc>https://aloomii.com/ai-agency-toronto/</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aloomii.com/agent-adoption/workshop/</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
 </urlset>

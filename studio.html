@@ -10,7 +10,18 @@
   <link rel="canonical" href="https://aloomii.com/studio">
   <link rel="stylesheet" href="/assets/css/aloomii-tokens.css">
   <link rel="stylesheet" href="/snippets/canonical-nav.css">
+  <link rel="stylesheet" href="/snippets/breadcrumbs.css">
   <link rel="stylesheet" href="/snippets/ghost-background.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://aloomii.com/"},
+      {"@type":"ListItem","position":2,"name":"Studio","item":"https://aloomii.com/studio"}
+    ]
+  }
+  </script>
   <style>
     :root {
       --bg: #0b0b14;
@@ -321,6 +332,13 @@
   <a href="/#contact" onclick="closeMenu()">Start a Conversation</a>
 </div>
 <!-- CANONICAL_NAV_END -->
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li>Studio</li>
+      </ol>
+    </nav>
 
     <main>
       <header class="hero">
