@@ -13,6 +13,7 @@
     "image": "/images/events/devin-meetup-summer-nights-luma.png",
     "description": "An evening for builders shipping with Devin. Demo what you're building, meet the Cognition team, and connect with operators using AI agents in production. Limited to 80 attendees.",
     "rsvpUrl": "https://luma.com/devin?e=evt-fYwJRYXhy9VOG3c",
+    "recapUrl": "https://devkick.com/events/2026-07-cognition-summer-nights/",
     "status": "past",
     "tags": [
       "AI",
@@ -31,6 +32,7 @@
     "venue": "Builders Club, Kitchener",
     "partner": "Cognition",
     "description": "Waterloo Build Night with Devin — Builders Club KW.",
+    "recapUrl": "https://devkick.com/events/2026-08-kick-02/",
     "status": "past",
     "manualUpdate": "MANUAL UPDATE: Keep this event current as dates, venue, and RSVP details change."
   },
