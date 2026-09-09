@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Builder Events in New York | Aloomii</title>
+  <meta name="description" content="Builder meetups, dinners, and salons for operators building with AI — New York events are coming.">
+  <link rel="canonical" href="https://aloomii.com/events/new-york/">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="stylesheet" href="/assets/css/aloomii-tokens.css">
+  <link rel="stylesheet" href="/snippets/canonical-nav.css">
+  <link rel="stylesheet" href="/snippets/breadcrumbs.css">
+  <link rel="stylesheet" href="/snippets/ghost-background.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://aloomii.com/"},
+      {"@type":"ListItem","position":2,"name":"Events","item":"https://aloomii.com/events"},
+      {"@type":"ListItem","position":3,"name":"New York","item":"https://aloomii.com/events/new-york/"}
+    ]
+  }
+  </script>
+  <style>
+    :root { --bg: #0b0b14; --border: rgba(255,255,255,0.12); --text: #f0f0f0; --text-body: rgba(255,255,255,0.75); --text-muted: rgba(255,255,255,0.4); --accent: #00c8be; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { margin: 0; overflow-x: hidden; font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    .city-page { position: relative; z-index: 2; }
+    .events-hero { max-width: 900px; margin: 0 auto; padding: 88px 48px 46px; text-align: center; }
+    .events-hero .eyebrow { margin-bottom: 16px; color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+    .events-hero h1 { margin: 0 0 20px; color: #fff; font-family: 'Bricolage Grotesque', Georgia, serif; font-size: clamp(34px, 5vw, 54px); font-weight: 800; line-height: 1.08; letter-spacing: -2px; }
+    .events-hero p { max-width: 650px; margin: 0 auto; color: var(--text-body); font-size: 17px; line-height: 1.7; }
+    .events-section { max-width: 900px; margin: 0 auto; padding: 52px 48px; }
+    .section-label { margin-bottom: 12px; color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+    .glass { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .glass:hover { background: rgba(255,255,255,0.12); border-color: rgba(0,200,190,0.45); }
+    .coming-card, .community-card, .host-card { padding: 40px; }
+    .coming-card h2, .community-card h2, .host-card h2 { margin: 0 0 14px; color: #fff; font-size: clamp(26px, 3.5vw, 36px); letter-spacing: -1px; }
+    .coming-card p, .community-card p, .host-card p { margin: 0 0 22px; color: var(--text-body); font-size: 16px; line-height: 1.75; }
+    .community-card a { color: var(--accent); text-decoration: none; }
+    .event-cta { display: inline-block; padding: 12px 28px; border-radius: 10px; background: var(--accent); box-shadow: 0 4px 16px rgba(0,200,190,0.2); color: #000; font-size: 14px; font-weight: 600; text-decoration: none; }
+    .event-cta:hover { background: #00e0d5; transform: translateY(-1px); }
+    .host-card { border-left: 3px solid var(--accent); border-radius: 0 20px 20px 0; text-align: center; }
+    .site-footer { position: relative; z-index: 2; padding: 56px 40px 30px; border-top: 1px solid var(--border); color: var(--text-muted); }
+    .footer-inner { display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 40px; max-width: 1120px; margin: 0 auto; }
+    .footer-brand img { width: 128px; height: auto; }
+    .footer-brand p { max-width: 240px; font-size: 13px; }
+    .footer-col h4 { margin: 0 0 12px; color: var(--text); font-size: 13px; }
+    .footer-col a { display: block; margin: 7px 0; color: var(--text-muted); font-size: 13px; text-decoration: none; }
+    .footer-col a:hover, .footer-social a:hover { color: var(--accent); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 20px; max-width: 1120px; margin: 38px auto 0; padding-top: 18px; border-top: 1px solid var(--border); font-size: 12px; }
+    .footer-social { display: flex; gap: 18px; }
+    .footer-social a { color: var(--text-muted); text-decoration: none; }
+    @media (max-width: 768px) {
+      .events-hero, .events-section { padding-right: 20px; padding-left: 20px; }
+      .events-hero { padding-top: 60px; }
+      .coming-card, .community-card, .host-card { padding: 32px 24px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; }
+    }
+    @media (max-width: 520px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-bottom { display: block; }
+      .footer-social { margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ghostCanvas"></canvas>
+  <div class="city-page">
+    <!-- CANONICAL_NAV_START -->
+<nav>
+  <a href="/" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
+  <ul class="nav-links">
+    <li><a href="/studio">Studio</a></li>
+    <li><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a></li>
+    <li><a href="/builds">Builds</a></li>
+    <li><a href="/agent-adoption/">Agent Adoption</a></li>
+    <li><a href="/playbook/">Playbook</a></li>
+    <li><a href="/events">Events</a></li>
+    <li><a href="/#team">Team</a></li>
+    <li><a href="/#contact" class="nav-cta">Start a Conversation</a></li>
+  </ul>
+  <button id="hamburger" class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/studio" onclick="closeMenu()">Studio</a>
+  <a href="https://devkick.com" onclick="closeMenu()">DevKick</a>
+  <a href="/builds" onclick="closeMenu()">Builds</a>
+  <a href="/agent-adoption/" onclick="closeMenu()">Agent Adoption</a>
+  <a href="/playbook/" onclick="closeMenu()">Playbook</a>
+  <a href="/events" onclick="closeMenu()">Events</a>
+  <a href="/#team" onclick="closeMenu()">Team</a>
+  <a href="/#contact" onclick="closeMenu()">Start a Conversation</a>
+</div>
+<!-- CANONICAL_NAV_END -->
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/events">Events</a></li>
+        <li>New York</li>
+      </ol>
+    </nav>
+
+    <main>
+      <header class="events-hero">
+        <div class="eyebrow">Events · New York</div>
+        <h1>Where New York builders meet.</h1>
+        <p>Meetups, dinners, and roundtables for operators building with AI in New York.</p>
+      </header>
+
+      <section class="events-section">
+        <div class="coming-card glass">
+          <div class="section-label">Coming soon</div>
+          <h2>New York events are next.</h2>
+          <p>We run builder meetups, private dinners, and salons — and we're bringing them to New York. Get in touch to host with us or hear about the first event.</p>
+          <a href="/#contact" class="event-cta">Get in Touch</a>
+        </div>
+      </section>
+
+      <section class="events-section">
+        <div class="community-card glass">
+          <div class="section-label">Community</div>
+          <h2>Build with the community.</h2>
+          <p>DevKick is the builder community — build nights, live teardowns and demos in the KW to GTA corridor. <a href="https://devkick.com" target="_blank" rel="noopener">Visit DevKick</a>.</p>
+        </div>
+      </section>
+
+      <section class="events-section">
+        <div class="host-card glass">
+          <h2>Host with us.</h2>
+          <p>We partner with companies that want to put builders in the same room. If you have a venue, a community, or a reason to gather, let's talk.</p>
+          <a href="/#contact" class="event-cta">Get in Touch</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="/images/logos/brand-logo.png" alt="Aloomii">
+          <p>Communities, media and software. Built in Caledonia, Ontario.</p>
+        </div>
+        <div class="footer-col"><h4>The Studio</h4><a href="/studio">Studio</a><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a><a href="/builds">Builds</a><a href="/playbook/">Playbook</a><a href="/agent-adoption/">Agent Adoption</a><a href="/events">Events</a><a href="/partners/databricks/">Databricks Partner</a><a href="/agent-adoption/devin/">Devin Adoption</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="/#team">About</a><a href="/blog/">Blog</a><a href="/#contact">Contact</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="/legal/privacy/">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/client-terms">Client Terms</a></div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Aloomii</span>
+        <div class="footer-social"><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:yohann@aloomii.com">Email</a></div>
+      </div>
+    </footer>
+  </div>
+  <script src="/snippets/canonical-nav.js"></script>
+  <script src="/snippets/ghost-background.js"></script>
+</body>
+</html>

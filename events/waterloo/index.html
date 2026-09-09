@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Builder Events in Waterloo &amp; Kitchener | Build Nights &amp; Meetups | Aloomii</title>
+  <meta name="description" content="Devin build nights and builder meetups for operators building with AI in the KW corridor.">
+  <link rel="canonical" href="https://aloomii.com/events/waterloo/">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="stylesheet" href="/assets/css/aloomii-tokens.css">
+  <link rel="stylesheet" href="/snippets/canonical-nav.css">
+  <link rel="stylesheet" href="/snippets/breadcrumbs.css">
+  <link rel="stylesheet" href="/snippets/ghost-background.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://aloomii.com/"},
+      {"@type":"ListItem","position":2,"name":"Events","item":"https://aloomii.com/events"},
+      {"@type":"ListItem","position":3,"name":"Waterloo","item":"https://aloomii.com/events/waterloo/"}
+    ]
+  }
+  </script>
+  <style>
+    :root { --bg: #0b0b14; --border: rgba(255,255,255,0.12); --text: #f0f0f0; --text-body: rgba(255,255,255,0.75); --text-muted: rgba(255,255,255,0.4); --accent: #00c8be; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { margin: 0; overflow-x: hidden; font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    .city-page { position: relative; z-index: 2; }
+    .events-hero { max-width: 900px; margin: 0 auto; padding: 88px 48px 46px; text-align: center; }
+    .events-hero .eyebrow { margin-bottom: 16px; color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+    .events-hero h1 { margin: 0 0 20px; color: #fff; font-family: 'Bricolage Grotesque', Georgia, serif; font-size: clamp(34px, 5vw, 54px); font-weight: 800; line-height: 1.08; letter-spacing: -2px; }
+    .events-hero p { max-width: 650px; margin: 0 auto; color: var(--text-body); font-size: 17px; line-height: 1.7; }
+    .events-section { max-width: 900px; margin: 0 auto; padding: 52px 48px; }
+    .section-label { margin-bottom: 12px; color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+    .section-heading { margin: 0 0 16px; color: #fff; font-size: clamp(26px, 3.5vw, 36px); font-weight: 800; letter-spacing: -1px; }
+    .glass { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .glass:hover { background: rgba(255,255,255,0.12); border-color: rgba(0,200,190,0.45); }
+    .event-card { margin-bottom: 24px; padding: 36px 40px; }
+    .event-card .event-meta { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 16px; color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: .5px; }
+    .event-card h3 { margin: 0 0 8px; color: #fff; font-size: 24px; font-weight: 800; letter-spacing: -.5px; }
+    .event-card .event-partner { margin-bottom: 14px; color: var(--text-muted); font-size: 13px; }
+    .event-card p { margin: 0 0 20px; color: var(--text-body); font-size: 15px; line-height: 1.7; }
+    .event-card .event-capacity { margin-bottom: 20px; color: var(--text-muted); font-size: 13px; }
+    .event-cta { display: inline-block; padding: 12px 28px; border-radius: 10px; background: var(--accent); box-shadow: 0 4px 16px rgba(0,200,190,0.2); color: #000; font-size: 14px; font-weight: 600; text-decoration: none; }
+    .event-cta:hover { background: #00e0d5; transform: translateY(-1px); }
+    .empty-state { padding: 48px; border: 1px dashed rgba(255,255,255,0.15); border-radius: 16px; text-align: center; }
+    .empty-state p { margin: 0; color: var(--text-muted); font-size: 15px; }
+    .table-card, .community-card, .host-card { padding: 40px; }
+    .table-card h3, .community-card h3, .host-card h3 { margin: 0 0 12px; color: #fff; font-size: 22px; }
+    .table-card p, .community-card p, .host-card p { margin: 0 0 22px; color: var(--text-body); font-size: 15px; line-height: 1.7; }
+    .community-card a { color: var(--accent); text-decoration: none; }
+    .host-card { border-left: 3px solid var(--accent); border-radius: 0 20px 20px 0; text-align: center; }
+    .site-footer { position: relative; z-index: 2; padding: 56px 40px 30px; border-top: 1px solid var(--border); color: var(--text-muted); }
+    .footer-inner { display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 40px; max-width: 1120px; margin: 0 auto; }
+    .footer-brand img { width: 128px; height: auto; }
+    .footer-brand p { max-width: 240px; font-size: 13px; }
+    .footer-col h4 { margin: 0 0 12px; color: var(--text); font-size: 13px; }
+    .footer-col a { display: block; margin: 7px 0; color: var(--text-muted); font-size: 13px; text-decoration: none; }
+    .footer-col a:hover, .footer-social a:hover { color: var(--accent); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 20px; max-width: 1120px; margin: 38px auto 0; padding-top: 18px; border-top: 1px solid var(--border); font-size: 12px; }
+    .footer-social { display: flex; gap: 18px; }
+    .footer-social a { color: var(--text-muted); text-decoration: none; }
+    @media (max-width: 768px) {
+      .events-hero, .events-section { padding-right: 20px; padding-left: 20px; }
+      .events-hero { padding-top: 60px; }
+      .event-card { padding: 28px 24px; }
+      .table-card, .community-card, .host-card { padding: 32px 24px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; }
+    }
+    @media (max-width: 520px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-bottom { display: block; }
+      .footer-social { margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ghostCanvas"></canvas>
+  <div class="city-page">
+    <!-- CANONICAL_NAV_START -->
+<nav>
+  <a href="/" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
+  <ul class="nav-links">
+    <li><a href="/studio">Studio</a></li>
+    <li><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a></li>
+    <li><a href="/builds">Builds</a></li>
+    <li><a href="/agent-adoption/">Agent Adoption</a></li>
+    <li><a href="/playbook/">Playbook</a></li>
+    <li><a href="/events">Events</a></li>
+    <li><a href="/#team">Team</a></li>
+    <li><a href="/#contact" class="nav-cta">Start a Conversation</a></li>
+  </ul>
+  <button id="hamburger" class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/studio" onclick="closeMenu()">Studio</a>
+  <a href="https://devkick.com" onclick="closeMenu()">DevKick</a>
+  <a href="/builds" onclick="closeMenu()">Builds</a>
+  <a href="/agent-adoption/" onclick="closeMenu()">Agent Adoption</a>
+  <a href="/playbook/" onclick="closeMenu()">Playbook</a>
+  <a href="/events" onclick="closeMenu()">Events</a>
+  <a href="/#team" onclick="closeMenu()">Team</a>
+  <a href="/#contact" onclick="closeMenu()">Start a Conversation</a>
+</div>
+<!-- CANONICAL_NAV_END -->
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/events">Events</a></li>
+        <li>Waterloo</li>
+      </ol>
+    </nav>
+
+    <main>
+      <header class="events-hero">
+        <div class="eyebrow">Events · Waterloo</div>
+        <h1>Where Waterloo builders meet.</h1>
+        <p>Meetups, dinners, and roundtables for operators building with AI in the KW corridor.</p>
+      </header>
+
+      <section class="events-section">
+        <div class="section-label">Upcoming Waterloo events</div>
+        <div id="upcomingEvents"></div>
+      </section>
+
+      <section class="events-section">
+        <div class="table-card glass">
+          <div class="section-label">The Table</div>
+          <h3>The Table 002 — Waterloo Lunch</h3>
+          <p>October 2, 2026 · Invite only</p>
+          <a href="/table" class="event-cta">Learn about The Table</a>
+        </div>
+      </section>
+
+      <section class="events-section">
+        <div class="community-card glass">
+          <div class="section-label">Community</div>
+          <h3>Build with the community.</h3>
+          <p>DevKick is the builder community — build nights, live teardowns and demos in the KW to GTA corridor. <a href="https://devkick.com" target="_blank" rel="noopener">Visit DevKick</a>.</p>
+        </div>
+      </section>
+
+      <section class="events-section">
+        <div class="host-card glass">
+          <h3>Host with us.</h3>
+          <p>We partner with companies that want to put builders in the same room. If you have a venue, a community, or a reason to gather, let's talk.</p>
+          <a href="/#contact" class="event-cta">Get in Touch</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="/images/logos/brand-logo.png" alt="Aloomii">
+          <p>Communities, media and software. Built in Caledonia, Ontario.</p>
+        </div>
+        <div class="footer-col"><h4>The Studio</h4><a href="/studio">Studio</a><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a><a href="/builds">Builds</a><a href="/playbook/">Playbook</a><a href="/agent-adoption/">Agent Adoption</a><a href="/events">Events</a><a href="/partners/databricks/">Databricks Partner</a><a href="/agent-adoption/devin/">Devin Adoption</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="/#team">About</a><a href="/blog/">Blog</a><a href="/#contact">Contact</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="/legal/privacy/">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/client-terms">Client Terms</a></div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Aloomii</span>
+        <div class="footer-social"><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:yohann@aloomii.com">Email</a></div>
+      </div>
+    </footer>
+  </div>
+  <script src="/snippets/canonical-nav.js"></script>
+  <script src="/snippets/ghost-background.js"></script>
+  <script>
+  function renderEventCard(ev) {
+    var dateObj = new Date(ev.date + 'T12:00:00');
+    var formatted = dateObj.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    var card = document.createElement('div');
+    card.className = 'event-card glass';
+    card.innerHTML =
+      (ev.image ? '<div style="margin-bottom:24px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);"><img src="' + ev.image + '" alt="' + ev.title + '" style="width:100%;height:auto;display:block;"></div>' : '') +
+      '<div class="event-meta"><span>' + formatted + '</span><span>' + ev.time + '</span><span>' + ev.location + '</span></div>' +
+      '<h3>' + ev.title + '</h3>' +
+      (ev.subtitle ? '<div style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:10px;">' + ev.subtitle + '</div>' : '') +
+      (ev.partner ? '<div class="event-partner">Partner: ' + ev.partner + '</div>' : '') +
+      '<p>' + (ev.description || ev.subtitle || '') + '</p>' +
+      (ev.venue ? '<div style="font-size:13px;color:var(--accent);margin-bottom:6px;">' + ev.venue + '</div>' : '') +
+      (ev.venueNote ? '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">' + ev.venueNote + '</div>' : '') +
+      (ev.capacity ? '<div class="event-capacity">' + ev.capacity + ' spots</div>' : '') +
+      (ev.rsvpUrl ? '<a href="' + ev.rsvpUrl + '" class="event-cta">RSVP</a>' : '');
+    return card;
+  }
+  (async function() {
+    var container = document.getElementById('upcomingEvents');
+    try {
+      var res = await fetch('/events.json');
+      var events = await res.json();
+      var upcoming = events.filter(function(ev) {
+        var location = ev.location || '';
+        return ev.status === 'upcoming' && (location.includes('Kitchener') || location.includes('Waterloo'));
+      });
+      var eventSchema = upcoming.map(function(ev) {
+        var item = {
+          '@context': 'https://schema.org',
+          '@type': 'Event',
+          name: ev.title,
+          eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+          eventStatus: 'https://schema.org/EventScheduled',
+          organizer: {'@type':'Organization', name:'Aloomii', url:'https://aloomii.com'}
+        };
+        if (ev.date) item.startDate = ev.date;
+        if (ev.city) item.location = {'@type':'Place', address:{'@type':'PostalAddress', addressLocality:ev.city}};
+        if (ev.rsvpUrl) item.url = ev.rsvpUrl;
+        if (ev.description || ev.subtitle) item.description = ev.description || ev.subtitle;
+        return item;
+      });
+      var schema = document.createElement('script');
+      schema.type = 'application/ld+json';
+      schema.textContent = JSON.stringify(eventSchema);
+      document.head.appendChild(schema);
+      if (!upcoming.length) {
+        container.innerHTML = '<div class="empty-state"><p>No upcoming Waterloo events right now. Check back soon.</p></div>';
+        return;
+      }
+      upcoming.forEach(function(ev) { container.appendChild(renderEventCard(ev)); });
+    } catch (err) {
+      container.innerHTML = '<div class="empty-state"><p>Unable to load events. Please try again later.</p></div>';
+    }
+  })();
+  </script>
+</body>
+</html>

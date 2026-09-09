@@ -38,6 +38,10 @@ const STATIC_PAGES = [
   { loc: '/agent-adoption/devin/', changefreq: 'monthly', priority: '0.8' },
   { loc: '/partners/databricks/', changefreq: 'monthly', priority: '0.8' },
   { loc: '/playbook/',           changefreq: 'monthly', priority: '0.8' },
+  { loc: '/events/toronto/',     changefreq: 'monthly', priority: '0.8' },
+  { loc: '/events/waterloo/',    changefreq: 'monthly', priority: '0.8' },
+  { loc: '/events/new-york/',    changefreq: 'monthly', priority: '0.8' },
+  { loc: '/events/boston/',      changefreq: 'monthly', priority: '0.8' },
 ];
 
 // Blog directories to skip (not real article slugs)

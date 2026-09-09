@@ -136,6 +136,12 @@
     font-size: 17px; color: var(--text-body); max-width: 600px;
     margin: 0 auto; line-height: 1.7;
   }
+  .city-links {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 18px;
+    margin: 28px auto 0; font-size: 13px;
+  }
+  .city-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .city-links a:hover { color: var(--accent); }
 
   /* ==================== SECTIONS ==================== */
   .events-section {
@@ -308,6 +314,12 @@
   <div class="eyebrow">Events</div>
   <h1>Where builders meet.</h1>
   <p>We convene the communities our software serves. Meetups, dinners, and roundtables for operators building with AI.</p>
+  <nav class="city-links" aria-label="Browse events by city">
+    <a href="/events/toronto/">Toronto</a>
+    <a href="/events/waterloo/">Waterloo</a>
+    <a href="/events/new-york/">New York</a>
+    <a href="/events/boston/">Boston</a>
+  </nav>
 </section>
 
 <!-- UPCOMING EVENTS -->
