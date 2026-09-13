@@ -199,7 +199,19 @@
       var events = await res.json();
       var today = new Date(); today.setHours(0,0,0,0);
       var upcoming = events.filter(function(ev) { return ev.status === 'upcoming' && new Date(ev.date + 'T23:59:59') >= today && (ev.location || '').includes('Toronto'); });
+      function eventPlace(ev) {
+        var raw = (ev.city || ev.location || '').trim();
+        if (!raw) return null;
+        var parts = raw.split(',').map(function (s) { return s.trim(); });
+        var locality = parts[0];
+        if (/kitchener-waterloo/i.test(locality)) locality = 'Kitchener';
+        var region = parts[1] && /^[A-Z]{2}$/.test(parts[1]) ? parts[1] : 'ON';
+        var place = { '@type': 'Place', name: ev.venue || raw, address: { '@type': 'PostalAddress', addressLocality: locality, addressRegion: region, addressCountry: 'CA' } };
+        return place;
+      }
       var eventSchema = upcoming.map(function(ev) {
+        var place = eventPlace(ev);
+        if (!place) return null;
         var item = {
           '@context': 'https://schema.org',
           '@type': 'Event',
@@ -209,11 +221,11 @@
           organizer: {'@type':'Organization', name:'Aloomii', url:'https://aloomii.com'}
         };
         if (ev.date) item.startDate = ev.date;
-        if (ev.city) item.location = {'@type':'Place', address:{'@type':'PostalAddress', addressLocality:ev.city}};
+        item.location = place;
         if (ev.rsvpUrl) item.url = ev.rsvpUrl;
         if (ev.description || ev.subtitle) item.description = ev.description || ev.subtitle;
         return item;
-      });
+      }).filter(function(item) { return item !== null; });
       var schema = document.createElement('script');
       schema.type = 'application/ld+json';
       schema.textContent = JSON.stringify(eventSchema);
