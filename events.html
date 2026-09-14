@@ -400,15 +400,22 @@ function closeMenu() { document.querySelector('.hamburger').classList.remove('ac
     const today = new Date(); today.setHours(0,0,0,0);
     const upcoming = events.filter(function(e) { return e.status === 'upcoming' && new Date(e.date + 'T23:59:59') >= today; });
 
+    var CA_REGIONS = ['ON','QC','BC','AB','MB','SK','NS','NB','NL','PE','YT','NT','NU'];
+    var CITY_META = { 'Toronto':['ON','CA'], 'Kitchener':['ON','CA'], 'Waterloo':['ON','CA'], 'Hamilton':['ON','CA'], 'London':['ON','CA'], 'New York':['NY','US'], 'Boston':['MA','US'], 'Cambridge':['MA','US'] };
     function eventPlace(ev) {
       var raw = (ev.city || ev.location || '').trim();
       if (!raw) return null;
       var parts = raw.split(',').map(function (s) { return s.trim(); });
       var locality = parts[0];
       if (/kitchener-waterloo/i.test(locality)) locality = 'Kitchener';
-      var region = parts[1] && /^[A-Z]{2}$/.test(parts[1]) ? parts[1] : 'ON';
-      var place = { '@type': 'Place', name: ev.venue || raw, address: { '@type': 'PostalAddress', addressLocality: locality, addressRegion: region, addressCountry: 'CA' } };
-      return place;
+      var address = { '@type': 'PostalAddress', addressLocality: locality };
+      var code = parts[1] && /^[A-Z]{2}$/.test(parts[1]) ? parts[1] : null;
+      var meta = CITY_META[locality];
+      var region = code || (meta ? meta[0] : null);
+      var country = ev.country || (code ? (CA_REGIONS.indexOf(code) >= 0 ? 'CA' : 'US') : (meta ? meta[1] : null));
+      if (region) address.addressRegion = region;
+      if (country) address.addressCountry = country;
+      return { '@type': 'Place', name: ev.venue || raw, address: address };
     }
 
     const eventSchema = upcoming.map(function(ev) {
