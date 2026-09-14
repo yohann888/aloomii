@@ -66,6 +66,34 @@
     "manualUpdate": "MANUAL UPDATE: Keep this event current as dates, venue, and RSVP details change."
   },
   {
+    "id": "the-table-001-toronto-2026-10-01",
+    "title": "The Table 001",
+    "subtitle": "Toronto, a private dinner for founders and investors",
+    "date": "2026-10-01",
+    "time": "6:00 PM",
+    "location": "Toronto, ON",
+    "image": "/images/table/table-001-cover.png?v=5",
+    "description": "An invite-only dinner for founders and operators building in Canada. Co-hosted with Amiral, Fasken, and BDO Canada. Seats are approved, not sold.",
+    "rsvpUrl": "https://luma.com/9bjf5taa",
+    "detailsUrl": "/table",
+    "status": "upcoming",
+    "manualUpdate": "MANUAL UPDATE: Keep this event current as dates, venue, and RSVP details change."
+  },
+  {
+    "id": "the-table-002-waterloo-2026-10-02",
+    "title": "The Table 002",
+    "subtitle": "Waterloo, a private founder and investor lunch",
+    "date": "2026-10-02",
+    "time": "Lunch",
+    "location": "Waterloo, ON",
+    "image": "/images/table/table-002-cover.png",
+    "description": "An invite-only founders' lunch in Waterloo. Co-hosted with Amiral and Barn VC. Seats are approved, not sold.",
+    "rsvpUrl": "https://luma.com/table-m6je",
+    "detailsUrl": "/table",
+    "status": "upcoming",
+    "manualUpdate": "MANUAL UPDATE: Keep this event current as dates, venue, and RSVP details change."
+  },
+  {
     "id": "devkick-kick-03-2026-10-15",
     "title": "Kick 03",
     "date": "2026-10-15",
