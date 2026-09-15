@@ -68,12 +68,12 @@
       .partner-hero, .partner-section, .partner-cta { padding-left: 20px; padding-right: 20px; }
       .partner-hero { padding-top: 56px; }
       .partner-grid { grid-template-columns: 1fr; }
-      .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px 24px; }
+      .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 24px; } .footer-brand { grid-column: 1 / -1; }
     }
     @media (max-width: 520px) {
       .partner-badge { height: 140px; }
       .partner-card { padding: 26px 22px; }
-      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); } .footer-brand { grid-column: 1 / -1; }
       .footer-bottom { display: block; }
       .footer-social { margin-top: 12px; }
     }

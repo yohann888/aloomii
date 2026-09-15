@@ -817,7 +817,7 @@
 .svc-cta .btn-secondary { margin-bottom: 14px; }
 .svc-cta small { display: block; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
 @media (max-width: 768px) {
-  .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; } .footer-brand { grid-column: 1 / -1; }
   .footer-col { min-width: 0; }
   .footer-col a { overflow-wrap: anywhere; }
   .team-member { flex-direction: column; }

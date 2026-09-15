@@ -58,10 +58,10 @@
       .events-hero, .events-section { padding-right: 20px; padding-left: 20px; }
       .events-hero { padding-top: 60px; }
       .coming-card, .community-card, .host-card { padding: 32px 24px; }
-      .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; } .footer-brand { grid-column: 1 / -1; }
     }
     @media (max-width: 520px) {
-      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); } .footer-brand { grid-column: 1 / -1; }
       .footer-bottom { display: block; }
       .footer-social { margin-top: 12px; }
     }
