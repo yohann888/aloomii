@@ -502,7 +502,11 @@
   .team-credentials .label { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; }
   .team-credentials .badges { display: flex; justify-content: center; align-items: center; gap: clamp(32px, 6vw, 80px); flex-wrap: wrap; }
   .team-credentials img { height: 200px; width: auto; border-radius: 14px; }
-  @media (max-width: 768px) { .team-credentials img { height: 160px; max-width: 100%; } }
+  @media (max-width: 768px) {
+    .team-credentials img { height: 160px; max-width: 100%; }
+    .team-member-photo { margin: 0 auto; }
+    #table-highlight a > img { margin: 0 auto; }
+  }
 
   /* ==================== FREE SCAN ==================== */
   .free-scan { padding: 80px var(--section-pad-h); }
