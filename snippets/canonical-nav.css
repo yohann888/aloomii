@@ -46,3 +46,9 @@ nav {
   .nav-links { display: none; }
   .hamburger { display: flex; }
 }
+@media (min-width: 769px) and (max-width: 1240px) {
+  nav { padding-left: 24px; padding-right: 24px; }
+  .nav-links { gap: 14px; }
+  .nav-links a { font-size: 13px; }
+  .nav-links .nav-cta { white-space: nowrap; }
+}

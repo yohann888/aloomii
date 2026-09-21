@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="What Devin (Cognition's autonomous coding agent) is, how it executes inside your perimeter, and how Aloomii, a Devin Ambassador practice, runs Devin adoption, sandboxing and enablement for engineering teams.">
+  <title>Devin | Autonomous AI Coding Agent, Adoption &amp; Enablement | Aloomii</title>
+  <link rel="canonical" href="https://aloomii.com/devin/">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="stylesheet" href="/assets/css/aloomii-tokens.css">
+  <link rel="stylesheet" href="/snippets/canonical-nav.css">
+  <link rel="stylesheet" href="/snippets/breadcrumbs.css">
+  <link rel="stylesheet" href="/snippets/ghost-background.css">
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://aloomii.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Devin",
+      "item": "https://aloomii.com/devin/"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://aloomii.com/devin/",
+  "url": "https://aloomii.com/devin/",
+  "name": "Devin | Autonomous AI Coding Agent, Adoption &amp; Enablement | Aloomii",
+  "description": "What Devin (Cognition's autonomous coding agent) is, how it executes inside your perimeter, and how Aloomii, a Devin Ambassador practice, runs Devin adoption, sandboxing and enablement for engineering teams.",
+  "about": [
+    "Devin AI",
+    "Cognition",
+    "autonomous coding agents",
+    "AI agent adoption",
+    "agent sandboxing"
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://aloomii.com/#organization",
+    "name": "Aloomii"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is Devin AI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Devin is an autonomous AI software engineer built by Cognition. Unlike an autocomplete assistant, it works end to end in its own environment: planning, editing multiple files, running builds and tests, and opening a pull request for review."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Devin secure enough for enterprise codebases?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With the right deployment, yes. Agent planning stays in the vendor cloud while all repo cloning, shell commands and builds run on your infrastructure via outbound-only connections. We add least-privilege credential vaults and internal registry whitelisting; see hardened Devin sandboxing and private VPC deployment."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do you roll Devin out to an engineering team?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Assessment, pilot, then a 3-week enablement cohort: repository rule sets, agentic workflow playbooks and an executive ROI scorecard tracking PR cycle time and review latency. The full path is on our agent adoption program page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can Devin help with a Databricks migration?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. We run supervised Devin swarms to convert legacy SQL and PySpark into Delta Lake pipelines governed by Unity Catalog, every change landing as a reviewed pull request. See Databricks migration services."
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    .partner-page { position: relative; z-index: 2; }
+    .partner-hero { padding: 72px 40px 76px; text-align: center; }
+    .partner-hero-inner, .partner-section-inner { max-width: 1000px; margin: 0 auto; }
+    .partner-hero h1 { max-width: 820px; margin: 24px auto 18px; color: #fff; font-size: clamp(38px, 6vw, 68px); line-height: 1.05; letter-spacing: -2px; }
+    .partner-hero .sub { max-width: 720px; margin: 0 auto 30px; color: var(--text-body); font-size: clamp(18px, 2.4vw, 24px); line-height: 1.5; }
+    .partner-badge { display: block; width: auto; height: 180px; margin: 0 auto; border-radius: 12px; }
+    .partner-section { padding: 72px 40px; }
+    .partner-section .section-heading { margin-bottom: 36px; }
+    .partner-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .partner-card { padding: 34px 30px; }
+    .partner-card h3 { color: #fff; font-size: 26px; line-height: 1.2; margin-bottom: 14px; }
+    .partner-card p, .partner-card li { color: var(--text-body); font-size: 15px; line-height: 1.75; }
+    .partner-card ul { margin: 22px 0 0; padding-left: 20px; }
+    .partner-card li { margin-bottom: 12px; }
+    .partner-why { max-width: 820px; margin: 0 auto; }
+    .partner-why p { color: var(--text-body); font-size: 16px; line-height: 1.8; margin-bottom: 22px; }
+    .partner-why strong { color: #fff; }
+    .partner-card a, .partner-faq a, .partner-assessment a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .partner-assessment { max-width: 1000px; margin: 0 auto; padding: 36px 34px; border: 1px solid rgba(0,200,190,0.35); }
+    .partner-assessment .kicker { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 12px; }
+    .partner-assessment h2 { color: #fff; font-size: 30px; line-height: 1.15; margin-bottom: 10px; }
+    .partner-assessment .lede { color: var(--text-muted); font-style: italic; font-size: 15px; margin-bottom: 18px; }
+    .partner-assessment p, .partner-assessment li { color: var(--text-body); font-size: 15px; line-height: 1.75; }
+    .partner-assessment ul { margin: 16px 0 18px; padding-left: 20px; }
+    .partner-assessment .keep { color: #fff; font-weight: 600; }
+    .partner-faq { max-width: 820px; margin: 0 auto; }
+    .partner-faq details { border-bottom: 1px solid var(--border); padding: 18px 0; }
+    .partner-faq summary { cursor: pointer; color: #fff; font-size: 18px; font-weight: 600; line-height: 1.4; list-style: none; }
+    .partner-faq summary::-webkit-details-marker { display: none; }
+    .partner-faq summary::before { content: "+"; color: var(--accent); margin-right: 12px; font-weight: 800; }
+    .partner-faq details[open] summary::before { content: "\2212"; }
+    .partner-faq p { color: var(--text-body); font-size: 15px; line-height: 1.75; margin: 12px 0 0 28px; }
+    .partner-cta { padding: 72px 40px 96px; text-align: center; }
+    .partner-cta h2 { color: #fff; font-size: clamp(28px, 4vw, 40px); margin-bottom: 24px; }
+    .partner-cta .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; border: 1px solid var(--accent); border-radius: 999px; background: var(--accent); color: #071313; font-size: 14px; font-weight: 800; text-decoration: none; }
+    .partner-cta .button:hover { box-shadow: 0 10px 30px rgba(0,200,190,.2); transform: translateY(-2px); }
+    .site-footer { position: relative; z-index: 2; padding: 56px 40px 30px; border-top: 1px solid var(--border); color: var(--text-muted); }
+    .footer-inner { display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 40px; max-width: var(--max, 1120px); margin: 0 auto; }
+    .footer-brand img { width: 128px; height: auto; }
+    .footer-brand p { max-width: 240px; font-size: 13px; }
+    .footer-col h4 { margin: 0 0 12px; color: var(--text); font-size: 13px; }
+    .footer-col a { display: block; margin: 7px 0; color: var(--text-muted); font-size: 13px; text-decoration: none; }
+    .footer-col a:hover, .footer-social a:hover { color: var(--accent); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 20px; max-width: var(--max, 1120px); margin: 38px auto 0; padding-top: 18px; border-top: 1px solid var(--border); font-size: 12px; }
+    .footer-social { display: flex; gap: 18px; }
+    .footer-social a { color: var(--text-muted); text-decoration: none; }
+    @media (max-width: 800px) {
+      .partner-hero, .partner-section, .partner-cta { padding-left: 20px; padding-right: 20px; }
+      .partner-hero { padding-top: 56px; }
+      .partner-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 24px; } .footer-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 520px) {
+      .partner-badge { height: 140px; }
+      .partner-card { padding: 26px 22px; }
+      .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); } .footer-brand { grid-column: 1 / -1; }
+      .footer-bottom { display: block; }
+      .footer-social { margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ghostCanvas"></canvas>
+  <div class="partner-page">
+    <!-- CANONICAL_NAV_START -->
+<nav>
+  <a href="/" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
+  <ul class="nav-links">
+    <li><a href="/builds">AI Engineering</a></li>
+    <li><a href="/agent-adoption/">Agent Adoption</a></li>
+    <li><a href="/databricks/">Databricks</a></li>
+    <li><a href="/devin/">Devin</a></li>
+    <li><a href="/playbook/">Playbook</a></li>
+    <li><a href="/events">Events</a></li>
+    <li><a href="/#team">Team</a></li>
+    <li><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a></li>
+    <li><a href="/studio">Studio</a></li>
+    <li><a href="/#contact" class="nav-cta">Start a Conversation</a></li>
+  </ul>
+  <button id="hamburger" class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/builds" onclick="closeMenu()">AI Engineering</a>
+  <a href="/agent-adoption/" onclick="closeMenu()">Agent Adoption</a>
+  <a href="/databricks/" onclick="closeMenu()">Databricks</a>
+  <a href="/devin/" onclick="closeMenu()">Devin</a>
+  <a href="/playbook/" onclick="closeMenu()">Playbook</a>
+  <a href="/events" onclick="closeMenu()">Events</a>
+  <a href="/#team" onclick="closeMenu()">Team</a>
+  <a href="https://devkick.com" onclick="closeMenu()">DevKick</a>
+  <a href="/studio" onclick="closeMenu()">Studio</a>
+  <a href="/#contact" onclick="closeMenu()">Start a Conversation</a>
+</div>
+<!-- CANONICAL_NAV_END -->
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li>Devin</li>
+      </ol>
+    </nav>
+
+    <main>
+      <header class="partner-hero">
+        <div class="partner-hero-inner">
+          <img class="partner-badge" src="/images/logos/devin-ambassador-dark.png" alt="Cognition Devin Ambassador">
+          <h1>Devin</h1>
+          <p class="sub">Cognition's autonomous AI coding agent, and the agent we know best. Aloomii runs Devin adoption, hardened sandboxing and team enablement for enterprise engineering teams.</p>
+        </div>
+      </header>
+
+      <section class="partner-section" id="overview">
+        <div class="partner-section-inner">
+          <div class="section-label">Tool outline</div>
+          <h2 class="section-heading">What Devin is, and how we deploy it.</h2>
+          <div class="partner-grid">
+            <article class="partner-card glass">
+              <h3>The agent</h3>
+              <p>Devin is an autonomous software engineering agent from Cognition. Given a ticket or a brief, it plans, clones the repo, edits code, runs the build and tests, and opens a pull request for human review.</p>
+              <ul>
+                <li>Ticket-to-PR workflow: works from Jira, Linear or GitHub issues to a reviewed pull request.</li>
+                <li>Full dev environment: shell, browser and editor in an isolated runtime, so it can run tests and reproduce bugs, not just suggest code.</li>
+                <li>Repository rules and knowledge: system prompts and playbooks tuned to your architecture, API contracts and linting standards.</li>
+                <li>Execution inside your perimeter: agent planning stays in the vendor cloud; all repo cloning, shell commands and builds run on your infrastructure via outbound-only connections. Nothing inbound, nothing egressing your code.</li>
+              </ul>
+            </article>
+            <article class="partner-card glass">
+              <h3>How Aloomii works with Devin</h3>
+              <p>Our deepest agent implementation expertise is Devin (Yohann Calpu is a Cognition Devin Ambassador). We turn seats into deployed, tested pull requests. See the full <a href="/agent-adoption/devin/">Devin adoption and enablement program</a>.</p>
+              <ul>
+                <li>Hardened agent sandboxing and private VPC deployment: isolated worker nodes, least-privilege credential vaults and internal registry whitelisting. Details in <a href="/agent-adoption/devin/">Devin sandboxing and private deployment</a>.</li>
+                <li>Developer velocity and team enablement cohort: a 3-week immersive cohort for engineering teams, with an executive ROI scorecard. See <a href="/agent-adoption/">the agent adoption program</a>.</li>
+                <li>Migration execution: supervised agent swarms running our <a href="/databricks/">Databricks</a> migration sprints against legacy repos.</li>
+                <li>Vendor-agnostic method: the adoption methodology works with any coding agent; Devin is where our implementation depth is.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="partner-section" id="faq">
+        <div class="partner-section-inner">
+          <div class="section-label">Questions teams ask us</div>
+          <h2 class="section-heading">Devin at Aloomii, answered</h2>
+          <div class="partner-faq">
+          <details>
+            <summary>What is Devin AI?</summary>
+            <p>Devin is an autonomous AI software engineer built by Cognition. Unlike an autocomplete assistant, it works end to end in its own environment: planning, editing multiple files, running builds and tests, and opening a pull request for review.</p>
+          </details>
+          <details>
+            <summary>Is Devin secure enough for enterprise codebases?</summary>
+            <p>With the right deployment, yes. Agent planning stays in the vendor cloud while all repo cloning, shell commands and builds run on your infrastructure via outbound-only connections. We add least-privilege credential vaults and internal registry whitelisting; see <a href="/agent-adoption/devin/">hardened Devin sandboxing and private VPC deployment</a>.</p>
+          </details>
+          <details>
+            <summary>How do you roll Devin out to an engineering team?</summary>
+            <p>Assessment, pilot, then a 3-week enablement cohort: repository rule sets, agentic workflow playbooks and an executive ROI scorecard tracking PR cycle time and review latency. The full path is on our <a href="/agent-adoption/">agent adoption program</a> page.</p>
+          </details>
+          <details>
+            <summary>Can Devin help with a Databricks migration?</summary>
+            <p>Yes. We run supervised Devin swarms to convert legacy SQL and PySpark into Delta Lake pipelines governed by Unity Catalog, every change landing as a reviewed pull request. See <a href="/partners/databricks/">Databricks migration services</a>.</p>
+          </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="partner-cta">
+        <h2>Ready to put Devin to work on your codebase?</h2>
+        <a class="button" href="/agent-adoption/devin/">See Devin adoption, sandboxing and enablement</a>
+        <p style="margin-top:22px;"><a href="/#contact" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px;">Or start a conversation about agent adoption</a></p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="/images/logos/brand-logo.png" alt="Aloomii">
+          <p>Communities, media and software. Built in Caledonia, Ontario.</p>
+        </div>
+        <div class="footer-col"><h4>Explore</h4><a href="/builds">AI Engineering</a><a href="/playbook/">Playbook</a><a href="/agent-adoption/">Agent Adoption</a><a href="/events">Events</a><a href="/partners/databricks/">Databricks Partner</a><a href="/agent-adoption/devin/">Devin Adoption</a><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a><a href="/studio">Studio</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="/#team">About</a><a href="/blog/">Blog</a><a href="/#contact">Contact</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="/legal/privacy/">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/client-terms">Client Terms</a></div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Aloomii</span>
+        <div class="footer-social"><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:yohann@aloomii.com">Email</a></div>
+      </div>
+    </footer>
+  </div>
+  <script src="/snippets/canonical-nav.js"></script>
+  <script src="/snippets/ghost-background.js"></script>
+  <script>
+    document.querySelectorAll('.partner-card, .partner-cta').forEach(function (el) { el.classList.add('reveal'); });
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      if (!('IntersectionObserver' in window)) { el.classList.add('visible'); return; }
+      var observer = new IntersectionObserver(function(entries, obs) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+        });
+      }, { rootMargin: '0px 0px 320px 0px', threshold: 0.08 });
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

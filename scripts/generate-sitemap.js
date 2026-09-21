@@ -37,6 +37,8 @@ const STATIC_PAGES = [
   { loc: '/agent-adoption/workshop/', changefreq: 'monthly', priority: '0.8' },
   { loc: '/agent-adoption/devin/', changefreq: 'monthly', priority: '0.8' },
   { loc: '/partners/databricks/', changefreq: 'monthly', priority: '0.8' },
+  { loc: '/databricks/',          changefreq: 'monthly', priority: '0.8' },
+  { loc: '/devin/',               changefreq: 'monthly', priority: '0.8' },
   { loc: '/playbook/',           changefreq: 'monthly', priority: '0.8' },
   { loc: '/events/toronto/',     changefreq: 'monthly', priority: '0.8' },
   { loc: '/events/waterloo/',    changefreq: 'monthly', priority: '0.8' },
