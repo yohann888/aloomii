@@ -118,6 +118,7 @@
     display: none; position: fixed; top: var(--nav-height); left: 0; right: 0;
     background: rgba(11,11,20,0.95); backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px); padding: 24px 40px;
+    max-height: calc(100dvh - var(--nav-height)); overflow-y: auto;
     border-bottom: 1px solid var(--border); z-index: 99;
   }
   .mobile-menu.active { display: block; }
@@ -833,7 +834,7 @@
   .svc-intro { margin-bottom: 36px; }
   .svc-why, .svc-cta { margin-top: 48px; }
 }
-@media (min-width: 769px) and (max-width: 1240px) {
+@media (min-width: 769px) and (max-width: 1400px) {
   nav { padding-left: 24px; padding-right: 24px; }
   .nav-links { gap: 14px; }
   .nav-links a { font-size: 13px; }
