@@ -136,7 +136,7 @@
               <h3>Hardened agent sandboxing &amp; private VPC deployment</h3>
               <p>Autonomous agents cannot touch production code or proprietary data without strict isolation. We architect, deploy, and verify private, isolated worker nodes (including Devin Outposts and containerized runners) inside your secure VPC or on-premise hardware.</p>
               <ul>
-                <li>Air-gapped execution: Agent planning remains in the cloud, while all repo cloning, shell commands, and builds run inside your perimeter via outbound-only WebSockets.</li>
+                <li>Execution inside your perimeter: agent planning stays in the vendor cloud; all repo cloning, shell commands, and builds run on your infrastructure via outbound-only connections. Nothing inbound, nothing egressing your code.</li>
                 <li>Least-privilege credential vaults: Zero plain-text secrets. Integrations with HashiCorp Vault, AWS Secrets Manager, and Databricks Unity Catalog service principals.</li>
                 <li>Internal registry whitelisting: Network egress controls that enforce package installations exclusively from internal artifact registries (Nexus/Artifactory).</li>
               </ul>
