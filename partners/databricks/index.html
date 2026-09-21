@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Databricks Brickbuilder Bronze partner for lakehouse implementation, Unity Catalog, and governed data architectures across Toronto, Waterloo, New York, and Boston.">
-  <title>Databricks Brickbuilder Partner | Enterprise Data &amp; AI | Aloomii</title>
+  <meta name="description" content="Databricks migration partner (Brickbuilder Partner Network). Legacy data warehouse and Spark migration to Delta Lake and Unity Catalog, with a fixed-fee migration assessment. Toronto, Waterloo, New York, Boston.">
+  <title>Databricks Migration Partner | Lakehouse Migration Services &amp; Assessment | Aloomii</title>
   <link rel="canonical" href="https://aloomii.com/partners/databricks/">
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/favicon.png">
@@ -26,10 +26,32 @@
   {
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": "Databricks Brickbuilder Partner",
-    "serviceType": "Databricks lakehouse implementation",
-    "provider": {"@type":"Organization","name":"Aloomii","url":"https://aloomii.com"},
-    "areaServed": ["Toronto","Waterloo","New York","Boston"]
+    "name": "Databricks Migration Services",
+    "serviceType": "Databricks migration and lakehouse modernization",
+    "description": "Legacy data warehouse and Spark migration to Databricks (Delta Lake, Unity Catalog) with agent-assisted code conversion, starting with a fixed-fee 2 to 3 week migration assessment.",
+    "provider": {"@type":"Organization","@id":"https://aloomii.com/#organization","name":"Aloomii","url":"https://aloomii.com","memberOf":{"@type":"Organization","name":"Databricks Partner Network"}},
+    "areaServed": ["Toronto","Waterloo","New York","Boston","Ontario"],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Databricks migration offerings",
+      "itemListElement": [
+        {"@type":"Offer","itemOffered":{"@type":"Service","name":"Databricks Migration Assessment","description":"2 to 3 weeks, fixed fee. Estate inventory, team interviews, a measured agent proof slice, agent-suitability map, projected human/agent split, effort and cost both ways, and an execution plan."}},
+        {"@type":"Offer","itemOffered":{"@type":"Service","name":"Databricks Migration & Modernization Sprints","description":"2-week outcome-based sprints migrating legacy pipelines to Delta Lake and Unity Catalog with supervised agent swarms."}}
+      ]
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"How do you migrate legacy ETL workloads to Databricks?","acceptedAnswer":{"@type":"Answer","text":"We inventory the estate, rank each job by agent suitability, then run supervised coding agents that convert legacy SQL, stored procedures and batch PySpark into Delta Lake pipelines governed by Unity Catalog. Every conversion lands as a pull request with generated tests and a human review gate; agents never touch production data directly."}},
+      {"@type":"Question","name":"How do you estimate Databricks migration timeline and TCO?","acceptedAnswer":{"@type":"Answer","text":"Through a fixed-fee 2 to 3 week migration assessment. Week one inventories your estate and interviews your team; week two runs a measured proof slice on your real code. You receive an agent-suitability map, the projected human/agent split, effort and cost estimated both ways (manual and agent-assisted), and an execution plan you keep whether or not you hire us to execute."}},
+      {"@type":"Question","name":"Which source platforms can be migrated to Databricks?","acceptedAnswer":{"@type":"Answer","text":"Legacy data warehouses such as Teradata, Synapse and Snowflake, on-prem Hadoop and Spark clusters, and batch PySpark or SQL pipelines. The method is the same: inventory, agent-suitability scoring, automated code conversion with human review, and Unity Catalog governance on the target."}},
+      {"@type":"Question","name":"What are the most common Databricks migration challenges and risks?","acceptedAnswer":{"@type":"Answer","text":"Undocumented legacy logic, missing test coverage, dialect differences in SQL and Spark, governance gaps when moving to Unity Catalog, and stalled timelines when senior engineers are pulled onto conversion work. We address them with automated test backfilling, agent-assisted conversion under review, and a governed target architecture defined before code moves."}},
+      {"@type":"Question","name":"Does agent-assisted migration expose our code or data to public models?","acceptedAnswer":{"@type":"Answer","text":"No. Agent planning stays in the vendor cloud, but all repo cloning, shell commands and builds run on your infrastructure via outbound-only connections, with least-privilege credentials from your vault and package installs restricted to internal registries."}}
+    ]
   }
   </script>
   <style>
@@ -50,6 +72,21 @@
     .partner-why { max-width: 820px; margin: 0 auto; }
     .partner-why p { color: var(--text-body); font-size: 16px; line-height: 1.8; margin-bottom: 22px; }
     .partner-why strong { color: #fff; }
+    .partner-card a, .partner-faq a, .partner-assessment a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .partner-assessment { max-width: 1000px; margin: 0 auto; padding: 36px 34px; border: 1px solid rgba(0,200,190,0.35); }
+    .partner-assessment .kicker { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 12px; }
+    .partner-assessment h2 { color: #fff; font-size: 30px; line-height: 1.15; margin-bottom: 10px; }
+    .partner-assessment .lede { color: var(--text-muted); font-style: italic; font-size: 15px; margin-bottom: 18px; }
+    .partner-assessment p, .partner-assessment li { color: var(--text-body); font-size: 15px; line-height: 1.75; }
+    .partner-assessment ul { margin: 16px 0 18px; padding-left: 20px; }
+    .partner-assessment .keep { color: #fff; font-weight: 600; }
+    .partner-faq { max-width: 820px; margin: 0 auto; }
+    .partner-faq details { border-bottom: 1px solid var(--border); padding: 18px 0; }
+    .partner-faq summary { cursor: pointer; color: #fff; font-size: 18px; font-weight: 600; line-height: 1.4; list-style: none; }
+    .partner-faq summary::-webkit-details-marker { display: none; }
+    .partner-faq summary::before { content: "+"; color: var(--accent); margin-right: 12px; font-weight: 800; }
+    .partner-faq details[open] summary::before { content: "\2212"; }
+    .partner-faq p { color: var(--text-body); font-size: 15px; line-height: 1.75; margin: 12px 0 0 28px; }
     .partner-cta { padding: 72px 40px 96px; text-align: center; }
     .partner-cta h2 { color: #fff; font-size: clamp(28px, 4vw, 40px); margin-bottom: 24px; }
     .partner-cta .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; border: 1px solid var(--accent); border-radius: 999px; background: var(--accent); color: #071313; font-size: 14px; font-weight: 800; text-decoration: none; }
@@ -121,19 +158,37 @@
       <header class="partner-hero">
         <div class="partner-hero-inner">
           <img class="partner-badge" src="/images/logos/databricks-brickbuilder-bronze.png" alt="Databricks Brickbuilder Partner Network, Bronze">
-          <h1>Databricks Brickbuilder Partner</h1>
-          <p class="sub">Lakehouse implementation and governed data architecture for teams modernizing the work that needs to run.</p>
+          <h1>Databricks Migration Partner</h1>
+          <p class="sub">Aloomii is a Databricks consulting partner (Brickbuilder Partner Network). We move legacy data estates onto the lakehouse &mdash; with agent-assisted execution that compresses migration timelines from quarters to weeks.</p>
         </div>
       </header>
 
       <section class="partner-section">
         <div class="partner-section-inner">
-          <div class="section-label">Lakehouse modernization</div>
-          <h2 class="section-heading">High-friction migrations, made governable.</h2>
+          <article class="partner-assessment glass" id="assessment">
+            <div class="kicker">Start here &middot; Databricks migration cost assessment framework</div>
+            <h2>Migration Assessment</h2>
+            <p class="lede">2&ndash;3 weeks, fixed fee. Where a 30-minute architecture audit converts into a measured plan.</p>
+            <p>Week one: we inventory your estate and interview your team. Week two: we run a real proof slice &mdash; an agent migrating a piece of your actual code, measured. You get:</p>
+            <ul>
+              <li>An agent-suitability map of your estate</li>
+              <li>Projected human/agent split</li>
+              <li>Effort and cost both ways &mdash; an estimate of Databricks migration timeline and TCO, manual versus agent-assisted</li>
+              <li>An execution plan</li>
+            </ul>
+            <p class="keep">Yours to keep whether or not you hire us to execute.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="partner-section" id="services">
+        <div class="partner-section-inner">
+          <div class="section-label">Databricks migration services</div>
+          <h2 class="section-heading">Legacy data warehouse migration to Databricks, made governable.</h2>
           <div class="partner-grid">
             <article class="partner-card glass">
-              <h3>Technical debt &amp; lakehouse modernization sprints</h3>
-              <p>Manual framework upgrades, SQL optimization, and batch-to-streaming pipeline migrations drain your senior developers' focus. We run supervised agent swarms against your legacy repos to execute high-friction migrations in days rather than quarters.</p>
+              <h3>Databricks Migration &amp; Modernization Sprints</h3>
+              <p>For teams with quarters of delayed migrations to Delta Lake and Unity Catalog. Manual framework upgrades, SQL optimization, and batch-to-streaming pipeline migrations drain your senior developers' focus. We run supervised agent swarms against your legacy repos to execute high-friction migrations in days rather than quarters &mdash; for a Teradata, Synapse or Snowflake warehouse, an on-prem Hadoop cluster, or batch PySpark that needs to become governed streaming.</p>
               <ul>
                 <li>Legacy code refactoring: Upgrades for deprecated libraries, Python version modernizations, and React hook migrations.</li>
                 <li>Governed lakehouse refactoring: Converting legacy PySpark batch scripts into optimized Delta Lake and Unity Catalog-compliant streaming pipelines.</li>
@@ -149,9 +204,38 @@
         </div>
       </section>
 
+      <section class="partner-section" id="faq">
+        <div class="partner-section-inner">
+          <div class="section-label">Databricks migration best practices</div>
+          <h2 class="section-heading">Questions data platform teams ask us</h2>
+          <div class="partner-faq">
+            <details>
+              <summary>How do you migrate legacy ETL workloads to Databricks?</summary>
+              <p>We inventory the estate, rank each job by agent suitability, then run supervised coding agents that convert legacy SQL, stored procedures and batch PySpark into Delta Lake pipelines governed by Unity Catalog. Every conversion lands as a pull request with generated tests and a human review gate; agents never touch production data directly.</p>
+            </details>
+            <details>
+              <summary>How do you estimate Databricks migration timeline and TCO?</summary>
+              <p>Through the fixed-fee <a href="#assessment">Databricks migration cost assessment framework</a> above. Week one inventories your estate and interviews your team; week two runs a measured proof slice on your real code. You receive an agent-suitability map, the projected human/agent split, effort and cost estimated both ways (manual and agent-assisted), and an execution plan you keep whether or not you hire us to execute.</p>
+            </details>
+            <details>
+              <summary>Which source platforms can be migrated to Databricks?</summary>
+              <p>Legacy data warehouses such as Teradata, Synapse and Snowflake, on-prem Hadoop and Spark clusters, and batch PySpark or SQL pipelines. The method is the same: inventory, agent-suitability scoring, automated Spark and SQL code conversion with human review, and Unity Catalog governance on the target.</p>
+            </details>
+            <details>
+              <summary>What are the most common Databricks migration challenges and risks?</summary>
+              <p>Undocumented legacy logic, missing test coverage, dialect differences in SQL and Spark, governance gaps when moving to Unity Catalog, and stalled timelines when senior engineers are pulled onto conversion work. We address them with automated test backfilling, agent-assisted conversion under review, and a governed target architecture defined before code moves.</p>
+            </details>
+            <details>
+              <summary>Does agent-assisted migration expose our code or data to public models?</summary>
+              <p>No. Agent planning stays in the vendor cloud, but all repo cloning, shell commands and builds run on your infrastructure via outbound-only connections, with least-privilege credentials from your vault and package installs restricted to internal registries. Details on the <a href="/agent-adoption/devin/">private-execution runtime for Devin</a>.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
       <section class="partner-cta">
-        <h2>Ready to operationalize autonomous engineering?</h2>
-        <a class="button" href="/#contact">Start a Conversation</a>
+        <h2>Ready to scope your Databricks migration?</h2>
+        <a class="button" href="/#contact">Book a Databricks migration assessment</a>
       </section>
     </main>
 
