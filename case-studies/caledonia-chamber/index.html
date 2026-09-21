@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Case study: how Aloomii built the Caledonia Regional Chamber of Commerce a public site, member portal, and staff CRM on one Chamber-owned database.">
+  <title>Case Study: Caledonia Regional Chamber of Commerce | Aloomii</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="stylesheet" href="/assets/css/aloomii-tokens.css">
+  <link rel="stylesheet" href="/snippets/canonical-nav.css">
+  <link rel="stylesheet" href="/snippets/breadcrumbs.css">
+  <link rel="stylesheet" href="/snippets/ghost-background.css">
+  <style>
+    .cs-page { position: relative; z-index: 2; }
+    .cs-section { padding: 72px 40px; }
+    .cs-inner { max-width: 1060px; margin: 0 auto; }
+
+    /* Image placeholders — swap each for an <img> with the same class when assets are ready */
+    .cs-slot {
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      border: 1px dashed rgba(255,255,255,0.28); border-radius: 14px;
+      background: rgba(255,255,255,0.04); color: var(--text-muted);
+      font-size: 13px; font-weight: 600; letter-spacing: 0.4px; line-height: 1.6;
+      min-height: 220px; padding: 20px; width: 100%;
+    }
+    .cs-slot small { display: block; font-weight: 400; margin-top: 6px; opacity: .7; }
+    img.cs-slot { border-style: solid; padding: 0; object-fit: cover; }
+
+    /* Hero */
+    .cs-hero { padding: 64px 40px 72px; }
+    .cs-hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; max-width: 1060px; margin: 0 auto; }
+    .cs-eyebrow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 11px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); margin-bottom: 22px; }
+    .cs-eyebrow .cs-logo-slot { min-height: 0; height: 44px; width: 44px; padding: 4px; flex-shrink: 0; border-radius: 8px; font-size: 9px; letter-spacing: 0; }
+    .cs-hero h1 { color: #fff; font-size: clamp(32px, 4.6vw, 52px); line-height: 1.12; letter-spacing: -1.5px; margin-bottom: 20px; }
+    .cs-hero .sub { color: var(--text-body); font-size: 17px; line-height: 1.7; margin-bottom: 30px; max-width: 480px; }
+    .cs-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 24px; border: 1px solid var(--accent); border-radius: 999px; background: var(--accent); color: #071313; font-size: 14px; font-weight: 800; text-decoration: none; transition: transform .2s, box-shadow .2s; }
+    .cs-btn:hover { box-shadow: 0 10px 30px rgba(0,200,190,.2); transform: translateY(-2px); }
+    .cs-hero .cs-slot { min-height: 320px; }
+
+    /* Fact strip */
+    .cs-facts { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 26px 40px; }
+    .cs-facts-inner { max-width: 1060px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 18px 40px; align-items: center; justify-content: space-between; }
+    .cs-fact { font-size: 13px; color: var(--text-body); line-height: 1.5; max-width: 170px; }
+    .cs-fact strong { display: block; color: #fff; font-size: 13px; }
+    .cs-fact .cs-slot { min-height: 52px; width: 130px; font-size: 10px; }
+
+    /* Two-column prose sections */
+    .cs-split { display: grid; grid-template-columns: 300px 1fr; gap: 48px; }
+    .cs-split h2 { color: #fff; font-size: clamp(24px, 3vw, 32px); letter-spacing: -0.8px; line-height: 1.2; }
+    .cs-split p { color: var(--text-body); font-size: 15.5px; line-height: 1.8; margin-bottom: 18px; }
+    .cs-split p strong { color: #fff; }
+
+    /* Section headings */
+    .cs-h2 { color: #fff; font-size: clamp(26px, 3.4vw, 36px); letter-spacing: -1px; margin-bottom: 8px; }
+    .cs-kicker { color: var(--text-muted); font-size: 14px; margin-bottom: 40px; }
+
+    /* Before/after pairs */
+    .cs-ba-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 14px; }
+    .cs-ba-label { font-size: 11px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+    .cs-ba-caption { color: var(--text-body); font-size: 14px; line-height: 1.7; margin: 4px 0 48px; }
+
+    /* Portal / CRM rows */
+    .cs-row { display: grid; grid-template-columns: 340px 1fr; gap: 24px; margin-bottom: 26px; align-items: stretch; }
+    .cs-row-card { padding: 26px 26px; border-radius: 14px; }
+    .cs-row-card .cs-ba-label { color: var(--accent); }
+    .cs-row-card p { color: var(--text-body); font-size: 14.5px; line-height: 1.7; }
+    .cs-row-card p.note { font-size: 13px; color: var(--text-muted); margin-top: 10px; }
+    .cs-row .cs-slot { min-height: 200px; height: 100%; }
+
+    /* Next section cards */
+    .cs-next-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 26px; }
+    .cs-next-card { padding: 30px 28px; border-radius: 14px; }
+    .cs-next-card .cs-ba-label { color: var(--accent); }
+    .cs-next-card.dashed { border: 1px dashed rgba(255,255,255,0.25); background: transparent; }
+    .cs-next-card h3 { color: #fff; font-size: 18px; line-height: 1.4; margin-bottom: 12px; }
+    .cs-next-card p { color: var(--text-body); font-size: 14.5px; line-height: 1.75; margin-bottom: 12px; }
+    .cs-line-note { color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 40px; }
+
+    /* Architecture diagram */
+    .cs-arch { background: rgba(0,0,0,0.45); border: 1px solid var(--border); border-radius: 16px; padding: 34px 30px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; margin-bottom: 20px; }
+    .cs-arch-col { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+    .cs-arch-box { border: 1px solid rgba(255,255,255,0.5); border-radius: 999px; color: #fff; font-size: 12.5px; font-weight: 600; text-align: center; padding: 10px 14px; }
+    .cs-arch-box.dashed { border-style: dashed; border-color: rgba(255,255,255,0.35); color: var(--text-muted); }
+    .cs-arch-key { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 4px; }
+
+    /* Collapsible architecture detail */
+    details.cs-arch-detail { border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,0.03); margin-bottom: 8px; }
+    details.cs-arch-detail summary { cursor: pointer; padding: 18px 22px; color: #fff; font-size: 14.5px; font-weight: 600; display: flex; justify-content: space-between; gap: 16px; }
+    details.cs-arch-detail summary small { color: var(--text-muted); font-weight: 400; }
+    details.cs-arch-detail .cs-arch-body { padding: 0 22px 22px; color: var(--text-body); font-size: 14.5px; line-height: 1.75; }
+    details.cs-arch-detail .cs-arch-body p { margin-bottom: 12px; }
+    details.cs-arch-detail .cs-arch-body strong { color: #fff; }
+
+    /* Contact */
+    .cs-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .cs-form { padding: 30px 28px; border-radius: 16px; }
+    .cs-form label { display: block; font-size: 13px; color: var(--text-body); margin: 0 0 6px; font-weight: 600; }
+    .cs-form input, .cs-form textarea { width: 100%; box-sizing: border-box; margin-bottom: 18px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: #fff; font-size: 14px; font-family: inherit; }
+    .cs-form input:focus, .cs-form textarea:focus { outline: none; border-color: var(--accent); }
+    .cs-form button { width: 100%; cursor: pointer; border: none; }
+    .cs-form-status { font-size: 13px; margin-top: 12px; color: var(--text-muted); min-height: 18px; }
+
+    @media (max-width: 860px) {
+      .cs-section, .cs-hero, .cs-facts { padding-left: 20px; padding-right: 20px; }
+      .cs-hero-grid, .cs-split, .cs-ba-pair, .cs-row, .cs-next-grid, .cs-contact-grid { grid-template-columns: 1fr; gap: 22px; }
+      .cs-arch { grid-template-columns: 1fr; }
+      .cs-facts-inner { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ghostCanvas"></canvas>
+  <div class="cs-page">
+    <!-- CANONICAL_NAV_START -->
+<nav>
+  <a href="/" class="nav-logo"><img src="/images/logos/brand-logo.png" alt="Aloomii"></a>
+  <ul class="nav-links">
+    <li><a href="/builds">AI Engineering</a></li>
+    <li><a href="/agent-adoption/">Agent Adoption</a></li>
+    <li><a href="/playbook/">Playbook</a></li>
+    <li><a href="/events">Events</a></li>
+    <li><a href="/#team">Team</a></li>
+    <!-- Case Study dropdown: hidden until launch. To go live, remove the nav-hidden class here and in the mobile menu. -->
+    <li class="nav-dropdown nav-hidden">
+      <a href="/case-studies/caledonia-chamber/" aria-haspopup="true">Case Study <span class="nav-caret">&#9662;</span></a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="/case-studies/caledonia-chamber/">Caledonia Chamber of Commerce</a></li>
+      </ul>
+    </li>
+    <li><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a></li>
+    <li><a href="/studio">Studio</a></li>
+    <li><a href="/#contact" class="nav-cta">Start a Conversation</a></li>
+  </ul>
+  <button id="hamburger" class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/builds" onclick="closeMenu()">AI Engineering</a>
+  <a href="/agent-adoption/" onclick="closeMenu()">Agent Adoption</a>
+  <a href="/playbook/" onclick="closeMenu()">Playbook</a>
+  <a href="/events" onclick="closeMenu()">Events</a>
+  <a href="/#team" onclick="closeMenu()">Team</a>
+  <a href="/case-studies/caledonia-chamber/" onclick="closeMenu()" class="nav-hidden mobile-sub">Case Study: Caledonia Chamber of Commerce</a>
+  <a href="https://devkick.com" onclick="closeMenu()">DevKick</a>
+  <a href="/studio" onclick="closeMenu()">Studio</a>
+  <a href="/#contact" onclick="closeMenu()">Start a Conversation</a>
+</div>
+<!-- CANONICAL_NAV_END -->
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/builds">AI Engineering</a></li>
+        <li>Caledonia Chamber of Commerce</li>
+      </ol>
+    </nav>
+
+    <main>
+      <header class="cs-hero">
+        <div class="cs-hero-grid">
+          <div>
+            <div class="cs-eyebrow">
+              <span>Case Study: Caledonia Regional Chamber of Commerce, est. 1972</span>
+              <span class="cs-slot cs-logo-slot" data-slot="chamber-logo" style="width:44px;height:44px;min-height:0;max-height:44px;padding:4px;">logo</span>
+            </div>
+            <h1>&ldquo;Membership should be easy to understand and even easier to renew.&rdquo;</h1>
+            <p class="sub">The Caledonia Regional Chamber told its members that. We built the system that makes it true.</p>
+            <a class="cs-btn" href="#contact-form">Walk us through your stack</a>
+          </div>
+          <div class="cs-slot" data-slot="hero">HERO: new homepage at the fold<small>(or drone loop; not both)</small></div>
+        </div>
+      </header>
+
+      <div class="cs-facts">
+        <div class="cs-facts-inner">
+          <div class="cs-fact"><strong>Founded</strong>1972</div>
+          <div class="cs-fact"><strong>Haldimand County,</strong>Ontario</div>
+          <div class="cs-fact"><strong>Public site, member portal,</strong>staff CRM</div>
+          <div class="cs-fact"><strong>One database,</strong>owned by the Chamber</div>
+          <div class="cs-fact"><strong>Databricks-ready,</strong>not Databricks-dependent</div>
+          <div class="cs-fact"><span class="cs-slot" data-slot="bronze-badge">Bronze partner badge</span></div>
+        </div>
+      </div>
+
+      <section class="cs-section">
+        <div class="cs-inner cs-split">
+          <h2>The situation</h2>
+          <div>
+            <p>Served businesses in Haldimand County since 1972. Simplified its fee structure in 2026 and told members joining and renewing should be simpler. The web presence could not yet deliver on that promise.</p>
+            <p>Template builder. Google Form for events. Ticketing elsewhere. A 2024 directory. A calendar widget showing its own setup instructions.</p>
+            <p>None of this was negligence. The Chamber decided to stop adding tools and build the system instead.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner">
+          <h2 class="cs-h2">Before and after</h2>
+          <p class="cs-kicker">The public site, three surfaces</p>
+
+          <div class="cs-ba-pair">
+            <div><div class="cs-ba-label">Before</div><div class="cs-slot" data-slot="p1-before">P1 BEFORE: Wix homepage, calendar widget in frame</div></div>
+            <div><div class="cs-ba-label">After</div><div class="cs-slot" data-slot="p1-after">P1 AFTER: new homepage</div></div>
+          </div>
+          <p class="cs-ba-caption">The old homepage showed a calendar widget's own setup instructions to visitors. The new one shows events.</p>
+
+          <div class="cs-ba-pair">
+            <div><div class="cs-ba-label">Before</div><div class="cs-slot" data-slot="p2-before">P2 BEFORE: directory, 2024 list</div></div>
+            <div><div class="cs-ba-label">After</div><div class="cs-slot" data-slot="p2-after">P2 AFTER: Shop Local directory</div></div>
+          </div>
+          <p class="cs-ba-caption">The directory was a dated list. It is now the full membership, kept current by the members themselves.</p>
+
+          <div class="cs-ba-pair">
+            <div><div class="cs-ba-label">Before</div><div class="cs-slot" data-slot="p3-before">P3 BEFORE: events page and Google Form</div></div>
+            <div><div class="cs-ba-label">After</div><div class="cs-slot" data-slot="p3-after">P3 AFTER: events calendar with ticketing</div></div>
+          </div>
+          <p class="cs-ba-caption">Event submissions arrived by Google Form and ticketing lived elsewhere. Both now happen on one page.</p>
+
+        </div>
+      </section>
+
+      <section class="cs-section" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner">
+          <h2 class="cs-h2">Members serve themselves. Staff step in by exception.</h2>
+          <p class="cs-kicker">The member portal. No before screenshot, because there was no portal.</p>
+
+          <div class="cs-row">
+            <div class="cs-row-card glass"><div class="cs-ba-label">Before</div><p>A member's only touchpoint with the Chamber between renewals was an email or a phone call.</p></div>
+            <div class="cs-slot" data-slot="m1">NOW<br>M1: member dashboard</div>
+          </div>
+          <div class="cs-row">
+            <div class="cs-row-card glass"><div class="cs-ba-label">Before</div><p>A listing change meant emailing staff and waiting for someone to edit the site.</p></div>
+            <div class="cs-slot" data-slot="m2">NOW<br>M2: listing editor</div>
+          </div>
+          <div class="cs-row">
+            <div class="cs-row-card glass"><div class="cs-ba-label">Before</div><p>No place for a member to offer a deal to other members.</p></div>
+            <div class="cs-slot" data-slot="m4">NOW<br>M4: member deals (Gate 4)</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner">
+          <h2 class="cs-h2">One console runs the operation.</h2>
+          <p class="cs-kicker">The staff CRM. Screenshots captured with seeded test records only.</p>
+
+          <div class="cs-row">
+            <div class="cs-row-card glass"><div class="cs-ba-label">Before</div><p>Membership administration happened wherever staff could make it happen.</p></div>
+            <div class="cs-slot" data-slot="s1">NOW<br>S1: console home</div>
+          </div>
+          <div class="cs-row">
+            <div class="cs-row-card glass"><div class="cs-ba-label">Before</div><p>Renewals were tracked by hand and chased by memory.</p></div>
+            <div class="cs-slot" data-slot="s2">NOW<br>S2: renewals worklist and reminder inbox</div>
+          </div>
+          <div class="cs-row">
+            <div class="cs-row-card glass"><div class="cs-ba-label">Before</div><p>A member's history lived in an inbox.</p></div>
+            <div class="cs-slot" data-slot="s3">NOW<br>S3: Member 360 timeline</div>
+          </div>
+          <div class="cs-row">
+            <div class="cs-row-card glass"><div class="cs-ba-label">Before</div><p>A website enquiry was an email someone had to remember to answer.</p></div>
+            <div class="cs-slot" data-slot="s4">NOW<br>S4: lead pipeline</div>
+          </div>
+          <div class="cs-row">
+            <div class="cs-row-card glass"><div class="cs-ba-label">Before</div><p>Reporting meant building a spreadsheet from scratch.</p><p class="note">At-risk scoring: one line here only if Gate 6 clears.</p></div>
+            <div class="cs-slot" data-slot="s5">NOW<br>S5: reporting with CSV and PDF export</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="architecture" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner">
+          <h2 class="cs-h2">Built for what the Chamber does next.</h2>
+          <p class="cs-kicker">Most association platforms are built to work. This one was built to still work in five years, feeding systems that do not exist yet.</p>
+
+          <div class="cs-next-grid">
+            <div class="cs-next-card glass">
+              <div class="cs-ba-label">Ready for Databricks, not dependent on it</div>
+              <h3>Nothing in the Chamber's daily operation depends on Databricks. Everything in the data layer is ready for it.</h3>
+              <p>The membership lifecycle is captured as an append-only event stream, typed for analytics, in a schema kept in git. Moving reporting to Databricks is configuration, not a rebuild. We are a Databricks partner and architected it this way from day one.</p>
+            </div>
+            <div class="cs-next-card dashed">
+              <div class="cs-ba-label">Not yet built. Possible on this foundation.</div>
+              <p>Members flagged before they lapse, not after.</p>
+              <p>Renewal outreach drafted from each member's own history, reviewed by staff, sent on schedule.</p>
+              <p>The ED asks a plain-language question of the membership data and gets an answer, not a spreadsheet project.</p>
+              <p>Event follow-up that goes out without anyone remembering to send it.</p>
+            </div>
+          </div>
+          <p class="cs-line-note">What the Chamber runs today is above this line. What the foundation is built to carry is here, labelled as such. We do not blur the two.</p>
+
+          <div class="cs-arch">
+            <div class="cs-arch-col">
+              <div class="cs-arch-box">Public site (Astro)</div>
+              <div class="cs-arch-box">Member portal</div>
+              <div class="cs-arch-box">Staff CRM</div>
+            </div>
+            <div class="cs-arch-col">
+              <div class="cs-arch-box">Postgres event ledger<br>(append-only, typed)</div>
+              <div class="cs-arch-box">Reporting module, read-only</div>
+              <div class="cs-arch-key">solid = runs today</div>
+            </div>
+            <div class="cs-arch-col">
+              <div class="cs-arch-box dashed">Lakehouse Sync (CDC)</div>
+              <div class="cs-arch-box dashed">Unity Catalog, Delta tables</div>
+              <div class="cs-arch-box dashed">Databricks SQL, AI/BI</div>
+              <div class="cs-arch-key">dashed = wired and waiting</div>
+            </div>
+          </div>
+
+          <details class="cs-arch-detail" id="arch-detail">
+            <summary>How the data layer is built, for technical readers <small>collapsed by default; opens on #architecture</small></summary>
+            <div class="cs-arch-body">
+              <p><strong>Phase 1 — Capture.</strong> Every membership action writes a typed event to an append-only Postgres ledger. Nothing is overwritten; state is derived, not stored.</p>
+              <p><strong>Phase 2 — Serve.</strong> The public site, member portal, and staff CRM all read from the same database through role-scoped views. One source of truth, three surfaces.</p>
+              <p><strong>Phase 3 — Report.</strong> A read-only reporting module builds worklists, CSV and PDF exports directly from the ledger. No copies of the data drift out of sync.</p>
+              <p><strong>Phase 4 — Sync.</strong> A CDC path is wired for Delta tables under Unity Catalog. Turning on Databricks reporting is configuration, not a rebuild.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="cs-section" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner cs-split">
+          <h2>The Chamber owns the Chamber's data</h2>
+          <div>
+            <p>Role-based access for staff, directors, and members. Hardened authentication. PIPEDA-aligned privacy policy; analytics on GA4 consent.</p>
+            <p>Full export, any time, no request required. Point-in-time recovery. No hostage data, no exit fee, no leverage held over a renewal negotiation.</p>
+            <p><strong>If the Chamber ever decides to work with someone else, it leaves with everything.</strong></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner cs-split">
+          <h2>Results, when there are results</h2>
+          <div>
+            <p>The platform went live in September 2026. We captured baseline numbers before cutover, and we will publish what changed once there is a full renewal cycle to measure. We would rather show you an honest build than a case study with numbers invented to fill the space. Check back in January.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cs-section" id="contact-form" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner cs-contact-grid">
+          <div>
+            <h2 class="cs-h2">If your chamber is somewhere on this same path</h2>
+            <p style="color: var(--text-body); font-size: 15.5px; line-height: 1.8; margin-bottom: 18px;">We built this once. The next chamber pays for configuration, not construction.</p>
+            <p style="color: var(--text-body); font-size: 15.5px; line-height: 1.8;">We will walk your current setup with you and tell you plainly whether a platform like this is worth it for an organization your size. If it is not, we will say so.</p>
+          </div>
+          <form class="cs-form glass" id="csContactForm">
+            <label for="cs-name">Name</label>
+            <input type="text" id="cs-name" name="name" required>
+            <label for="cs-email">Email</label>
+            <input type="email" id="cs-email" name="email" required>
+            <label for="cs-org">Organization</label>
+            <input type="text" id="cs-org" name="company">
+            <label for="cs-stack">What does your stack look like today?</label>
+            <textarea id="cs-stack" name="details" rows="4"></textarea>
+            <button type="submit" class="cs-btn">Walk us through your stack</button>
+            <div class="cs-form-status" id="csFormStatus"></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" style="position: relative; z-index: 2; padding: 56px 40px 30px; border-top: 1px solid var(--border); color: var(--text-muted);">
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; gap: 20px; max-width: 1060px; margin: 0 auto; font-size: 13px; flex-wrap: wrap;">
+        <span>Aloomii Inc., Caledonia, Ontario</span>
+        <span><a href="/builds" style="color: var(--text-muted); text-decoration: none;">AI Engineering</a> &middot; <a href="/agent-adoption/" style="color: var(--text-muted); text-decoration: none;">Agent Adoption Program</a> &middot; <a href="/studio" style="color: var(--text-muted); text-decoration: none;">Studio</a> &middot; <a href="https://devkick.com" target="_blank" rel="noopener" style="color: var(--text-muted); text-decoration: none;">DevKick</a></span>
+      </div>
+    </footer>
+  </div>
+  <script src="/snippets/canonical-nav.js"></script>
+  <script src="/snippets/ghost-background.js"></script>
+  <script>
+    if (location.hash === '#architecture') {
+      document.getElementById('arch-detail').open = true;
+    }
+    document.getElementById('csContactForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var status = document.getElementById('csFormStatus');
+      var form = e.target;
+      status.textContent = 'Sending\u2026';
+      try {
+        var res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: form.name.value,
+            email: form.email.value,
+            company: form.company.value,
+            service: 'chamber-platform-case-study',
+            details: form.details.value
+          })
+        });
+        if (!res.ok) throw new Error('bad response');
+        status.textContent = "Thanks \u2014 we'll walk your stack with you shortly.";
+        form.reset();
+      } catch (err) {
+        status.textContent = 'Something went wrong \u2014 email yohann@aloomii.com instead.';
+      }
+    });
+  </script>
+</body>
+</html>

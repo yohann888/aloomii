@@ -22,6 +22,18 @@ nav {
   border-radius: 10px; font-weight: 600; font-size: 13px; transition: all 0.25s;
 }
 .nav-links .nav-cta:hover { background: #00e0d5; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,200,190,0.3); }
+.nav-hidden { display: none !important; }
+.nav-dropdown { position: relative; }
+.nav-dropdown .nav-caret { font-size: 10px; opacity: .7; }
+.nav-dropdown-menu {
+  display: none; position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  min-width: 260px; padding: 8px; list-style: none; margin: 0;
+  background: rgba(11,11,20,0.97); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+}
+.nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown:focus-within .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 10px 14px; border-radius: 8px; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: rgba(255,255,255,0.06); }
 .hamburger {
   display: none; flex-direction: column; gap: 5px;
   cursor: pointer; padding: 8px; background: none; border: none;
