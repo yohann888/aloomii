@@ -385,6 +385,9 @@
     padding-right: 40px; cursor: pointer; background-color: rgba(255,255,255,0.06);
   }
   .form-group select option { background: #1a1a2e; color: #fff; }
+  @media (max-width: 480px) {
+    .form-group select { font-size: 14px; padding-left: 12px; padding-right: 32px; background-position: right 12px center; }
+  }
   .form-group textarea { resize: vertical; min-height: 120px; }
   .form-group input::placeholder,
   .form-group textarea::placeholder { color: rgba(255,255,255,0.35); }
@@ -1164,12 +1167,12 @@
           <label for="service">What Are You Looking For?</label>
           <select id="service" name="service">
             <option value="" disabled selected>Select a service</option>
+            <option value="databricks-migration">Databricks migration / data modernization</option>
+            <option value="agent-adoption">Agent adoption &amp; enablement</option>
             <option value="studio-production">Podcast or video production (Studio)</option>
             <option value="business-website">A website for my business</option>
             <option value="platform-software-build">A larger platform or software build</option>
             <option value="playbook">The Playbook</option>
-            <option value="databricks-migration">Databricks migration / data modernization</option>
-            <option value="agent-adoption">Agent adoption &amp; enablement</option>
             <option value="not-sure">Not sure yet, let's talk</option>
           </select>
         </div>
@@ -1251,9 +1254,12 @@
   // Observe all reveal elements for entrance animation
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
+      if (!entry.isIntersecting) return;
+      // Tall sections (e.g. Services on a phone) may never reach the 8% ratio, so reveal them on any intersection
+      const tall = entry.boundingClientRect.height > window.innerHeight;
+      if (tall || entry.intersectionRatio >= 0.08) entry.target.classList.add('visible');
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  }, { threshold: [0, 0.08], rootMargin: '0px 0px -30px 0px' });
   document.querySelectorAll('.reveal, .reveal-scale, .reveal-stagger').forEach(el => revealObserver.observe(el));
 
   // Consultation form submission
