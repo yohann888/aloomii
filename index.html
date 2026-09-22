@@ -801,6 +801,10 @@
 .svc-assessment .svc-features { margin-bottom: 0; }
 .svc-assessment .svc-engagement { margin-top: 22px; }
 .svc-assessment .svc-keep { color: #fff; font-size: 14px; line-height: 1.7; margin-top: 18px; }
+.svc-entry { text-align: center; margin: 0 0 40px; }
+.svc-entry .btn-secondary { margin-bottom: 12px; }
+.svc-entry small { display: block; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+.svc-edge { color: #fff; font-size: 15px; line-height: 1.75; padding: 14px 16px; margin: 0 0 18px; border-left: 2px solid var(--accent); background: rgba(0,200,190,0.06); border-radius: 0 8px 8px 0; }
 .proof-partner-note { max-width: 640px; margin: 18px auto 0; text-align: center; color: var(--text-body); font-size: 14px; line-height: 1.7; }
 .svc-card { padding: 36px 34px 30px; display: flex; flex-direction: column; min-width: 0; }
 .svc-card-number { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.16em; margin-bottom: 12px; }
@@ -987,8 +991,8 @@
       <p>Enterprises buy Devin and Cursor licenses, then hit two walls: security boundaries the agents can't cross, and backlogs they can't parse.</p>
     </div>
     <article class="svc-card svc-assessment glass reveal-scale">
-      <div class="svc-card-number">00 &middot; Start here</div>
-      <h3>Migration Assessment</h3>
+      <div class="svc-card-number">00</div>
+      <h3>Start here: the Migration Assessment</h3>
       <p class="svc-for">2&ndash;3 weeks, fixed fee. The step between a 30-minute audit and an execution engagement.</p>
       <div class="svc-card-body">
         <div>
@@ -999,7 +1003,7 @@
           <ul class="svc-features">
             <li>Agent-suitability map of your estate</li>
             <li>Projected human/agent split</li>
-            <li>Effort and cost both ways</li>
+            <li>Effort and cost estimates both ways</li>
             <li>An execution plan</li>
           </ul>
         </div>
@@ -1009,12 +1013,17 @@
         <div><span>Model</span><strong>Fixed fee</strong></div>
       </div>
     </article>
+    <div class="svc-entry reveal">
+      <a href="#contact" class="btn-secondary">Book a 30-Minute Architecture Audit</a>
+      <small>The entry step. We review your current repo topologies, security constraints, and CI/CD pipelines to map your highest-ROI deployment path.</small>
+    </div>
     <div class="svc-grid">
       <article class="svc-card glass reveal-scale">
         <div class="svc-card-number">01</div>
         <h3>Databricks Migration &amp; Modernization Sprints</h3>
         <p class="svc-for">For teams with quarters of delayed migrations to Delta Lake and Unity Catalog.</p>
         <p class="svc-description">Manual framework upgrades, SQL optimization, and batch-to-streaming pipeline migrations drain your senior developers' focus. We run supervised agent swarms against your legacy repos to execute high-friction migrations in days rather than quarters, whether the source is a <a href="/partners/databricks/#faq" class="inline-link">legacy data warehouse migrating to Databricks</a> or an on-prem Spark and Hadoop estate. Read <a href="/partners/databricks/#faq" class="inline-link">how to migrate legacy ETL workloads to Databricks</a>.</p>
+        <p class="svc-edge">Legacy ETL and warehouse migrations are our sharpest edge: Informatica PowerCenter, IBM DataStage, Netezza, and Db2 estates moved onto Databricks, agent-assisted, led by practitioners with years inside those exact tools. We deploy comfortably in IBM-based environments (Red Hat OpenShift, HashiCorp Vault) while your data moves to the lakehouse.</p>
         <ul class="svc-features">
           <li>Legacy code refactoring: Upgrades for deprecated libraries, Python version modernizations, and React hook migrations.</li>
           <li>Governed lakehouse refactoring: Converting legacy PySpark batch scripts into optimized Delta Lake and Unity Catalog-compliant streaming pipelines. We <a href="/partners/databricks/#faq" class="inline-link">automate Spark and SQL code conversion for Databricks</a> with human review on every PR.</li>
@@ -1081,8 +1090,7 @@
     </div>
     <div class="svc-cta reveal">
       <p>Ready to operationalize autonomous engineering?</p>
-      <a href="#contact" class="btn-secondary">Book a 30-Minute Architecture Audit</a>
-      <small>We'll review your current repo topologies, security constraints, and CI/CD pipelines to map your highest-ROI deployment path.</small>
+      <a href="#contact" class="btn-secondary">Start with the Migration Assessment</a>
     </div>
   </div>
 </section>

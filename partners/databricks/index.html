@@ -51,7 +51,10 @@
       {"@type":"Question","name":"How do you estimate Databricks migration timeline and TCO?","acceptedAnswer":{"@type":"Answer","text":"Through a fixed-fee 2 to 3 week migration assessment. Week one inventories your estate and interviews your team; week two runs a measured proof slice on your real code. You receive an agent-suitability map, the projected human/agent split, effort and cost estimated both ways (manual and agent-assisted), and an execution plan you keep whether or not you hire us to execute."}},
       {"@type":"Question","name":"Which source platforms can be migrated to Databricks?","acceptedAnswer":{"@type":"Answer","text":"Legacy data warehouses such as Teradata, Synapse and Snowflake, on-prem Hadoop and Spark clusters, and batch PySpark or SQL pipelines. The method is the same: inventory, agent-suitability scoring, automated code conversion with human review, and Unity Catalog governance on the target."}},
       {"@type":"Question","name":"What are the most common Databricks migration challenges and risks?","acceptedAnswer":{"@type":"Answer","text":"Undocumented legacy logic, missing test coverage, dialect differences in SQL and Spark, governance gaps when moving to Unity Catalog, and stalled timelines when senior engineers are pulled onto conversion work. We address them with automated test backfilling, agent-assisted conversion under review, and a governed target architecture defined before code moves."}},
-      {"@type":"Question","name":"Does agent-assisted migration expose our code or data to public models?","acceptedAnswer":{"@type":"Answer","text":"No. Agent planning stays in the vendor cloud, but all repo cloning, shell commands and builds run on your infrastructure via outbound-only connections, with least-privilege credentials from your vault and package installs restricted to internal registries."}}
+      {"@type":"Question","name":"Does agent-assisted migration expose our code or data to public models?","acceptedAnswer":{"@type":"Answer","text":"No. Agent planning stays in the vendor cloud, but all repo cloning, shell commands and builds run on your infrastructure via outbound-only connections, with least-privilege credentials from your vault and package installs restricted to internal registries."}},
+      {"@type": "Question", "name": "Do you migrate Informatica PowerCenter to Databricks?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Legacy ETL migration is the core of our practice, and Informatica is our deepest tool. Our team has years of hands-on PowerCenter experience: mappings, workflows, mapplets, parameter files, and the undocumented tribal logic that accumulates in a decade-old repository. Our approach starts by inventorying your repository and classifying every mapping by complexity and agent suitability. Straightforward mappings are converted to governed Delta Live Tables pipelines with agent assistance and human review; the gnarly ones (complex transformations, embedded stored procedures, dependencies nobody remembers) get flagged for practitioner-led conversion. You see the full map before anything moves. The two-week Migration Assessment includes a proof slice: real mappings from your repository, converted and measured, so you know the timeline and cost before committing to the migration."}},
+      {"@type": "Question", "name": "Do you migrate IBM DataStage to Databricks?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, with the same methodology. We inventory the DataStage project, classify every job by complexity and agent suitability, then convert parallel and sequence jobs, stages, shared containers and parameter sets into governed Delta Lake pipelines with agent assistance and human review on every change. Our tool depth is deepest in PowerCenter, but our practitioners have worked inside DataStage estates and the surrounding IBM stack (Db2, Netezza, Red Hat OpenShift), and the Migration Assessment proof slice uses your real jobs so the estimate reflects your project, not a generic benchmark."}},
+      {"@type": "Question", "name": "Can agents really convert ETL mappings reliably?", "acceptedAnswer": {"@type": "Answer", "text": "For the right mappings, yes; for the wrong ones, no, and knowing which is which is the job. Every mapping is classified before conversion. Straightforward, well-patterned mappings are converted by agents, and every conversion ships as a pull request with generated tests and a practitioner review before it merges. Complex transformations, embedded stored procedures and undocumented dependencies are flagged for practitioner-led conversion rather than forced through an agent. The human/agent split is measured in the assessment proof slice, so the reliability claim is tested on your repository before you commit to the migration."}}
     ]
   }
   </script>
@@ -68,6 +71,7 @@
     .partner-card { padding: 34px 30px; }
     .partner-card h3 { color: #fff; font-size: 26px; line-height: 1.2; margin-bottom: 14px; }
     .partner-card p, .partner-card li { color: var(--text-body); font-size: 15px; line-height: 1.75; }
+    .partner-card p.edge { color: #fff; padding: 12px 14px; border-left: 2px solid var(--accent); background: rgba(0,200,190,0.06); border-radius: 0 8px 8px 0; }
     .partner-card ul { margin: 22px 0 0; padding-left: 20px; }
     .partner-card li { margin-bottom: 12px; }
     .partner-why { max-width: 820px; margin: 0 auto; }
@@ -172,14 +176,14 @@
       <section class="partner-section">
         <div class="partner-section-inner">
           <article class="partner-assessment glass" id="assessment">
-            <div class="kicker">Start here &middot; Databricks migration cost assessment framework</div>
-            <h2>Migration Assessment</h2>
+            <div class="kicker">Databricks migration cost assessment framework</div>
+            <h2>Start here: the Migration Assessment</h2>
             <p class="lede">2&ndash;3 weeks, fixed fee. Where a 30-minute architecture audit converts into a measured plan.</p>
             <p>Week one: we inventory your estate and interview your team. Week two: we run a real proof slice: an agent migrating a piece of your actual code, measured. You get:</p>
             <ul>
               <li>An agent-suitability map of your estate</li>
               <li>Projected human/agent split</li>
-              <li>Effort and cost both ways: an estimate of Databricks migration timeline and TCO, manual versus agent-assisted</li>
+              <li>Effort and cost estimates both ways: an estimate of Databricks migration timeline and TCO, manual versus agent-assisted</li>
               <li>An execution plan</li>
             </ul>
             <p class="keep">Yours to keep whether or not you hire us to execute.</p>
@@ -195,6 +199,7 @@
             <article class="partner-card glass">
               <h3>Databricks Migration &amp; Modernization Sprints</h3>
               <p>For teams with quarters of delayed migrations to Delta Lake and Unity Catalog. Manual framework upgrades, SQL optimization, and batch-to-streaming pipeline migrations drain your senior developers' focus. We run supervised agent swarms against your legacy repos to execute high-friction migrations in days rather than quarters, for a Teradata, Synapse or Snowflake warehouse, an on-prem Hadoop cluster, or batch PySpark that needs to become governed streaming.</p>
+              <p class="edge">Legacy ETL and warehouse migrations are our sharpest edge: Informatica PowerCenter, IBM DataStage, Netezza, and Db2 estates moved onto Databricks, agent-assisted, led by practitioners with years inside those exact tools. We deploy comfortably in IBM-based environments (Red Hat OpenShift, HashiCorp Vault) while your data moves to the lakehouse.</p>
               <ul>
                 <li>Legacy code refactoring: Upgrades for deprecated libraries, Python version modernizations, and React hook migrations.</li>
                 <li>Governed lakehouse refactoring: Converting legacy PySpark batch scripts into optimized Delta Lake and Unity Catalog-compliant streaming pipelines.</li>
@@ -234,6 +239,18 @@
             <details>
               <summary>Does agent-assisted migration expose our code or data to public models?</summary>
               <p>No. Agent planning stays in the vendor cloud, but all repo cloning, shell commands and builds run on your infrastructure via outbound-only connections, with least-privilege credentials from your vault and package installs restricted to internal registries. Details on the <a href="/agent-adoption/devin/">private-execution runtime for Devin</a>.</p>
+            </details>
+            <details>
+              <summary>Do you migrate Informatica PowerCenter to Databricks?</summary>
+              <p>Yes. Legacy ETL migration is the core of our practice, and Informatica is our deepest tool. Our team has years of hands-on PowerCenter experience: mappings, workflows, mapplets, parameter files, and the undocumented tribal logic that accumulates in a decade-old repository. Our approach starts by inventorying your repository and classifying every mapping by complexity and agent suitability. Straightforward mappings are converted to governed Delta Live Tables pipelines with agent assistance and human review; the gnarly ones (complex transformations, embedded stored procedures, dependencies nobody remembers) get flagged for practitioner-led conversion. You see the full map before anything moves. The two-week Migration Assessment includes a proof slice: real mappings from your repository, converted and measured, so you know the timeline and cost before committing to the migration.</p>
+            </details>
+            <details>
+              <summary>Do you migrate IBM DataStage to Databricks?</summary>
+              <p>Yes, with the same methodology. We inventory the DataStage project, classify every job by complexity and agent suitability, then convert parallel and sequence jobs, stages, shared containers and parameter sets into governed Delta Lake pipelines with agent assistance and human review on every change. Our tool depth is deepest in PowerCenter, but our practitioners have worked inside DataStage estates and the surrounding IBM stack (Db2, Netezza, Red Hat OpenShift), and the Migration Assessment proof slice uses your real jobs so the estimate reflects your project, not a generic benchmark.</p>
+            </details>
+            <details>
+              <summary>Can agents really convert ETL mappings reliably?</summary>
+              <p>For the right mappings, yes; for the wrong ones, no, and knowing which is which is the job. Every mapping is classified before conversion. Straightforward, well-patterned mappings are converted by agents, and every conversion ships as a pull request with generated tests and a practitioner review before it merges. Complex transformations, embedded stored procedures and undocumented dependencies are flagged for practitioner-led conversion rather than forced through an agent. The human/agent split is measured in the assessment proof slice, so the reliability claim is tested on your repository before you commit to the migration.</p>
             </details>
           </div>
         </div>
