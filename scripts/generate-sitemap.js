@@ -38,6 +38,7 @@ const STATIC_PAGES = [
   { loc: '/agent-adoption/devin/', changefreq: 'monthly', priority: '0.8' },
   { loc: '/partners/databricks/', changefreq: 'monthly', priority: '0.8' },
   { loc: '/databricks/',          changefreq: 'monthly', priority: '0.8' },
+  { loc: '/case-studies/caledonia-chamber/', changefreq: 'monthly', priority: '0.7' },
   { loc: '/devin/',               changefreq: 'monthly', priority: '0.8' },
   { loc: '/playbook/',           changefreq: 'monthly', priority: '0.8' },
   { loc: '/events/toronto/',     changefreq: 'monthly', priority: '0.8' },

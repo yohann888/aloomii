@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="Case study: how Aloomii built the Caledonia Regional Chamber of Commerce a public site, member portal, and staff CRM on one Chamber-owned database.">
+  <meta name="description" content="Case study: how Aloomii built the Caledonia Regional Chamber of Commerce a public site, member portal and staff CRM on one Chamber-owned event ledger, architected for Databricks from day one.">
   <title>Case Study: Caledonia Regional Chamber of Commerce | Aloomii</title>
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/favicon.png">
@@ -17,7 +17,7 @@
     .cs-section { padding: 72px 40px; }
     .cs-inner { max-width: 1060px; margin: 0 auto; }
 
-    /* Image placeholders — swap each for an <img> with the same class when assets are ready */
+    /* Image placeholders: swap each for an <img> with the same class when assets are ready */
     .cs-slot {
       display: flex; align-items: center; justify-content: center; text-align: center;
       border: 1px dashed rgba(255,255,255,0.28); border-radius: 14px;
@@ -94,6 +94,15 @@
     details.cs-arch-detail .cs-arch-body p { margin-bottom: 12px; }
     details.cs-arch-detail .cs-arch-body strong { color: #fff; }
 
+    /* FAQ */
+    .cs-faq { max-width: 820px; }
+    .cs-faq details { border-bottom: 1px solid var(--border); padding: 18px 0; }
+    .cs-faq summary { cursor: pointer; color: #fff; font-size: 17px; font-weight: 600; line-height: 1.4; list-style: none; }
+    .cs-faq summary::-webkit-details-marker { display: none; }
+    .cs-faq summary::before { content: "+"; color: var(--accent); margin-right: 12px; font-weight: 800; }
+    .cs-faq details[open] summary::before { content: "\2212"; }
+    .cs-faq p { color: var(--text-body); font-size: 15px; line-height: 1.75; margin: 12px 0 0 28px; }
+
     /* Contact */
     .cs-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
     .cs-form { padding: 30px 28px; border-radius: 16px; }
@@ -120,6 +129,8 @@
   <ul class="nav-links">
     <li><a href="/builds">AI Engineering</a></li>
     <li><a href="/agent-adoption/">Agent Adoption</a></li>
+    <li><a href="/databricks/">Databricks</a></li>
+    <li><a href="/devin/">Devin</a></li>
     <li><a href="/playbook/">Playbook</a></li>
     <li><a href="/events">Events</a></li>
     <li><a href="/#team">Team</a></li>
@@ -140,6 +151,8 @@
 <div class="mobile-menu" id="mobileMenu">
   <a href="/builds" onclick="closeMenu()">AI Engineering</a>
   <a href="/agent-adoption/" onclick="closeMenu()">Agent Adoption</a>
+  <a href="/databricks/" onclick="closeMenu()">Databricks</a>
+  <a href="/devin/" onclick="closeMenu()">Devin</a>
   <a href="/playbook/" onclick="closeMenu()">Playbook</a>
   <a href="/events" onclick="closeMenu()">Events</a>
   <a href="/#team" onclick="closeMenu()">Team</a>
@@ -279,13 +292,14 @@
             <div class="cs-next-card glass">
               <div class="cs-ba-label">Ready for Databricks, not dependent on it</div>
               <h3>Nothing in the Chamber's daily operation depends on Databricks. Everything in the data layer is ready for it.</h3>
-              <p>The membership lifecycle is captured as an append-only event stream, typed for analytics, in a schema kept in git. Moving reporting to Databricks is configuration, not a rebuild. We are a Databricks partner and architected it this way from day one.</p>
+              <p>The membership lifecycle is captured as an append-only event stream, typed for analytics, in a schema kept in git. Moving reporting to Databricks is configuration, not a rebuild.</p>
+              <p>That shape is deliberate. Delta tables under Unity Catalog reward an immutable, typed ledger: lineage is free, point-in-time queries are trivial, and governance is applied once at the catalog rather than patched into every report. The CDC path lands the ledger as Delta tables, Databricks SQL and AI/BI sit on top, and Delta Live Tables can own any transformation the Chamber later needs. Aloomii is a <a href="/partners/databricks/" class="inline-link">Databricks consulting partner (Brickbuilder Partner Network)</a> and architected the data layer this way from day one.</p>
             </div>
             <div class="cs-next-card dashed">
               <div class="cs-ba-label">Not yet built. Possible on this foundation.</div>
-              <p>Members flagged before they lapse, not after.</p>
-              <p>Renewal outreach drafted from each member's own history, reviewed by staff, sent on schedule.</p>
-              <p>The ED asks a plain-language question of the membership data and gets an answer, not a spreadsheet project.</p>
+              <p>Members flagged before they lapse, not after: a lapse-risk score computed in Databricks SQL from the renewal ledger.</p>
+              <p>Renewal outreach drafted from each member's own history in Unity Catalog governed tables, reviewed by staff, sent on schedule.</p>
+              <p>The Executive Director asks a plain-language question of the membership data in Databricks AI/BI and gets an answer, not a spreadsheet project.</p>
               <p>Event follow-up that goes out without anyone remembering to send it.</p>
             </div>
           </div>
@@ -313,12 +327,22 @@
           <details class="cs-arch-detail" id="arch-detail">
             <summary>How the data layer is built, for technical readers <small>collapsed by default; opens on #architecture</small></summary>
             <div class="cs-arch-body">
-              <p><strong>Phase 1 — Capture.</strong> Every membership action writes a typed event to an append-only Postgres ledger. Nothing is overwritten; state is derived, not stored.</p>
-              <p><strong>Phase 2 — Serve.</strong> The public site, member portal, and staff CRM all read from the same database through role-scoped views. One source of truth, three surfaces.</p>
-              <p><strong>Phase 3 — Report.</strong> A read-only reporting module builds worklists, CSV and PDF exports directly from the ledger. No copies of the data drift out of sync.</p>
-              <p><strong>Phase 4 — Sync.</strong> A CDC path is wired for Delta tables under Unity Catalog. Turning on Databricks reporting is configuration, not a rebuild.</p>
+              <p><strong>Phase 1: Capture.</strong> Every membership action writes a typed event to an append-only Postgres ledger. Nothing is overwritten; state is derived, not stored.</p>
+              <p><strong>Phase 2: Serve.</strong> The public site, member portal, and staff CRM all read from the same database through role-scoped views. One source of truth, three surfaces.</p>
+              <p><strong>Phase 3: Report.</strong> A read-only reporting module builds worklists, CSV and PDF exports directly from the ledger. No copies of the data drift out of sync.</p>
+              <p><strong>Phase 4: Sync.</strong> A CDC path is wired for Delta tables under Unity Catalog. Turning on Databricks reporting is configuration, not a rebuild.</p>
             </div>
           </details>
+        </div>
+      </section>
+
+      <section class="cs-section" id="legacy-estates" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner cs-split">
+          <h2>The same discipline we use on legacy estates</h2>
+          <div>
+            <p>Most of our Databricks work is the opposite of this build: Informatica PowerCenter, IBM DataStage, Netezza and Db2 estates moved onto the lakehouse, agent-assisted, with practitioners who spent years inside those tools. The Chamber got the same principle in reverse. Land the data in a shape Databricks can govern from day one, so there is never a migration to do later.</p>
+            <p>If your estate is already on one of those platforms, start with <a href="/partners/databricks/#faq" class="inline-link">how we migrate Informatica PowerCenter and IBM DataStage to Databricks</a> and the <a href="/partners/databricks/#assessment" class="inline-link">fixed-fee Migration Assessment</a>.</p>
+          </div>
         </div>
       </section>
 
@@ -342,11 +366,32 @@
         </div>
       </section>
 
+      <section class="cs-section" id="faq" style="border-top: 1px solid var(--border);">
+        <div class="cs-inner">
+          <h2 class="cs-h2">Questions chambers and associations ask about this build</h2>
+          <div class="cs-faq">
+            <details>
+              <summary>Is the Caledonia Chamber platform built on Databricks?</summary>
+              <p>It is built for Databricks, not on it. The Chamber's daily operations run on a Postgres event ledger with a public site, member portal and staff CRM reading from it. A CDC path to Delta tables under Unity Catalog is wired and waiting; turning on Databricks reporting is configuration, not a rebuild. We say this plainly because a chamber does not need a lakehouse on day one, and we would rather show you an honest architecture than an inflated one.</p>
+            </details>
+            <details>
+              <summary>Why an append-only event ledger instead of a normal membership database?</summary>
+              <p>Because a ledger never loses history. Every join, renewal, listing change and event submission is written as a typed event and never overwritten, so current state is derived rather than stored. That gives the Chamber point-in-time recovery and full export today, and it is exactly the shape Delta tables and Unity Catalog govern best, so the same data can feed lapse-risk scoring or plain-language reporting later without a rebuild.</p>
+            </details>
+            <details>
+              <summary>Can this platform be configured for another chamber or association?</summary>
+              <p>Yes. The public site, member portal, staff CRM and reporting module are one codebase with the Chamber's fees, categories and branding held as configuration. The next chamber pays for configuration, not construction. We will walk your current stack with you first and tell you plainly whether a platform like this is worth it for an organization your size.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
       <section class="cs-section" id="contact-form" style="border-top: 1px solid var(--border);">
         <div class="cs-inner cs-contact-grid">
           <div>
             <h2 class="cs-h2">If your chamber is somewhere on this same path</h2>
             <p style="color: var(--text-body); font-size: 15.5px; line-height: 1.8; margin-bottom: 18px;">We built this once. The next chamber pays for configuration, not construction.</p>
+            <p style="color: var(--text-body); font-size: 15.5px; line-height: 1.8; margin-bottom: 18px;">Not a chamber? The same team runs our <a href="/databricks/" class="inline-link">Databricks migration and modernization practice</a> and <a href="/devin/" class="inline-link">Devin agent adoption programs</a> for enterprise data and engineering teams.</p>
             <p style="color: var(--text-body); font-size: 15.5px; line-height: 1.8;">We will walk your current setup with you and tell you plainly whether a platform like this is worth it for an organization your size. If it is not, we will say so.</p>
           </div>
           <form class="cs-form glass" id="csContactForm">
@@ -372,6 +417,17 @@
       </div>
     </footer>
   </div>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is the Caledonia Chamber platform built on Databricks?", "acceptedAnswer": {"@type": "Answer", "text": "It is built for Databricks, not on it. The Chamber's daily operations run on a Postgres event ledger with a public site, member portal and staff CRM reading from it. A CDC path to Delta tables under Unity Catalog is wired and waiting; turning on Databricks reporting is configuration, not a rebuild. We say this plainly because a chamber does not need a lakehouse on day one, and we would rather show you an honest architecture than an inflated one."}},
+    {"@type": "Question", "name": "Why an append-only event ledger instead of a normal membership database?", "acceptedAnswer": {"@type": "Answer", "text": "Because a ledger never loses history. Every join, renewal, listing change and event submission is written as a typed event and never overwritten, so current state is derived rather than stored. That gives the Chamber point-in-time recovery and full export today, and it is exactly the shape Delta tables and Unity Catalog govern best, so the same data can feed lapse-risk scoring or plain-language reporting later without a rebuild."}},
+    {"@type": "Question", "name": "Can this platform be configured for another chamber or association?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The public site, member portal, staff CRM and reporting module are one codebase with the Chamber's fees, categories and branding held as configuration. The next chamber pays for configuration, not construction. We will walk your current stack with you first and tell you plainly whether a platform like this is worth it for an organization your size."}}
+  ]
+}
+  </script>
   <script src="/snippets/canonical-nav.js"></script>
   <script src="/snippets/ghost-background.js"></script>
   <script>

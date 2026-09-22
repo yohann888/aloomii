@@ -786,6 +786,14 @@
 .newsletter-inline { padding: 32px var(--section-pad-h); }
 .newsletter-inline .newsletter-inner { padding: 24px 32px; }
 #builds .offering-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; margin: 0 auto; }
+.cs-feature { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; max-width: 900px; margin: 32px auto 0; padding: 28px; text-decoration: none; color: inherit; }
+.cs-feature-media { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cs-feature-media img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top; border-radius: 8px; border: 1px solid var(--border); }
+.cs-feature blockquote { margin: 12px 0 10px; font-size: 20px; line-height: 1.35; color: #fff; font-weight: 600; }
+.cs-feature-body p { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; }
+.cs-feature-link { display: inline-block; margin-top: 14px; font-size: 13px; font-weight: 600; color: var(--accent); }
+.cs-feature:hover .cs-feature-link { text-decoration: underline; }
+@media (max-width: 768px) { .cs-feature { grid-template-columns: 1fr; padding: 20px; } .cs-feature blockquote { font-size: 18px; } }
 .newsletter-inline .newsletter-link:hover,
 .offering-card .card-link:hover,
 .inline-link:hover {
@@ -1105,9 +1113,21 @@
     <h2 class="section-heading reveal">We ship the systems we run ourselves.</h2>
     <p class="section-sub reveal" style="text-align:center;max-width:800px;margin:0 auto 40px;">We both build platforms and internal tools for our own work and client work. Yohann is a formally trained software engineer who shipped production code at JP Morgan, IBM and the Ontario Government, and he takes the larger platform builds. Between us, a platform gets built properly.</p>
     <div class="offering-grid">
-      <div class="offering-card founders glass reveal-scale"><div class="card-tag">Selective builds</div><h3>Platforms</h3><p>Systems that run an organization. Website, CRM and member operations in one build. Currently building the platform for a regional chamber of commerce, built on Databricks. Selective, usually by referral.</p><!-- MANUAL UPDATE: Update when the chamber website case study ships. --><p class="card-note">Case study ships this fall.</p><a href="#contact" class="card-cta">Talk about a platform &rarr;</a></div>
+      <div class="offering-card founders glass reveal-scale"><div class="card-tag">Selective builds</div><h3>Platforms</h3><p>Systems that run an organization. Website, CRM and member operations in one build. We built the platform for the Caledonia Regional Chamber of Commerce: public site, member portal and staff CRM on one Chamber-owned data layer, architected for Databricks from day one. Selective, usually by referral.</p><!-- MANUAL UPDATE: add measured results when the first renewal cycle closes (January). --><p class="card-note">Case study live. Results published after the first full renewal cycle.</p><a href="#contact" class="card-cta">Talk about a platform &rarr;</a></div>
       <div class="offering-card founders glass reveal-scale"><div class="card-tag">Built for our work and client work</div><h3>Internal tools</h3><p>The tooling that makes the work faster. It is built for our own work and client work.</p></div>
     </div>
+    <a href="/case-studies/caledonia-chamber/" class="cs-feature glass reveal-scale">
+      <div class="cs-feature-media">
+        <img src="/case-studies/caledonia-chamber/images/p1-before.png" alt="The Chamber's old homepage showed a calendar widget's setup instructions to visitors" loading="lazy">
+        <img src="/case-studies/caledonia-chamber/images/p1-after.png" alt="The new Caledonia Chamber homepage showing upcoming events" loading="lazy">
+      </div>
+      <div class="cs-feature-body">
+        <div class="card-tag">Case study</div>
+        <blockquote>"Membership should be easy to understand and even easier to renew."</blockquote>
+        <p>A chamber founded in 1972 told its members that. Its website showed visitors a calendar widget's own setup instructions. We built the system that makes the promise true.</p>
+        <span class="cs-feature-link">How a 54-year-old chamber got a member portal, a CRM and a Databricks-ready data layer in one build &rarr;</span>
+      </div>
+    </a>
   </div>
 </section>
 
@@ -1226,7 +1246,7 @@
         <a class="libutton" href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7445126674708451328" target="_blank">Subscribe on LinkedIn</a>
       </div>
     </div>
-    <div class="footer-col"><h4>Explore</h4><a href="/builds">AI Engineering</a><a href="/playbook/">Playbook</a><a href="/agent-adoption/">Agent Adoption</a><a href="/partners/databricks/">Databricks Migration Services</a><a href="https://palebluenexus.com" target="_blank" rel="noopener">Pale Blue Nexus</a><a href="/events">Events</a><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a><a href="/studio">Studio</a></div>
+    <div class="footer-col"><h4>Explore</h4><a href="/builds">AI Engineering</a><a href="/case-studies/caledonia-chamber/">Case study: Caledonia Chamber</a><a href="/playbook/">Playbook</a><a href="/agent-adoption/">Agent Adoption</a><a href="/partners/databricks/">Databricks Migration Services</a><a href="https://palebluenexus.com" target="_blank" rel="noopener">Pale Blue Nexus</a><a href="/events">Events</a><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a><a href="/studio">Studio</a></div>
     <div class="footer-col"><h4>Company</h4><a href="#team">About</a><a href="https://aloomii.com/blog/">Blog</a><a href="#contact">Contact</a></div>
     <div class="footer-col"><h4>Legal</h4><a href="/legal/privacy/">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/client-terms">Client Terms</a></div>
   </div>
