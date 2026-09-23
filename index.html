@@ -793,7 +793,14 @@
 .cs-feature-body p { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; }
 .cs-feature-link { display: inline-block; margin-top: 14px; font-size: 13px; font-weight: 600; color: var(--accent); }
 .cs-feature:hover .cs-feature-link { text-decoration: underline; }
-@media (max-width: 768px) { .cs-feature { grid-template-columns: 1fr; padding: 20px; } .cs-feature blockquote { font-size: 18px; } }
+@media (max-width: 768px) { .cs-feature { grid-template-columns: 1fr; padding: 20px; } .cs-feature blockquote { font-size: 18px; } .cs-feature.glass { margin: 28px 20px 0 !important; width: auto !important; max-width: none !important; } }
+.playbook-strip-section { padding: 0 24px 72px; }
+.playbook-strip { display: flex; align-items: center; justify-content: space-between; gap: 28px; max-width: 760px; margin: 0 auto; padding: 24px 28px; text-decoration: none; color: inherit; }
+.playbook-strip h3 { font-size: 20px; color: #fff; margin: 10px 0 6px; }
+.playbook-strip p { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; margin: 0; }
+.playbook-strip-link { flex-shrink: 0; font-size: 13px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.playbook-strip:hover .playbook-strip-link { text-decoration: underline; }
+@media (max-width: 768px) { .playbook-strip { flex-direction: column; align-items: flex-start; gap: 16px; } .playbook-strip.glass { margin: 0 20px !important; width: auto !important; max-width: none !important; } }
 .newsletter-inline .newsletter-link:hover,
 .offering-card .card-link:hover,
 .inline-link:hover {
@@ -875,7 +882,7 @@
     <li><a href="/agent-adoption/">Agent Adoption</a></li>
     <li><a href="/databricks/">Databricks</a></li>
     <li><a href="/devin/">Devin</a></li>
-    <li><a href="/playbook/">Playbook</a></li>
+    <li><a href="/case-studies/caledonia-chamber/">Case Study</a></li>
     <li><a href="/events">Events</a></li>
     <li><a href="#team">Team</a></li>
     <li><a href="https://devkick.com" target="_blank" rel="noopener">DevKick</a></li>
@@ -891,7 +898,7 @@
   <a href="/agent-adoption/" onclick="closeMenu()">Agent Adoption</a>
   <a href="/databricks/" onclick="closeMenu()">Databricks</a>
   <a href="/devin/" onclick="closeMenu()">Devin</a>
-  <a href="/playbook/" onclick="closeMenu()">Playbook</a>
+  <a href="/case-studies/caledonia-chamber/" onclick="closeMenu()">Case Study</a>
   <a href="/events" onclick="closeMenu()">Events</a>
   <a href="#team" onclick="closeMenu()">Team</a>
   <a href="https://devkick.com" onclick="closeMenu()">DevKick</a>
@@ -1222,6 +1229,17 @@
       <p>We got your request. Someone from the team will reach out within 24 hours.</p>
     </div>
   </form>
+</section>
+
+<section class="playbook-strip-section reveal" id="playbook">
+  <a href="/playbook/" class="playbook-strip glass">
+    <div>
+      <div class="card-tag">The Playbook</div>
+      <h3>The Aloomii Playbook</h3>
+      <p>The AI portal where every prompt, every workflow and every result makes the next one better. Three role-specific playbooks for founders, operators and engineers.</p>
+    </div>
+    <span class="playbook-strip-link">Open the Playbook &rarr;</span>
+  </a>
 </section>
 
 <div class="proof-bar reveal">
