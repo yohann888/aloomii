@@ -27,8 +27,6 @@ EXCLUDED = (
     "demo/",
     "command/",
     "moji/",
-    "crcc-proposal/",
-    "crcc-workshop/",
     "gtm-audit/",
 )
 
