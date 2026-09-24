@@ -350,7 +350,7 @@
             </details>
             <details>
               <summary>Why an append-only event ledger instead of a normal membership database?</summary>
-              <p>Because a ledger never loses history. Every join, renewal, listing change and event submission is written as a typed event and never overwritten, so current state is derived rather than stored. That gives the Chamber point-in-time recovery and full export today, and it is exactly the shape Delta tables and Unity Catalog govern best, so the same data can feed lapse-risk scoring or plain-language reporting later without a rebuild.</p>
+              <p>Because a ledger never loses history. Every join, renewal, listing change and event submission is written as a typed event and never overwritten, so current state is derived rather than stored. That gives the Chamber point-in-time recovery and full export today, and it is exactly the shape Delta tables and Unity Catalog govern best, so the same data can feed plain-language reporting later without a rebuild.</p>
             </details>
             <details>
               <summary>Can this platform be configured for another chamber or association?</summary>
@@ -397,7 +397,7 @@
   "@type": "FAQPage",
   "mainEntity": [
     {"@type": "Question", "name": "Is the Caledonia Chamber platform built on Databricks?", "acceptedAnswer": {"@type": "Answer", "text": "It is built for Databricks, not on it. The Chamber's daily operations run on a Postgres event ledger with a public site, member portal and staff CRM reading from it. A CDC path to Delta tables under Unity Catalog is wired and waiting; turning on Databricks reporting is configuration, not a rebuild. We say this plainly because a chamber does not need a lakehouse on day one, and we would rather show you an honest architecture than an inflated one."}},
-    {"@type": "Question", "name": "Why an append-only event ledger instead of a normal membership database?", "acceptedAnswer": {"@type": "Answer", "text": "Because a ledger never loses history. Every join, renewal, listing change and event submission is written as a typed event and never overwritten, so current state is derived rather than stored. That gives the Chamber point-in-time recovery and full export today, and it is exactly the shape Delta tables and Unity Catalog govern best, so the same data can feed lapse-risk scoring or plain-language reporting later without a rebuild."}},
+    {"@type": "Question", "name": "Why an append-only event ledger instead of a normal membership database?", "acceptedAnswer": {"@type": "Answer", "text": "Because a ledger never loses history. Every join, renewal, listing change and event submission is written as a typed event and never overwritten, so current state is derived rather than stored. That gives the Chamber point-in-time recovery and full export today, and it is exactly the shape Delta tables and Unity Catalog govern best, so the same data can feed plain-language reporting later without a rebuild."}},
     {"@type": "Question", "name": "Can this platform be configured for another chamber or association?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The public site, member portal, staff CRM and reporting module are one codebase with the Chamber's fees, categories and branding held as configuration. The next chamber pays for configuration, not construction. We will walk your current stack with you first and tell you plainly whether a platform like this is worth it for an organization your size."}}
   ]
 }
