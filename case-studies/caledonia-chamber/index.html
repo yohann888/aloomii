@@ -299,8 +299,8 @@
             </div>
           </div>
 
-          <details class="cs-arch-detail" id="arch-detail">
-            <summary>How the data layer is built, for technical readers <small>collapsed by default; opens on #architecture</small></summary>
+          <details class="cs-arch-detail" id="arch-detail" open>
+            <summary>How the data layer is built, for technical readers</summary>
             <div class="cs-arch-body">
               <p><strong>Phase 1: Capture.</strong> Every membership action writes a typed event to an append-only Postgres ledger. Nothing is overwritten; state is derived, not stored.</p>
               <p><strong>Phase 2: Serve.</strong> The public site, member portal, and staff CRM all read from the same database through role-scoped views. One source of truth, three surfaces.</p>
@@ -404,9 +404,6 @@
   <script src="/snippets/canonical-nav.js"></script>
   <script src="/snippets/ghost-background.js"></script>
   <script>
-    if (location.hash === '#architecture') {
-      document.getElementById('arch-detail').open = true;
-    }
     document.getElementById('csContactForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       var status = document.getElementById('csFormStatus');
